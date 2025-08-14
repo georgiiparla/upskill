@@ -35,7 +35,7 @@ export default function App() {
 				}}
 				className={`border-b-2 px-1 pt-1 text-sm font-medium transition-colors duration-150 ease-in-out ${isActive
 					// Active State: A colored underline and strong text
-					? 'border-indigo-500 dark:border-indigo-400 text-gray-900 dark:text-gray-100'
+					? 'border-blue-700 dark:border-blue-700 text-gray-900 dark:text-gray-100'
 					// Inactive State: A transparent underline and muted text
 					: 'border-transparent text-gray-500 dark:text-gray-400 hover:border-gray-300 dark:hover:border-gray-600 hover:text-gray-700 dark:hover:text-gray-300'
 					}`}

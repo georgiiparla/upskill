@@ -1,17 +1,148 @@
 "use client"
 
 import React, { useState } from 'react';
-import { PieChart, ThumbsUp } from 'lucide-react';
+import { useTheme } from 'next-themes';
+import { ThumbsUp, PieChart as PieChartIcon } from 'lucide-react';
+import {
+	PieChart, Pie, Cell, Tooltip, ResponsiveContainer
+} from 'recharts';
+
 import { Card, SectionTitle } from "./Helper";
+
+// --- Chart Components ---
+
+// Mock Data for Feedback Charts
+const sentimentData = [
+	{ name: 'Positive', value: 400 },
+	{ name: 'Neutral', value: 120 },
+	{ name: 'Negative', value: 80 },
+];
+
+const feedbackTrendsData = [
+	{ name: 'Communication', value: 15 },
+	{ name: 'Leadership', value: 25 },
+	{ name: 'Tools', value: 18 },
+	{ name: 'Workload', value: 12 },
+];
+
+const SENTIMENT_COLORS = ['#22c55e', '#f59e0b', '#ef4444']; // Green, Amber, Red
+const TRENDS_COLORS = ['#818cf8', '#a78bfa', '#c084fc', '#f472b6']; // Indigo, Purple, Fuchsia, Pink
+
+// A new, list-style custom legend for better styling and information
+const CustomLegend = ({ data, colors }) => (
+	<ul className="mt-4 space-y-2 text-sm">
+		{data.map((entry, index) => (
+			<li key={`item-${index}`} className="flex items-center justify-between">
+				<div className="flex items-center">
+					<span
+						className="w-3 h-3 rounded-full mr-2"
+						style={{ backgroundColor: colors[index % colors.length] }}
+					/>
+					<span className="text-gray-600 dark:text-gray-400">{entry.name}</span>
+				</div>
+				<span className="font-semibold text-gray-800 dark:text-gray-200">{entry.value}</span>
+			</li>
+		))}
+	</ul>
+);
+
+const SentimentChart = () => {
+	const { theme } = useTheme();
+	const totalValue = sentimentData.reduce((acc, entry) => acc + entry.value, 0);
+
+	return (
+		<div>
+			<ResponsiveContainer width="100%" height={200}>
+				<PieChart>
+					<Pie
+						data={sentimentData}
+						cx="50%"
+						cy="50%"
+						labelLine={false}
+						outerRadius={80}
+						innerRadius={60}
+						fill="#8884d8"
+						dataKey="value"
+						nameKey="name"
+						paddingAngle={5}
+					>
+						{sentimentData.map((entry, index) => (
+							<Cell key={`cell-${index}`} fill={SENTIMENT_COLORS[index % SENTIMENT_COLORS.length]} stroke={theme === 'dark' ? '#1f2937' : '#ffffff'} />
+						))}
+					</Pie>
+					<Tooltip
+						contentStyle={{
+							backgroundColor: theme === 'dark' ? 'rgba(31, 41, 55, 0.8)' : 'rgba(255, 255, 255, 0.8)',
+							backdropFilter: 'blur(4px)',
+							borderRadius: '0.5rem',
+							border: '1px solid',
+							borderColor: theme === 'dark' ? '#374151' : '#e5e7eb'
+						}}
+					/>
+					{/* Reverted to a single <text> element for perfect centering */}
+					<text x="50%" y="50%" textAnchor="middle" dominantBaseline="middle"
+						className="text-3xl font-bold fill-current text-gray-800 dark:text-gray-200">
+						{totalValue}
+					</text>
+				</PieChart>
+			</ResponsiveContainer>
+			<CustomLegend data={sentimentData} colors={SENTIMENT_COLORS} />
+		</div>
+	);
+};
+
+const FeedbackTrendsChart = () => {
+	const { theme } = useTheme();
+	const totalValue = feedbackTrendsData.reduce((acc, entry) => acc + entry.value, 0);
+
+	return (
+		<div>
+			<ResponsiveContainer width="100%" height={200}>
+				<PieChart>
+					<Pie
+						data={feedbackTrendsData}
+						cx="50%"
+						cy="50%"
+						labelLine={false}
+						outerRadius={80}
+						innerRadius={60}
+						fill="#8884d8"
+						dataKey="value"
+						nameKey="name"
+						paddingAngle={5}
+					>
+						{feedbackTrendsData.map((entry, index) => (
+							<Cell key={`cell-${index}`} fill={TRENDS_COLORS[index % TRENDS_COLORS.length]} stroke={theme === 'dark' ? '#1f2937' : '#ffffff'} />
+						))}
+					</Pie>
+					<Tooltip
+						contentStyle={{
+							backgroundColor: theme === 'dark' ? 'rgba(31, 41, 55, 0.8)' : 'rgba(255, 255, 255, 0.8)',
+							backdropFilter: 'blur(4px)',
+							borderRadius: '0.5rem',
+							border: '1px solid',
+							borderColor: theme === 'dark' ? '#374151' : '#e5e7eb'
+						}}
+					/>
+					{/* Reverted to a single <text> element for perfect centering */}
+					<text x="50%" y="50%" textAnchor="middle" dominantBaseline="middle"
+						className="text-3xl font-bold fill-current text-gray-800 dark:text-gray-200">
+						{totalValue}
+					</text>
+				</PieChart>
+			</ResponsiveContainer>
+			<CustomLegend data={feedbackTrendsData} colors={TRENDS_COLORS} />
+		</div>
+	);
+};
+
+
+// --- Main Feedback Component ---
 
 export const Feedback = () => {
 	const [isAnonymous, setIsAnonymous] = useState(false);
 
 	return (
-		/* This grid is mobile-first.
-		   - On small screens (default): it's a 1-column stack.
-		   - On large screens (lg) and up: it becomes a 2-column grid.
-		*/
 		<div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
 			{/* Feedback Submission Form */}
 			<div>
@@ -32,15 +163,22 @@ export const Feedback = () => {
 			</div>
 			{/* Feedback Analytics */}
 			<div>
-				<SectionTitle icon={<PieChart className="h-6 w-6 text-indigo-500" />} title="Feedback Analytics" />
+				<SectionTitle icon={<PieChartIcon className="h-6 w-6 text-indigo-500" />} title="Feedback Analytics" />
 				<Card>
-					<p className="mb-4 text-gray-600 dark:text-gray-400">Trends and sentiment from recent feedback.</p>
-					<div className="space-y-4">
-						<div className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg h-32 flex items-center justify-center text-gray-400 dark:text-gray-500">Sentiment Analysis (Chart)</div>
-						<div className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg h-32 flex items-center justify-center text-gray-400 dark:text-gray-500">Feedback Trends (Graph)</div>
+					{/* This grid will be 2 columns on medium screens and up, and 1 column on mobile */}
+					<div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
+						<div>
+							<h4 className="text-center font-semibold text-gray-600 dark:text-gray-400 mb-2">Sentiment Analysis</h4>
+							<SentimentChart />
+						</div>
+						<div>
+							<h4 className="text-center font-semibold text-gray-600 dark:text-gray-400 mb-2">Feedback Trends</h4>
+							<FeedbackTrendsChart />
+						</div>
 					</div>
 				</Card>
 			</div>
 		</div>
 	);
 };
+
