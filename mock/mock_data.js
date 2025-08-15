@@ -62,6 +62,12 @@ export const MOCK_MEETINGS = [
     { id: 1, title: 'Q3 Project Kickoff', date: '2025-08-16', status: 'Upcoming' },
     { id: 2, title: 'Weekly Sync: Sprint 14', date: '2025-08-12', status: 'Complete' },
     { id: 3, title: 'Design Review: New Feature', date: '2025-08-11', status: 'Complete' },
+    { id: 4, title: 'Q3 Project Kickoff', date: '2025-08-16', status: 'Upcoming' },
+    { id: 5, title: 'Weekly Sync: Sprint 14', date: '2025-08-12', status: 'Complete' },
+    { id: 6, title: 'Design Review: New Feature', date: '2025-08-11', status: 'Complete' },
+    { id: 7, title: 'Q3 Project Kickoff', date: '2025-08-16', status: 'Upcoming' },
+    { id: 8, title: 'Weekly Sync: Sprint 14', date: '2025-08-12', status: 'Complete' },
+    { id: 9, title: 'Design Review: New Feature', date: '2025-08-11', status: 'Complete' },
 ];
 
 export const MOCK_TEAM_ENGAGEMENT_DATA = [
