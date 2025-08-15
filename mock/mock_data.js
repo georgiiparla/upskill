@@ -85,3 +85,19 @@ export const MOCK_PERSONAL_ENGAGEMENT_DATA = [
     { category: 'Knowledge', value: 80, fullMark: 100 },
     { category: 'Skills', value: 45, fullMark: 100 },
 ];
+
+export const SENTIMENT_DATA = [
+    { name: 'Positive', value: 400 },
+    { name: 'Neutral', value: 120 },
+    { name: 'Negative', value: 80 },
+];
+
+export const FEEDBACK_TRENDS_DATA = [
+    { name: 'Communication', value: 15 },
+    { name: 'Leadership', value: 25 },
+    { name: 'Tools', value: 18 },
+    { name: 'Workload', value: 12 },
+];
+
+export const SENTIMENT_COLORS = ['#22c55e', '#f59e0b', '#ef4444']; // Green, Amber, Red
+export const TRENDS_COLORS = ['#818cf8', '#a78bfa', '#c084fc', '#f472b6']; // Indigo, Purple, Fuchsia, Pink

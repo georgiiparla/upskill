@@ -4,13 +4,13 @@ import {
     Tooltip, ResponsiveContainer
 } from 'recharts';
 import {
-    Activity, Users, User, Clock, BookOpen, Calendar, ArrowRight
+    Activity, Users, User, Clock, BookOpen, Calendar, NotebookText
 } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import React from 'react';
 
 import { Card, SectionTitle } from "./Helper";
-// All mock data is now imported from the central file
+
 import { 
     MOCK_ACTIVITY_STREAM, 
     MOCK_AGENDA_ITEMS, 
@@ -18,6 +18,123 @@ import {
     MOCK_TEAM_ENGAGEMENT_DATA,
     MOCK_PERSONAL_ENGAGEMENT_DATA
 } from "../mock/mock_data";
+
+
+const DASHBOARD_STYLES = {
+    agendaTimeline: `
+        relative 
+        border-l 
+        border-gray-200 dark:border-gray-700 
+        ml-3
+    `,
+    agendaIconWrapperBase: `
+        absolute 
+        flex items-center justify-center 
+        w-6 h-6 
+        rounded-full 
+        -left-3 
+    `,
+    agendaIconWrapperArticle: `
+        bg-purple-200 dark:bg-purple-900
+    `,
+    agendaIconWrapperMeeting: `
+        bg-blue-200 dark:bg-blue-900
+    `,
+    agendaIconArticle: `
+        w-3 h-3 text-purple-600 dark:text-purple-300
+    `,
+    agendaIconMeeting: `
+        w-3 h-3 text-blue-600 dark:text-blue-300
+    `,
+    agendaCard: `
+        p-4 
+        bg-gray-50 dark:bg-gray-700/50 
+        rounded-lg 
+        border border-gray-200 dark:border-gray-600 
+        shadow-sm 
+        group 
+        hover:bg-indigo-50 dark:hover:bg-gray-700 
+        transition-all 
+        cursor-pointer
+    `,
+    agendaDetails: `
+        text-sm 
+        font-normal 
+        text-gray-500 dark:text-gray-400 
+        mb-1
+    `,
+    agendaTitle: `
+        text-sm 
+        font-semibold 
+        text-gray-900 dark:text-white 
+        group-hover:text-indigo-600 dark:group-hover:text-indigo-400 
+        transition-colors
+    `,
+    agendaNotesButton: `
+        flex items-center justify-center 
+        h-8 w-8 
+        rounded-full 
+        hover:bg-indigo-100 dark:hover:bg-indigo-900/30 
+        transition-colors
+    `,
+    agendaNotesIcon: `
+        h-5 w-5 
+        text-indigo-500 dark:text-indigo-400
+    `,
+    cardScrollableContent: `
+        flex-grow 
+        overflow-y-auto 
+        pr-2 
+        max-h-[350px]
+    `,
+    activityListItem: `
+        flex items-start 
+        p-3 
+        bg-gray-50 dark:bg-gray-700/50 
+        rounded-lg
+    `,
+    activityUser: `
+        font-bold 
+        text-gray-900 dark:text-white
+    `,
+    activityTime: `
+        text-xs 
+        text-gray-500 dark:text-gray-400 
+        mt-0.5
+    `,
+    meetingsListItem: `
+        flex items-center justify-between 
+        p-3 
+        bg-gray-50 dark:bg-gray-700/50 
+        rounded-lg 
+        hover:bg-gray-100 dark:hover:bg-gray-700 
+        transition-colors
+    `,
+    meetingsStatusBase: `
+        text-xs 
+        font-semibold 
+        mr-4 px-2 py-1 
+        rounded-full
+    `,
+    meetingsStatusUpcoming: `
+        bg-blue-100 text-blue-800 
+        dark:bg-blue-900 dark:text-blue-200
+    `,
+    meetingsStatusRecent: `
+        bg-green-100 text-green-800 
+        dark:bg-green-900 dark:text-green-200
+    `,
+    meetingsTitle: `
+        font-semibold 
+        text-gray-800 dark:text-white
+    `,
+    meetingsDate: `
+        text-xs 
+        text-gray-500 dark:text-gray-400
+    `,
+};
+
+
 // --- Chart Components ---
 
 const EngagementChart = ({ data, title, icon, color }) => {
@@ -56,26 +173,42 @@ export const Dashboard = () => {
             {/* --- This Week's Agenda Section (Full Width) --- */}
             <div>
                 <Card>
-                    <SectionTitle icon={<BookOpen className="h-6 w-6 text-indigo-500" />} title="This Week's Agenda" />
-                    <br />
-                    <ol className="relative border-l border-gray-200 dark:border-gray-700 ml-3">
-                        {MOCK_AGENDA_ITEMS.map((item) => (
-                            <li key={item.id} className="mb-6 ml-6">              
-                                <span className={`absolute flex items-center justify-center w-6 h-6 rounded-full -left-3 ring-8 ring-white dark:ring-gray-900 ${
-                                    item.type === 'article' ? 'bg-purple-200 dark:bg-purple-900' : 'bg-blue-200 dark:bg-blue-900'
-                                }`}>
-                                    {item.type === 'article' ? 
-                                        <BookOpen className="w-3 h-3 text-purple-600 dark:text-purple-300" /> : 
-                                        <Calendar className="w-3 h-3 text-blue-600 dark:text-blue-300" />}
-                                </span>
-                                <div className="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600 shadow-sm group hover:bg-indigo-50 dark:hover:bg-gray-700 transition-all cursor-pointer">
-                                    <p className="text-sm font-normal text-gray-500 dark:text-gray-400 mb-1">{item.type === 'article' ?
-`Learning: ${item.category}` : `Meeting: ${item.date}`}</p>
-                                    <a href="#" className="text-sm font-semibold text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">{item.title}</a>
-                                </div>
-                            </li>
-                        ))}
-                    </ol>
+                  <SectionTitle 
+                    icon={<BookOpen className="h-6 w-6 text-indigo-500" />} 
+                    title="This Week's Agenda" 
+                  />
+                  <br />
+                  <ol className={DASHBOARD_STYLES.agendaTimeline}>
+                    {MOCK_AGENDA_ITEMS.map((item) => (
+                      <li key={item.id} className="mb-6 ml-6">              
+                        <span className={`${DASHBOARD_STYLES.agendaIconWrapperBase} ${
+                          item.type === 'article' ? DASHBOARD_STYLES.agendaIconWrapperArticle : DASHBOARD_STYLES.agendaIconWrapperMeeting
+                        }`}>
+                          {item.type === 'article' ? 
+                            <BookOpen className={DASHBOARD_STYLES.agendaIconArticle} /> : 
+                            <Calendar className={DASHBOARD_STYLES.agendaIconMeeting} />}
+                        </span>
+                        <div className={DASHBOARD_STYLES.agendaCard}>
+                          <div className="flex justify-between items-center">
+                            <div>
+                              <p className={DASHBOARD_STYLES.agendaDetails}>
+                                {item.type === 'article' ? `Learning: ${item.category}` : `Meeting: ${item.date}`}
+                              </p>
+                              <a href="#" className={DASHBOARD_STYLES.agendaTitle}>
+                                {item.title}
+                              </a>
+                            </div>
+                            <button 
+                              aria-label="View notes"
+                              className={DASHBOARD_STYLES.agendaNotesButton}
+                            >
+                              <NotebookText className={DASHBOARD_STYLES.agendaNotesIcon} />
+                            </button>
+                          </div>
+                        </div>
+                      </li>
+                    ))}
+                  </ol>
                 </Card>
             </div>
 
@@ -100,16 +233,16 @@ export const Dashboard = () => {
                 {/* Live Activity Stream */}
                 <Card className="flex flex-col">
                     <SectionTitle icon={<Activity className="h-6 w-6 text-blue-500" />} title="Live Activity Stream" />
-                    <div className="flex-grow overflow-y-auto pr-2 max-h-[350px]"> {/* Added max-height */}
+                    <div className={DASHBOARD_STYLES.cardScrollableContent}>
                         <ul className="space-y-4">
                             {MOCK_ACTIVITY_STREAM.map(item => (
-                                <li key={item.id} className="flex items-start p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                                <li key={item.id} className={DASHBOARD_STYLES.activityListItem}>
                                     <div className="flex-shrink-0 mt-1">{item.icon}</div>
                                     <div className="ml-4 flex-grow">
                                         <p className="text-sm text-gray-700 dark:text-gray-300">
-                                            <span className="font-bold text-gray-900 dark:text-white">{item.user}</span> {item.action}
+                                            <span className={DASHBOARD_STYLES.activityUser}>{item.user}</span> {item.action}
                                         </p>
-                                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{item.time}</p>
+                                        <p className={DASHBOARD_STYLES.activityTime}>{item.time}</p>
                                     </div>
                                 </li>
                             ))}
@@ -120,27 +253,23 @@ export const Dashboard = () => {
                 {/* Upcoming & Recent Meetings */}
                 <Card className="flex flex-col">
                     <SectionTitle icon={<Calendar className="h-6 w-6 text-purple-500" />} title="Upcoming & Recent Meetings" />
-                    <div className="flex-grow overflow-y-auto pr-2 max-h-[350px]"> {/* Added max-height */}
+                    <div className={DASHBOARD_STYLES.cardScrollableContent}>
                         <ul className="space-y-3">
                             {MOCK_MEETINGS.map(item => (
-                                <li key={item.id} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                                <li key={item.id} className={DASHBOARD_STYLES.meetingsListItem}>
                                     <div className="flex items-center">
-                                        <span className={`text-xs font-semibold mr-4 px-2 py-1 rounded-full ${
+                                        <span className={`${DASHBOARD_STYLES.meetingsStatusBase} ${
                                             item.status === 'Upcoming' 
-                                            ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200' 
-                                            : 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+                                            ? DASHBOARD_STYLES.meetingsStatusUpcoming 
+                                            : DASHBOARD_STYLES.meetingsStatusRecent
                                         }`}>
                                             {item.status}
                                         </span>
                                         <div>
-                                            <p className="font-semibold text-gray-800 dark:text-white">{item.title}</p>
-                                            <p className="text-xs text-gray-500 dark:text-gray-400">{item.date}</p>
+                                            <p className={DASHBOARD_STYLES.meetingsTitle}>{item.title}</p>
+                                            <p className={DASHBOARD_STYLES.meetingsDate}>{item.date}</p>
                                         </div>
                                     </div>
-                                    <button className="flex items-center text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:underline">
-                                        View Notes
-                                        <ArrowRight className="h-4 w-4 ml-1" />
-                                    </button>
                                 </li>
                             ))}
                         </ul>
