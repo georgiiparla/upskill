@@ -55,6 +55,7 @@ const SentimentChart = () => {
 			<ResponsiveContainer width="100%" height={200}>
 				<PieChart>
 					<Pie
+						isAnimationActive={false}
 						data={sentimentData}
 						cx="50%"
 						cy="50%"
@@ -78,6 +79,7 @@ const SentimentChart = () => {
 							border: '1px solid',
 							borderColor: theme === 'dark' ? '#374151' : '#e5e7eb'
 						}}
+						itemStyle={{ color: theme === 'dark' ? '#ffffff' : '#000000' }}
 					/>
 					{/* Reverted to a single <text> element for perfect centering */}
 					<text x="50%" y="50%" textAnchor="middle" dominantBaseline="middle"
@@ -110,6 +112,7 @@ const FeedbackTrendsChart = () => {
 						dataKey="value"
 						nameKey="name"
 						paddingAngle={5}
+						isAnimationActive={false}
 					>
 						{feedbackTrendsData.map((entry, index) => (
 							<Cell key={`cell-${index}`} fill={TRENDS_COLORS[index % TRENDS_COLORS.length]} stroke={theme === 'dark' ? '#1f2937' : '#ffffff'} />
@@ -123,6 +126,7 @@ const FeedbackTrendsChart = () => {
 							border: '1px solid',
 							borderColor: theme === 'dark' ? '#374151' : '#e5e7eb'
 						}}
+						itemStyle={{ color: theme === 'dark' ? '#ffffff' : '#000000' }}
 					/>
 					{/* Reverted to a single <text> element for perfect centering */}
 					<text x="50%" y="50%" textAnchor="middle" dominantBaseline="middle"
@@ -146,12 +150,12 @@ export const Feedback = () => {
 		<div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
 			{/* Feedback Submission Form */}
 			<div>
-				<SectionTitle icon={<ThumbsUp className="h-6 w-6 text-indigo-500" />} title="Real-Time Feedback" />
+				<SectionTitle icon={<ThumbsUp className="h-6 w-6 text-indigo-500" />} title="Your Feedback" />
 				<Card>
 					<form onSubmit={(e) => e.preventDefault()}>
 						<div className="mb-4">
-							<label htmlFor="feedback-text" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your Feedback</label>
-							<textarea id="feedback-text" rows="6" className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Provide constructive feedback..."></textarea>
+							<label htmlFor="feedback-text" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">What do you think?</label>
+							<textarea id="feedback-text" rows="6" className="block p-2.5 w-full h-[232px] text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Provide constructive feedback..."></textarea>
 						</div>
 						<div className="flex items-center mb-4">
 							<input id="anonymous-checkbox" type="checkbox" checked={isAnonymous} onChange={() => setIsAnonymous(!isAnonymous)} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />

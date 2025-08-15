@@ -91,8 +91,8 @@ export default function App() {
 								<Image
 									src="/rs2logo.png" // The path to your image in the 'public' folder
 									alt="Upskill Logo"
-									width={32}         // Corresponds to Tailwind's h-8 (8 * 4px = 32px)
-									height={32}        // Corresponds to Tailwind's w-8
+									width={24}         // Corresponds to Tailwind's h-8 (8 * 4px = 32px)
+									height={24}        // Corresponds to Tailwind's w-8
 									className="mr-2"   // Keeps the margin from the text
 								/>
 								Upskill
