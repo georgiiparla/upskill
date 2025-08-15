@@ -87,11 +87,13 @@ const DASHBOARD_STYLES = {
         pr-2 
         max-h-[350px]
     `,
+    // UPDATED STYLE: Removed background, added subtle hover effect
     activityListItem: `
         flex items-start 
         p-3 
-        bg-gray-50 dark:bg-gray-700/50 
         rounded-lg
+        transition-colors
+        hover:bg-gray-500/10
     `,
     activityUser: `
         font-bold 
@@ -102,13 +104,13 @@ const DASHBOARD_STYLES = {
         text-gray-500 dark:text-gray-400 
         mt-0.5
     `,
+    // UPDATED STYLE: Removed background, added subtle hover effect
     meetingsListItem: `
         flex items-center justify-between 
         p-3 
-        bg-gray-50 dark:bg-gray-700/50 
         rounded-lg 
-        hover:bg-gray-100 dark:hover:bg-gray-700 
         transition-colors
+        hover:bg-gray-500/10
     `,
     meetingsStatusBase: `
         text-xs 

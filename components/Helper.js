@@ -11,23 +11,24 @@ const STYLES = {
         ml-3
     `,
     cardContainer: `
-        bg-white dark:bg-gray-800
+        bg-white/50 dark:bg-gray-800/50
+        backdrop-blur-lg
         rounded-xl 
-        shadow-md hover:shadow-lg
-        overflow-hidden
+        border border-white/20
+        shadow-lg
         transition-all duration-300
     `
 }
 
 export const SectionTitle = ({ icon, title }) => (
-	<div className={STYLES.sectionTitleContainer}>
-		{icon}
-		<h2 className={STYLES.sectionTitleHeader2}>{title}</h2>
-	</div>
+    <div className={STYLES.sectionTitleContainer}>
+        {icon}
+        <h2 className={STYLES.sectionTitleHeader2}>{title}</h2>
+    </div>
 );
 
 export const Card = ({ children, className = '' }) => (
-	<div className={`${STYLES.cardContainer} ${className}`}>
-		<div className="p-6">{children}</div>
-	</div>
+    <div className={`${STYLES.cardContainer} ${className}`}>
+        <div className="p-6">{children}</div>
+    </div>
 );

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useTheme } from 'next-themes';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Sun, Moon } from 'lucide-react';
 import Image from 'next/image';
 
 import { Dashboard } from "../components/Dashboard";
@@ -18,9 +18,13 @@ const APP_STYLES = {
         bg-gray-100 dark:bg-gray-900
     `,
     nav: `
-        bg-white dark:bg-gray-800 
+        bg-white/80 dark:bg-gray-800/80
+        backdrop-blur-sm
         border-b 
         border-gray-200 dark:border-gray-700
+        sticky top-0
+        z-50
+        transition-all duration-300 ease-in-out
     `,
     navContainer: `
         mx-auto 
@@ -29,9 +33,13 @@ const APP_STYLES = {
     `,
     navFlexContainer: `
         flex 
-        h-16 
         items-center 
         justify-between
+        h-16
+        transition-all duration-300 ease-in-out
+    `,
+    navFlexContainerScrolled: `
+        h-11
     `,
     logoAndLinksContainer: `
         flex 
@@ -47,6 +55,14 @@ const APP_STYLES = {
     `,
     logoImage: `
         mr-2
+    `,
+    logoText: `
+        transition-all duration-300 ease-in-out
+        whitespace-nowrap
+        overflow-hidden
+    `,
+    logoTextScrolled: `
+        w-0 opacity-0
     `,
     desktopNavWrapper: `
         hidden 
@@ -109,7 +125,8 @@ const APP_STYLES = {
 };
 
 const NAVLINK_STYLES = {
-    base: `
+    // Default (unscrolled) styles
+    baseDefault: `
         border-b-2 
         px-1 pt-1 
         text-sm 
@@ -118,15 +135,39 @@ const NAVLINK_STYLES = {
         duration-150 
         ease-in-out
     `,
-    active: `
+    activeDefault: `
         border-blue-700 dark:border-blue-700 
         text-gray-900 dark:text-gray-100
     `,
-    inactive: `
+    inactiveDefault: `
         border-transparent 
         text-gray-500 dark:text-gray-400 
         hover:border-gray-300 dark:hover:border-gray-600 
         hover:text-gray-700 dark:hover:text-gray-300
+    `,
+    // Scrolled styles
+    baseScrolled: `
+        relative
+        px-3 py-2
+        text-sm 
+        font-medium 
+        transition-colors 
+        duration-150 
+        ease-in-out
+    `,
+    activeScrolled: `
+        text-gray-900 dark:text-gray-100
+    `,
+    inactiveScrolled: `
+        text-gray-500 dark:text-gray-400 
+        hover:text-gray-700 dark:hover:text-gray-300
+    `,
+    // Style for the dot itself
+    activeDot: `
+      absolute left-0 top-1/2 -translate-y-1/2 
+      h-1.5 w-1.5 
+      bg-blue-700 rounded-full 
+      transition-opacity duration-300
     `
 };
 
@@ -157,6 +198,22 @@ export default function App() {
     const [mounted, setMounted] = useState(false);
     const [currentPage, setCurrentPage] = useState('dashboard');
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [scrolled, setScrolled] = useState(false);
+
+    // Effect to handle scroll detection
+    useEffect(() => {
+        const handleScroll = () => {
+            const isScrolled = window.scrollY > 50;
+            if (isScrolled !== scrolled) {
+                setScrolled(isScrolled);
+            }
+        };
+
+        document.addEventListener('scroll', handleScroll);
+        return () => {
+            document.removeEventListener('scroll', handleScroll);
+        };
+    }, [scrolled]);
 
     useEffect(() => {
         setMounted(true);
@@ -166,17 +223,23 @@ export default function App() {
         return null;
     }
 
-    const NavLink = ({ pageName, children }) => {
+    const NavLink = ({ pageName, children, scrolled }) => {
         const isActive = currentPage === pageName;
-        const activeClass = isActive ? NAVLINK_STYLES.active : NAVLINK_STYLES.inactive;
+
+        const baseClass = scrolled ? NAVLINK_STYLES.baseScrolled : NAVLINK_STYLES.baseDefault;
+        const activeClass = isActive 
+            ? (scrolled ? NAVLINK_STYLES.activeScrolled : NAVLINK_STYLES.activeDefault) 
+            : (scrolled ? NAVLINK_STYLES.inactiveScrolled : NAVLINK_STYLES.inactiveDefault);
+        
         return (
             <button
                 onClick={() => {
                     setCurrentPage(pageName);
                     setIsMenuOpen(false);
                 }}
-                className={`${NAVLINK_STYLES.base} ${activeClass}`}
+                className={`${baseClass} ${activeClass}`}
             >
+                <span className={`${NAVLINK_STYLES.activeDot} ${isActive && scrolled ? 'opacity-100' : 'opacity-0'}`}></span>
                 {children}
             </button>
         );
@@ -218,7 +281,7 @@ export default function App() {
             {/* Navigation */}
             <nav className={APP_STYLES.nav}>
                 <div className={APP_STYLES.navContainer}>
-                    <div className={APP_STYLES.navFlexContainer}>
+                    <div className={`${APP_STYLES.navFlexContainer} ${scrolled ? APP_STYLES.navFlexContainerScrolled : ''}`}>
                         <div className={APP_STYLES.logoAndLinksContainer}>
                             {/* Logo */}
                             <div className={APP_STYLES.logoContainer}>
@@ -229,15 +292,17 @@ export default function App() {
                                     height={24}
                                     className={APP_STYLES.logoImage}
                                 />
-                                Upskill
+                                <span className={`${APP_STYLES.logoText} ${scrolled ? APP_STYLES.logoTextScrolled : ''}`}>
+                                    Upskill
+                                </span>
                             </div>
                             {/* Desktop Navigation Links */}
                             <div className={APP_STYLES.desktopNavWrapper}>
                                 <div className={APP_STYLES.desktopNavLinksContainer}>
-                                    <NavLink pageName="dashboard">Dashboard</NavLink>
-                                    <NavLink pageName="quests">Quests</NavLink>
-                                    <NavLink pageName="feedback">Feedback</NavLink>
-                                    <NavLink pageName="leaderboard">Leaderboard</NavLink>
+                                    <NavLink pageName="dashboard" scrolled={scrolled}>Dashboard</NavLink>
+                                    <NavLink pageName="quests" scrolled={scrolled}>Quests</NavLink>
+                                    <NavLink pageName="feedback" scrolled={scrolled}>Feedback</NavLink>
+                                    <NavLink pageName="leaderboard" scrolled={scrolled}>Leaderboard</NavLink>
                                 </div>
                             </div>
                         </div>
@@ -247,7 +312,11 @@ export default function App() {
                                 onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
                                 className={APP_STYLES.themeToggleButton}
                             >
-                                {theme === 'dark' ? '☀️' : '🌙'}
+                                {theme === 'dark' ? (
+                                    <Sun className="h-5 w-5" />
+                                ) : (
+                                    <Moon className="h-5 w-5" />
+                                )}
                             </button>
                             {/* Hamburger Menu Button */}
                             <div className={APP_STYLES.hamburgerMenuWrapper}>

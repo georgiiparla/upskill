@@ -146,7 +146,7 @@ export const Leaderboard = () => {
                     </div>
 
                     {/* 1st Place */}
-                    <div className="md:order-2">
+                    <div className="md:order-2 relative z-10"> {/* <-- THE FIX IS HERE */}
                          {topThree[0] && (
                             <Card className={`${LEADERBOARD_STYLES.cardBase} ${LEADERBOARD_STYLES.card1st}`}>
                                 <Trophy className={LEADERBOARD_STYLES.podiumTrophy1st} />
