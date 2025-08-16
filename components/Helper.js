@@ -20,8 +20,8 @@ const STYLES = {
     `
 }
 
-export const SectionTitle = ({ icon, title }) => (
-    <div className={STYLES.sectionTitleContainer}>
+export const SectionTitle = ({ icon, title, className}) => (
+    <div className={`${STYLES.sectionTitleContainer} ${className}`}>
         {icon}
         <h2 className={STYLES.sectionTitleHeader2}>{title}</h2>
     </div>

@@ -39,7 +39,7 @@ const APP_STYLES = {
         transition-all duration-300 ease-in-out
     `,
     navFlexContainerScrolled: `
-        h-11
+        h-[44px]
     `,
     logoAndLinksContainer: `
         flex 

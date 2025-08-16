@@ -27,7 +27,7 @@ export const MOCK_LEADERBOARD = [
 // --- QUESTS DATA ---
 export const MOCK_QUESTS = [
     { id: 1, title: 'Adaptability Ace', description: 'Complete the "Handling Change" module and score 90% on the quiz.', points: 150, progress: 100, completed: true },
-    { id: 2, title: 'Communication Champion', description: 'Provide constructive feedback on 5 different project documents.', points: 200, progress: 60, completed: false },
+    { id: 2, title: 'Communication Pro', description: 'Provide constructive feedback on 5 different project documents.', points: 200, progress: 60, completed: false },
     { id: 3, title: 'Leadership Leap', description: 'Lead a project planning session and submit the meeting notes.', points: 250, progress: 0, completed: false },
     { id: 4, title: 'Teamwork Titan', description: 'Successfully complete a paired programming challenge.', points: 100, progress: 100, completed: true },
 ];

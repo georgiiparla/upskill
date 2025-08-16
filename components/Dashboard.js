@@ -177,9 +177,9 @@ export const Dashboard = () => {
                 <Card>
                   <SectionTitle 
                     icon={<BookOpen className="h-6 w-6 text-indigo-500" />} 
-                    title="This Week's Agenda" 
+                    title="This Week's Agenda"
+                    className={'mb-7'}
                   />
-                  <br />
                   <ol className={DASHBOARD_STYLES.agendaTimeline}>
                     {MOCK_AGENDA_ITEMS.map((item) => (
                       <li key={item.id} className="mb-6 ml-6">              
