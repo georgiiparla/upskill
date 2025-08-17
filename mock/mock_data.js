@@ -35,12 +35,12 @@ export const MOCK_QUESTS = [
 // --- DASHBOARD DATA ---
 
 export const MOCK_ACTIVITY_STREAM = [
-	{ id: 1, user: 'Casey Jordan', action: 'completed the quest "Teamwork Titan".', time: '5m ago', icon: <Award className="h-5 w-5 text-yellow-500" /> },
-	{ id: 2, user: 'Alex Rivera', action: 'provided feedback on the "Q3 Marketing Plan".', time: '2h ago', icon: <ThumbsUp className="h-5 w-5 text-blue-500" /> },
-	{ id: 3, user: 'Taylor Morgan', action: 'updated the status of task "Deploy Staging Server".', time: '1d ago', icon: <ListChecks className="h-5 w-5 text-green-500" /> },
-	{ id: 4, user: 'Jamie Lee', action: 'read the article "Leading Without Authority".', time: '1d ago', icon: <BookOpen className="h-5 w-5 text-purple-500" /> },
-	{ id: 5, user: 'Jordan Smith', action: 'RSVP\'d to "Q3 Project Kickoff".', time: '2d ago', icon: <Calendar className="h-5 w-5 text-red-500" /> },
-	{ id: 6, user: 'Riley Chen', action: 'commented on the "Weekly Sync" notes.', time: '2d ago', icon: <MessageSquare className="h-5 w-5 text-teal-500" /> },
+    { id: 1, user: 'Casey Jordan', action: 'completed the quest "Teamwork Titan".', time: '5m ago', icon: <Award className="h-5 w-5 text-yellow-500" /> },
+    { id: 2, user: 'Alex Rivera', action: 'provided feedback on the "Q3 Marketing Plan".', time: '2h ago', icon: <ThumbsUp className="h-5 w-5 text-blue-500" /> },
+    { id: 3, user: 'Taylor Morgan', action: 'updated the status of task "Deploy Staging Server".', time: '1d ago', icon: <ListChecks className="h-5 w-5 text-green-500" /> },
+    { id: 4, user: 'Jamie Lee', action: 'read the article "Leading Without Authority".', time: '1d ago', icon: <BookOpen className="h-5 w-5 text-purple-500" /> },
+    { id: 5, user: 'Jordan Smith', action: 'RSVP\'d to "Q3 Project Kickoff".', time: '2d ago', icon: <Calendar className="h-5 w-5 text-red-500" /> },
+    { id: 6, user: 'Riley Chen', action: 'commented on the "Weekly Sync" notes.', time: '2d ago', icon: <MessageSquare className="h-5 w-5 text-teal-500" /> },
     { id: 7, user: 'Devin Patel', action: 'completed the quest "Communication Champion".', time: '2d ago', icon: <Award className="h-5 w-5 text-yellow-500" /> },
     { id: 8, user: 'Skyler Kim', action: 'provided feedback on the "New Feature" design.', time: '3d ago', icon: <ThumbsUp className="h-5 w-5 text-blue-500" /> },
     { id: 9, user: 'Alex Rivera', action: 'unlocked the "Feedback Pro" badge.', time: '3d ago', icon: <Award className="h-5 w-5 text-yellow-500" /> },
@@ -86,12 +86,6 @@ export const MOCK_PERSONAL_ENGAGEMENT_DATA = [
     { category: 'Skills', value: 45, fullMark: 100 },
 ];
 
-export const SENTIMENT_DATA = [
-    { name: 'Positive', value: 400 },
-    { name: 'Neutral', value: 120 },
-    { name: 'Negative', value: 80 },
-];
-
 export const FEEDBACK_TRENDS_DATA = [
     { name: 'Communication', value: 15 },
     { name: 'Leadership', value: 25 },
@@ -99,5 +93,43 @@ export const FEEDBACK_TRENDS_DATA = [
     { name: 'Workload', value: 12 },
 ];
 
-export const SENTIMENT_COLORS = ['#22c55e', '#f59e0b', '#ef4444']; // Green, Amber, Red
 export const TRENDS_COLORS = ['#818cf8', '#a78bfa', '#c084fc', '#f472b6']; // Indigo, Purple, Fuchsia, Pink
+
+// For the new Topic dropdown in the form
+export const MOCK_FEEDBACK_TOPICS = [
+    'General',
+    'Q3 Marketing Plan',
+    'New Feature Design',
+    'API Documentation',
+    'Onboarding Process',
+    'Weekly Sync Meeting',
+    'Project Alpha Performance',
+    'Team Offsite Event',
+];
+
+// For the Sentiment Analysis chart
+export const SENTIMENT_DATA = [
+    { name: 'Positive', value: 400 },
+    { name: 'Neutral', value: 120 },
+    { name: 'Negative', value: 80 },
+];
+export const SENTIMENT_COLORS = ['#22c55e', '#f59e0b', '#ef4444'];
+
+// For the new scrollable history list
+export const MOCK_FEEDBACK_HISTORY = [
+    { id: 1, subject: 'Q3 Marketing Plan', content: 'The plan is well-structured, but the timeline seems a bit too aggressive. Consider adding a buffer week.', date: '2025-08-15', sentiment: 'Neutral' },
+    { id: 2, subject: 'New Feature Design', content: 'I love the new UI! It\'s much more intuitive than the previous version. Great work!', date: '2025-08-14', sentiment: 'Positive' },
+    { id: 3, subject: 'API Documentation', content: 'The endpoint for user authentication is missing examples. It was difficult to understand the required request body.', date: '2025-08-12', sentiment: 'Negative' },
+    { id: 4, subject: 'Onboarding Process', content: 'The new hire checklist is very helpful, but links to the HR system are broken.', date: '2025-08-11', sentiment: 'Negative' },
+    { id: 5, subject: 'Weekly Sync Meeting', content: 'These meetings are productive. The agenda is clear and we stick to the topics. No changes needed.', date: '2025-08-08', sentiment: 'Positive' },
+    { id: 6, subject: 'Project Alpha Performance', content: 'The application is running slower this week. We should investigate potential memory leaks.', date: '2025-08-07', sentiment: 'Neutral' },
+    { id: 7, subject: 'Team Offsite Event', content: 'The proposed venue looks great and the activities seem fun. I\'m looking forward to it.', date: '2025-08-05', sentiment: 'Positive' },
+];
+
+// --- NEW: Data for the Quick Insights component ---
+export const MOCK_FEEDBACK_STATS = {
+    totalSubmissions: 600,
+    responseRate: 82,
+    positiveTrend: 5, // in percentage
+};
+

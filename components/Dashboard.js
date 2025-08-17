@@ -11,10 +11,10 @@ import React from 'react';
 
 import { Card, SectionTitle } from "./Helper";
 
-import { 
-    MOCK_ACTIVITY_STREAM, 
-    MOCK_AGENDA_ITEMS, 
-    MOCK_MEETINGS, 
+import {
+    MOCK_ACTIVITY_STREAM,
+    MOCK_AGENDA_ITEMS,
+    MOCK_MEETINGS,
     MOCK_TEAM_ENGAGEMENT_DATA,
     MOCK_PERSONAL_ENGAGEMENT_DATA
 } from "../mock/mock_data";
@@ -150,8 +150,8 @@ const EngagementChart = ({ data, title, icon, color }) => {
                     <PolarGrid stroke={theme === 'dark' ? '#374151' : '#e5e7eb'} />
                     <PolarAngleAxis dataKey="category" stroke={tickColor} fontSize={12} />
                     <Radar name="Engagement" dataKey="value" stroke={color} fill={color} fillOpacity={0.6} />
-                    <Tooltip 
-                        contentStyle={{ 
+                    <Tooltip
+                        contentStyle={{
                             backgroundColor: theme === 'dark' ? 'rgba(31, 41, 55, 0.8)' : 'rgba(255, 255, 255, 0.8)',
                             backdropFilter: 'blur(4px)',
                             borderRadius: '0.5rem',
@@ -175,59 +175,58 @@ export const Dashboard = () => {
             {/* --- This Week's Agenda Section (Full Width) --- */}
             <div>
                 <Card>
-                  <SectionTitle 
-                    icon={<BookOpen className="h-6 w-6 text-indigo-500" />} 
-                    title="This Week's Agenda"
-                    className={'mb-7'}
-                  />
-                  <ol className={DASHBOARD_STYLES.agendaTimeline}>
-                    {MOCK_AGENDA_ITEMS.map((item) => (
-                      <li key={item.id} className="mb-6 ml-6">              
-                        <span className={`${DASHBOARD_STYLES.agendaIconWrapperBase} ${
-                          item.type === 'article' ? DASHBOARD_STYLES.agendaIconWrapperArticle : DASHBOARD_STYLES.agendaIconWrapperMeeting
-                        }`}>
-                          {item.type === 'article' ? 
-                            <BookOpen className={DASHBOARD_STYLES.agendaIconArticle} /> : 
-                            <Calendar className={DASHBOARD_STYLES.agendaIconMeeting} />}
-                        </span>
-                        <div className={DASHBOARD_STYLES.agendaCard}>
-                          <div className="flex justify-between items-center">
-                            <div>
-                              <p className={DASHBOARD_STYLES.agendaDetails}>
-                                {item.type === 'article' ? `Learning: ${item.category}` : `Meeting: ${item.date}`}
-                              </p>
-                              <a href="#" className={DASHBOARD_STYLES.agendaTitle}>
-                                {item.title}
-                              </a>
-                            </div>
-                            <button 
-                              aria-label="View notes"
-                              className={DASHBOARD_STYLES.agendaNotesButton}
-                            >
-                              <NotebookText className={DASHBOARD_STYLES.agendaNotesIcon} />
-                            </button>
-                          </div>
-                        </div>
-                      </li>
-                    ))}
-                  </ol>
+                    <SectionTitle
+                        icon={<BookOpen className="h-6 w-6 text-indigo-500" />}
+                        title="This Week's Agenda"
+                        className={'mb-7'}
+                    />
+                    <ol className={DASHBOARD_STYLES.agendaTimeline}>
+                        {MOCK_AGENDA_ITEMS.map((item) => (
+                            <li key={item.id} className="mb-6 ml-6">
+                                <span className={`${DASHBOARD_STYLES.agendaIconWrapperBase} ${item.type === 'article' ? DASHBOARD_STYLES.agendaIconWrapperArticle : DASHBOARD_STYLES.agendaIconWrapperMeeting
+                                    }`}>
+                                    {item.type === 'article' ?
+                                        <BookOpen className={DASHBOARD_STYLES.agendaIconArticle} /> :
+                                        <Calendar className={DASHBOARD_STYLES.agendaIconMeeting} />}
+                                </span>
+                                <div className={DASHBOARD_STYLES.agendaCard}>
+                                    <div className="flex justify-between items-center">
+                                        <div>
+                                            <p className={DASHBOARD_STYLES.agendaDetails}>
+                                                {item.type === 'article' ? `Learning: ${item.category}` : `Meeting: ${item.date}`}
+                                            </p>
+                                            <a href="#" className={DASHBOARD_STYLES.agendaTitle}>
+                                                {item.title}
+                                            </a>
+                                        </div>
+                                        <button
+                                            aria-label="View notes"
+                                            className={DASHBOARD_STYLES.agendaNotesButton}
+                                        >
+                                            <NotebookText className={DASHBOARD_STYLES.agendaNotesIcon} />
+                                        </button>
+                                    </div>
+                                </div>
+                            </li>
+                        ))}
+                    </ol>
                 </Card>
             </div>
 
             {/* --- 2x2 Grid Section --- */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Team Engagement */}
-                <EngagementChart 
-                    data={MOCK_TEAM_ENGAGEMENT_DATA} 
-                    title="Team Engagement" 
+                <EngagementChart
+                    data={MOCK_TEAM_ENGAGEMENT_DATA}
+                    title="Team Engagement"
                     icon={<Users className="h-6 w-6 text-purple-500" />}
                     color="#a78bfa"
                 />
 
                 {/* Personal Focus */}
-                <EngagementChart 
-                    data={MOCK_PERSONAL_ENGAGEMENT_DATA} 
-                    title="Personal Focus" 
+                <EngagementChart
+                    data={MOCK_PERSONAL_ENGAGEMENT_DATA}
+                    title="Personal Focus"
                     icon={<User className="h-6 w-6 text-green-500" />}
                     color="#22c55e"
                 />
@@ -251,7 +250,7 @@ export const Dashboard = () => {
                         </ul>
                     </div>
                 </Card>
-                
+
                 {/* Upcoming & Recent Meetings */}
                 <Card className="flex flex-col">
                     <SectionTitle icon={<Calendar className="h-6 w-6 text-purple-500" />} title="Upcoming & Recent Meetings" />
@@ -260,11 +259,10 @@ export const Dashboard = () => {
                             {MOCK_MEETINGS.map(item => (
                                 <li key={item.id} className={DASHBOARD_STYLES.meetingsListItem}>
                                     <div className="flex items-center">
-                                        <span className={`${DASHBOARD_STYLES.meetingsStatusBase} ${
-                                            item.status === 'Upcoming' 
-                                            ? DASHBOARD_STYLES.meetingsStatusUpcoming 
-                                            : DASHBOARD_STYLES.meetingsStatusRecent
-                                        }`}>
+                                        <span className={`${DASHBOARD_STYLES.meetingsStatusBase} ${item.status === 'Upcoming'
+                                                ? DASHBOARD_STYLES.meetingsStatusUpcoming
+                                                : DASHBOARD_STYLES.meetingsStatusRecent
+                                            }`}>
                                             {item.status}
                                         </span>
                                         <div>
