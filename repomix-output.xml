@@ -41,35 +41,30 @@ The content is organized as follows:
 </file_summary>
 
 <directory_structure>
-app/
-  globals.css
-  layout.js
-  page.js
-components/
-  feedback/
-    FeedbackCharts.js
-    FeedbackHistory.js
-    FeedbackStats.js
-    FeedbackTips.js
-  Dashboard.js
-  Feedback.js
-  Helper.js
-  Leaderboard.js
-  Quests.js
-  ThemeProvider.js
-mock/
-  mock_data.js
-public/
-  file.svg
-  globe.svg
-  next.svg
-  vercel.svg
-  window.svg
 .gitignore
+app/globals.css
+app/layout.js
+app/page.js
+components/Dashboard.js
+components/Feedback.js
+components/feedback/FeedbackCharts.js
+components/feedback/FeedbackHistory.js
+components/feedback/FeedbackStats.js
+components/feedback/FeedbackTips.js
+components/Helper.js
+components/Leaderboard.js
+components/Quests.js
+components/ThemeProvider.js
 jsconfig.json
+mock/mock_data.js
 next.config.mjs
 package.json
 postcss.config.mjs
+public/file.svg
+public/globe.svg
+public/next.svg
+public/vercel.svg
+public/window.svg
 README.md
 tailwind.config.js
 </directory_structure>
@@ -77,117 +72,48 @@ tailwind.config.js
 <files>
 This section contains the contents of the repository's files.
 
-<file path="components/feedback/FeedbackHistory.js">
-"use client";
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { MOCK_FEEDBACK_HISTORY } from "@/mock/mock_data";
-import { Card, SectionTitle } from "../Helper";
-import { MessageSquare, Loader2 } from "lucide-react";
+<file path=".gitignore">
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-// --- Skeleton Component for Initial Loading ---
-const FeedbackSkeleton = () => (
-    <li className="p-3 rounded-lg bg-gray-50 dark:bg-gray-700/50 border-l-4 border-gray-300 dark:border-gray-600 animate-pulse">
-        <div className="flex justify-between items-center mb-2">
-            <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-1/3"></div>
-            <div className="h-3 bg-gray-300 dark:bg-gray-600 rounded w-1/4"></div>
-        </div>
-        <div className="h-3 bg-gray-300 dark:bg-gray-600 rounded w-full"></div>
-    </li>
-);
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
 
-const getSentimentColor = (sentiment) => {
-    switch (sentiment) {
-        case 'Positive': return 'border-l-4 border-green-500';
-        case 'Negative': return 'border-l-4 border-red-500';
-        default: return 'border-l-4 border-amber-500';
-    }
-};
+# testing
+/coverage
 
-export const FeedbackHistory = () => {
-    const [items, setItems] = useState([]);
-    const [page, setPage] = useState(1);
-    const [hasMore, setHasMore] = useState(true);
-    const [isLoading, setIsLoading] = useState(true);
-    const observer = useRef();
-    const ITEMS_PER_PAGE = 5; // Increased items per page for a longer list
-    const FAKE_DELAY_MS = 1500;
+# next.js
+/.next/
+/out/
 
-    // Effect for INITIAL data load with skeleton
-    useEffect(() => {
-        setIsLoading(true);
-        const timer = setTimeout(() => {
-            const initialItems = MOCK_FEEDBACK_HISTORY.slice(0, ITEMS_PER_PAGE);
-            setItems(initialItems);
-            setHasMore(MOCK_FEEDBACK_HISTORY.length > ITEMS_PER_PAGE);
-            setIsLoading(false);
-        }, FAKE_DELAY_MS);
-        return () => clearTimeout(timer);
-    }, []);
+# production
+/build
 
-    // Effect for SUBSEQUENT page loads (infinite scroll)
-    useEffect(() => {
-        if (page === 1) return;
-        // Add a loading state for subsequent fetches to show spinner
-        const timer = setTimeout(() => {
-            const startIndex = (page - 1) * ITEMS_PER_PAGE;
-            const newItems = MOCK_FEEDBACK_HISTORY.slice(startIndex, startIndex + ITEMS_PER_PAGE);
-            if (newItems.length > 0) {
-                setItems(prev => [...prev, ...newItems]);
-            }
-            setHasMore(MOCK_FEEDBACK_HISTORY.length > startIndex + ITEMS_PER_PAGE);
-        }, FAKE_DELAY_MS);
-        return () => clearTimeout(timer);
-    }, [page]);
+# misc
+.DS_Store
+*.pem
 
-    // Intersection Observer to trigger loading more items
-    const lastItemRef = useCallback(node => {
-        if (isLoading) return;
-        if (observer.current) observer.current.disconnect();
-        observer.current = new IntersectionObserver(entries => {
-            if (entries[0].isIntersecting && hasMore) {
-                setPage(prevPage => prevPage + 1);
-            }
-        });
-        if (node) observer.current.observe(node);
-    }, [isLoading, hasMore]);
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
 
-    return (
-        <div>
-            <SectionTitle icon={<MessageSquare className="h-6 w-6 text-indigo-500" />} title="Submission History" />
-            <Card>
-                <ul className="space-y-4">
-                    {items.map((item, index) => (
-                        <li
-                            ref={items.length === index + 1 ? lastItemRef : null}
-                            key={`${item.id}-${index}`}
-                            className={`p-4 rounded-lg transition-colors hover:bg-gray-500/10 ${getSentimentColor(item.sentiment)}`}
-                        >
-                            <div className="flex justify-between items-center mb-1">
-                                <h4 className="font-semibold text-gray-800 dark:text-gray-200">{item.subject}</h4>
-                                <span className="text-sm text-gray-500 dark:text-gray-400">{item.date}</span>
-                            </div>
-                            <p className="text-base text-gray-600 dark:text-gray-300">{item.content}</p>
-                        </li>
-                    ))}
-                    {/* Skeletons are shown via the isLoading flag on the parent */}
-                    {isLoading && (
-                        <>
-                            <FeedbackSkeleton />
-                            <FeedbackSkeleton />
-                            <FeedbackSkeleton />
-                        </>
-                    )}
-                </ul>
-                {/* Loader for infinite scroll */}
-                {hasMore && !isLoading && (
-                    <div className="flex justify-center items-center pt-6">
-                        <Loader2 className="h-6 w-6 text-gray-500 animate-spin" />
-                    </div>
-                )}
-            </Card>
-        </div>
-    );
-};
+# env files (can opt-in for committing if needed)
+.env*
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
 </file>
 
 <file path="components/feedback/FeedbackStats.js">
@@ -316,6 +242,23 @@ export function ThemeProvider({ children }) {
 }
 </file>
 
+<file path="jsconfig.json">
+{
+  "compilerOptions": {
+    "paths": {
+      "@/*": ["./*"]
+    }
+  }
+}
+</file>
+
+<file path="next.config.mjs">
+/** @type {import('next').NextConfig} */
+const nextConfig = {};
+
+export default nextConfig;
+</file>
+
 <file path="public/file.svg">
 <svg fill="none" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M14.5 13.5V5.41a1 1 0 0 0-.3-.7L9.8.29A1 1 0 0 0 9.08 0H1.5v13.5A2.5 2.5 0 0 0 4 16h8a2.5 2.5 0 0 0 2.5-2.5m-1.5 0v-7H8v-5H3v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1M9.5 5V2.12L12.38 5zM5.13 5h-.62v1.25h2.12V5zm-.62 3h7.12v1.25H4.5zm.62 3h-.62v1.25h7.12V11z" clip-rule="evenodd" fill="#666" fill-rule="evenodd"/></svg>
 </file>
@@ -334,67 +277,6 @@ export function ThemeProvider({ children }) {
 
 <file path="public/window.svg">
 <svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" clip-rule="evenodd" d="M1.5 2.5h13v10a1 1 0 0 1-1 1h-11a1 1 0 0 1-1-1zM0 1h16v11.5a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 0 12.5zm3.75 4.5a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5M7 4.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0m1.75.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5" fill="#666"/></svg>
-</file>
-
-<file path=".gitignore">
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
-# dependencies
-/node_modules
-/.pnp
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/versions
-
-# testing
-/coverage
-
-# next.js
-/.next/
-/out/
-
-# production
-/build
-
-# misc
-.DS_Store
-*.pem
-
-# debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-.pnpm-debug.log*
-
-# env files (can opt-in for committing if needed)
-.env*
-
-# vercel
-.vercel
-
-# typescript
-*.tsbuildinfo
-next-env.d.ts
-</file>
-
-<file path="jsconfig.json">
-{
-  "compilerOptions": {
-    "paths": {
-      "@/*": ["./*"]
-    }
-  }
-}
-</file>
-
-<file path="next.config.mjs">
-/** @type {import('next').NextConfig} */
-const nextConfig = {};
-
-export default nextConfig;
 </file>
 
 <file path="README.md">
@@ -437,22 +319,23 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 </file>
 
 <file path="tailwind.config.js">
-// tailwind.config.js
+// In tailwind.config.js
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-	darkMode: 'class', // This line is crucial for next-themes to work
+	darkMode: 'class',
 	content: [
 		'./pages/**/*.{js,ts,jsx,tsx,mdx}',
 		'./components/**/*.{js,ts,jsx,tsx,mdx}',
 		'./app/**/*.{js,ts,jsx,tsx,mdx}',
 	],
 	theme: {
-		extend: {
-			// You can add dark-mode specific colors here if needed later
-		},
+		extend: {},
 	},
-	plugins: [],
+	// 👇 UPDATE THIS PLUGINS ARRAY 👇
+	plugins: [
+        require('tailwind-scrollbar-hide') // Add this line
+    ],
 };
 </file>
 
@@ -541,6 +424,119 @@ export const SentimentChart = () => {
                     </Bar>
                 </BarChart>
             </ResponsiveContainer>
+        </div>
+    );
+};
+</file>
+
+<file path="components/feedback/FeedbackHistory.js">
+"use client";
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { MOCK_FEEDBACK_HISTORY } from "@/mock/mock_data";
+import { Card, SectionTitle } from "../Helper";
+import { MessageSquare, Loader2 } from "lucide-react";
+
+// --- Skeleton Component for Initial Loading ---
+const FeedbackSkeleton = () => (
+    <li className="p-3 rounded-lg bg-gray-50 dark:bg-gray-700/50 border-l-4 border-gray-300 dark:border-gray-600 animate-pulse">
+        <div className="flex justify-between items-center mb-2">
+            <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-1/3"></div>
+            <div className="h-3 bg-gray-300 dark:bg-gray-600 rounded w-1/4"></div>
+        </div>
+        <div className="h-3 bg-gray-300 dark:bg-gray-600 rounded w-full"></div>
+    </li>
+);
+
+const getSentimentColor = (sentiment) => {
+    switch (sentiment) {
+        case 'Positive': return 'border-l-4 border-green-500';
+        case 'Negative': return 'border-l-4 border-red-500';
+        default: return 'border-l-4 border-amber-500';
+    }
+};
+
+export const FeedbackHistory = () => {
+    const [items, setItems] = useState([]);
+    const [page, setPage] = useState(1);
+    const [hasMore, setHasMore] = useState(true);
+    const [isLoading, setIsLoading] = useState(true);
+    const observer = useRef();
+    const ITEMS_PER_PAGE = 5; // Increased items per page for a longer list
+    const FAKE_DELAY_MS = 1500;
+
+    // Effect for INITIAL data load with skeleton
+    useEffect(() => {
+        setIsLoading(true);
+        const timer = setTimeout(() => {
+            const initialItems = MOCK_FEEDBACK_HISTORY.slice(0, ITEMS_PER_PAGE);
+            setItems(initialItems);
+            setHasMore(MOCK_FEEDBACK_HISTORY.length > ITEMS_PER_PAGE);
+            setIsLoading(false);
+        }, FAKE_DELAY_MS);
+        return () => clearTimeout(timer);
+    }, []);
+
+    // Effect for SUBSEQUENT page loads (infinite scroll)
+    useEffect(() => {
+        if (page === 1) return;
+        // Add a loading state for subsequent fetches to show spinner
+        const timer = setTimeout(() => {
+            const startIndex = (page - 1) * ITEMS_PER_PAGE;
+            const newItems = MOCK_FEEDBACK_HISTORY.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+            if (newItems.length > 0) {
+                setItems(prev => [...prev, ...newItems]);
+            }
+            setHasMore(MOCK_FEEDBACK_HISTORY.length > startIndex + ITEMS_PER_PAGE);
+        }, FAKE_DELAY_MS);
+        return () => clearTimeout(timer);
+    }, [page]);
+
+    // Intersection Observer to trigger loading more items
+    const lastItemRef = useCallback(node => {
+        if (isLoading) return;
+        if (observer.current) observer.current.disconnect();
+        observer.current = new IntersectionObserver(entries => {
+            if (entries[0].isIntersecting && hasMore) {
+                setPage(prevPage => prevPage + 1);
+            }
+        });
+        if (node) observer.current.observe(node);
+    }, [isLoading, hasMore]);
+
+    return (
+        <div>
+            <SectionTitle icon={<MessageSquare className="h-6 w-6 text-indigo-500" />} title="Submission History" />
+            <Card>
+                <ul className="space-y-4">
+                    {items.map((item, index) => (
+                        <li
+                            ref={items.length === index + 1 ? lastItemRef : null}
+                            key={`${item.id}-${index}`}
+                            className={`p-4 rounded-lg transition-colors hover:bg-gray-500/10 ${getSentimentColor(item.sentiment)}`}
+                        >
+                            <div className="flex justify-between items-center mb-1">
+                                <h4 className="font-semibold text-gray-800 dark:text-gray-200">{item.subject}</h4>
+                                <span className="text-sm text-gray-500 dark:text-gray-400">{item.date}</span>
+                            </div>
+                            <p className="text-base text-gray-600 dark:text-gray-300">{item.content}</p>
+                        </li>
+                    ))}
+                    {/* Skeletons are shown via the isLoading flag on the parent */}
+                    {isLoading && (
+                        <>
+                            <FeedbackSkeleton />
+                            <FeedbackSkeleton />
+                            <FeedbackSkeleton />
+                        </>
+                    )}
+                </ul>
+                {/* Loader for infinite scroll */}
+                {hasMore && !isLoading && (
+                    <div className="flex justify-center items-center pt-6">
+                        <Loader2 className="h-6 w-6 text-gray-500 animate-spin" />
+                    </div>
+                )}
+            </Card>
         </div>
     );
 };
@@ -681,7 +677,8 @@ export default config;
     "next-themes": "^0.4.6",
     "react": "19.1.0",
     "react-dom": "19.1.0",
-    "recharts": "^3.1.2"
+    "recharts": "^3.1.2",
+    "tailwind-scrollbar-hide": "^4.0.0"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.21",
@@ -955,114 +952,6 @@ export const Leaderboard = () => {
                         </Card>
                     ))}
                 </div>
-            </div>
-        </div>
-    );
-};
-</file>
-
-<file path="components/Feedback.js">
-"use client"
-import React, { useState } from 'react';
-import { ThumbsUp, Lightbulb } from 'lucide-react';
-
-import { Card, SectionTitle } from "./Helper";
-import { FeedbackHistory } from './feedback/FeedbackHistory';
-import { MOCK_FEEDBACK_TOPICS } from '@/mock/mock_data';
-
-// --- Style Definitions ---
-const MAIN_STYLES = {
-    formLabel: `block mb-2 text-sm font-medium text-gray-900 dark:text-white`,
-    formSelect: `block w-full px-4 py-3 text-sm text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-blue-500 dark:focus:ring-blue-500 focus:border-blue-500 dark:focus:border-blue-500`,
-    formTextArea: `block px-4 py-3 w-full h-full min-h-[200px] text-sm text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-blue-500 dark:focus:ring-blue-500 focus:border-blue-500 dark:focus:border-blue-500 dark:placeholder-gray-400`,
-    formCheckBox: `w-4 h-4 text-blue-600 rounded bg-gray-100 dark:bg-gray-700 border-gray-300 dark:border-gray-600 dark:ring-offset-gray-800 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-600`,
-    formCheckBoxLabel: `ml-2 text-sm font-medium text-gray-900 dark:text-gray-300`,
-    submitButton: `w-full px-5 py-2.5 bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 text-white font-medium text-sm text-center rounded-lg`,
-};
-
-// --- Merged Feedback Form & Tips Component ---
-const FeedbackHub = () => {
-    const [isAnonymous, setIsAnonymous] = useState(false);
-    const [topic, setTopic] = useState(MOCK_FEEDBACK_TOPICS[0]);
-
-    const tips = [
-        "Be specific: Provide concrete examples instead of vague statements.",
-        "Focus on behavior, not personality. Describe the action and its impact.",
-        "Offer solutions: If you identify a problem, suggest a potential improvement.",
-        "Be timely: Provide feedback as soon as possible after the event.",
-        "Keep it constructive: The goal is to help and improve, not to criticize."
-    ];
-
-    return (
-        <div>
-            <SectionTitle icon={<ThumbsUp className="h-6 w-6 text-indigo-500" />} title="Provide Feedback" />
-            <Card>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    {/* Left Side: Form */}
-                    <form className="flex flex-col" onSubmit={(e) => e.preventDefault()}>
-                        <div className="mb-4">
-                            <label htmlFor="feedback-topic" className={MAIN_STYLES.formLabel}>Topic</label>
-                            <select
-                                id="feedback-topic"
-                                value={topic}
-                                onChange={(e) => setTopic(e.target.value)}
-                                className={MAIN_STYLES.formSelect}
-                            >
-                                {MOCK_FEEDBACK_TOPICS.map(t => <option key={t} value={t}>{t}</option>)}
-                            </select>
-                        </div>
-                        <div className="mb-4 flex-grow">
-                            <label htmlFor="feedback-text" className={MAIN_STYLES.formLabel}>What do you think?</label>
-                            <textarea
-                                id="feedback-text"
-                                className={MAIN_STYLES.formTextArea}
-                                placeholder="Provide constructive feedback..."
-                            ></textarea>
-                        </div>
-                        <div className="flex items-center mb-4">
-                            <input
-                                id="anonymous-checkbox"
-                                type="checkbox" checked={isAnonymous}
-                                onChange={() => setIsAnonymous(!isAnonymous)}
-                                className={MAIN_STYLES.formCheckBox}
-                            />
-                            <label htmlFor="anonymous-checkbox" className={MAIN_STYLES.formCheckBoxLabel}>Submit Anonymously</label>
-                        </div>
-                        <button type="submit" className={MAIN_STYLES.submitButton}>Submit Feedback</button>
-                    </form>
-
-                    {/* Right Side: Tips */}
-                    <div className="flex flex-col">
-                        <h3 className="flex items-center text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                            <Lightbulb className="h-6 w-6 text-indigo-500 mr-3" />
-                            Tips for Effective Feedback
-                        </h3>
-                        <ul className="space-y-4">
-                            {tips.map((tip, index) => (
-                                <li key={index} className="flex items-start text-sm text-gray-600 dark:text-gray-300">
-                                    <span className="mt-1 mr-3 flex-shrink-0 h-2 w-2 rounded-full bg-indigo-400"></span>
-                                    {tip}
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                </div>
-            </Card>
-        </div>
-    );
-};
-
-
-// --- Main Feedback Component ---
-export const Feedback = () => {
-    return (
-        <div className="space-y-8">
-            {/* --- Top Section: Merged Hub --- */}
-            <FeedbackHub />
-
-            {/* --- Bottom Section: Full-Width History --- */}
-            <div>
-                <FeedbackHistory />
             </div>
         </div>
     );
@@ -1569,6 +1458,114 @@ export default function App() {
 }
 </file>
 
+<file path="components/Feedback.js">
+"use client"
+import React, { useState } from 'react';
+import { ThumbsUp, Lightbulb } from 'lucide-react';
+
+import { Card, SectionTitle } from "./Helper";
+import { FeedbackHistory } from './feedback/FeedbackHistory';
+import { MOCK_FEEDBACK_TOPICS } from '@/mock/mock_data';
+
+// --- Style Definitions ---
+const MAIN_STYLES = {
+    formLabel: `block mb-2 text-sm font-medium text-gray-900 dark:text-white`,
+    formSelect: `block w-full px-4 py-3 text-sm text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-blue-500 dark:focus:ring-blue-500 focus:border-blue-500 dark:focus:border-blue-500`,
+    formTextArea: `block px-4 py-3 w-full h-full min-h-[200px] text-sm text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-blue-500 dark:focus:ring-blue-500 focus:border-blue-500 dark:focus:border-blue-500 dark:placeholder-gray-400`,
+    formCheckBox: `w-4 h-4 text-blue-600 rounded bg-gray-100 dark:bg-gray-700 border-gray-300 dark:border-gray-600 dark:ring-offset-gray-800 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-600`,
+    formCheckBoxLabel: `ml-2 text-sm font-medium text-gray-900 dark:text-gray-300`,
+    submitButton: `w-full px-5 py-2.5 bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 text-white font-medium text-sm text-center rounded-lg`,
+};
+
+// --- Merged Feedback Form & Tips Component ---
+const FeedbackHub = () => {
+    const [isAnonymous, setIsAnonymous] = useState(false);
+    const [topic, setTopic] = useState(MOCK_FEEDBACK_TOPICS[0]);
+
+    const tips = [
+        "Be specific: Provide concrete examples instead of vague statements.",
+        "Focus on behavior, not personality. Describe the action and its impact.",
+        "Offer solutions: If you identify a problem, suggest a potential improvement.",
+        "Be timely: Provide feedback as soon as possible after the event.",
+        "Keep it constructive: The goal is to help and improve, not to criticize."
+    ];
+
+    return (
+        <div>
+            <SectionTitle icon={<ThumbsUp className="h-6 w-6 text-indigo-500" />} title="Provide Feedback" />
+            <Card>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    {/* Left Side: Form */}
+                    <form className="flex flex-col" onSubmit={(e) => e.preventDefault()}>
+                        <div className="mb-4">
+                            <label htmlFor="feedback-topic" className={MAIN_STYLES.formLabel}>Topic</label>
+                            <select
+                                id="feedback-topic"
+                                value={topic}
+                                onChange={(e) => setTopic(e.target.value)}
+                                className={MAIN_STYLES.formSelect}
+                            >
+                                {MOCK_FEEDBACK_TOPICS.map(t => <option key={t} value={t}>{t}</option>)}
+                            </select>
+                        </div>
+                        <div className="mb-4 flex-grow">
+                            <label htmlFor="feedback-text" className={MAIN_STYLES.formLabel}>What do you think?</label>
+                            <textarea
+                                id="feedback-text"
+                                className={MAIN_STYLES.formTextArea}
+                                placeholder="Provide constructive feedback..."
+                            ></textarea>
+                        </div>
+                        <div className="flex items-center mb-4">
+                            <input
+                                id="anonymous-checkbox"
+                                type="checkbox" checked={isAnonymous}
+                                onChange={() => setIsAnonymous(!isAnonymous)}
+                                className={MAIN_STYLES.formCheckBox}
+                            />
+                            <label htmlFor="anonymous-checkbox" className={MAIN_STYLES.formCheckBoxLabel}>Submit Anonymously</label>
+                        </div>
+                        <button type="submit" className={MAIN_STYLES.submitButton}>Submit Feedback</button>
+                    </form>
+
+                    {/* Right Side: Tips */}
+                    <div className="flex flex-col">
+                        <h3 className="flex items-center text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                            <Lightbulb className="h-6 w-6 text-indigo-500 mr-3" />
+                            Tips for Effective Feedback
+                        </h3>
+                        <ul className="space-y-4">
+                            {tips.map((tip, index) => (
+                                <li key={index} className="flex items-start text-sm text-gray-600 dark:text-gray-300">
+                                    <span className="mt-1 mr-3 flex-shrink-0 h-2 w-2 rounded-full bg-indigo-400"></span>
+                                    {tip}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </div>
+            </Card>
+        </div>
+    );
+};
+
+
+// --- Main Feedback Component ---
+export const Feedback = () => {
+    return (
+        <div className="space-y-8">
+            {/* --- Top Section: Merged Hub --- */}
+            <FeedbackHub />
+
+            {/* --- Bottom Section: Full-Width History --- */}
+            <div>
+                <FeedbackHistory />
+            </div>
+        </div>
+    );
+};
+</file>
+
 <file path="components/Dashboard.js">
 "use client";
 import {
@@ -1576,7 +1573,7 @@ import {
     Tooltip, ResponsiveContainer
 } from 'recharts';
 import {
-    Activity, Users, User, Clock, BookOpen, Calendar, NotebookText
+    Activity, Users, User, Calendar, BookOpen, NotebookText
 } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import React from 'react';
@@ -1653,13 +1650,15 @@ const DASHBOARD_STYLES = {
         h-5 w-5 
         text-indigo-500 dark:text-indigo-400
     `,
+    // --- FIX APPLIED HERE ---
+    // Added 'scrollbar-hide' to keep the element scrollable but hide the visual scrollbar.
     cardScrollableContent: `
         flex-grow 
         overflow-y-auto 
+        scrollbar-hide
         pr-2 
         max-h-[350px]
     `,
-    // UPDATED STYLE: Removed background, added subtle hover effect
     activityListItem: `
         flex items-start 
         p-3 
@@ -1676,7 +1675,6 @@ const DASHBOARD_STYLES = {
         text-gray-500 dark:text-gray-400 
         mt-0.5
     `,
-    // UPDATED STYLE: Removed background, added subtle hover effect
     meetingsListItem: `
         flex items-center justify-between 
         p-3 
@@ -1804,6 +1802,7 @@ export const Dashboard = () => {
                 />
 
                 {/* Live Activity Stream */}
+                {/* No changes needed here, as it uses the updated DASHBOARD_STYLES object */}
                 <Card className="flex flex-col">
                     <SectionTitle icon={<Activity className="h-6 w-6 text-blue-500" />} title="Live Activity Stream" />
                     <div className={DASHBOARD_STYLES.cardScrollableContent}>
@@ -1824,6 +1823,7 @@ export const Dashboard = () => {
                 </Card>
 
                 {/* Upcoming & Recent Meetings */}
+                {/* No changes needed here, as it uses the updated DASHBOARD_STYLES object */}
                 <Card className="flex flex-col">
                     <SectionTitle icon={<Calendar className="h-6 w-6 text-purple-500" />} title="Upcoming & Recent Meetings" />
                     <div className={DASHBOARD_STYLES.cardScrollableContent}>

@@ -4,7 +4,7 @@ import {
     Tooltip, ResponsiveContainer
 } from 'recharts';
 import {
-    Activity, Users, User, Clock, BookOpen, Calendar, NotebookText
+    Activity, Users, User, Calendar, BookOpen, NotebookText
 } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import React from 'react';
@@ -81,13 +81,14 @@ const DASHBOARD_STYLES = {
         h-5 w-5 
         text-indigo-500 dark:text-indigo-400
     `,
+    // --- MANUAL CSS CLASS APPLIED HERE ---
+    // We are now using our own 'no-scrollbar' class from globals.css
     cardScrollableContent: `
         flex-grow 
         overflow-y-auto 
-        pr-2 
+        no-scrollbar
         max-h-[350px]
     `,
-    // UPDATED STYLE: Removed background, added subtle hover effect
     activityListItem: `
         flex items-start 
         p-3 
@@ -104,7 +105,6 @@ const DASHBOARD_STYLES = {
         text-gray-500 dark:text-gray-400 
         mt-0.5
     `,
-    // UPDATED STYLE: Removed background, added subtle hover effect
     meetingsListItem: `
         flex items-center justify-between 
         p-3 

@@ -8,17 +8,71 @@ import { MOCK_FEEDBACK_TOPICS } from '@/mock/mock_data';
 
 // --- Style Definitions ---
 const MAIN_STYLES = {
-    formLabel: `block mb-2 text-sm font-medium text-gray-900 dark:text-white`,
-    formSelect: `block w-full px-4 py-3 text-sm text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-blue-500 dark:focus:ring-blue-500 focus:border-blue-500 dark:focus:border-blue-500`,
-    formTextArea: `block px-4 py-3 w-full h-full min-h-[200px] text-sm text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-blue-500 dark:focus:ring-blue-500 focus:border-blue-500 dark:focus:border-blue-500 dark:placeholder-gray-400`,
-    formCheckBox: `w-4 h-4 text-blue-600 rounded bg-gray-100 dark:bg-gray-700 border-gray-300 dark:border-gray-600 dark:ring-offset-gray-800 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-600`,
-    formCheckBoxLabel: `ml-2 text-sm font-medium text-gray-900 dark:text-gray-300`,
-    submitButton: `w-full px-5 py-2.5 bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 text-white font-medium text-sm text-center rounded-lg`,
+    formLabel: `
+                block 
+                mb-2 
+                text-sm 
+                font-medium 
+                text-gray-900 
+                dark:text-white
+                `,
+    formSelect: `
+                block 
+                w-full 
+                px-4 
+                py-3 
+                text-sm 
+                text-gray-900 
+                dark:text-white 
+                bg-gray-50 dark:bg-gray-700 
+                rounded-lg 
+                border border-gray-300 dark:border-gray-600 
+                focus:ring-blue-500 dark:focus:ring-blue-500
+                focus:border-blue-500 dark:focus:border-blue-500
+                `,
+    formTextArea: `
+                block 
+                px-4 
+                py-3 
+                w-full min-h-[200px] 
+                text-sm text-gray-900 dark:text-white 
+                bg-gray-50 dark:bg-gray-700 rounded-lg 
+                border border-gray-300 dark:border-gray-600 
+                focus:ring-blue-500 dark:focus:ring-blue-500 
+                focus:border-blue-500 dark:focus:border-blue-500 
+                dark:placeholder-gray-400
+                `,
+    formCheckBox: `
+                w-4 h-4 
+                text-blue-600 
+                rounded 
+                bg-gray-100 
+                dark:bg-gray-700 b
+                order-gray-300 
+                dark:border-gray-600 dark:ring-offset-gray-800 
+                focus:ring-2 focus:ring-blue-500 
+                dark:focus:ring-blue-600`,
+    formCheckBoxLabel: `
+                ml-2 
+                text-sm 
+                font-medium 
+                text-gray-900 
+                dark:text-gray-300
+                `,
+    submitButton: `
+                w-full 
+                px-5 py-2.5 
+                bg-blue-600 hover:bg-blue-700 
+                focus:ring-4 focus:outline-none focus:ring-blue-300 
+                dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 
+                text-white font-medium text-sm text-center rounded-lg
+                `,
 };
 
 // --- Merged Feedback Form & Tips Component ---
 const FeedbackHub = () => {
-    const [isAnonymous, setIsAnonymous] = useState(false);
+    {/* // ^ Checkbox */}
+    // const [isAnonymous, setIsAnonymous] = useState(false);
     const [topic, setTopic] = useState(MOCK_FEEDBACK_TOPICS[0]);
 
     const tips = [
@@ -34,9 +88,10 @@ const FeedbackHub = () => {
             <SectionTitle icon={<ThumbsUp className="h-6 w-6 text-indigo-500" />} title="Provide Feedback" />
             <Card>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    {/* Left Side: Form */}
-                    <form className="flex flex-col" onSubmit={(e) => e.preventDefault()}>
-                        <div className="mb-4">
+                    {/* // ! Left Side: FORM FEEBACK BLOCK */}
+                    <form className="flex flex-col gap-6" onSubmit={(e) => e.preventDefault()}>
+                        {/* // ^ Feeback topic */}
+                        <div className="">
                             <label htmlFor="feedback-topic" className={MAIN_STYLES.formLabel}>Topic</label>
                             <select
                                 id="feedback-topic"
@@ -47,7 +102,8 @@ const FeedbackHub = () => {
                                 {MOCK_FEEDBACK_TOPICS.map(t => <option key={t} value={t}>{t}</option>)}
                             </select>
                         </div>
-                        <div className="mb-4 flex-grow">
+                        {/* // ^ Textarea */}
+                        <div className="flex-grow">
                             <label htmlFor="feedback-text" className={MAIN_STYLES.formLabel}>What do you think?</label>
                             <textarea
                                 id="feedback-text"
@@ -55,7 +111,8 @@ const FeedbackHub = () => {
                                 placeholder="Provide constructive feedback..."
                             ></textarea>
                         </div>
-                        <div className="flex items-center mb-4">
+                        {/* // ^ Checkbox */}
+                        {/* <div className="flex items-center mb-4">
                             <input
                                 id="anonymous-checkbox"
                                 type="checkbox" checked={isAnonymous}
@@ -63,7 +120,8 @@ const FeedbackHub = () => {
                                 className={MAIN_STYLES.formCheckBox}
                             />
                             <label htmlFor="anonymous-checkbox" className={MAIN_STYLES.formCheckBoxLabel}>Submit Anonymously</label>
-                        </div>
+                        </div> */}
+                        {/* // ^ Submit button */}
                         <button type="submit" className={MAIN_STYLES.submitButton}>Submit Feedback</button>
                     </form>
 
@@ -76,7 +134,7 @@ const FeedbackHub = () => {
                         <ul className="space-y-4">
                             {tips.map((tip, index) => (
                                 <li key={index} className="flex items-start text-sm text-gray-600 dark:text-gray-300">
-                                    <span className="mt-1 mr-3 flex-shrink-0 h-2 w-2 rounded-full bg-indigo-400"></span>
+                                    <span className="ml-2 mt-1 mr-5 flex-shrink-0 h-2 w-2 rounded-full bg-indigo-400"></span>
                                     {tip}
                                 </li>
                             ))}
