@@ -1,55 +1,47 @@
 This file is a merged representation of a subset of the codebase, containing files not matching ignore patterns, combined into a single document by Repomix.
 
-<file_summary>
-This section contains a summary of this file.
+# File Summary
 
-<purpose>
+## Purpose
 This file contains a packed representation of a subset of the repository's contents that is considered the most important context.
 It is designed to be easily consumable by AI systems for analysis, code review,
 or other automated processes.
-</purpose>
 
-<file_format>
+## File Format
 The content is organized as follows:
 1. This summary section
 2. Repository information
 3. Directory structure
 4. Repository files (if enabled)
 5. Multiple file entries, each consisting of:
-  - File path as an attribute
-  - Full contents of the file
-</file_format>
+  a. A header with the file path (## File: path/to/file)
+  b. The full contents of the file in a code block
 
-<usage_guidelines>
+## Usage Guidelines
 - This file should be treated as read-only. Any changes should be made to the
   original repository files, not this packed version.
 - When processing this file, use the file path to distinguish
   between different files in the repository.
 - Be aware that this file may contain sensitive information. Handle it with
   the same level of security as you would the original repository.
-</usage_guidelines>
 
-<notes>
+## Notes
 - Some files may have been excluded based on .gitignore rules and Repomix's configuration
 - Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
 - Files matching these patterns are excluded: node_modules
 - Files matching patterns in .gitignore are excluded
 - Files matching default ignore patterns are excluded
 - Files are sorted by Git change count (files with more changes are at the bottom)
-</notes>
 
-</file_summary>
-
-<directory_structure>
+# Directory Structure
+```
 .gitignore
 app/globals.css
 app/layout.js
 app/page.js
 components/Dashboard.js
 components/Feedback.js
-components/feedback/FeedbackCharts.js
 components/feedback/FeedbackHistory.js
-components/feedback/FeedbackStats.js
 components/feedback/FeedbackTips.js
 components/Helper.js
 components/Leaderboard.js
@@ -67,12 +59,12 @@ public/vercel.svg
 public/window.svg
 README.md
 tailwind.config.js
-</directory_structure>
+```
 
-<files>
-This section contains the contents of the repository's files.
+# Files
 
-<file path=".gitignore">
+## File: .gitignore
+````
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
@@ -114,57 +106,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-</file>
+````
 
-<file path="components/feedback/FeedbackStats.js">
-"use client";
-import { Card, SectionTitle } from "../Helper";
-import { MOCK_FEEDBACK_STATS } from "@/mock/mock_data";
-import { BarChart2, CheckCircle, TrendingUp } from "lucide-react";
-
-const StatCard = ({ icon, label, value, unit }) => (
-    <div className="flex items-center p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
-        <div className="p-3 rounded-full bg-indigo-100 dark:bg-indigo-900/50 text-indigo-500 dark:text-indigo-400">
-            {icon}
-        </div>
-        <div className="ml-4">
-            <p className="text-sm text-gray-500 dark:text-gray-400">{label}</p>
-            <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                {value}<span className="text-base font-medium">{unit}</span>
-            </p>
-        </div>
-    </div>
-);
-
-export const FeedbackStats = () => {
-    return (
-        <div>
-            <SectionTitle icon={<BarChart2 className="h-6 w-6 text-indigo-500" />} title="Quick Insights" />
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <StatCard
-                    icon={<CheckCircle className="h-6 w-6" />}
-                    label="Total Submissions"
-                    value={MOCK_FEEDBACK_STATS.totalSubmissions}
-                />
-                <StatCard
-                    icon={<TrendingUp className="h-6 w-6" />}
-                    label="Response Rate"
-                    value={MOCK_FEEDBACK_STATS.responseRate}
-                    unit="%"
-                />
-                <StatCard
-                    icon={<TrendingUp className="h-6 w-6 text-green-500 dark:text-green-400" />}
-                    label="Positive Trend"
-                    value={`+${MOCK_FEEDBACK_STATS.positiveTrend}`}
-                    unit="%"
-                />
-            </div>
-        </div>
-    );
-};
-</file>
-
-<file path="components/feedback/FeedbackTips.js">
+## File: components/feedback/FeedbackTips.js
+````javascript
 import { Lightbulb } from 'lucide-react';
 import { Card, SectionTitle } from "../Helper";
 
@@ -212,9 +157,10 @@ export const FeedbackTips = () => {
         </div>
     );
 };
-</file>
+````
 
-<file path="components/ThemeProvider.js">
+## File: components/ThemeProvider.js
+````javascript
 "use client";
 
 import { ThemeProvider as NextThemesProvider } from 'next-themes';
@@ -240,9 +186,10 @@ export function ThemeProvider({ children }) {
 		</NextThemesProvider>
 	);
 }
-</file>
+````
 
-<file path="jsconfig.json">
+## File: jsconfig.json
+````json
 {
   "compilerOptions": {
     "paths": {
@@ -250,36 +197,43 @@ export function ThemeProvider({ children }) {
     }
   }
 }
-</file>
+````
 
-<file path="next.config.mjs">
+## File: next.config.mjs
+````
 /** @type {import('next').NextConfig} */
 const nextConfig = {};
 
 export default nextConfig;
-</file>
+````
 
-<file path="public/file.svg">
+## File: public/file.svg
+````
 <svg fill="none" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M14.5 13.5V5.41a1 1 0 0 0-.3-.7L9.8.29A1 1 0 0 0 9.08 0H1.5v13.5A2.5 2.5 0 0 0 4 16h8a2.5 2.5 0 0 0 2.5-2.5m-1.5 0v-7H8v-5H3v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1M9.5 5V2.12L12.38 5zM5.13 5h-.62v1.25h2.12V5zm-.62 3h7.12v1.25H4.5zm.62 3h-.62v1.25h7.12V11z" clip-rule="evenodd" fill="#666" fill-rule="evenodd"/></svg>
-</file>
+````
 
-<file path="public/globe.svg">
+## File: public/globe.svg
+````
 <svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><g clip-path="url(#a)"><path fill-rule="evenodd" clip-rule="evenodd" d="M10.27 14.1a6.5 6.5 0 0 0 3.67-3.45q-1.24.21-2.7.34-.31 1.83-.97 3.1M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.48-1.52a7 7 0 0 1-.96 0H7.5a4 4 0 0 1-.84-1.32q-.38-.89-.63-2.08a40 40 0 0 0 3.92 0q-.25 1.2-.63 2.08a4 4 0 0 1-.84 1.31zm2.94-4.76q1.66-.15 2.95-.43a7 7 0 0 0 0-2.58q-1.3-.27-2.95-.43a18 18 0 0 1 0 3.44m-1.27-3.54a17 17 0 0 1 0 3.64 39 39 0 0 1-4.3 0 17 17 0 0 1 0-3.64 39 39 0 0 1 4.3 0m1.1-1.17q1.45.13 2.69.34a6.5 6.5 0 0 0-3.67-3.44q.65 1.26.98 3.1M8.48 1.5l.01.02q.41.37.84 1.31.38.89.63 2.08a40 40 0 0 0-3.92 0q.25-1.2.63-2.08a4 4 0 0 1 .85-1.32 7 7 0 0 1 .96 0m-2.75.4a6.5 6.5 0 0 0-3.67 3.44 29 29 0 0 1 2.7-.34q.31-1.83.97-3.1M4.58 6.28q-1.66.16-2.95.43a7 7 0 0 0 0 2.58q1.3.27 2.95.43a18 18 0 0 1 0-3.44m.17 4.71q-1.45-.12-2.69-.34a6.5 6.5 0 0 0 3.67 3.44q-.65-1.27-.98-3.1" fill="#666"/></g><defs><clipPath id="a"><path fill="#fff" d="M0 0h16v16H0z"/></clipPath></defs></svg>
-</file>
+````
 
-<file path="public/next.svg">
+## File: public/next.svg
+````
 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 394 80"><path fill="#000" d="M262 0h68.5v12.7h-27.2v66.6h-13.6V12.7H262V0ZM149 0v12.7H94v20.4h44.3v12.6H94v21h55v12.6H80.5V0h68.7zm34.3 0h-17.8l63.8 79.4h17.9l-32-39.7 32-39.6h-17.9l-23 28.6-23-28.6zm18.3 56.7-9-11-27.1 33.7h17.8l18.3-22.7z"/><path fill="#000" d="M81 79.3 17 0H0v79.3h13.6V17l50.2 62.3H81Zm252.6-.4c-1 0-1.8-.4-2.5-1s-1.1-1.6-1.1-2.6.3-1.8 1-2.5 1.6-1 2.6-1 1.8.3 2.5 1a3.4 3.4 0 0 1 .6 4.3 3.7 3.7 0 0 1-3 1.8zm23.2-33.5h6v23.3c0 2.1-.4 4-1.3 5.5a9.1 9.1 0 0 1-3.8 3.5c-1.6.8-3.5 1.3-5.7 1.3-2 0-3.7-.4-5.3-1s-2.8-1.8-3.7-3.2c-.9-1.3-1.4-3-1.4-5h6c.1.8.3 1.6.7 2.2s1 1.2 1.6 1.5c.7.4 1.5.5 2.4.5 1 0 1.8-.2 2.4-.6a4 4 0 0 0 1.6-1.8c.3-.8.5-1.8.5-3V45.5zm30.9 9.1a4.4 4.4 0 0 0-2-3.3 7.5 7.5 0 0 0-4.3-1.1c-1.3 0-2.4.2-3.3.5-.9.4-1.6 1-2 1.6a3.5 3.5 0 0 0-.3 4c.3.5.7.9 1.3 1.2l1.8 1 2 .5 3.2.8c1.3.3 2.5.7 3.7 1.2a13 13 0 0 1 3.2 1.8 8.1 8.1 0 0 1 3 6.5c0 2-.5 3.7-1.5 5.1a10 10 0 0 1-4.4 3.5c-1.8.8-4.1 1.2-6.8 1.2-2.6 0-4.9-.4-6.8-1.2-2-.8-3.4-2-4.5-3.5a10 10 0 0 1-1.7-5.6h6a5 5 0 0 0 3.5 4.6c1 .4 2.2.6 3.4.6 1.3 0 2.5-.2 3.5-.6 1-.4 1.8-1 2.4-1.7a4 4 0 0 0 .8-2.4c0-.9-.2-1.6-.7-2.2a11 11 0 0 0-2.1-1.4l-3.2-1-3.8-1c-2.8-.7-5-1.7-6.6-3.2a7.2 7.2 0 0 1-2.4-5.7 8 8 0 0 1 1.7-5 10 10 0 0 1 4.3-3.5c2-.8 4-1.2 6.4-1.2 2.3 0 4.4.4 6.2 1.2 1.8.8 3.2 2 4.3 3.4 1 1.4 1.5 3 1.5 5h-5.8z"/></svg>
-</file>
+````
 
-<file path="public/vercel.svg">
+## File: public/vercel.svg
+````
 <svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1155 1000"><path d="m577.3 0 577.4 1000H0z" fill="#fff"/></svg>
-</file>
+````
 
-<file path="public/window.svg">
+## File: public/window.svg
+````
 <svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" clip-rule="evenodd" d="M1.5 2.5h13v10a1 1 0 0 1-1 1h-11a1 1 0 0 1-1-1zM0 1h16v11.5a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 0 12.5zm3.75 4.5a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5M7 4.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0m1.75.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5" fill="#666"/></svg>
-</file>
+````
 
-<file path="README.md">
+## File: README.md
+````markdown
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
@@ -316,36 +270,10 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-</file>
+````
 
-<file path="tailwind.config.js">
-// In tailwind.config.js
-
-/** @type {import('tailwindcss').Config} */
-module.exports = {
-	darkMode: 'class',
-	content: [
-		'./pages/**/*.{js,ts,jsx,tsx,mdx}',
-		'./components/**/*.{js,ts,jsx,tsx,mdx}',
-		'./app/**/*.{js,ts,jsx,tsx,mdx}',
-	],
-	theme: {
-		extend: {},
-	},
-	// 👇 UPDATE THIS PLUGINS ARRAY 👇
-	plugins: [
-        require('tailwind-scrollbar-hide') // Add this line
-    ],
-};
-</file>
-
-<file path="app/globals.css">
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-</file>
-
-<file path="app/layout.js">
+## File: app/layout.js
+````javascript
 import { Inter } from "next/font/google";
 import "./globals.css";
 
@@ -371,185 +299,19 @@ export default function RootLayout({ children }) {
 		</html>
 	);
 }
-</file>
+````
 
-<file path="components/feedback/FeedbackCharts.js">
+## File: components/Quests.js
+````javascript
+// -----------------------------------------------------------------------------
+// File: components/Quests.js (MODIFIED with Skeleton Loader)
+// -----------------------------------------------------------------------------
 "use client"
-import { useTheme } from 'next-themes';
-import {
-    BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell
-} from 'recharts';
-
-import { SENTIMENT_DATA, SENTIMENT_COLORS } from '@/mock/mock_data';
-
-// --- Sentiment Analysis Bar Chart ---
-export const SentimentChart = () => {
-    const { theme } = useTheme();
-    const tickColor = theme === 'dark' ? '#9ca3af' : '#6b7280';
-
-    return (
-        <div style={{ height: '300px' }}>
-            <ResponsiveContainer width="100%" height="100%">
-                <BarChart
-                    data={SENTIMENT_DATA}
-                    layout="vertical"
-                    margin={{
-                        top: 20, right: 30, left: 20, bottom: 5,
-                    }}
-                >
-                    <XAxis type="number" hide />
-                    <YAxis
-                        type="category"
-                        dataKey="name"
-                        axisLine={false}
-                        tickLine={false}
-                        tick={{ fill: tickColor, fontSize: 14 }}
-                    />
-                    <Tooltip
-                        cursor={{ fill: 'rgba(128, 128, 128, 0.1)' }}
-                        contentStyle={{
-                            backgroundColor: theme === 'dark' ? 'rgba(31, 41, 55, 0.8)' : 'rgba(255, 255, 255, 0.8)',
-                            backdropFilter: 'blur(4px)',
-                            borderRadius: '0.5rem',
-                            border: '1px solid',
-                            borderColor: theme === 'dark' ? '#374151' : '#e5e7eb'
-                        }}
-                        itemStyle={{ color: theme === 'dark' ? '#ffffff' : '#000000' }}
-                    />
-                    {/* The radius property below rounds the corners of the bars */}
-                    <Bar dataKey="value" barSize={35} radius={[0, 8, 8, 0]}>
-                        {SENTIMENT_DATA.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={SENTIMENT_COLORS[index % SENTIMENT_COLORS.length]} />
-                        ))}
-                    </Bar>
-                </BarChart>
-            </ResponsiveContainer>
-        </div>
-    );
-};
-</file>
-
-<file path="components/feedback/FeedbackHistory.js">
-"use client";
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { MOCK_FEEDBACK_HISTORY } from "@/mock/mock_data";
-import { Card, SectionTitle } from "../Helper";
-import { MessageSquare, Loader2 } from "lucide-react";
-
-// --- Skeleton Component for Initial Loading ---
-const FeedbackSkeleton = () => (
-    <li className="p-3 rounded-lg bg-gray-50 dark:bg-gray-700/50 border-l-4 border-gray-300 dark:border-gray-600 animate-pulse">
-        <div className="flex justify-between items-center mb-2">
-            <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-1/3"></div>
-            <div className="h-3 bg-gray-300 dark:bg-gray-600 rounded w-1/4"></div>
-        </div>
-        <div className="h-3 bg-gray-300 dark:bg-gray-600 rounded w-full"></div>
-    </li>
-);
-
-const getSentimentColor = (sentiment) => {
-    switch (sentiment) {
-        case 'Positive': return 'border-l-4 border-green-500';
-        case 'Negative': return 'border-l-4 border-red-500';
-        default: return 'border-l-4 border-amber-500';
-    }
-};
-
-export const FeedbackHistory = () => {
-    const [items, setItems] = useState([]);
-    const [page, setPage] = useState(1);
-    const [hasMore, setHasMore] = useState(true);
-    const [isLoading, setIsLoading] = useState(true);
-    const observer = useRef();
-    const ITEMS_PER_PAGE = 5; // Increased items per page for a longer list
-    const FAKE_DELAY_MS = 1500;
-
-    // Effect for INITIAL data load with skeleton
-    useEffect(() => {
-        setIsLoading(true);
-        const timer = setTimeout(() => {
-            const initialItems = MOCK_FEEDBACK_HISTORY.slice(0, ITEMS_PER_PAGE);
-            setItems(initialItems);
-            setHasMore(MOCK_FEEDBACK_HISTORY.length > ITEMS_PER_PAGE);
-            setIsLoading(false);
-        }, FAKE_DELAY_MS);
-        return () => clearTimeout(timer);
-    }, []);
-
-    // Effect for SUBSEQUENT page loads (infinite scroll)
-    useEffect(() => {
-        if (page === 1) return;
-        // Add a loading state for subsequent fetches to show spinner
-        const timer = setTimeout(() => {
-            const startIndex = (page - 1) * ITEMS_PER_PAGE;
-            const newItems = MOCK_FEEDBACK_HISTORY.slice(startIndex, startIndex + ITEMS_PER_PAGE);
-            if (newItems.length > 0) {
-                setItems(prev => [...prev, ...newItems]);
-            }
-            setHasMore(MOCK_FEEDBACK_HISTORY.length > startIndex + ITEMS_PER_PAGE);
-        }, FAKE_DELAY_MS);
-        return () => clearTimeout(timer);
-    }, [page]);
-
-    // Intersection Observer to trigger loading more items
-    const lastItemRef = useCallback(node => {
-        if (isLoading) return;
-        if (observer.current) observer.current.disconnect();
-        observer.current = new IntersectionObserver(entries => {
-            if (entries[0].isIntersecting && hasMore) {
-                setPage(prevPage => prevPage + 1);
-            }
-        });
-        if (node) observer.current.observe(node);
-    }, [isLoading, hasMore]);
-
-    return (
-        <div>
-            <SectionTitle icon={<MessageSquare className="h-6 w-6 text-indigo-500" />} title="Submission History" />
-            <Card>
-                <ul className="space-y-4">
-                    {items.map((item, index) => (
-                        <li
-                            ref={items.length === index + 1 ? lastItemRef : null}
-                            key={`${item.id}-${index}`}
-                            className={`p-4 rounded-lg transition-colors hover:bg-gray-500/10 ${getSentimentColor(item.sentiment)}`}
-                        >
-                            <div className="flex justify-between items-center mb-1">
-                                <h4 className="font-semibold text-gray-800 dark:text-gray-200">{item.subject}</h4>
-                                <span className="text-sm text-gray-500 dark:text-gray-400">{item.date}</span>
-                            </div>
-                            <p className="text-base text-gray-600 dark:text-gray-300">{item.content}</p>
-                        </li>
-                    ))}
-                    {/* Skeletons are shown via the isLoading flag on the parent */}
-                    {isLoading && (
-                        <>
-                            <FeedbackSkeleton />
-                            <FeedbackSkeleton />
-                            <FeedbackSkeleton />
-                        </>
-                    )}
-                </ul>
-                {/* Loader for infinite scroll */}
-                {hasMore && !isLoading && (
-                    <div className="flex justify-center items-center pt-6">
-                        <Loader2 className="h-6 w-6 text-gray-500 animate-spin" />
-                    </div>
-                )}
-            </Card>
-        </div>
-    );
-};
-</file>
-
-<file path="components/Quests.js">
 import { Shield, Target } from 'lucide-react';
 import { Card, SectionTitle } from "./Helper";
-
-import { MOCK_QUESTS } from "../mock/mock_data";
+import React, { useState, useEffect } from 'react';
 
 // --- Style Definitions ---
-
 const QUESTS_STYLES = {
     pageDescription: `
         mb-6 
@@ -610,16 +372,95 @@ const QUESTS_STYLES = {
     `
 };
 
+// --- NEW: Skeleton Component for a single Quest Card ---
+const QuestCardSkeleton = () => {
+    return (
+        <Card className="animate-pulse">
+            <div className="flex justify-between items-start">
+                {/* Title Placeholder */}
+                <div className="h-6 bg-gray-300 dark:bg-gray-700 rounded w-3/4"></div>
+                {/* Points Placeholder */}
+                <div className="h-5 bg-gray-300 dark:bg-gray-700 rounded-full w-12"></div>
+            </div>
+            {/* Description Placeholder */}
+            <div className="mt-3 space-y-2">
+                <div className="h-4 bg-gray-300 dark:bg-gray-700 rounded w-full"></div>
+                <div className="h-4 bg-gray-300 dark:bg-gray-700 rounded w-5/6"></div>
+            </div>
+            <div className="mt-5">
+                <div className="flex justify-between mb-1">
+                    {/* Progress Label Placeholder */}
+                    <div className="h-4 bg-gray-300 dark:bg-gray-700 rounded w-1/4"></div>
+                    {/* Progress Percentage Placeholder */}
+                    <div className="h-4 bg-gray-300 dark:bg-gray-700 rounded w-1/6"></div>
+                </div>
+                {/* Progress Bar Placeholder */}
+                <div className="w-full bg-gray-300 dark:bg-gray-700 rounded-full h-2.5"></div>
+            </div>
+        </Card>
+    );
+};
+
 
 export const Quests = () => {
+    const [quests, setQuests] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const fetchQuests = async () => {
+            try {
+                // Simulate a slightly longer network request to see the skeleton
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                const response = await fetch('http://localhost:9292/quests');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                setQuests(data);
+            } catch (e) {
+                console.error("Failed to fetch quests:", e);
+                setError(e.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchQuests();
+    }, []);
+
+    // --- UPDATED: Loading state now renders the skeleton grid ---
+    if (loading) {
+        return (
+            <div>
+                <SectionTitle icon={<Target className="h-6 w-6 text-indigo-500" />} title="Challenges & Quests" />
+                <p className={QUESTS_STYLES.pageDescription}>Engage in challenges to earn points, unlock badges, and grow your skills.</p>
+                <div className={QUESTS_STYLES.questsGrid}>
+                    {/* Render a few skeleton cards to show the layout */}
+                    <QuestCardSkeleton />
+                    <QuestCardSkeleton />
+                    <QuestCardSkeleton />
+                </div>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+             <div>
+                <SectionTitle icon={<Target className="h-6 w-6 text-indigo-500" />} title="Challenges & Quests" />
+                <p className="text-red-500">Could not load quests: {error}</p>
+            </div>
+        )
+    }
+
     return (
         <div>
             <SectionTitle icon={<Target className="h-6 w-6 text-indigo-500" />} title="Challenges & Quests" />
-
             <p className={QUESTS_STYLES.pageDescription}>Engage in challenges to earn points, unlock badges, and grow your skills.</p>
-
             <div className={QUESTS_STYLES.questsGrid}>
-                {MOCK_QUESTS.map(quest => (
+                {quests.map(quest => (
                     <Card key={quest.id} className={quest.completed ? QUESTS_STYLES.cardCompleted : ''}>
                         <div className="flex justify-between items-start">
                             <h3 className={QUESTS_STYLES.questTitle}>{quest.title}</h3>
@@ -647,9 +488,10 @@ export const Quests = () => {
         </div>
     );
 };
-</file>
+````
 
-<file path="postcss.config.mjs">
+## File: postcss.config.mjs
+````
 const config = {
 	plugins: {
 		tailwindcss: {},
@@ -658,9 +500,193 @@ const config = {
 };
 
 export default config;
-</file>
+````
 
-<file path="package.json">
+## File: tailwind.config.js
+````javascript
+// In tailwind.config.js
+
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+    darkMode: 'class',
+    content: [
+        './pages/**/*.{js,ts,jsx,tsx,mdx}',
+        './components/**/*.{js,ts,jsx,tsx,mdx}',
+        './app/**/*.{js,ts,jsx,tsx,mdx}',
+    ],
+    theme: {
+        extend: {},
+    },
+    // 👇 REMOVE THE PLUGINS ARRAY OR LEAVE IT EMPTY 👇
+    plugins: [], 
+};
+````
+
+## File: app/globals.css
+````css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Add this to the end of app/globals.css */
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+````
+
+## File: components/feedback/FeedbackHistory.js
+````javascript
+"use client";
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { Card, SectionTitle } from "../Helper";
+import { MessageSquare, Loader2, AlertTriangle } from "lucide-react"; // Import AlertTriangle
+
+// --- Skeleton and Style components can remain unchanged ---
+const FeedbackSkeleton = () => (
+    <li className="p-4 rounded-lg bg-gray-50 dark:bg-gray-800/60 border-l-2 border-gray-300 dark:border-gray-600 animate-pulse">
+        <div className="flex justify-between items-center mb-2">
+            <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-1/3"></div>
+            <div className="h-3 bg-gray-300 dark:bg-gray-600 rounded w-1/4"></div>
+        </div>
+        <div className="h-3 bg-gray-300 dark:bg-gray-600 rounded w-full"></div>
+    </li>
+);
+
+const getSentimentColor = (sentiment) => {
+    switch (sentiment) {
+        case 'Positive': return 'border-green-500';
+        case 'Negative': return 'border-red-500';
+        default: return 'border-amber-500';
+    }
+};
+
+export const FeedbackHistory = () => {
+    const [items, setItems] = useState([]);
+    const [page, setPage] = useState(1);
+    const [hasMore, setHasMore] = useState(true);
+    const [error, setError] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [isFetchingMore, setIsFetchingMore] = useState(false);
+    const observer = useRef();
+    const ITEMS_PER_PAGE = 5;
+
+    useEffect(() => {
+        const fetchFeedback = async () => {
+            if (page === 1) {
+                setIsLoading(true);
+            } else {
+                setIsFetchingMore(true);
+            }
+
+            try {
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                const response = await fetch(`http://localhost:9292/feedback?page=${page}&limit=${ITEMS_PER_PAGE}`);
+                if (!response.ok) {
+                    throw new Error(`The server responded with status: ${response.status}`);
+                }
+                const data = await response.json();
+                
+                setItems(prevItems => page === 1 ? data.items : [...prevItems, ...data.items]);
+                setHasMore(data.hasMore);
+
+            } catch (err) {
+                console.error("Failed to fetch feedback history:", err);
+                setError(err.message);
+                setHasMore(false); // Stop trying to fetch more if there's an error
+            } finally {
+                setIsLoading(false);
+                setIsFetchingMore(false);
+            }
+        };
+
+        // Only fetch if there's more data and no error
+        if (hasMore && !error) {
+           fetchFeedback();
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [page]);
+
+
+    const lastItemRef = useCallback(node => {
+        if (isLoading || isFetchingMore) return;
+        if (observer.current) observer.current.disconnect();
+        observer.current = new IntersectionObserver(entries => {
+            if (entries[0].isIntersecting && hasMore) {
+                setPage(prevPage => prevPage + 1);
+            }
+        });
+        if (node) observer.current.observe(node);
+    }, [isLoading, isFetchingMore, hasMore]);
+    
+    // --- CORRECTED ERROR HANDLING BLOCK ---
+    // This now shows a relevant error message within the original Card layout.
+    if (error && items.length === 0) {
+        return (
+            <Card>
+                <SectionTitle className={"mb-6"} icon={<MessageSquare className="h-6 w-6 text-indigo-500" />} title="Submission History" />
+                <div className="flex flex-col items-center justify-center text-center p-8">
+                    <AlertTriangle className="h-12 w-12 text-red-500 mb-4" />
+                    <h3 className="text-lg font-semibold text-gray-800 dark:text-white">Could not load feedback history</h3>
+                    <p className="text-sm text-red-500 dark:text-red-400 mt-1">{error}</p>
+                </div>
+            </Card>
+        )
+    }
+
+    return (
+        <div>
+            <Card>
+                <SectionTitle className={"mb-6"} icon={<MessageSquare className="h-6 w-6 text-indigo-500" />} title="Submission History" />
+                
+                {isLoading && items.length === 0 ? (
+                    <ul className="space-y-4">
+                        <FeedbackSkeleton />
+                        <FeedbackSkeleton />
+                        <FeedbackSkeleton />
+                    </ul>
+                ) : (
+                    <ul className="space-y-4">
+                        {items.map((item, index) => (
+                            <li
+                                ref={items.length === index + 1 ? lastItemRef : null}
+                                key={`${item.id}-${index}`}
+                                className={`
+                                    bg-gray-50 dark:bg-gray-800/60 p-4 rounded-lg 
+                                    transition-colors hover:bg-gray-100 dark:hover:bg-gray-700/80
+                                    border-l-2 ${getSentimentColor(item.sentiment)}
+                                `}
+                            >
+                                <div className="flex justify-between items-center mb-1">
+                                    <h4 className="text-sm font-semibold text-gray-800 dark:text-gray-200">{item.subject}</h4>
+                                    <span className="text-sm text-gray-500 dark:text-gray-400">{item.date}</span>
+                                </div>
+                                <p className="text-sm text-gray-600 dark:text-gray-300">{item.content}</p>
+                            </li>
+                        ))}
+                    </ul>
+                )}
+                
+                {isFetchingMore && (
+                    <div className="flex justify-center items-center pt-6">
+                        <Loader2 className="h-6 w-6 text-gray-500 animate-spin" />
+                    </div>
+                )}
+            </Card>
+        </div>
+    );
+};
+````
+
+## File: package.json
+````json
 {
   "name": "upskill-app",
   "version": "0.1.0",
@@ -677,8 +703,7 @@ export default config;
     "next-themes": "^0.4.6",
     "react": "19.1.0",
     "react-dom": "19.1.0",
-    "recharts": "^3.1.2",
-    "tailwind-scrollbar-hide": "^4.0.0"
+    "recharts": "^3.1.2"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.21",
@@ -686,9 +711,10 @@ export default config;
     "tailwindcss": "^3.4.17"
   }
 }
-</file>
+````
 
-<file path="components/Helper.js">
+## File: components/Helper.js
+````javascript
 const STYLES = {
     sectionTitleContainer: `
         flex
@@ -723,128 +749,204 @@ export const Card = ({ children, className = '' }) => (
         <div className="p-6">{children}</div>
     </div>
 );
-</file>
+````
 
-<file path="components/Leaderboard.js">
+## File: components/Leaderboard.js
+````javascript
 "use client"
 
-import { Trophy, Award } from 'lucide-react';
+import React, { useState, useEffect } from 'react'; // Import hooks
+import { Trophy, Award, AlertTriangle } from 'lucide-react';
 import { Card, SectionTitle } from "./Helper";
 
-// Assuming MOCK_LEADERBOARD is imported from a mock data file
-import { MOCK_LEADERBOARD } from "../mock/mock_data";
-
-// --- Style Definitions ---
-
+// --- Style Definitions (can remain unchanged) ---
 const LEADERBOARD_STYLES = {
-    // Podium Cards
     podiumGrid: `
-        grid 
-        grid-cols-1 md:grid-cols-3 
-        gap-4 
-        items-end
-    `,
+                grid 
+                grid-cols-1 md:grid-cols-3 
+                gap-4 items-end
+                `,
     cardBase: `
-        border-2 text-center p-4
-    `,
+                border-2 
+                text-center 
+                p-4
+                `,
     card2nd: `
-        border-gray-300 dark:border-gray-600
-    `,
+            border-gray-300 
+            dark:border-gray-600
+            `,
     card1st: `
-        border-yellow-400 dark:border-yellow-500 
-        p-6 
-        transform md:scale-110 
-        shadow-lg
-    `,
+                border-yellow-400 dark:border-yellow-500 
+                p-6 
+                transform md:scale-110 
+                shadow-lg
+                `,
     card3rd: `
-        border-yellow-600/50 dark:border-yellow-800/80
-    `,
+                border-yellow-600/50 dark:border-yellow-800/80
+                `,
     podiumTrophy1st: `
-        h-12 w-12 text-yellow-400 mx-auto mb-2
-    `,
+                        h-12 w-12 
+                        text-yellow-400 
+                        mx-auto 
+                        mb-2
+                        `,
     podiumTrophy2nd3rd: `
-        h-10 w-10 mx-auto mb-2
-    `,
+                        h-10 w-10 
+                        mx-auto mb-2
+                        `,
     podiumName1st: `
-        font-bold text-xl text-gray-800 dark:text-white
-    `,
+                    font-bold 
+                    text-xl 
+                    text-gray-800 
+                    dark:text-white
+                    `,
     podiumName2nd3rd: `
-        font-bold text-lg text-gray-800 dark:text-white
-    `,
+                        font-bold text-lg 
+                        text-gray-800 dark:text-white`,
     podiumPlace1st: `
-        font-semibold text-yellow-500 dark:text-yellow-400
-    `,
+                    font-semibold 
+                    text-yellow-500 dark:text-yellow-400
+                    `,
     podiumPlace2nd: `
-        font-semibold text-gray-500 dark:text-gray-400
-    `,
+                    font-semibold 
+                    text-gray-500 dark:text-gray-400
+                    `,
     podiumPlace3rd: `
-        font-semibold text-yellow-700 dark:text-yellow-800
-    `,
+                    font-semibold 
+                    text-yellow-700 dark:text-yellow-800
+                    `,
     podiumPoints1st: `
-        text-3xl font-bold text-indigo-500 dark:text-indigo-400 mt-2
-    `,
+                    text-3xl 
+                    font-bold 
+                    text-indigo-500 dark:text-indigo-400 mt-2
+                    `,
     podiumPoints2nd3rd: `
-        text-2xl font-bold text-indigo-500 dark:text-indigo-400 mt-2
-    `,
-    // Table Styles
+                        text-2xl 
+                        font-bold 
+                        text-indigo-500 
+                        dark:text-indigo-400 
+                        mt-2`,
     table: `
-        w-full 
-        text-sm text-left 
-        text-gray-500 dark:text-gray-400
-    `,
+            w-full 
+            text-sm 
+            text-left 
+            text-gray-500 dark:text-gray-400
+            `,
     tableHead: `
-        text-xs 
-        text-gray-700 
-        uppercase 
-        bg-gray-50 dark:bg-gray-700 dark:text-gray-400
-    `,
+                text-xs 
+                text-gray-700 
+                uppercase 
+                bg-gray-50 dark:bg-gray-700 
+                dark:text-gray-400
+                `,
     tableHeadCell: `
-        px-6 py-3
-    `,
+                    px-6 
+                    py-3
+                    `,
     tableRow: `
-        bg-white border-b 
-        dark:bg-gray-800 dark:border-gray-700 
-        hover:bg-gray-50 dark:hover:bg-gray-600
-    `,
-    tableCell: `
-        px-6 py-4
-    `,
+                bg-white 
+                border-b 
+                dark:bg-gray-800 
+                dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600
+                `,
+    tableCell: `px-6 py-4`,
     tableCellRank: `
-        text-gray-500 dark:text-gray-400 
-        font-bold 
-        w-6 text-center
-    `,
+                    text-gray-500 
+                    dark:text-gray-400 
+                    font-bold 
+                    w-6 
+                    text-center`,
     tableCellUser: `
-        font-medium 
-        text-gray-900 
-        whitespace-nowrap dark:text-white
-    `,
+                    font-medium 
+                    text-gray-900 
+                    whitespace-nowrap 
+                    dark:text-white
+                    `,
     tableCellPoints: `
-        text-right 
-        font-bold 
-        text-gray-800 dark:text-white
-    `,
-    // Mobile List Styles
-    mobileCardContainer: `
-        flex items-center justify-between
-    `,
-    mobileUserInfo: `
-        ml-3 font-bold text-gray-900 dark:text-white
-    `,
-    mobilePoints: `
-        font-bold text-indigo-600 dark:text-indigo-400
-    `,
-    mobileBadgeDivider: `
-        mt-4 pt-4 
-        border-t 
-        border-gray-200 dark:border-gray-700
-    `,
+                    text-right 
+                    font-bold 
+                    text-gray-800 
+                    dark:text-white
+                    `,
 };
+
+// --- NEW: Skeleton Components for Loading State ---
+
+const PodiumSkeleton = () => (
+    <div className={LEADERBOARD_STYLES.podiumGrid}>
+        {/* 2nd Place Skeleton */}
+        <div className="md:order-1 animate-pulse">
+            <Card className={`${LEADERBOARD_STYLES.cardBase} ${LEADERBOARD_STYLES.card2nd}`}>
+                <div className="h-10 w-10 mx-auto mb-2 bg-gray-300 dark:bg-gray-700 rounded-full"></div>
+                <div className="h-6 w-3/4 mx-auto bg-gray-300 dark:bg-gray-700 rounded"></div>
+                <div className="h-4 w-1/2 mx-auto mt-2 bg-gray-300 dark:bg-gray-700 rounded"></div>
+                <div className="h-8 w-1/3 mx-auto mt-2 bg-gray-300 dark:bg-gray-700 rounded"></div>
+            </Card>
+        </div>
+        {/* 1st Place Skeleton */}
+        <div className="md:order-2 relative z-10 animate-pulse">
+            <Card className={`${LEADERBOARD_STYLES.cardBase} ${LEADERBOARD_STYLES.card1st}`}>
+                <div className="h-12 w-12 mx-auto mb-2 bg-gray-300 dark:bg-gray-700 rounded-full"></div>
+                <div className="h-7 w-3/4 mx-auto bg-gray-300 dark:bg-gray-700 rounded"></div>
+                <div className="h-5 w-1/2 mx-auto mt-2 bg-gray-300 dark:bg-gray-700 rounded"></div>
+                <div className="h-9 w-1/3 mx-auto mt-2 bg-gray-300 dark:bg-gray-700 rounded"></div>
+            </Card>
+        </div>
+        {/* 3rd Place Skeleton */}
+        <div className="md:order-3 animate-pulse">
+            <Card className={`${LEADERBOARD_STYLES.cardBase} ${LEADERBOARD_STYLES.card3rd}`}>
+                <div className="h-10 w-10 mx-auto mb-2 bg-gray-300 dark:bg-gray-700 rounded-full"></div>
+                <div className="h-6 w-3/4 mx-auto bg-gray-300 dark:bg-gray-700 rounded"></div>
+                <div className="h-4 w-1/2 mx-auto mt-2 bg-gray-300 dark:bg-gray-700 rounded"></div>
+                <div className="h-8 w-1/3 mx-auto mt-2 bg-gray-300 dark:bg-gray-700 rounded"></div>
+            </Card>
+        </div>
+    </div>
+);
+
+const LadderSkeleton = () => (
+    <Card>
+        <div className="overflow-x-auto animate-pulse">
+            <div className="space-y-4 p-2">
+                {[...Array(5)].map((_, i) => (
+                    <div key={i} className="flex items-center space-x-4">
+                        <div className="h-6 w-6 bg-gray-300 dark:bg-gray-700 rounded"></div>
+                        <div className="h-6 flex-1 bg-gray-300 dark:bg-gray-700 rounded"></div>
+                        <div className="h-6 w-1/4 bg-gray-300 dark:bg-gray-700 rounded"></div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    </Card>
+);
 
 
 // --- Main Leaderboard Component ---
-
 export const Leaderboard = () => {
+    const [leaderboard, setLeaderboard] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const fetchLeaderboard = async () => {
+            try {
+                // Using a small delay to make the skeleton visible
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                const response = await fetch('http://localhost:9292/leaderboard');
+                if (!response.ok) {
+                    throw new Error(`Server responded with status: ${response.status}`);
+                }
+                const data = await response.json();
+                setLeaderboard(data);
+            } catch (err) {
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchLeaderboard();
+    }, []);
+
     const getTrophyIcon = (rank) => {
         if (rank === 1) return <Trophy className="h-6 w-6 text-yellow-400" />;
         if (rank === 2) return <Trophy className="h-6 w-6 text-gray-400" />;
@@ -852,8 +954,33 @@ export const Leaderboard = () => {
         return <span className={LEADERBOARD_STYLES.tableCellRank}>{rank}</span>;
     };
 
-    const topThree = MOCK_LEADERBOARD.slice(0, 3);
-    const restOfLeaderboard = MOCK_LEADERBOARD.slice(3);
+    if (loading) {
+        return (
+            <div className="space-y-12">
+                <div>
+                    <SectionTitle icon={<Award className="h-6 w-6 text-indigo-500" />} title="COMMS Podium Finishers" />
+                    <PodiumSkeleton />
+                </div>
+                <div>
+                    <SectionTitle icon={<Trophy className="h-6 w-6 text-indigo-500" />} title="Ladder" />
+                    <LadderSkeleton />
+                </div>
+            </div>
+        );
+    }
+    
+    if (error) {
+        return (
+            <div className="flex flex-col items-center justify-center text-center p-8 bg-red-50 dark:bg-red-900/20 rounded-lg">
+                <AlertTriangle className="h-12 w-12 text-red-500 mb-4" />
+                <h3 className="text-lg font-semibold text-gray-800 dark:text-white">Could not load the leaderboard</h3>
+                <p className="text-sm text-red-500 dark:text-red-400 mt-1">{error}</p>
+            </div>
+        );
+    }
+
+    const topThree = leaderboard.slice(0, 3);
+    const restOfLeaderboard = leaderboard.slice(3);
 
     return (
         <div className="space-y-12">
@@ -874,7 +1001,7 @@ export const Leaderboard = () => {
                     </div>
 
                     {/* 1st Place */}
-                    <div className="md:order-2 relative z-10"> {/* <-- THE FIX IS HERE */}
+                    <div className="md:order-2 relative z-10">
                          {topThree[0] && (
                             <Card className={`${LEADERBOARD_STYLES.cardBase} ${LEADERBOARD_STYLES.card1st}`}>
                                 <Trophy className={LEADERBOARD_STYLES.podiumTrophy1st} />
@@ -902,8 +1029,6 @@ export const Leaderboard = () => {
             {/* --- Full Leaderboard Table (for the rest) --- */}
             <div>
                 <SectionTitle icon={<Trophy className="h-6 w-6 text-indigo-500" />} title="Ladder" />
-                
-                {/* --- Desktop Table --- */}
                 <div className="hidden md:block">
                     <Card>
                         <div className="overflow-x-auto">
@@ -930,35 +1055,14 @@ export const Leaderboard = () => {
                         </div>
                     </Card>
                 </div>
-
-                {/* --- Mobile Card List --- */}
-                <div className="md:hidden space-y-4">
-                    {restOfLeaderboard.map((user, index) => (
-                        <Card key={user.id}>
-                            <div className={LEADERBOARD_STYLES.mobileCardContainer}>
-                                <div className="flex items-center">
-                                    <div className="w-8">{getTrophyIcon(index + 4)}</div>
-                                    <p className={LEADERBOARD_STYLES.mobileUserInfo}>{user.name}</p>
-                                </div>
-                                <div className="text-right">
-                                    <p className={LEADERBOARD_STYLES.mobilePoints}>{user.points.toLocaleString()} PTS</p>
-                                </div>
-                            </div>
-                            {user.badges.length > 0 && (
-                                <div className={LEADERBOARD_STYLES.mobileBadgeDivider}>
-                                    <div className="flex space-x-2">{user.badges.map((badge, i) => <span key={i} className="text-2xl">{badge}</span>)}</div>
-                                </div>
-                            )}
-                        </Card>
-                    ))}
-                </div>
             </div>
         </div>
     );
 };
-</file>
+````
 
-<file path="mock/mock_data.js">
+## File: mock/mock_data.js
+````javascript
 import { Award, ThumbsUp, ListChecks, BookOpen, Calendar, MessageSquare } from 'lucide-react';
 
 // --- LEADERBOARD DATA ---
@@ -1093,9 +1197,10 @@ export const MOCK_FEEDBACK_STATS = {
     responseRate: 82,
     positiveTrend: 5, // in percentage
 };
-</file>
+````
 
-<file path="app/page.js">
+## File: app/page.js
+````javascript
 "use client"
 
 import React, { useState, useEffect } from 'react';
@@ -1456,9 +1561,10 @@ export default function App() {
         </div>
     );
 }
-</file>
+````
 
-<file path="components/Feedback.js">
+## File: components/Feedback.js
+````javascript
 "use client"
 import React, { useState } from 'react';
 import { ThumbsUp, Lightbulb } from 'lucide-react';
@@ -1469,17 +1575,71 @@ import { MOCK_FEEDBACK_TOPICS } from '@/mock/mock_data';
 
 // --- Style Definitions ---
 const MAIN_STYLES = {
-    formLabel: `block mb-2 text-sm font-medium text-gray-900 dark:text-white`,
-    formSelect: `block w-full px-4 py-3 text-sm text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-blue-500 dark:focus:ring-blue-500 focus:border-blue-500 dark:focus:border-blue-500`,
-    formTextArea: `block px-4 py-3 w-full h-full min-h-[200px] text-sm text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-blue-500 dark:focus:ring-blue-500 focus:border-blue-500 dark:focus:border-blue-500 dark:placeholder-gray-400`,
-    formCheckBox: `w-4 h-4 text-blue-600 rounded bg-gray-100 dark:bg-gray-700 border-gray-300 dark:border-gray-600 dark:ring-offset-gray-800 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-600`,
-    formCheckBoxLabel: `ml-2 text-sm font-medium text-gray-900 dark:text-gray-300`,
-    submitButton: `w-full px-5 py-2.5 bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 text-white font-medium text-sm text-center rounded-lg`,
+    formLabel: `
+                block 
+                mb-2 
+                text-sm 
+                font-medium 
+                text-gray-900 
+                dark:text-white
+                `,
+    formSelect: `
+                block 
+                w-full 
+                px-4 
+                py-3 
+                text-sm 
+                text-gray-900 
+                dark:text-white 
+                bg-gray-50 dark:bg-gray-700 
+                rounded-lg 
+                border border-gray-300 dark:border-gray-600 
+                focus:ring-blue-500 dark:focus:ring-blue-500
+                focus:border-blue-500 dark:focus:border-blue-500
+                `,
+    formTextArea: `
+                block 
+                px-4 
+                py-3 
+                w-full min-h-[200px] 
+                text-sm text-gray-900 dark:text-white 
+                bg-gray-50 dark:bg-gray-700 rounded-lg 
+                border border-gray-300 dark:border-gray-600 
+                focus:ring-blue-500 dark:focus:ring-blue-500 
+                focus:border-blue-500 dark:focus:border-blue-500 
+                dark:placeholder-gray-400
+                `,
+    formCheckBox: `
+                w-4 h-4 
+                text-blue-600 
+                rounded 
+                bg-gray-100 
+                dark:bg-gray-700 b
+                order-gray-300 
+                dark:border-gray-600 dark:ring-offset-gray-800 
+                focus:ring-2 focus:ring-blue-500 
+                dark:focus:ring-blue-600`,
+    formCheckBoxLabel: `
+                ml-2 
+                text-sm 
+                font-medium 
+                text-gray-900 
+                dark:text-gray-300
+                `,
+    submitButton: `
+                w-full 
+                px-5 py-2.5 
+                bg-blue-600 hover:bg-blue-700 
+                focus:ring-4 focus:outline-none focus:ring-blue-300 
+                dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 
+                text-white font-medium text-sm text-center rounded-lg
+                `,
 };
 
 // --- Merged Feedback Form & Tips Component ---
 const FeedbackHub = () => {
-    const [isAnonymous, setIsAnonymous] = useState(false);
+    {/* // ^ Checkbox */}
+    // const [isAnonymous, setIsAnonymous] = useState(false);
     const [topic, setTopic] = useState(MOCK_FEEDBACK_TOPICS[0]);
 
     const tips = [
@@ -1495,9 +1655,10 @@ const FeedbackHub = () => {
             <SectionTitle icon={<ThumbsUp className="h-6 w-6 text-indigo-500" />} title="Provide Feedback" />
             <Card>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    {/* Left Side: Form */}
-                    <form className="flex flex-col" onSubmit={(e) => e.preventDefault()}>
-                        <div className="mb-4">
+                    {/* // ! Left Side: FORM FEEBACK BLOCK */}
+                    <form className="flex flex-col gap-6" onSubmit={(e) => e.preventDefault()}>
+                        {/* // ^ Feeback topic */}
+                        <div className="">
                             <label htmlFor="feedback-topic" className={MAIN_STYLES.formLabel}>Topic</label>
                             <select
                                 id="feedback-topic"
@@ -1508,7 +1669,8 @@ const FeedbackHub = () => {
                                 {MOCK_FEEDBACK_TOPICS.map(t => <option key={t} value={t}>{t}</option>)}
                             </select>
                         </div>
-                        <div className="mb-4 flex-grow">
+                        {/* // ^ Textarea */}
+                        <div className="flex-grow">
                             <label htmlFor="feedback-text" className={MAIN_STYLES.formLabel}>What do you think?</label>
                             <textarea
                                 id="feedback-text"
@@ -1516,7 +1678,8 @@ const FeedbackHub = () => {
                                 placeholder="Provide constructive feedback..."
                             ></textarea>
                         </div>
-                        <div className="flex items-center mb-4">
+                        {/* // ^ Checkbox */}
+                        {/* <div className="flex items-center mb-4">
                             <input
                                 id="anonymous-checkbox"
                                 type="checkbox" checked={isAnonymous}
@@ -1524,7 +1687,8 @@ const FeedbackHub = () => {
                                 className={MAIN_STYLES.formCheckBox}
                             />
                             <label htmlFor="anonymous-checkbox" className={MAIN_STYLES.formCheckBoxLabel}>Submit Anonymously</label>
-                        </div>
+                        </div> */}
+                        {/* // ^ Submit button */}
                         <button type="submit" className={MAIN_STYLES.submitButton}>Submit Feedback</button>
                     </form>
 
@@ -1537,7 +1701,7 @@ const FeedbackHub = () => {
                         <ul className="space-y-4">
                             {tips.map((tip, index) => (
                                 <li key={index} className="flex items-start text-sm text-gray-600 dark:text-gray-300">
-                                    <span className="mt-1 mr-3 flex-shrink-0 h-2 w-2 rounded-full bg-indigo-400"></span>
+                                    <span className="ml-2 mt-1 mr-5 flex-shrink-0 h-2 w-2 rounded-full bg-indigo-400"></span>
                                     {tip}
                                 </li>
                             ))}
@@ -1564,9 +1728,10 @@ export const Feedback = () => {
         </div>
     );
 };
-</file>
+````
 
-<file path="components/Dashboard.js">
+## File: components/Dashboard.js
+````javascript
 "use client";
 import {
     RadarChart, PolarGrid, PolarAngleAxis, Radar,
@@ -1650,13 +1815,12 @@ const DASHBOARD_STYLES = {
         h-5 w-5 
         text-indigo-500 dark:text-indigo-400
     `,
-    // --- FIX APPLIED HERE ---
-    // Added 'scrollbar-hide' to keep the element scrollable but hide the visual scrollbar.
+    // --- MANUAL CSS CLASS APPLIED HERE ---
+    // We are now using our own 'no-scrollbar' class from globals.css
     cardScrollableContent: `
         flex-grow 
         overflow-y-auto 
-        scrollbar-hide
-        pr-2 
+        no-scrollbar
         max-h-[350px]
     `,
     activityListItem: `
@@ -1802,7 +1966,6 @@ export const Dashboard = () => {
                 />
 
                 {/* Live Activity Stream */}
-                {/* No changes needed here, as it uses the updated DASHBOARD_STYLES object */}
                 <Card className="flex flex-col">
                     <SectionTitle icon={<Activity className="h-6 w-6 text-blue-500" />} title="Live Activity Stream" />
                     <div className={DASHBOARD_STYLES.cardScrollableContent}>
@@ -1823,7 +1986,6 @@ export const Dashboard = () => {
                 </Card>
 
                 {/* Upcoming & Recent Meetings */}
-                {/* No changes needed here, as it uses the updated DASHBOARD_STYLES object */}
                 <Card className="flex flex-col">
                     <SectionTitle icon={<Calendar className="h-6 w-6 text-purple-500" />} title="Upcoming & Recent Meetings" />
                     <div className={DASHBOARD_STYLES.cardScrollableContent}>
@@ -1851,6 +2013,4 @@ export const Dashboard = () => {
         </div>
     );
 };
-</file>
-
-</files>
+````

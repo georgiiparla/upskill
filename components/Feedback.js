@@ -128,13 +128,13 @@ const FeedbackHub = () => {
                     {/* Right Side: Tips */}
                     <div className="flex flex-col">
                         <h3 className="flex items-center text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                            <Lightbulb className="h-6 w-6 text-indigo-500 mr-3" />
+                            <Lightbulb className="h-6 w-6 text-yellow-500 mr-3" />
                             Tips for Effective Feedback
                         </h3>
                         <ul className="space-y-4">
                             {tips.map((tip, index) => (
                                 <li key={index} className="flex items-start text-sm text-gray-600 dark:text-gray-300">
-                                    <span className="ml-2 mt-1 mr-5 flex-shrink-0 h-2 w-2 rounded-full bg-indigo-400"></span>
+                                    <span className="ml-2 mt-1 mr-5 flex-shrink-0 h-2 w-2 rounded-full bg-blue-500"></span>
                                     {tip}
                                 </li>
                             ))}
