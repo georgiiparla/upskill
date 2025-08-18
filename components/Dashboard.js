@@ -4,7 +4,7 @@ import {
     Tooltip, ResponsiveContainer
 } from 'recharts';
 import {
-    Activity, Users, User, Calendar, BookOpen, NotebookText, AlertTriangle
+    Activity, Users, User, Calendar, BookOpen, NotebookText, AlertTriangle, Timer
 } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import React, { useState, useEffect } from 'react'; // Import hooks
@@ -188,18 +188,18 @@ export const Dashboard = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <EngagementChart data={data.teamEngagement} title="Team Engagement" icon={<Users className="h-6 w-6 text-purple-500" />} color="#a78bfa" />
                 <EngagementChart data={data.personalEngagement} title="Personal Focus" icon={<User className="h-6 w-6 text-green-500" />} color="#22c55e" />
-                
+
                 {/* Live Activity Stream */}
                 <Card className="flex flex-col">
-                    <SectionTitle icon={<Activity className="h-6 w-6 text-blue-500" />} title="Live Activity Stream" />
+                    <SectionTitle icon={<Timer className="h-6 w-6 text-blue-500" />} title="Live Activity Stream" />
                     <div className={DASHBOARD_STYLES.cardScrollableContent}>
                         <ul className="space-y-4">
                             {data.activityStream.map(item => (
                                 <li key={item.id} className={DASHBOARD_STYLES.activityListItem}>
                                     <div className="flex-shrink-0 mt-1"><Activity className="h-5 w-5 text-gray-400" /></div>
                                     <div className="ml-4 flex-grow">
-                                        <p className="text-sm text-gray-700 dark:text-gray-300"><span className={DASHBOARD_STYLES.activityUser}>{item.user}</span> {item.action}</p>
-                                        <p className={DASHBOARD_STYLES.activityTime}>{item.time}</p>
+                                        <p className="text-sm text-gray-700 dark:text-gray-300"><span className={DASHBOARD_STYLES.activityUser}>{item.user_name}</span> {item.action}</p>
+                                        <p className={DASHBOARD_STYLES.activityTime}>{item.created_at}</p>
                                     </div>
                                 </li>
                             ))}
@@ -220,7 +220,7 @@ export const Dashboard = () => {
                                         </span>
                                         <div>
                                             <p className={DASHBOARD_STYLES.meetingsTitle}>{item.title}</p>
-                                            <p className={DASHBOARD_STYLES.meetingsDate}>{item.date}</p>
+                                            <p className={DASHBOARD_STYLES.meetingsDate}>{item.meeting_date}</p>
                                         </div>
                                     </div>
                                 </li>

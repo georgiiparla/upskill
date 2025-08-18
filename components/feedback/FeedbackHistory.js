@@ -47,7 +47,7 @@ export const FeedbackHistory = () => {
                     throw new Error(`The server responded with status: ${response.status}`);
                 }
                 const data = await response.json();
-                
+
                 setItems(prevItems => page === 1 ? data.items : [...prevItems, ...data.items]);
                 setHasMore(data.hasMore);
 
@@ -63,9 +63,9 @@ export const FeedbackHistory = () => {
 
         // Only fetch if there's more data and no error
         if (hasMore && !error) {
-           fetchFeedback();
+            fetchFeedback();
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [page]);
 
 
@@ -79,7 +79,7 @@ export const FeedbackHistory = () => {
         });
         if (node) observer.current.observe(node);
     }, [isLoading, isFetchingMore, hasMore]);
-    
+
     // --- CORRECTED ERROR HANDLING BLOCK ---
     // This now shows a relevant error message within the original Card layout.
     if (error && items.length === 0) {
@@ -99,7 +99,7 @@ export const FeedbackHistory = () => {
         <div>
             <Card>
                 <SectionTitle className={"mb-6"} icon={<MessageSquare className="h-6 w-6 text-indigo-500" />} title="Submission History" />
-                
+
                 {isLoading && items.length === 0 ? (
                     <ul className="space-y-4">
                         <FeedbackSkeleton />
@@ -120,14 +120,14 @@ export const FeedbackHistory = () => {
                             >
                                 <div className="flex justify-between items-center mb-1">
                                     <h4 className="text-sm font-semibold text-gray-800 dark:text-gray-200">{item.subject}</h4>
-                                    <span className="text-sm text-gray-500 dark:text-gray-400">{item.date}</span>
+                                    <span className="text-xs text-gray-500 dark:text-gray-400">{item.created_at}</span>
                                 </div>
                                 <p className="text-sm text-gray-600 dark:text-gray-300">{item.content}</p>
                             </li>
                         ))}
                     </ul>
                 )}
-                
+
                 {isFetchingMore && (
                     <div className="flex justify-center items-center pt-6">
                         <Loader2 className="h-6 w-6 text-gray-500 animate-spin" />
