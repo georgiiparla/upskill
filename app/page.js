@@ -6,15 +6,16 @@ import { useTheme } from 'next-themes';
 import { Menu, X, Sun, Moon, LogOut, Loader2 } from 'lucide-react';
 import Image from 'next/image';
 
-import { Dashboard } from "../components/Dashboard";
+// MODIFIED: Import the default DashboardPage component instead of the named one
+import Dashboard from "../components/Dashboard"; 
 import { Feedback } from "../components/Feedback";
 import { Leaderboard } from "../components/Leaderboard";
 import { Quests } from "../components/Quests";
 import { Auth } from '@/components/Auth';
 import { useAuth } from '@/context/AuthContext';
-import { Modal } from '@/components/Modal'; // IMPORT the new Modal component
+import { Modal } from '@/components/Modal';
 
-// --- Style Definitions (can remain as they were) ---
+// --- Style Definitions (can remain as they are) ---
 const APP_STYLES = {
     appContainer: `
         min-h-screen 
@@ -189,14 +190,13 @@ const MOBILE_NAVLINK_STYLES = {
     `
 };
 
-
 export default function App() {
     const { theme, setTheme } = useTheme();
     const [mounted, setMounted] = useState(false);
     const [currentPage, setCurrentPage] = useState('dashboard');
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
-    const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false); // ADDED: State for modal
+    const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
     const { isAuthenticated, user, logout, loading } = useAuth();
 
@@ -213,7 +213,6 @@ export default function App() {
 
     useEffect(() => { setMounted(true) }, []);
 
-    // ADDED: Handler for confirming logout
     const handleLogoutConfirm = () => {
         logout();
         setIsLogoutModalOpen(false);
@@ -270,6 +269,7 @@ export default function App() {
 
     const renderPage = () => {
         switch (currentPage) {
+            // MODIFIED: Render the self-contained DashboardPage
             case 'dashboard': return <Dashboard />;
             case 'quests': return <Quests />;
             case 'feedback': return <Feedback />;
@@ -280,7 +280,6 @@ export default function App() {
 
     return (
         <div className={APP_STYLES.appContainer}>
-            {/* ADDED: Render the Modal */}
             <Modal
                 isOpen={isLogoutModalOpen}
                 onClose={() => setIsLogoutModalOpen(false)}
@@ -313,7 +312,6 @@ export default function App() {
                                     Welcome, <span className="font-bold">{user.username}</span>
                                 </span>
                                 <button
-                                    // MODIFIED: This button now opens the modal
                                     onClick={() => setIsLogoutModalOpen(true)}
                                     className="p-2 rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none"
                                 >

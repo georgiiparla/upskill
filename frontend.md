@@ -66,6 +66,51 @@ tailwind.config.js
 
 # Files
 
+## File: .gitignore
+````
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files (can opt-in for committing if needed)
+.env*
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+````
+
 ## File: components/Auth.js
 ````javascript
 // components/Auth.js
@@ -269,6 +314,35 @@ export const Modal = ({ isOpen, onClose, onConfirm, title, children }) => {
 };
 ````
 
+## File: components/ThemeProvider.js
+````javascript
+"use client";
+
+import { ThemeProvider as NextThemesProvider } from 'next-themes';
+import { useEffect, useState } from 'react';
+
+export function ThemeProvider({ children }) {
+	// This state ensures the component is only rendered on the client.
+	const [mounted, setMounted] = useState(false);
+
+	useEffect(() => {
+		setMounted(true);
+	}, []);
+
+	if (!mounted) {
+		// On the server, return nothing to avoid a hydration mismatch.
+		// The actual content will be rendered on the client.
+		return <>{children}</>;
+	}
+
+	return (
+		<NextThemesProvider attribute="class" defaultTheme="system">
+			{children}
+		</NextThemesProvider>
+	);
+}
+````
+
 ## File: context/AuthContext.js
 ````javascript
 // context/AuthContext.js
@@ -394,80 +468,6 @@ export const AuthProvider = ({ children }) => {
 export const useAuth = () => useContext(AuthContext);
 ````
 
-## File: .gitignore
-````
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
-# dependencies
-/node_modules
-/.pnp
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/versions
-
-# testing
-/coverage
-
-# next.js
-/.next/
-/out/
-
-# production
-/build
-
-# misc
-.DS_Store
-*.pem
-
-# debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-.pnpm-debug.log*
-
-# env files (can opt-in for committing if needed)
-.env*
-
-# vercel
-.vercel
-
-# typescript
-*.tsbuildinfo
-next-env.d.ts
-````
-
-## File: components/ThemeProvider.js
-````javascript
-"use client";
-
-import { ThemeProvider as NextThemesProvider } from 'next-themes';
-import { useEffect, useState } from 'react';
-
-export function ThemeProvider({ children }) {
-	// This state ensures the component is only rendered on the client.
-	const [mounted, setMounted] = useState(false);
-
-	useEffect(() => {
-		setMounted(true);
-	}, []);
-
-	if (!mounted) {
-		// On the server, return nothing to avoid a hydration mismatch.
-		// The actual content will be rendered on the client.
-		return <>{children}</>;
-	}
-
-	return (
-		<NextThemesProvider attribute="class" defaultTheme="system">
-			{children}
-		</NextThemesProvider>
-	);
-}
-````
-
 ## File: jsconfig.json
 ````json
 {
@@ -552,41 +552,6 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 ````
 
-## File: app/layout.js
-````javascript
-// app/layout.js
-import { Inter } from "next/font/google";
-import "./globals.css";
-
-import { ThemeProvider } from '../components/ThemeProvider';
-import { AuthProvider } from "@/context/AuthContext";
-import { GlobalErrorNotifier } from "@/components/GlobalErrorNotifier"; // IMPORT the new component
-
-const inter = Inter({ subsets: ["latin"] });
-
-export const metadata = {
-	title: "Upskill",
-	description: "Upskill platform",
-};
-
-export default function RootLayout({ children }) {
-	return (
-		<html lang="en" suppressHydrationWarning>
-			<body
-				className={`${inter.className} antialiased`}
-			>
-                <AuthProvider>
-                    <GlobalErrorNotifier />
-				    <ThemeProvider>
-					    {children}
-				    </ThemeProvider>
-                </AuthProvider>
-			</body>
-		</html>
-	);
-}
-````
-
 ## File: postcss.config.mjs
 ````
 const config = {
@@ -637,6 +602,107 @@ module.exports = {
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
 }
+````
+
+## File: app/layout.js
+````javascript
+// app/layout.js
+import { Inter } from "next/font/google";
+import "./globals.css";
+
+import { ThemeProvider } from '../components/ThemeProvider';
+import { AuthProvider } from "@/context/AuthContext";
+import { GlobalErrorNotifier } from "@/components/GlobalErrorNotifier"; // IMPORT the new component
+
+const inter = Inter({ subsets: ["latin"] });
+
+export const metadata = {
+	title: "Upskill",
+	description: "Upskill platform",
+};
+
+export default function RootLayout({ children }) {
+	return (
+		<html lang="en" suppressHydrationWarning>
+			<body
+				className={`${inter.className} antialiased`}
+			>
+                <AuthProvider>
+                    <GlobalErrorNotifier />
+				    <ThemeProvider>
+					    {children}
+				    </ThemeProvider>
+                </AuthProvider>
+			</body>
+		</html>
+	);
+}
+````
+
+## File: package.json
+````json
+{
+  "name": "upskill-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "lucide-react": "^0.539.0",
+    "next": "15.4.6",
+    "next-themes": "^0.4.6",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "recharts": "^3.1.2"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.17"
+  }
+}
+````
+
+## File: components/Helper.js
+````javascript
+const STYLES = {
+    sectionTitleContainer: `
+        flex
+        items-center
+        mb-4
+    `,
+    sectionTitleHeader2: `
+        text-xl 
+        font-bold 
+        text-gray-800 dark:text-gray-200 
+        ml-3
+    `,
+    cardContainer: `
+        bg-white/50 dark:bg-gray-800/50
+        backdrop-blur-lg
+        rounded-xl 
+        border border-white/20
+        shadow-lg
+        transition-all duration-300
+    `
+}
+
+export const SectionTitle = ({ icon, title, className}) => (
+    <div className={`${STYLES.sectionTitleContainer} ${className}`}>
+        {icon}
+        <h2 className={STYLES.sectionTitleHeader2}>{title}</h2>
+    </div>
+);
+
+export const Card = ({ children, className = '' }) => (
+    <div className={`${STYLES.cardContainer} ${className}`}>
+        <div className="p-6">{children}</div>
+    </div>
+);
 ````
 
 ## File: components/Quests.js
@@ -824,72 +890,6 @@ export const Quests = () => {
         </div>
     );
 };
-````
-
-## File: package.json
-````json
-{
-  "name": "upskill-app",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
-  },
-  "dependencies": {
-    "lucide-react": "^0.539.0",
-    "next": "15.4.6",
-    "next-themes": "^0.4.6",
-    "react": "19.1.0",
-    "react-dom": "19.1.0",
-    "recharts": "^3.1.2"
-  },
-  "devDependencies": {
-    "autoprefixer": "^10.4.21",
-    "postcss": "^8.5.6",
-    "tailwindcss": "^3.4.17"
-  }
-}
-````
-
-## File: components/Helper.js
-````javascript
-const STYLES = {
-    sectionTitleContainer: `
-        flex
-        items-center
-        mb-4
-    `,
-    sectionTitleHeader2: `
-        text-xl 
-        font-bold 
-        text-gray-800 dark:text-gray-200 
-        ml-3
-    `,
-    cardContainer: `
-        bg-white/50 dark:bg-gray-800/50
-        backdrop-blur-lg
-        rounded-xl 
-        border border-white/20
-        shadow-lg
-        transition-all duration-300
-    `
-}
-
-export const SectionTitle = ({ icon, title, className}) => (
-    <div className={`${STYLES.sectionTitleContainer} ${className}`}>
-        {icon}
-        <h2 className={STYLES.sectionTitleHeader2}>{title}</h2>
-    </div>
-);
-
-export const Card = ({ children, className = '' }) => (
-    <div className={`${STYLES.cardContainer} ${className}`}>
-        <div className="p-6">{children}</div>
-    </div>
-);
 ````
 
 ## File: components/feedback/FeedbackHistory.js
@@ -2011,14 +2011,9 @@ export const Feedback = () => {
 ````javascript
 "use client";
 import {
-    RadarChart, PolarGrid, PolarAngleAxis, Radar,
-    Tooltip, ResponsiveContainer
-} from 'recharts';
-import {
-    Activity, Users, User, Calendar, BookOpen, NotebookText, AlertTriangle, Timer
+    Activity, Users, User, Calendar, BookOpen, NotebookText, AlertTriangle, Timer, Shield, ThumbsUp, Star, Target
 } from 'lucide-react';
-import { useTheme } from 'next-themes';
-import React, { useState, useEffect } from 'react'; // Import hooks
+import React, { useState, useEffect } from 'react';
 
 import { Card, SectionTitle } from "./Helper";
 
@@ -2047,8 +2042,7 @@ const DASHBOARD_STYLES = {
     meetingsDate: `text-xs text-gray-500 dark:text-gray-400`,
 };
 
-// --- NEW: Skeleton Components ---
-
+// --- Skeleton Components ---
 const AgendaSkeleton = () => (
     <Card>
         <div className="h-7 w-1/2 bg-gray-300 dark:bg-gray-700 rounded mb-7"></div>
@@ -2066,14 +2060,19 @@ const AgendaSkeleton = () => (
     </Card>
 );
 
-const ChartSkeleton = () => (
+const StatCardSkeleton = () => (
     <Card>
-        <div className="h-7 w-1/2 bg-gray-300 dark:bg-gray-700 rounded mb-4"></div>
-        <div className="w-full h-[300px] bg-gray-200 dark:bg-gray-700/50 rounded-lg"></div>
+        <div className="flex items-center">
+            <div className="h-10 w-10 bg-gray-300 dark:bg-gray-700 rounded-lg"></div>
+            <div className="ml-4 flex-1">
+                <div className="h-4 w-3/4 bg-gray-300 dark:bg-gray-700 rounded mb-2"></div>
+                <div className="h-7 w-1/2 bg-gray-300 dark:bg-gray-700 rounded"></div>
+            </div>
+        </div>
     </Card>
 );
 
-const ListSkeleton = ({ title }) => (
+const ListSkeleton = () => (
     <Card className="flex flex-col">
         <div className="h-7 w-1/2 bg-gray-300 dark:bg-gray-700 rounded mb-4"></div>
         <div className="flex-grow space-y-4">
@@ -2087,34 +2086,18 @@ const ListSkeleton = ({ title }) => (
     </Card>
 );
 
-
-// --- Chart Component (Unchanged) ---
-const EngagementChart = ({ data, title, icon, color }) => {
-    const { theme } = useTheme();
-    const tickColor = theme === 'dark' ? '#9ca3af' : '#6b7280';
-    return (
-        <Card>
-            <SectionTitle icon={icon} title={title} />
-            <ResponsiveContainer width="100%" height={300}>
-                <RadarChart cx="50%" cy="50%" outerRadius="80%" data={data}>
-                    <PolarGrid stroke={theme === 'dark' ? '#374151' : '#e5e7eb'} />
-                    <PolarAngleAxis dataKey="category" stroke={tickColor} fontSize={12} />
-                    <Radar name="Engagement" dataKey="value" stroke={color} fill={color} fillOpacity={0.6} />
-                    <Tooltip
-                        contentStyle={{
-                            backgroundColor: theme === 'dark' ? 'rgba(31, 41, 55, 0.8)' : 'rgba(255, 255, 255, 0.8)',
-                            backdropFilter: 'blur(4px)',
-                            borderRadius: '0.5rem',
-                            border: '1px solid',
-                            borderColor: theme === 'dark' ? '#374151' : '#e5e7eb'
-                        }}
-                        itemStyle={{ color: theme === 'dark' ? '#e5e7eb' : '#1f2937' }}
-                    />
-                </RadarChart>
-            </ResponsiveContainer>
-        </Card>
-    );
-};
+// --- Reusable StatCard Component ---
+const StatCard = ({ icon, title, value }) => (
+    <Card>
+        <div className="flex items-center">
+            <div className="flex-shrink-0">{icon}</div>
+            <div className="ml-4">
+                <p className="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">{title}</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">{value.toLocaleString()}</p>
+            </div>
+        </div>
+    </Card>
+);
 
 
 // --- Main Dashboard Component ---
@@ -2127,7 +2110,6 @@ export const Dashboard = () => {
         const fetchDashboardData = async () => {
             try {
                 await new Promise(resolve => setTimeout(resolve, 1000));
-                // MODIFIED LINE
                 const response = await fetch('http://localhost:9292/dashboard', { credentials: 'include' });
                 if (!response.ok) {
                     throw new Error(`Server responded with status: ${response.status}`);
@@ -2147,9 +2129,17 @@ export const Dashboard = () => {
         return (
             <div className="space-y-6 animate-pulse">
                 <AgendaSkeleton />
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <StatCardSkeleton />
+                    <StatCardSkeleton />
+                </div>
+                {/* MODIFIED: Skeleton now has 3 cards to match the personal stats layout */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <StatCardSkeleton />
+                    <StatCardSkeleton />
+                    <StatCardSkeleton />
+                </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <ChartSkeleton />
-                    <ChartSkeleton />
                     <ListSkeleton />
                     <ListSkeleton />
                 </div>
@@ -2168,7 +2158,7 @@ export const Dashboard = () => {
     }
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-8">
             {/* This Week's Agenda */}
             <div>
                 <Card>
@@ -2196,11 +2186,49 @@ export const Dashboard = () => {
                 </Card>
             </div>
 
-            {/* 2x2 Grid Section */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <EngagementChart data={data.teamEngagement} title="Team Engagement" icon={<Users className="h-6 w-6 text-purple-500" />} color="#a78bfa" />
-                <EngagementChart data={data.personalEngagement} title="Personal Focus" icon={<User className="h-6 w-6 text-green-500" />} color="#22c55e" />
+            {/* Team Activity Section */}
+            <div>
+                <SectionTitle icon={<Users className="h-6 w-6 text-purple-500" />} title="Team Activity (This Week)" />
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
+                    <StatCard
+                        icon={<Shield className="h-8 w-8 text-green-500" />}
+                        title="Quests Completed"
+                        value={data.teamStats.quests_completed_week}
+                    />
+                    <StatCard
+                        icon={<ThumbsUp className="h-8 w-8 text-blue-500" />}
+                        title="Feedback Given"
+                        value={data.teamStats.feedback_given_week}
+                    />
+                </div>
+            </div>
 
+            {/* Personal Activity Section */}
+            <div>
+                <SectionTitle icon={<User className="h-6 w-6 text-teal-500" />} title="Your Activity (All Time)" />
+                {/* MODIFIED: Added a third card for quests completed */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
+                    <StatCard
+                        icon={<ThumbsUp className="h-8 w-8 text-cyan-500" />}
+                        title="Your Feedback Given"
+                        value={data.personalStats.feedback_given_total}
+                    />
+                    <StatCard
+                        icon={<Star className="h-8 w-8 text-yellow-500" />}
+                        title="Your Total Points"
+                        value={data.personalStats.points_total}
+                    />
+                    <StatCard
+                        icon={<Target className="h-8 w-8 text-red-500" />}
+                        title="Your Quests Completed"
+                        value={data.personalStats.quests_completed_total}
+                    />
+                </div>
+            </div>
+
+
+            {/* Lists Section */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Live Activity Stream */}
                 <Card className="flex flex-col">
                     <SectionTitle icon={<Timer className="h-6 w-6 text-blue-500" />} title="Live Activity Stream" />
