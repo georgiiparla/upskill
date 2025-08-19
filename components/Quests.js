@@ -105,10 +105,9 @@ export const Quests = () => {
     useEffect(() => {
         const fetchQuests = async () => {
             try {
-                // Simulate a slightly longer network request to see the skeleton
                 await new Promise(resolve => setTimeout(resolve, 1000));
-                
-                const response = await fetch('http://localhost:9292/quests');
+                // MODIFIED LINE
+                const response = await fetch('http://localhost:9292/quests', { credentials: 'include' });
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
@@ -121,7 +120,6 @@ export const Quests = () => {
                 setLoading(false);
             }
         };
-
         fetchQuests();
     }, []);
 

@@ -39,14 +39,17 @@ The content is organized as follows:
 app/globals.css
 app/layout.js
 app/page.js
+components/Auth.js
 components/Dashboard.js
 components/Feedback.js
 components/feedback/FeedbackHistory.js
-components/feedback/FeedbackTips.js
+components/GlobalErrorNotifier.js
 components/Helper.js
 components/Leaderboard.js
+components/Modal.js
 components/Quests.js
 components/ThemeProvider.js
+context/AuthContext.js
 jsconfig.json
 mock/mock_data.js
 next.config.mjs
@@ -62,6 +65,334 @@ tailwind.config.js
 ```
 
 # Files
+
+## File: components/Auth.js
+````javascript
+// components/Auth.js
+"use client";
+import { useState } from 'react';
+import { useAuth } from '@/context/AuthContext';
+import Image from 'next/image';
+import { Loader2 } from 'lucide-react';
+
+export const Auth = () => {
+    const [isLogin, setIsLogin] = useState(true);
+    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
+    const { login, signup } = useAuth();
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        setError('');
+
+        const response = isLogin
+            ? await login(email, password)
+            : await signup(username, email, password);
+
+        setLoading(false);
+
+        if (!response.success) {
+            setError(response.error || `An unknown error occurred during ${isLogin ? 'login' : 'signup'}.`);
+        } else if (!isLogin) {
+            // After successful signup, switch to login view with a success message
+            setIsLogin(true);
+            setError('Signup successful! Please log in.');
+        }
+    };
+
+    return (
+        <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
+            <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                <div className="flex justify-center">
+                     <Image src="/rs2logo.png" alt="Upskill Logo" width={48} height={48} />
+                </div>
+                <h2 className="text-2xl font-bold text-center text-gray-900 dark:text-white">
+                    {isLogin ? 'Welcome Back!' : 'Create an Account'}
+                </h2>
+
+                <form className="space-y-6" onSubmit={handleSubmit}>
+                    {!isLogin && (
+                        <div>
+                            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-200">Username</label>
+                            <input
+                                type="text"
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                required
+                            />
+                        </div>
+                    )}
+                    <div>
+                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-200">Email</label>
+                        <input
+                            type="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-200">Password</label>
+                        <input
+                            type="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                            required
+                        />
+                    </div>
+
+                    {error && <p className="text-sm text-center text-red-500">{error}</p>}
+
+                    <button
+                        type="submit"
+                        disabled={loading}
+                        className="w-full px-4 py-2 font-bold text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-blue-400 flex items-center justify-center"
+                    >
+                        {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                        {isLogin ? 'Login' : 'Sign Up'}
+                    </button>
+                </form>
+
+                <p className="text-sm text-center text-gray-600 dark:text-gray-400">
+                    {isLogin ? "Don't have an account?" : 'Already have an account?'}
+                    <button onClick={() => { setIsLogin(!isLogin); setError(''); }} className="ml-1 font-medium text-blue-600 hover:underline">
+                        {isLogin ? 'Sign up' : 'Login'}
+                    </button>
+                </p>
+            </div>
+        </div>
+    );
+};
+````
+
+## File: components/GlobalErrorNotifier.js
+````javascript
+// components/GlobalErrorNotifier.js
+"use client";
+
+import { useAuth } from "@/context/AuthContext";
+import { AlertTriangle, X } from "lucide-react";
+
+export const GlobalErrorNotifier = () => {
+    const { error, clearError } = useAuth();
+
+    if (!error) {
+        return null; // Don't render anything if there is no error
+    }
+
+    return (
+        <div className="fixed top-0 left-0 right-0 z-[100] bg-red-600 text-white shadow-lg animate-pulse-once">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="flex items-center justify-between h-12">
+                    <div className="flex items-center">
+                        <AlertTriangle className="h-6 w-6 mr-3" />
+                        <p className="font-medium text-sm">{error}</p>
+                    </div>
+                    <button
+                        onClick={clearError}
+                        className="p-2 rounded-full hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-white"
+                        aria-label="Dismiss"
+                    >
+                        <X className="h-5 w-5" />
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+};
+````
+
+## File: components/Modal.js
+````javascript
+// components/Modal.js
+"use client";
+
+import { X } from 'lucide-react';
+
+export const Modal = ({ isOpen, onClose, onConfirm, title, children }) => {
+    if (!isOpen) {
+        return null;
+    }
+
+    return (
+        // Backdrop
+        <div 
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm"
+            onClick={onClose} // Close modal on backdrop click
+        >
+            {/* Modal Content */}
+            <div
+                className="relative w-full max-w-md p-6 bg-white rounded-lg shadow-xl dark:bg-gray-800"
+                onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the modal
+            >
+                {/* Header */}
+                <div className="flex items-center justify-between pb-4 border-b border-gray-200 dark:border-gray-700">
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{title}</h3>
+                    <button
+                        onClick={onClose}
+                        className="p-1 rounded-full text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
+                    >
+                        <X className="w-5 h-5" />
+                    </button>
+                </div>
+
+                {/* Body */}
+                <div className="py-6 text-sm text-gray-600 dark:text-gray-300">
+                    {children}
+                </div>
+
+                {/* Footer with Buttons */}
+                <div className="flex justify-end space-x-4">
+                    <button
+                        onClick={onClose}
+                        className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600 focus:outline-none"
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        onClick={onConfirm}
+                        className="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-700 focus:outline-none"
+                    >
+                        Sign Out
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+};
+````
+
+## File: context/AuthContext.js
+````javascript
+// context/AuthContext.js
+"use client";
+
+import React, { createContext, useState, useContext, useEffect } from 'react';
+
+const AuthContext = createContext(null);
+
+export const AuthProvider = ({ children }) => {
+    const [user, setUser] = useState(null);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null); // ADDED: State for global errors
+
+    const API_URL = 'http://localhost:9292/auth';
+
+    // ADDED: A user-friendly error message for network issues
+    const friendlyError = "Could not connect to the server. Please check your connection and try again later.";
+
+    // Function to clear the error
+    const clearError = () => setError(null);
+
+    const checkSession = async () => {
+        // MODIFIED: Wrapped in try...catch
+        try {
+            const response = await fetch(`${API_URL}/profile`, { credentials: 'include' });
+            if (response.ok) {
+                const data = await response.json();
+                if (data.logged_in) {
+                    setUser(data.user);
+                    setIsAuthenticated(true);
+                } else {
+                    setIsAuthenticated(false);
+                    setUser(null);
+                }
+            } else {
+                // Handle cases where the server is up but returns an error (e.g., 500)
+                setIsAuthenticated(false);
+                setUser(null);
+            }
+        } catch (err) {
+            console.error("Session check failed:", err);
+            setError(friendlyError); // Set the global error
+            setIsAuthenticated(false);
+            setUser(null);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        checkSession();
+    }, []);
+
+    const login = async (email, password) => {
+        // MODIFIED: Wrapped in try...catch
+        try {
+            const response = await fetch(`${API_URL}/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password }),
+                credentials: 'include'
+            });
+            const data = await response.json();
+            if (response.ok) {
+                setUser(data.user);
+                setIsAuthenticated(true);
+                return { success: true };
+            }
+            return { success: false, error: data.error };
+        } catch (err) {
+            console.error("Login failed:", err);
+            setError(friendlyError); // Set the global error
+            return { success: false, error: friendlyError };
+        }
+    };
+
+    const signup = async (username, email, password) => {
+        // MODIFIED: Wrapped in try...catch
+        try {
+            const response = await fetch(`${API_URL}/signup`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, email, password }),
+                credentials: 'include'
+            });
+            const data = await response.json();
+            if (response.ok) {
+                return { success: true };
+            }
+            return { success: false, error: data.error };
+        } catch (err) {
+            console.error("Signup failed:", err);
+            setError(friendlyError); // Set the global error
+            return { success: false, error: friendlyError };
+        }
+    };
+
+    const logout = async () => {
+        // MODIFIED: Wrapped in try...catch
+        try {
+            await fetch(`${API_URL}/logout`, { method: 'POST', credentials: 'include' });
+        } catch (err) {
+            console.error("Logout failed:", err);
+            setError(friendlyError); // Set the global error
+        } finally {
+            setUser(null);
+            setIsAuthenticated(false);
+        }
+    };
+
+    // MODIFIED: Added 'error' and 'clearError' to the context value
+    const value = { user, isAuthenticated, loading, login, signup, logout, error, clearError };
+
+    return (
+        <AuthContext.Provider value={value}>
+            {children}
+        </AuthContext.Provider>
+    );
+};
+
+export const useAuth = () => useContext(AuthContext);
+````
 
 ## File: .gitignore
 ````
@@ -106,57 +437,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-````
-
-## File: components/feedback/FeedbackTips.js
-````javascript
-import { Lightbulb } from 'lucide-react';
-import { Card, SectionTitle } from "../Helper";
-
-// --- Style Definitions ---
-const TIPS_STYLES = {
-    listItem: `
-        flex 
-        items-start 
-        text-sm 
-        text-gray-600 dark:text-gray-300
-    `,
-    bulletPoint: `
-        mt-1 
-        mr-3 
-        flex-shrink-0 
-        h-2 w-2 
-        rounded-full 
-        bg-indigo-400
-    `,
-};
-
-// --- List of Tips ---
-const feedbackTips = [
-    "Be specific: Provide concrete examples instead of vague statements.",
-    "Focus on behavior, not personality. Describe the action and its impact.",
-    "Offer solutions: If you identify a problem, suggest a potential improvement.",
-    "Be timely: Provide feedback as soon as possible after the event.",
-    "Keep it constructive: The goal is to help and improve, not to criticize."
-];
-
-export const FeedbackTips = () => {
-    return (
-        <div>
-            <SectionTitle icon={<Lightbulb className="h-6 w-6 text-indigo-500" />} title="Tips for Effective Feedback" />
-            <Card>
-                <ul className="space-y-3">
-                    {feedbackTips.map((tip, index) => (
-                        <li key={index} className={TIPS_STYLES.listItem}>
-                            <span className={TIPS_STYLES.bulletPoint}></span>
-                            {tip}
-                        </li>
-                    ))}
-                </ul>
-            </Card>
-        </div>
-    );
-};
 ````
 
 ## File: components/ThemeProvider.js
@@ -274,10 +554,13 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## File: app/layout.js
 ````javascript
+// app/layout.js
 import { Inter } from "next/font/google";
 import "./globals.css";
 
 import { ThemeProvider } from '../components/ThemeProvider';
+import { AuthProvider } from "@/context/AuthContext";
+import { GlobalErrorNotifier } from "@/components/GlobalErrorNotifier"; // IMPORT the new component
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -292,12 +575,67 @@ export default function RootLayout({ children }) {
 			<body
 				className={`${inter.className} antialiased`}
 			>
-				<ThemeProvider>
-					{children}
-				</ThemeProvider>
+                <AuthProvider>
+                    <GlobalErrorNotifier />
+				    <ThemeProvider>
+					    {children}
+				    </ThemeProvider>
+                </AuthProvider>
 			</body>
 		</html>
 	);
+}
+````
+
+## File: postcss.config.mjs
+````
+const config = {
+	plugins: {
+		tailwindcss: {},
+		autoprefixer: {},
+	},
+};
+
+export default config;
+````
+
+## File: tailwind.config.js
+````javascript
+// In tailwind.config.js
+
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+    darkMode: 'class',
+    content: [
+        './pages/**/*.{js,ts,jsx,tsx,mdx}',
+        './components/**/*.{js,ts,jsx,tsx,mdx}',
+        './app/**/*.{js,ts,jsx,tsx,mdx}',
+    ],
+    theme: {
+        extend: {},
+    },
+    // 👇 REMOVE THE PLUGINS ARRAY OR LEAVE IT EMPTY 👇
+    plugins: [], 
+};
+````
+
+## File: app/globals.css
+````css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Add this to the end of app/globals.css */
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
 }
 ````
 
@@ -410,10 +748,9 @@ export const Quests = () => {
     useEffect(() => {
         const fetchQuests = async () => {
             try {
-                // Simulate a slightly longer network request to see the skeleton
                 await new Promise(resolve => setTimeout(resolve, 1000));
-                
-                const response = await fetch('http://localhost:9292/quests');
+                // MODIFIED LINE
+                const response = await fetch('http://localhost:9292/quests', { credentials: 'include' });
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
@@ -426,7 +763,6 @@ export const Quests = () => {
                 setLoading(false);
             }
         };
-
         fetchQuests();
     }, []);
 
@@ -485,201 +821,6 @@ export const Quests = () => {
                     </Card>
                 ))}
             </div>
-        </div>
-    );
-};
-````
-
-## File: postcss.config.mjs
-````
-const config = {
-	plugins: {
-		tailwindcss: {},
-		autoprefixer: {},
-	},
-};
-
-export default config;
-````
-
-## File: tailwind.config.js
-````javascript
-// In tailwind.config.js
-
-/** @type {import('tailwindcss').Config} */
-module.exports = {
-    darkMode: 'class',
-    content: [
-        './pages/**/*.{js,ts,jsx,tsx,mdx}',
-        './components/**/*.{js,ts,jsx,tsx,mdx}',
-        './app/**/*.{js,ts,jsx,tsx,mdx}',
-    ],
-    theme: {
-        extend: {},
-    },
-    // 👇 REMOVE THE PLUGINS ARRAY OR LEAVE IT EMPTY 👇
-    plugins: [], 
-};
-````
-
-## File: app/globals.css
-````css
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-/* Add this to the end of app/globals.css */
-
-/* Hide scrollbar for Chrome, Safari and Opera */
-.no-scrollbar::-webkit-scrollbar {
-    display: none;
-}
-
-/* Hide scrollbar for IE, Edge and Firefox */
-.no-scrollbar {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
-}
-````
-
-## File: components/feedback/FeedbackHistory.js
-````javascript
-"use client";
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Card, SectionTitle } from "../Helper";
-import { MessageSquare, Loader2, AlertTriangle } from "lucide-react"; // Import AlertTriangle
-
-// --- Skeleton and Style components can remain unchanged ---
-const FeedbackSkeleton = () => (
-    <li className="p-4 rounded-lg bg-gray-50 dark:bg-gray-800/60 border-l-2 border-gray-300 dark:border-gray-600 animate-pulse">
-        <div className="flex justify-between items-center mb-2">
-            <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-1/3"></div>
-            <div className="h-3 bg-gray-300 dark:bg-gray-600 rounded w-1/4"></div>
-        </div>
-        <div className="h-3 bg-gray-300 dark:bg-gray-600 rounded w-full"></div>
-    </li>
-);
-
-const getSentimentColor = (sentiment) => {
-    switch (sentiment) {
-        case 'Positive': return 'border-green-500';
-        case 'Negative': return 'border-red-500';
-        default: return 'border-amber-500';
-    }
-};
-
-export const FeedbackHistory = () => {
-    const [items, setItems] = useState([]);
-    const [page, setPage] = useState(1);
-    const [hasMore, setHasMore] = useState(true);
-    const [error, setError] = useState(null);
-    const [isLoading, setIsLoading] = useState(true);
-    const [isFetchingMore, setIsFetchingMore] = useState(false);
-    const observer = useRef();
-    const ITEMS_PER_PAGE = 5;
-
-    useEffect(() => {
-        const fetchFeedback = async () => {
-            if (page === 1) {
-                setIsLoading(true);
-            } else {
-                setIsFetchingMore(true);
-            }
-
-            try {
-                await new Promise(resolve => setTimeout(resolve, 1000));
-                const response = await fetch(`http://localhost:9292/feedback?page=${page}&limit=${ITEMS_PER_PAGE}`);
-                if (!response.ok) {
-                    throw new Error(`The server responded with status: ${response.status}`);
-                }
-                const data = await response.json();
-                
-                setItems(prevItems => page === 1 ? data.items : [...prevItems, ...data.items]);
-                setHasMore(data.hasMore);
-
-            } catch (err) {
-                console.error("Failed to fetch feedback history:", err);
-                setError(err.message);
-                setHasMore(false); // Stop trying to fetch more if there's an error
-            } finally {
-                setIsLoading(false);
-                setIsFetchingMore(false);
-            }
-        };
-
-        // Only fetch if there's more data and no error
-        if (hasMore && !error) {
-           fetchFeedback();
-        }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [page]);
-
-
-    const lastItemRef = useCallback(node => {
-        if (isLoading || isFetchingMore) return;
-        if (observer.current) observer.current.disconnect();
-        observer.current = new IntersectionObserver(entries => {
-            if (entries[0].isIntersecting && hasMore) {
-                setPage(prevPage => prevPage + 1);
-            }
-        });
-        if (node) observer.current.observe(node);
-    }, [isLoading, isFetchingMore, hasMore]);
-    
-    // --- CORRECTED ERROR HANDLING BLOCK ---
-    // This now shows a relevant error message within the original Card layout.
-    if (error && items.length === 0) {
-        return (
-            <Card>
-                <SectionTitle className={"mb-6"} icon={<MessageSquare className="h-6 w-6 text-indigo-500" />} title="Submission History" />
-                <div className="flex flex-col items-center justify-center text-center p-8">
-                    <AlertTriangle className="h-12 w-12 text-red-500 mb-4" />
-                    <h3 className="text-lg font-semibold text-gray-800 dark:text-white">Could not load feedback history</h3>
-                    <p className="text-sm text-red-500 dark:text-red-400 mt-1">{error}</p>
-                </div>
-            </Card>
-        )
-    }
-
-    return (
-        <div>
-            <Card>
-                <SectionTitle className={"mb-6"} icon={<MessageSquare className="h-6 w-6 text-indigo-500" />} title="Submission History" />
-                
-                {isLoading && items.length === 0 ? (
-                    <ul className="space-y-4">
-                        <FeedbackSkeleton />
-                        <FeedbackSkeleton />
-                        <FeedbackSkeleton />
-                    </ul>
-                ) : (
-                    <ul className="space-y-4">
-                        {items.map((item, index) => (
-                            <li
-                                ref={items.length === index + 1 ? lastItemRef : null}
-                                key={`${item.id}-${index}`}
-                                className={`
-                                    bg-gray-50 dark:bg-gray-800/60 p-4 rounded-lg 
-                                    transition-colors hover:bg-gray-100 dark:hover:bg-gray-700/80
-                                    border-l-2 ${getSentimentColor(item.sentiment)}
-                                `}
-                            >
-                                <div className="flex justify-between items-center mb-1">
-                                    <h4 className="text-sm font-semibold text-gray-800 dark:text-gray-200">{item.subject}</h4>
-                                    <span className="text-sm text-gray-500 dark:text-gray-400">{item.date}</span>
-                                </div>
-                                <p className="text-sm text-gray-600 dark:text-gray-300">{item.content}</p>
-                            </li>
-                        ))}
-                    </ul>
-                )}
-                
-                {isFetchingMore && (
-                    <div className="flex justify-center items-center pt-6">
-                        <Loader2 className="h-6 w-6 text-gray-500 animate-spin" />
-                    </div>
-                )}
-            </Card>
         </div>
     );
 };
@@ -749,6 +890,149 @@ export const Card = ({ children, className = '' }) => (
         <div className="p-6">{children}</div>
     </div>
 );
+````
+
+## File: components/feedback/FeedbackHistory.js
+````javascript
+"use client";
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { Card, SectionTitle } from "../Helper";
+import { MessageSquare, Loader2, AlertTriangle } from "lucide-react"; // Import AlertTriangle
+
+// --- Skeleton and Style components can remain unchanged ---
+const FeedbackSkeleton = () => (
+    <li className="p-4 rounded-lg bg-gray-50 dark:bg-gray-800/60 border-l-2 border-gray-300 dark:border-gray-600 animate-pulse">
+        <div className="flex justify-between items-center mb-2">
+            <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-1/3"></div>
+            <div className="h-3 bg-gray-300 dark:bg-gray-600 rounded w-1/4"></div>
+        </div>
+        <div className="h-3 bg-gray-300 dark:bg-gray-600 rounded w-full"></div>
+    </li>
+);
+
+const getSentimentColor = (sentiment) => {
+    switch (sentiment) {
+        case 'Positive': return 'border-green-500';
+        case 'Negative': return 'border-red-500';
+        default: return 'border-amber-500';
+    }
+};
+
+export const FeedbackHistory = () => {
+    const [items, setItems] = useState([]);
+    const [page, setPage] = useState(1);
+    const [hasMore, setHasMore] = useState(true);
+    const [error, setError] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [isFetchingMore, setIsFetchingMore] = useState(false);
+    const observer = useRef();
+    const ITEMS_PER_PAGE = 5;
+
+    useEffect(() => {
+        const fetchFeedback = async () => {
+            if (page === 1) {
+                setIsLoading(true);
+            } else {
+                setIsFetchingMore(true);
+            }
+
+            try {
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                const response = await fetch(`http://localhost:9292/feedback?page=${page}&limit=${ITEMS_PER_PAGE}`, { credentials: 'include' });
+                if (!response.ok) {
+                    throw new Error(`The server responded with status: ${response.status}`);
+                }
+                const data = await response.json();
+
+                setItems(prevItems => page === 1 ? data.items : [...prevItems, ...data.items]);
+                setHasMore(data.hasMore);
+
+            } catch (err) {
+                console.error("Failed to fetch feedback history:", err);
+                setError(err.message);
+                setHasMore(false); // Stop trying to fetch more if there's an error
+            } finally {
+                setIsLoading(false);
+                setIsFetchingMore(false);
+            }
+        };
+
+        // Only fetch if there's more data and no error
+        if (hasMore && !error) {
+            fetchFeedback();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [page, hasMore, error]);
+
+
+    const lastItemRef = useCallback(node => {
+        if (isLoading || isFetchingMore) return;
+        if (observer.current) observer.current.disconnect();
+        observer.current = new IntersectionObserver(entries => {
+            if (entries[0].isIntersecting && hasMore) {
+                setPage(prevPage => prevPage + 1);
+            }
+        });
+        if (node) observer.current.observe(node);
+    }, [isLoading, isFetchingMore, hasMore]);
+
+    // --- CORRECTED ERROR HANDLING BLOCK ---
+    // This now shows a relevant error message within the original Card layout.
+    if (error && items.length === 0) {
+        return (
+            <Card>
+                <SectionTitle className={"mb-6"} icon={<MessageSquare className="h-6 w-6 text-indigo-500" />} title="Submission History" />
+                <div className="flex flex-col items-center justify-center text-center p-8">
+                    <AlertTriangle className="h-12 w-12 text-red-500 mb-4" />
+                    <h3 className="text-lg font-semibold text-gray-800 dark:text-white">Could not load feedback history</h3>
+                    <p className="text-sm text-red-500 dark:text-red-400 mt-1">{error}</p>
+                </div>
+            </Card>
+        )
+    }
+
+    return (
+        <div>
+            <Card>
+                <SectionTitle className={"mb-6"} icon={<MessageSquare className="h-6 w-6 text-indigo-500" />} title="Submission History" />
+
+                {isLoading && items.length === 0 ? (
+                    <ul className="space-y-4">
+                        <FeedbackSkeleton />
+                        <FeedbackSkeleton />
+                        <FeedbackSkeleton />
+                    </ul>
+                ) : (
+                    <ul className="space-y-4">
+                        {items.map((item, index) => (
+                            <li
+                                ref={items.length === index + 1 ? lastItemRef : null}
+                                key={`${item.id}-${index}`}
+                                className={`
+                                    bg-gray-50 dark:bg-gray-800/60 p-4 rounded-lg 
+                                    transition-colors hover:bg-gray-100 dark:hover:bg-gray-700/80
+                                    border-l-2 ${getSentimentColor(item.sentiment)}
+                                `}
+                            >
+                                <div className="flex justify-between items-center mb-1">
+                                    <h4 className="text-sm font-semibold text-gray-800 dark:text-gray-200">{item.subject}</h4>
+                                    <span className="text-xs text-gray-500 dark:text-gray-400">{item.created_at}</span>
+                                </div>
+                                <p className="text-sm text-gray-600 dark:text-gray-300">{item.content}</p>
+                            </li>
+                        ))}
+                    </ul>
+                )}
+
+                {isFetchingMore && (
+                    <div className="flex justify-center items-center pt-6">
+                        <Loader2 className="h-6 w-6 text-gray-500 animate-spin" />
+                    </div>
+                )}
+            </Card>
+        </div>
+    );
+};
 ````
 
 ## File: components/Leaderboard.js
@@ -930,9 +1214,9 @@ export const Leaderboard = () => {
     useEffect(() => {
         const fetchLeaderboard = async () => {
             try {
-                // Using a small delay to make the skeleton visible
                 await new Promise(resolve => setTimeout(resolve, 1000));
-                const response = await fetch('http://localhost:9292/leaderboard');
+                // MODIFIED LINE
+                const response = await fetch('http://localhost:9292/leaderboard', { credentials: 'include' });
                 if (!response.ok) {
                     throw new Error(`Server responded with status: ${response.status}`);
                 }
@@ -1201,20 +1485,23 @@ export const MOCK_FEEDBACK_STATS = {
 
 ## File: app/page.js
 ````javascript
+// app/page.js
 "use client"
 
 import React, { useState, useEffect } from 'react';
 import { useTheme } from 'next-themes';
-import { Menu, X, Sun, Moon } from 'lucide-react';
+import { Menu, X, Sun, Moon, LogOut, Loader2 } from 'lucide-react';
 import Image from 'next/image';
 
 import { Dashboard } from "../components/Dashboard";
 import { Feedback } from "../components/Feedback";
 import { Leaderboard } from "../components/Leaderboard";
 import { Quests } from "../components/Quests";
+import { Auth } from '@/components/Auth';
+import { useAuth } from '@/context/AuthContext';
+import { Modal } from '@/components/Modal'; // IMPORT the new Modal component
 
-// --- Style Definitions ---
-
+// --- Style Definitions (can remain as they were) ---
 const APP_STYLES = {
     appContainer: `
         min-h-screen 
@@ -1326,9 +1613,7 @@ const APP_STYLES = {
         sm:px-6 lg:px-8
     `
 };
-
 const NAVLINK_STYLES = {
-    // Default (unscrolled) styles
     baseDefault: `
         border-b-2 
         px-1 pt-1 
@@ -1348,7 +1633,6 @@ const NAVLINK_STYLES = {
         hover:border-gray-300 dark:hover:border-gray-600 
         hover:text-gray-700 dark:hover:text-gray-300
     `,
-    // Scrolled styles
     baseScrolled: `
         relative
         px-3 py-2
@@ -1365,7 +1649,6 @@ const NAVLINK_STYLES = {
         text-gray-500 dark:text-gray-400 
         hover:text-gray-700 dark:hover:text-gray-300
     `,
-    // Style for the dot itself
     activeDot: `
       absolute left-0 top-1/2 -translate-y-1/2 
       h-1.5 w-1.5 
@@ -1373,7 +1656,6 @@ const NAVLINK_STYLES = {
       transition-opacity duration-300
     `
 };
-
 const MOBILE_NAVLINK_STYLES = {
     base: `
         block 
@@ -1394,7 +1676,6 @@ const MOBILE_NAVLINK_STYLES = {
     `
 };
 
-// --- Main App Component ---
 
 export default function App() {
     const { theme, setTheme } = useTheme();
@@ -1402,8 +1683,10 @@ export default function App() {
     const [currentPage, setCurrentPage] = useState('dashboard');
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
+    const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false); // ADDED: State for modal
 
-    // Effect to handle scroll detection
+    const { isAuthenticated, user, logout, loading } = useAuth();
+
     useEffect(() => {
         const handleScroll = () => {
             const isScrolled = window.scrollY > 50;
@@ -1411,24 +1694,32 @@ export default function App() {
                 setScrolled(isScrolled);
             }
         };
-
         document.addEventListener('scroll', handleScroll);
-        return () => {
-            document.removeEventListener('scroll', handleScroll);
-        };
+        return () => document.removeEventListener('scroll', handleScroll);
     }, [scrolled]);
 
-    useEffect(() => {
-        setMounted(true);
-    }, []);
+    useEffect(() => { setMounted(true) }, []);
 
-    if (!mounted) {
-        return null;
+    // ADDED: Handler for confirming logout
+    const handleLogoutConfirm = () => {
+        logout();
+        setIsLogoutModalOpen(false);
+    };
+
+    if (!mounted || loading) {
+        return (
+            <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
+                <Loader2 className="h-12 w-12 animate-spin text-blue-600" />
+            </div>
+        );
+    }
+    
+    if (!isAuthenticated) {
+        return <Auth />;
     }
 
     const NavLink = ({ pageName, children, scrolled }) => {
         const isActive = currentPage === pageName;
-
         const baseClass = scrolled ? NAVLINK_STYLES.baseScrolled : NAVLINK_STYLES.baseDefault;
         const activeClass = isActive 
             ? (scrolled ? NAVLINK_STYLES.activeScrolled : NAVLINK_STYLES.activeDefault) 
@@ -1466,40 +1757,34 @@ export default function App() {
 
     const renderPage = () => {
         switch (currentPage) {
-            case 'dashboard':
-                return <Dashboard />;
-            case 'quests':
-                return <Quests />;
-            case 'feedback':
-                return <Feedback />;
-            case 'leaderboard':
-                return <Leaderboard />;
-            default:
-                return <Dashboard />;
+            case 'dashboard': return <Dashboard />;
+            case 'quests': return <Quests />;
+            case 'feedback': return <Feedback />;
+            case 'leaderboard': return <Leaderboard />;
+            default: return <Dashboard />;
         }
     };
 
     return (
         <div className={APP_STYLES.appContainer}>
-            {/* Navigation */}
+            {/* ADDED: Render the Modal */}
+            <Modal
+                isOpen={isLogoutModalOpen}
+                onClose={() => setIsLogoutModalOpen(false)}
+                onConfirm={handleLogoutConfirm}
+                title="Confirm Sign Out"
+            >
+                Are you sure you want to sign out of your account?
+            </Modal>
+
             <nav className={APP_STYLES.nav}>
                 <div className={APP_STYLES.navContainer}>
                     <div className={`${APP_STYLES.navFlexContainer} ${scrolled ? APP_STYLES.navFlexContainerScrolled : ''}`}>
                         <div className={APP_STYLES.logoAndLinksContainer}>
-                            {/* Logo */}
                             <div className={APP_STYLES.logoContainer}>
-                                <Image
-                                    src="/rs2logo.png"
-                                    alt="Upskill Logo"
-                                    width={24}
-                                    height={24}
-                                    className={APP_STYLES.logoImage}
-                                />
-                                <span className={`${APP_STYLES.logoText} ${scrolled ? APP_STYLES.logoTextScrolled : ''}`}>
-                                    Upskill
-                                </span>
+                                <Image src="/rs2logo.png" alt="Upskill Logo" width={24} height={24} className={APP_STYLES.logoImage} />
+                                <span className={`${APP_STYLES.logoText} ${scrolled ? APP_STYLES.logoTextScrolled : ''}`}>Upskill</span>
                             </div>
-                            {/* Desktop Navigation Links */}
                             <div className={APP_STYLES.desktopNavWrapper}>
                                 <div className={APP_STYLES.desktopNavLinksContainer}>
                                     <NavLink pageName="dashboard" scrolled={scrolled}>Dashboard</NavLink>
@@ -1510,36 +1795,32 @@ export default function App() {
                             </div>
                         </div>
                         <div className={APP_STYLES.navActionsContainer}>
-                            {/* Theme Toggle Button */}
-                            <button
-                                onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-                                className={APP_STYLES.themeToggleButton}
-                            >
-                                {theme === 'dark' ? (
-                                    <Sun className="h-5 w-5" />
-                                ) : (
-                                    <Moon className="h-5 w-5" />
-                                )}
-                            </button>
-                            {/* Hamburger Menu Button */}
-                            <div className={APP_STYLES.hamburgerMenuWrapper}>
+                            <div className="flex items-center space-x-3">
+                                <span className="hidden sm:inline text-sm text-gray-700 dark:text-gray-300">
+                                    Welcome, <span className="font-bold">{user.username}</span>
+                                </span>
                                 <button
-                                    onClick={() => setIsMenuOpen(!isMenuOpen)}
-                                    className={APP_STYLES.hamburgerButton}
+                                    // MODIFIED: This button now opens the modal
+                                    onClick={() => setIsLogoutModalOpen(true)}
+                                    className="p-2 rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none"
                                 >
-                                    <span className="sr-only">Open main menu</span>
-                                    {isMenuOpen ? (
-                                        <X className={APP_STYLES.hamburgerIcon} aria-hidden="true" />
-                                    ) : (
-                                        <Menu className={APP_STYLES.hamburgerIcon} aria-hidden="true" />
-                                    )}
+                                    <LogOut className="h-5 w-5" />
+                                </button>
+                                <button
+                                    onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                                    className={APP_STYLES.themeToggleButton}
+                                >
+                                    {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+                                </button>
+                            </div>
+                            <div className={APP_STYLES.hamburgerMenuWrapper}>
+                                <button onClick={() => setIsMenuOpen(!isMenuOpen)} className={APP_STYLES.hamburgerButton}>
+                                    {isMenuOpen ? <X className={APP_STYLES.hamburgerIcon} /> : <Menu className={APP_STYLES.hamburgerIcon} />}
                                 </button>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                {/* Mobile Menu */}
                 {isMenuOpen && (
                     <div className={APP_STYLES.mobileMenuContainer}>
                         <div className={APP_STYLES.mobileMenuLinksContainer}>
@@ -1551,12 +1832,8 @@ export default function App() {
                     </div>
                 )}
             </nav>
-
-            {/* Main Content */}
             <main>
-                <div className={APP_STYLES.mainContent}>
-                    {renderPage()}
-                </div>
+                <div className={APP_STYLES.mainContent}>{renderPage()}</div>
             </main>
         </div>
     );
@@ -1695,13 +1972,13 @@ const FeedbackHub = () => {
                     {/* Right Side: Tips */}
                     <div className="flex flex-col">
                         <h3 className="flex items-center text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                            <Lightbulb className="h-6 w-6 text-indigo-500 mr-3" />
+                            <Lightbulb className="h-6 w-6 text-yellow-500 mr-3" />
                             Tips for Effective Feedback
                         </h3>
                         <ul className="space-y-4">
                             {tips.map((tip, index) => (
                                 <li key={index} className="flex items-start text-sm text-gray-600 dark:text-gray-300">
-                                    <span className="ml-2 mt-1 mr-5 flex-shrink-0 h-2 w-2 rounded-full bg-indigo-400"></span>
+                                    <span className="ml-2 mt-1 mr-5 flex-shrink-0 h-2 w-2 rounded-full bg-blue-500"></span>
                                     {tip}
                                 </li>
                             ))}
@@ -1738,141 +2015,80 @@ import {
     Tooltip, ResponsiveContainer
 } from 'recharts';
 import {
-    Activity, Users, User, Calendar, BookOpen, NotebookText
+    Activity, Users, User, Calendar, BookOpen, NotebookText, AlertTriangle, Timer
 } from 'lucide-react';
 import { useTheme } from 'next-themes';
-import React from 'react';
+import React, { useState, useEffect } from 'react'; // Import hooks
 
 import { Card, SectionTitle } from "./Helper";
 
-import {
-    MOCK_ACTIVITY_STREAM,
-    MOCK_AGENDA_ITEMS,
-    MOCK_MEETINGS,
-    MOCK_TEAM_ENGAGEMENT_DATA,
-    MOCK_PERSONAL_ENGAGEMENT_DATA
-} from "../mock/mock_data";
-
-
+// --- Style Definitions (Unchanged) ---
 const DASHBOARD_STYLES = {
-    agendaTimeline: `
-        relative 
-        border-l 
-        border-gray-200 dark:border-gray-700 
-        ml-3
-    `,
-    agendaIconWrapperBase: `
-        absolute 
-        flex items-center justify-center 
-        w-6 h-6 
-        rounded-full 
-        -left-3 
-    `,
-    agendaIconWrapperArticle: `
-        bg-purple-200 dark:bg-purple-900
-    `,
-    agendaIconWrapperMeeting: `
-        bg-blue-200 dark:bg-blue-900
-    `,
-    agendaIconArticle: `
-        w-3 h-3 text-purple-600 dark:text-purple-300
-    `,
-    agendaIconMeeting: `
-        w-3 h-3 text-blue-600 dark:text-blue-300
-    `,
-    agendaCard: `
-        p-4 
-        bg-gray-50 dark:bg-gray-700/50 
-        rounded-lg 
-        border border-gray-200 dark:border-gray-600 
-        shadow-sm 
-        group 
-        hover:bg-indigo-50 dark:hover:bg-gray-700 
-        transition-all 
-        cursor-pointer
-    `,
-    agendaDetails: `
-        text-sm 
-        font-normal 
-        text-gray-500 dark:text-gray-400 
-        mb-1
-    `,
-    agendaTitle: `
-        text-sm 
-        font-semibold 
-        text-gray-900 dark:text-white 
-        group-hover:text-indigo-600 dark:group-hover:text-indigo-400 
-        transition-colors
-    `,
-    agendaNotesButton: `
-        flex items-center justify-center 
-        h-8 w-8 
-        rounded-full 
-        hover:bg-indigo-100 dark:hover:bg-indigo-900/30 
-        transition-colors
-    `,
-    agendaNotesIcon: `
-        h-5 w-5 
-        text-indigo-500 dark:text-indigo-400
-    `,
-    // --- MANUAL CSS CLASS APPLIED HERE ---
-    // We are now using our own 'no-scrollbar' class from globals.css
-    cardScrollableContent: `
-        flex-grow 
-        overflow-y-auto 
-        no-scrollbar
-        max-h-[350px]
-    `,
-    activityListItem: `
-        flex items-start 
-        p-3 
-        rounded-lg
-        transition-colors
-        hover:bg-gray-500/10
-    `,
-    activityUser: `
-        font-bold 
-        text-gray-900 dark:text-white
-    `,
-    activityTime: `
-        text-xs 
-        text-gray-500 dark:text-gray-400 
-        mt-0.5
-    `,
-    meetingsListItem: `
-        flex items-center justify-between 
-        p-3 
-        rounded-lg 
-        transition-colors
-        hover:bg-gray-500/10
-    `,
-    meetingsStatusBase: `
-        text-xs 
-        font-semibold 
-        mr-4 px-2 py-1 
-        rounded-full
-    `,
-    meetingsStatusUpcoming: `
-        bg-blue-100 text-blue-800 
-        dark:bg-blue-900 dark:text-blue-200
-    `,
-    meetingsStatusRecent: `
-        bg-green-100 text-green-800 
-        dark:bg-green-900 dark:text-green-200
-    `,
-    meetingsTitle: `
-        font-semibold 
-        text-gray-800 dark:text-white
-    `,
-    meetingsDate: `
-        text-xs 
-        text-gray-500 dark:text-gray-400
-    `,
+    agendaTimeline: `relative border-l border-gray-200 dark:border-gray-700 ml-3`,
+    agendaIconWrapperBase: `absolute flex items-center justify-center w-6 h-6 rounded-full -left-3`,
+    agendaIconWrapperArticle: `bg-purple-200 dark:bg-purple-900`,
+    agendaIconWrapperMeeting: `bg-blue-200 dark:bg-blue-900`,
+    agendaIconArticle: `w-3 h-3 text-purple-600 dark:text-purple-300`,
+    agendaIconMeeting: `w-3 h-3 text-blue-600 dark:text-blue-300`,
+    agendaCard: `p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600 shadow-sm group hover:bg-indigo-50 dark:hover:bg-gray-700 transition-all cursor-pointer`,
+    agendaDetails: `text-sm font-normal text-gray-500 dark:text-gray-400 mb-1`,
+    agendaTitle: `text-sm font-semibold text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors`,
+    agendaNotesButton: `flex items-center justify-center h-8 w-8 rounded-full hover:bg-indigo-100 dark:hover:bg-indigo-900/30 transition-colors`,
+    agendaNotesIcon: `h-5 w-5 text-indigo-500 dark:text-indigo-400`,
+    cardScrollableContent: `flex-grow overflow-y-auto no-scrollbar max-h-[350px]`,
+    activityListItem: `flex items-start p-3 rounded-lg transition-colors hover:bg-gray-500/10`,
+    activityUser: `font-bold text-gray-900 dark:text-white`,
+    activityTime: `text-xs text-gray-500 dark:text-gray-400 mt-0.5`,
+    meetingsListItem: `flex items-center justify-between p-3 rounded-lg transition-colors hover:bg-gray-500/10`,
+    meetingsStatusBase: `text-xs font-semibold mr-4 px-2 py-1 rounded-full`,
+    meetingsStatusUpcoming: `bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200`,
+    meetingsStatusRecent: `bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200`,
+    meetingsTitle: `font-semibold text-gray-800 dark:text-white`,
+    meetingsDate: `text-xs text-gray-500 dark:text-gray-400`,
 };
 
+// --- NEW: Skeleton Components ---
 
-// --- Chart Components ---
+const AgendaSkeleton = () => (
+    <Card>
+        <div className="h-7 w-1/2 bg-gray-300 dark:bg-gray-700 rounded mb-7"></div>
+        <div className="relative border-l border-gray-200 dark:border-gray-700 ml-3 space-y-6">
+            {[...Array(2)].map((_, i) => (
+                <div key={i} className="ml-6">
+                    <div className="absolute w-6 h-6 bg-gray-300 dark:bg-gray-700 rounded-full -left-3"></div>
+                    <div className="p-4 bg-gray-200 dark:bg-gray-700/50 rounded-lg">
+                        <div className="h-4 w-1/3 bg-gray-300 dark:bg-gray-600 rounded mb-2"></div>
+                        <div className="h-5 w-3/4 bg-gray-300 dark:bg-gray-600 rounded"></div>
+                    </div>
+                </div>
+            ))}
+        </div>
+    </Card>
+);
 
+const ChartSkeleton = () => (
+    <Card>
+        <div className="h-7 w-1/2 bg-gray-300 dark:bg-gray-700 rounded mb-4"></div>
+        <div className="w-full h-[300px] bg-gray-200 dark:bg-gray-700/50 rounded-lg"></div>
+    </Card>
+);
+
+const ListSkeleton = ({ title }) => (
+    <Card className="flex flex-col">
+        <div className="h-7 w-1/2 bg-gray-300 dark:bg-gray-700 rounded mb-4"></div>
+        <div className="flex-grow space-y-4">
+            {[...Array(4)].map((_, i) => (
+                <div key={i} className="flex items-center space-x-3">
+                    <div className="h-6 w-6 bg-gray-300 dark:bg-gray-700 rounded-full"></div>
+                    <div className="flex-1 h-5 bg-gray-300 dark:bg-gray-700 rounded"></div>
+                </div>
+            ))}
+        </div>
+    </Card>
+);
+
+
+// --- Chart Component (Unchanged) ---
 const EngagementChart = ({ data, title, icon, color }) => {
     const { theme } = useTheme();
     const tickColor = theme === 'dark' ? '#9ca3af' : '#6b7280';
@@ -1902,41 +2118,74 @@ const EngagementChart = ({ data, title, icon, color }) => {
 
 
 // --- Main Dashboard Component ---
-
 export const Dashboard = () => {
+    const [data, setData] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const fetchDashboardData = async () => {
+            try {
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                // MODIFIED LINE
+                const response = await fetch('http://localhost:9292/dashboard', { credentials: 'include' });
+                if (!response.ok) {
+                    throw new Error(`Server responded with status: ${response.status}`);
+                }
+                const dashboardData = await response.json();
+                setData(dashboardData);
+            } catch (err) {
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchDashboardData();
+    }, []);
+
+    if (loading) {
+        return (
+            <div className="space-y-6 animate-pulse">
+                <AgendaSkeleton />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <ChartSkeleton />
+                    <ChartSkeleton />
+                    <ListSkeleton />
+                    <ListSkeleton />
+                </div>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="flex flex-col items-center justify-center text-center p-8 bg-red-50 dark:bg-red-900/20 rounded-lg">
+                <AlertTriangle className="h-12 w-12 text-red-500 mb-4" />
+                <h3 className="text-lg font-semibold text-gray-800 dark:text-white">Could not load dashboard data</h3>
+                <p className="text-sm text-red-500 dark:text-red-400 mt-1">{error}</p>
+            </div>
+        );
+    }
+
     return (
         <div className="space-y-6">
-            {/* --- This Week's Agenda Section (Full Width) --- */}
+            {/* This Week's Agenda */}
             <div>
                 <Card>
-                    <SectionTitle
-                        icon={<BookOpen className="h-6 w-6 text-indigo-500" />}
-                        title="This Week's Agenda"
-                        className={'mb-7'}
-                    />
+                    <SectionTitle icon={<BookOpen className="h-6 w-6 text-indigo-500" />} title="This Week's Agenda" className={'mb-7'} />
                     <ol className={DASHBOARD_STYLES.agendaTimeline}>
-                        {MOCK_AGENDA_ITEMS.map((item) => (
+                        {data.agendaItems.map((item) => (
                             <li key={item.id} className="mb-6 ml-6">
-                                <span className={`${DASHBOARD_STYLES.agendaIconWrapperBase} ${item.type === 'article' ? DASHBOARD_STYLES.agendaIconWrapperArticle : DASHBOARD_STYLES.agendaIconWrapperMeeting
-                                    }`}>
-                                    {item.type === 'article' ?
-                                        <BookOpen className={DASHBOARD_STYLES.agendaIconArticle} /> :
-                                        <Calendar className={DASHBOARD_STYLES.agendaIconMeeting} />}
+                                <span className={`${DASHBOARD_STYLES.agendaIconWrapperBase} ${item.type === 'article' ? DASHBOARD_STYLES.agendaIconWrapperArticle : DASHBOARD_STYLES.agendaIconWrapperMeeting}`}>
+                                    {item.type === 'article' ? <BookOpen className={DASHBOARD_STYLES.agendaIconArticle} /> : <Calendar className={DASHBOARD_STYLES.agendaIconMeeting} />}
                                 </span>
                                 <div className={DASHBOARD_STYLES.agendaCard}>
                                     <div className="flex justify-between items-center">
                                         <div>
-                                            <p className={DASHBOARD_STYLES.agendaDetails}>
-                                                {item.type === 'article' ? `Learning: ${item.category}` : `Meeting: ${item.date}`}
-                                            </p>
-                                            <a href="#" className={DASHBOARD_STYLES.agendaTitle}>
-                                                {item.title}
-                                            </a>
+                                            <p className={DASHBOARD_STYLES.agendaDetails}>{item.type === 'article' ? `Learning: ${item.category}` : `Meeting: ${item.due_date}`}</p>
+                                            <a href="#" className={DASHBOARD_STYLES.agendaTitle}>{item.title}</a>
                                         </div>
-                                        <button
-                                            aria-label="View notes"
-                                            className={DASHBOARD_STYLES.agendaNotesButton}
-                                        >
+                                        <button aria-label="View notes" className={DASHBOARD_STYLES.agendaNotesButton}>
                                             <NotebookText className={DASHBOARD_STYLES.agendaNotesIcon} />
                                         </button>
                                     </div>
@@ -1947,37 +2196,22 @@ export const Dashboard = () => {
                 </Card>
             </div>
 
-            {/* --- 2x2 Grid Section --- */}
+            {/* 2x2 Grid Section */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Team Engagement */}
-                <EngagementChart
-                    data={MOCK_TEAM_ENGAGEMENT_DATA}
-                    title="Team Engagement"
-                    icon={<Users className="h-6 w-6 text-purple-500" />}
-                    color="#a78bfa"
-                />
-
-                {/* Personal Focus */}
-                <EngagementChart
-                    data={MOCK_PERSONAL_ENGAGEMENT_DATA}
-                    title="Personal Focus"
-                    icon={<User className="h-6 w-6 text-green-500" />}
-                    color="#22c55e"
-                />
+                <EngagementChart data={data.teamEngagement} title="Team Engagement" icon={<Users className="h-6 w-6 text-purple-500" />} color="#a78bfa" />
+                <EngagementChart data={data.personalEngagement} title="Personal Focus" icon={<User className="h-6 w-6 text-green-500" />} color="#22c55e" />
 
                 {/* Live Activity Stream */}
                 <Card className="flex flex-col">
-                    <SectionTitle icon={<Activity className="h-6 w-6 text-blue-500" />} title="Live Activity Stream" />
+                    <SectionTitle icon={<Timer className="h-6 w-6 text-blue-500" />} title="Live Activity Stream" />
                     <div className={DASHBOARD_STYLES.cardScrollableContent}>
                         <ul className="space-y-4">
-                            {MOCK_ACTIVITY_STREAM.map(item => (
+                            {data.activityStream.map(item => (
                                 <li key={item.id} className={DASHBOARD_STYLES.activityListItem}>
-                                    <div className="flex-shrink-0 mt-1">{item.icon}</div>
+                                    <div className="flex-shrink-0 mt-1"><Activity className="h-5 w-5 text-gray-400" /></div>
                                     <div className="ml-4 flex-grow">
-                                        <p className="text-sm text-gray-700 dark:text-gray-300">
-                                            <span className={DASHBOARD_STYLES.activityUser}>{item.user}</span> {item.action}
-                                        </p>
-                                        <p className={DASHBOARD_STYLES.activityTime}>{item.time}</p>
+                                        <p className="text-sm text-gray-700 dark:text-gray-300"><span className={DASHBOARD_STYLES.activityUser}>{item.user_name}</span> {item.action}</p>
+                                        <p className={DASHBOARD_STYLES.activityTime}>{item.created_at}</p>
                                     </div>
                                 </li>
                             ))}
@@ -1990,18 +2224,15 @@ export const Dashboard = () => {
                     <SectionTitle icon={<Calendar className="h-6 w-6 text-purple-500" />} title="Upcoming & Recent Meetings" />
                     <div className={DASHBOARD_STYLES.cardScrollableContent}>
                         <ul className="space-y-3">
-                            {MOCK_MEETINGS.map(item => (
+                            {data.meetings.map(item => (
                                 <li key={item.id} className={DASHBOARD_STYLES.meetingsListItem}>
                                     <div className="flex items-center">
-                                        <span className={`${DASHBOARD_STYLES.meetingsStatusBase} ${item.status === 'Upcoming'
-                                                ? DASHBOARD_STYLES.meetingsStatusUpcoming
-                                                : DASHBOARD_STYLES.meetingsStatusRecent
-                                            }`}>
+                                        <span className={`${DASHBOARD_STYLES.meetingsStatusBase} ${item.status === 'Upcoming' ? DASHBOARD_STYLES.meetingsStatusUpcoming : DASHBOARD_STYLES.meetingsStatusRecent}`}>
                                             {item.status}
                                         </span>
                                         <div>
                                             <p className={DASHBOARD_STYLES.meetingsTitle}>{item.title}</p>
-                                            <p className={DASHBOARD_STYLES.meetingsDate}>{item.date}</p>
+                                            <p className={DASHBOARD_STYLES.meetingsDate}>{item.meeting_date}</p>
                                         </div>
                                     </div>
                                 </li>

@@ -1,7 +1,10 @@
+// app/layout.js
 import { Inter } from "next/font/google";
 import "./globals.css";
 
 import { ThemeProvider } from '../components/ThemeProvider';
+import { AuthProvider } from "@/context/AuthContext";
+import { GlobalErrorNotifier } from "@/components/GlobalErrorNotifier"; // IMPORT the new component
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,9 +19,12 @@ export default function RootLayout({ children }) {
 			<body
 				className={`${inter.className} antialiased`}
 			>
-				<ThemeProvider>
-					{children}
-				</ThemeProvider>
+                <AuthProvider>
+                    <GlobalErrorNotifier />
+				    <ThemeProvider>
+					    {children}
+				    </ThemeProvider>
+                </AuthProvider>
 			</body>
 		</html>
 	);

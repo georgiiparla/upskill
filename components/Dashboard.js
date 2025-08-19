@@ -115,8 +115,9 @@ export const Dashboard = () => {
     useEffect(() => {
         const fetchDashboardData = async () => {
             try {
-                await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate loading
-                const response = await fetch('http://localhost:9292/dashboard');
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                // MODIFIED LINE
+                const response = await fetch('http://localhost:9292/dashboard', { credentials: 'include' });
                 if (!response.ok) {
                     throw new Error(`Server responded with status: ${response.status}`);
                 }
@@ -170,7 +171,7 @@ export const Dashboard = () => {
                                 <div className={DASHBOARD_STYLES.agendaCard}>
                                     <div className="flex justify-between items-center">
                                         <div>
-                                            <p className={DASHBOARD_STYLES.agendaDetails}>{item.type === 'article' ? `Learning: ${item.category}` : `Meeting: ${item.date}`}</p>
+                                            <p className={DASHBOARD_STYLES.agendaDetails}>{item.type === 'article' ? `Learning: ${item.category}` : `Meeting: ${item.due_date}`}</p>
                                             <a href="#" className={DASHBOARD_STYLES.agendaTitle}>{item.title}</a>
                                         </div>
                                         <button aria-label="View notes" className={DASHBOARD_STYLES.agendaNotesButton}>

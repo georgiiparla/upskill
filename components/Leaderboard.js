@@ -175,9 +175,9 @@ export const Leaderboard = () => {
     useEffect(() => {
         const fetchLeaderboard = async () => {
             try {
-                // Using a small delay to make the skeleton visible
                 await new Promise(resolve => setTimeout(resolve, 1000));
-                const response = await fetch('http://localhost:9292/leaderboard');
+                // MODIFIED LINE
+                const response = await fetch('http://localhost:9292/leaderboard', { credentials: 'include' });
                 if (!response.ok) {
                     throw new Error(`Server responded with status: ${response.status}`);
                 }

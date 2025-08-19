@@ -42,7 +42,7 @@ export const FeedbackHistory = () => {
 
             try {
                 await new Promise(resolve => setTimeout(resolve, 1000));
-                const response = await fetch(`http://localhost:9292/feedback?page=${page}&limit=${ITEMS_PER_PAGE}`);
+                const response = await fetch(`http://localhost:9292/feedback?page=${page}&limit=${ITEMS_PER_PAGE}`, { credentials: 'include' });
                 if (!response.ok) {
                     throw new Error(`The server responded with status: ${response.status}`);
                 }
@@ -66,7 +66,7 @@ export const FeedbackHistory = () => {
             fetchFeedback();
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [page]);
+    }, [page, hasMore, error]);
 
 
     const lastItemRef = useCallback(node => {
