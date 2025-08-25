@@ -10,17 +10,17 @@ const DASHBOARD_STYLES = {
     agendaTimeline: `relative border-l border-gray-200 dark:border-gray-700 ml-3`,
     agendaIconWrapperBase: `absolute flex items-center justify-center w-6 h-6 rounded-full -left-3`,
     agendaIconWrapperArticle: `bg-purple-200 dark:bg-purple-900`,
-    agendaIconWrapperMeeting: `bg-blue-200 dark:bg-blue-900`,
-    agendaCard: `p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600 shadow-sm group hover:bg-indigo-50 dark:hover:bg-gray-700 transition-all cursor-pointer`,
+    agendaIconWrapperMeeting: `bg-csway-red/20 dark:bg-csway-red/20`,
+    agendaCard: `p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600 shadow-sm group hover:bg-csway-green/10 dark:hover:bg-gray-700 transition-all cursor-pointer`,
     agendaDetails: `text-sm font-normal text-gray-500 dark:text-gray-400 mb-1`,
-    agendaTitle: `text-sm font-semibold text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors`,
+    agendaTitle: `text-sm font-semibold text-gray-900 dark:text-white group-hover:text-csway-green dark:group-hover:text-csway-green transition-colors`,
     cardScrollableContent: `flex-grow overflow-y-auto no-scrollbar max-h-[350px]`,
     activityListItem: `flex items-start p-3 rounded-lg transition-colors hover:bg-gray-500/10`,
     activityUser: `font-bold text-gray-900 dark:text-white`,
     activityTime: `text-xs text-gray-500 dark:text-gray-400 mt-0.5`,
     meetingsListItem: `flex items-center justify-between p-3 rounded-lg transition-colors hover:bg-gray-500/10`,
     meetingsStatusBase: `text-xs font-semibold mr-4 px-2 py-1 rounded-full`,
-    meetingsStatusUpcoming: `bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200`,
+    meetingsStatusUpcoming: `bg-csway-orange/20 text-csway-orange dark:bg-csway-orange/20 dark:text-csway-orange`,
     meetingsStatusRecent: `bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200`,
     meetingsTitle: `font-semibold text-gray-800 dark:text-white`,
     meetingsDate: `text-xs text-gray-500 dark:text-gray-400`,
@@ -44,12 +44,12 @@ const MetricItem = ({ icon, label, allTime, thisWeek }) => (
     </div>
 );
 
-// --- NEW: Reusable iOS-style Toggle Switch Component ---
+// --- Reusable iOS-style Toggle Switch Component ---
 const ToggleSwitch = ({ options, activeOption, setActiveOption }) => (
     <div className="relative flex items-center bg-gray-200 dark:bg-gray-700 rounded-full p-1">
         {/* Sliding background element */}
         <div
-            className="absolute top-1 left-1 h-[calc(100%-8px)] w-[calc(50%-4px)] bg-blue-600 rounded-full shadow-md transition-transform duration-300 ease-in-out"
+            className="absolute top-1 left-1 h-[calc(100%-8px)] w-[calc(50%-4px)] bg-csway-green rounded-full shadow-md transition-transform duration-300 ease-in-out"
             style={{ transform: activeOption === options[0].id ? 'translateX(0%)' : 'translateX(100%)' }}
         />
         {options.map(option => (
@@ -81,17 +81,16 @@ const ActivityCard = ({ activityData }) => {
     return (
         <Card>
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
-                <SectionTitle icon={<ActivityIcon className="h-6 w-6 text-indigo-500" />} title="Activity Overview" />
+                <SectionTitle icon={<ActivityIcon className="h-6 w-6 text-csway-orange" />} title="Activity Overview" />
                 <div className="mt-4 sm:mt-0">
-                    {/* MODIFIED: Using the new ToggleSwitch component */}
                     <ToggleSwitch options={toggleOptions} activeOption={activeView} setActiveOption={setActiveView} />
                 </div>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <MetricItem icon={<Shield className="h-6 w-6 text-green-500" />} label="Quests Completed" allTime={currentData.quests.allTime} thisWeek={currentData.quests.thisWeek} />
-                <MetricItem icon={<ThumbsUp className="h-6 w-6 text-blue-500" />} label="Feedback Given" allTime={currentData.feedback.allTime} thisWeek={currentData.feedback.thisWeek} />
-                {currentData.points && <MetricItem icon={<Star className="h-6 w-6 text-yellow-500" />} label="Total Points" allTime={currentData.points.allTime} thisWeek={currentData.points.thisWeek} />}
+                <MetricItem icon={<Shield className="h-6 w-6 text-csway-green" />} label="Quests Completed" allTime={currentData.quests.allTime} thisWeek={currentData.quests.thisWeek} />
+                <MetricItem icon={<ThumbsUp className="h-6 w-6 text-csway-red" />} label="Feedback Given" allTime={currentData.feedback.allTime} thisWeek={currentData.feedback.thisWeek} />
+                {currentData.points && <MetricItem icon={<Star className="h-6 w-6 text-csway-orange" />} label="Total Points" allTime={currentData.points.allTime} thisWeek={currentData.points.thisWeek} />}
                 {currentData.streak !== undefined && <MetricItem icon={<Flame className="h-6 w-6 text-orange-500" />} label={isPersonal ? "Current Streak" : "Avg. Streak"} allTime={`${currentData.streak} days`} thisWeek={0} />}
             </div>
         </Card>
@@ -103,12 +102,12 @@ const DashboardContent = ({ data }) => {
     return (
         <div className="space-y-8">
             <Card>
-                <SectionTitle icon={<BookOpen className="h-6 w-6 text-indigo-500" />} title="This Week's Agenda" className={'mb-7'} />
+                <SectionTitle icon={<BookOpen className="h-6 w-6 text-csway-orange" />} title="This Week's Agenda" className={'mb-7'} />
                 <ol className={DASHBOARD_STYLES.agendaTimeline}>
                     {data.agendaItems.map((item) => (
                         <li key={item.id} className="mb-6 ml-6">
                             <span className={`${DASHBOARD_STYLES.agendaIconWrapperBase} ${item.type === 'article' ? DASHBOARD_STYLES.agendaIconWrapperArticle : DASHBOARD_STYLES.agendaIconWrapperMeeting}`}>
-                                {item.type === 'article' ? <BookOpen className="w-3 h-3 text-purple-600 dark:text-purple-300" /> : <Calendar className="w-3 h-3 text-blue-600 dark:text-blue-300" />}
+                                {item.type === 'article' ? <BookOpen className="w-3 h-3 text-purple-600 dark:text-purple-300" /> : <Calendar className="w-3 h-3 text-csway-red dark:text-csway-red" />}
                             </span>
                             <div className={DASHBOARD_STYLES.agendaCard}>
                                 <p className={DASHBOARD_STYLES.agendaDetails}>{item.type === 'article' ? `Learning: ${item.category}` : `Meeting: ${item.due_date}`}</p>
@@ -123,7 +122,7 @@ const DashboardContent = ({ data }) => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <Card className="flex flex-col">
-                    <SectionTitle icon={<Timer className="h-6 w-6 text-blue-500" />} title="Live Activity Stream" />
+                    <SectionTitle icon={<Timer className="h-6 w-6 text-csway-red" />} title="Live Activity Stream" />
                     <div className={DASHBOARD_STYLES.cardScrollableContent}>
                         <ul className="space-y-4">
                             {data.activityStream.map(item => (
@@ -164,7 +163,6 @@ const DashboardContent = ({ data }) => {
     );
 };
 
-// --- Page Level Component (Handles Fetching and States) ---
 export default function Dashboard() {
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);

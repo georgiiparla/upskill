@@ -1,6 +1,3 @@
-// In tailwind.config.js
-
-/** @type {import('tailwindcss').Config} */
 module.exports = {
     darkMode: 'class',
     content: [
@@ -9,8 +6,15 @@ module.exports = {
         './app/**/*.{js,ts,jsx,tsx,mdx}',
     ],
     theme: {
-        extend: {},
+        extend: {
+            colors: {
+                'csway': {
+                    'green': '#22a55e',
+                    'orange': '#f3b75a',
+                    'red': '#e37a7b',
+                }
+            }
+        },
     },
-    // 👇 REMOVE THE PLUGINS ARRAY OR LEAVE IT EMPTY 👇
     plugins: [], 
 };

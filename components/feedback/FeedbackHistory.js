@@ -1,9 +1,8 @@
 "use client";
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Card, SectionTitle } from "../Helper";
-import { MessageSquare, Loader2, AlertTriangle } from "lucide-react"; // Import AlertTriangle
+import { MessageSquare, Loader2, AlertTriangle } from "lucide-react";
 
-// --- Skeleton and Style components can remain unchanged ---
 const FeedbackSkeleton = () => (
     <li className="p-4 rounded-lg bg-gray-50 dark:bg-gray-800/60 border-l-2 border-gray-300 dark:border-gray-600 animate-pulse">
         <div className="flex justify-between items-center mb-2">
@@ -54,18 +53,16 @@ export const FeedbackHistory = () => {
             } catch (err) {
                 console.error("Failed to fetch feedback history:", err);
                 setError(err.message);
-                setHasMore(false); // Stop trying to fetch more if there's an error
+                setHasMore(false);
             } finally {
                 setIsLoading(false);
                 setIsFetchingMore(false);
             }
         };
 
-        // Only fetch if there's more data and no error
         if (hasMore && !error) {
             fetchFeedback();
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [page, hasMore, error]);
 
 
@@ -80,12 +77,10 @@ export const FeedbackHistory = () => {
         if (node) observer.current.observe(node);
     }, [isLoading, isFetchingMore, hasMore]);
 
-    // --- CORRECTED ERROR HANDLING BLOCK ---
-    // This now shows a relevant error message within the original Card layout.
     if (error && items.length === 0) {
         return (
             <Card>
-                <SectionTitle className={"mb-6"} icon={<MessageSquare className="h-6 w-6 text-indigo-500" />} title="Submission History" />
+                <SectionTitle className={"mb-6"} icon={<MessageSquare className="h-6 w-6 text-csway-orange" />} title="Submission History" />
                 <div className="flex flex-col items-center justify-center text-center p-8">
                     <AlertTriangle className="h-12 w-12 text-red-500 mb-4" />
                     <h3 className="text-lg font-semibold text-gray-800 dark:text-white">Could not load feedback history</h3>
@@ -98,7 +93,7 @@ export const FeedbackHistory = () => {
     return (
         <div>
             <Card>
-                <SectionTitle className={"mb-6"} icon={<MessageSquare className="h-6 w-6 text-indigo-500" />} title="Submission History" />
+                <SectionTitle className={"mb-6"} icon={<MessageSquare className="h-6 w-6 text-csway-orange" />} title="Submission History" />
 
                 {isLoading && items.length === 0 ? (
                     <ul className="space-y-4">

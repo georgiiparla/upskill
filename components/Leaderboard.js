@@ -1,10 +1,9 @@
 "use client"
 
-import React, { useState, useEffect } from 'react'; // Import hooks
+import React, { useState, useEffect } from 'react';
 import { Trophy, Award, AlertTriangle } from 'lucide-react';
 import { Card, SectionTitle } from "./Helper";
 
-// --- Style Definitions (can remain unchanged) ---
 const LEADERBOARD_STYLES = {
     podiumGrid: `
                 grid 
@@ -21,17 +20,17 @@ const LEADERBOARD_STYLES = {
             dark:border-gray-600
             `,
     card1st: `
-                border-yellow-400 dark:border-yellow-500 
+                border-csway-orange dark:border-csway-orange 
                 p-6 
                 transform md:scale-110 
                 shadow-lg
                 `,
     card3rd: `
-                border-yellow-600/50 dark:border-yellow-800/80
+                border-csway-red/50 dark:border-csway-red/80
                 `,
     podiumTrophy1st: `
                         h-12 w-12 
-                        text-yellow-400 
+                        text-csway-orange 
                         mx-auto 
                         mb-2
                         `,
@@ -50,7 +49,7 @@ const LEADERBOARD_STYLES = {
                         text-gray-800 dark:text-white`,
     podiumPlace1st: `
                     font-semibold 
-                    text-yellow-500 dark:text-yellow-400
+                    text-csway-orange
                     `,
     podiumPlace2nd: `
                     font-semibold 
@@ -58,18 +57,17 @@ const LEADERBOARD_STYLES = {
                     `,
     podiumPlace3rd: `
                     font-semibold 
-                    text-yellow-700 dark:text-yellow-800
+                    text-csway-red
                     `,
     podiumPoints1st: `
                     text-3xl 
                     font-bold 
-                    text-indigo-500 dark:text-indigo-400 mt-2
+                    text-csway-green mt-2
                     `,
     podiumPoints2nd3rd: `
                         text-2xl 
                         font-bold 
-                        text-indigo-500 
-                        dark:text-indigo-400 
+                        text-csway-green 
                         mt-2`,
     table: `
             w-full 
@@ -114,8 +112,6 @@ const LEADERBOARD_STYLES = {
                     dark:text-white
                     `,
 };
-
-// --- NEW: Skeleton Components for Loading State ---
 
 const PodiumSkeleton = () => (
     <div className={LEADERBOARD_STYLES.podiumGrid}>
@@ -165,8 +161,6 @@ const LadderSkeleton = () => (
     </Card>
 );
 
-
-// --- Main Leaderboard Component ---
 export const Leaderboard = () => {
     const [leaderboard, setLeaderboard] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -176,7 +170,6 @@ export const Leaderboard = () => {
         const fetchLeaderboard = async () => {
             try {
                 await new Promise(resolve => setTimeout(resolve, 1000));
-                // MODIFIED LINE
                 const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/leaderboard`, { credentials: 'include' });
                 if (!response.ok) {
                     throw new Error(`Server responded with status: ${response.status}`);
@@ -193,9 +186,9 @@ export const Leaderboard = () => {
     }, []);
 
     const getTrophyIcon = (rank) => {
-        if (rank === 1) return <Trophy className="h-6 w-6 text-yellow-400" />;
+        if (rank === 1) return <Trophy className="h-6 w-6 text-csway-orange" />;
         if (rank === 2) return <Trophy className="h-6 w-6 text-gray-400" />;
-        if (rank === 3) return <Trophy className="h-6 w-6 text-yellow-600" />;
+        if (rank === 3) return <Trophy className="h-6 w-6 text-csway-red" />;
         return <span className={LEADERBOARD_STYLES.tableCellRank}>{rank}</span>;
     };
 
@@ -203,11 +196,11 @@ export const Leaderboard = () => {
         return (
             <div className="space-y-12">
                 <div>
-                    <SectionTitle icon={<Award className="h-6 w-6 text-indigo-500" />} title="COMMS Podium Finishers" />
+                    <SectionTitle icon={<Award className="h-6 w-6 text-csway-orange" />} title="COMMS Podium Finishers" />
                     <PodiumSkeleton />
                 </div>
                 <div>
-                    <SectionTitle icon={<Trophy className="h-6 w-6 text-indigo-500" />} title="Ladder" />
+                    <SectionTitle icon={<Trophy className="h-6 w-6 text-csway-orange" />} title="Ladder" />
                     <LadderSkeleton />
                 </div>
             </div>
@@ -229,11 +222,9 @@ export const Leaderboard = () => {
 
     return (
         <div className="space-y-12">
-            {/* --- Top 3 Podium Section --- */}
             <div>
-                <SectionTitle icon={<Award className="h-6 w-6 text-indigo-500" />} title="COMMS Podium Finishers" />
+                <SectionTitle icon={<Award className="h-6 w-6 text-csway-orange" />} title="COMMS Podium Finishers" />
                 <div className={LEADERBOARD_STYLES.podiumGrid}>
-                    {/* 2nd Place */}
                     <div className="md:order-1">
                         {topThree[1] && (
                             <Card className={`${LEADERBOARD_STYLES.cardBase} ${LEADERBOARD_STYLES.card2nd}`}>
@@ -245,7 +236,6 @@ export const Leaderboard = () => {
                         )}
                     </div>
 
-                    {/* 1st Place */}
                     <div className="md:order-2 relative z-10">
                          {topThree[0] && (
                             <Card className={`${LEADERBOARD_STYLES.cardBase} ${LEADERBOARD_STYLES.card1st}`}>
@@ -257,11 +247,10 @@ export const Leaderboard = () => {
                         )}
                     </div>
 
-                    {/* 3rd Place */}
                     <div className="md:order-3">
                         {topThree[2] && (
                              <Card className={`${LEADERBOARD_STYLES.cardBase} ${LEADERBOARD_STYLES.card3rd}`}>
-                                <Trophy className={`${LEADERBOARD_STYLES.podiumTrophy2nd3rd} text-yellow-700 dark:text-yellow-800`} />
+                                <Trophy className={`${LEADERBOARD_STYLES.podiumTrophy2nd3rd} text-csway-red`} />
                                 <h3 className={LEADERBOARD_STYLES.podiumName2nd3rd}>{topThree[2].name}</h3>
                                 <p className={LEADERBOARD_STYLES.podiumPlace3rd}>3rd Place</p>
                                 <p className={LEADERBOARD_STYLES.podiumPoints2nd3rd}>{topThree[2].points.toLocaleString()} PTS</p>
@@ -271,9 +260,8 @@ export const Leaderboard = () => {
                 </div>
             </div>
 
-            {/* --- Full Leaderboard Table (for the rest) --- */}
             <div>
-                <SectionTitle icon={<Trophy className="h-6 w-6 text-indigo-500" />} title="Ladder" />
+                <SectionTitle icon={<Trophy className="h-6 w-6 text-csway-orange" />} title="Ladder" />
                 <div className="hidden md:block">
                     <Card>
                         <div className="overflow-x-auto">

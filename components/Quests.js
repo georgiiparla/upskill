@@ -1,12 +1,8 @@
-// -----------------------------------------------------------------------------
-// File: components/Quests.js (MODIFIED with Skeleton Loader)
-// -----------------------------------------------------------------------------
 "use client"
 import { Shield, Target } from 'lucide-react';
 import { Card, SectionTitle } from "./Helper";
 import React, { useState, useEffect } from 'react';
 
-// --- Style Definitions ---
 const QUESTS_STYLES = {
     pageDescription: `
         mb-6 
@@ -51,7 +47,7 @@ const QUESTS_STYLES = {
         dark:bg-gray-700
     `,
     progressBarFill: `
-        bg-blue-600 
+        bg-csway-green 
         h-2.5 
         rounded-full
     `,
@@ -67,29 +63,22 @@ const QUESTS_STYLES = {
     `
 };
 
-// --- NEW: Skeleton Component for a single Quest Card ---
 const QuestCardSkeleton = () => {
     return (
         <Card className="animate-pulse">
             <div className="flex justify-between items-start">
-                {/* Title Placeholder */}
                 <div className="h-6 bg-gray-300 dark:bg-gray-700 rounded w-3/4"></div>
-                {/* Points Placeholder */}
                 <div className="h-5 bg-gray-300 dark:bg-gray-700 rounded-full w-12"></div>
             </div>
-            {/* Description Placeholder */}
             <div className="mt-3 space-y-2">
                 <div className="h-4 bg-gray-300 dark:bg-gray-700 rounded w-full"></div>
                 <div className="h-4 bg-gray-300 dark:bg-gray-700 rounded w-5/6"></div>
             </div>
             <div className="mt-5">
                 <div className="flex justify-between mb-1">
-                    {/* Progress Label Placeholder */}
                     <div className="h-4 bg-gray-300 dark:bg-gray-700 rounded w-1/4"></div>
-                    {/* Progress Percentage Placeholder */}
                     <div className="h-4 bg-gray-300 dark:bg-gray-700 rounded w-1/6"></div>
                 </div>
-                {/* Progress Bar Placeholder */}
                 <div className="w-full bg-gray-300 dark:bg-gray-700 rounded-full h-2.5"></div>
             </div>
         </Card>
@@ -106,7 +95,6 @@ export const Quests = () => {
         const fetchQuests = async () => {
             try {
                 await new Promise(resolve => setTimeout(resolve, 1000));
-                // MODIFIED LINE
                 const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/quests`, { credentials: 'include' });
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
@@ -123,14 +111,12 @@ export const Quests = () => {
         fetchQuests();
     }, []);
 
-    // --- UPDATED: Loading state now renders the skeleton grid ---
     if (loading) {
         return (
             <div>
-                <SectionTitle icon={<Target className="h-6 w-6 text-indigo-500" />} title="Challenges & Quests" />
+                <SectionTitle icon={<Target className="h-6 w-6 text-csway-orange" />} title="Challenges & Quests" />
                 <p className={QUESTS_STYLES.pageDescription}>Engage in challenges to earn points, unlock badges, and grow your skills.</p>
                 <div className={QUESTS_STYLES.questsGrid}>
-                    {/* Render a few skeleton cards to show the layout */}
                     <QuestCardSkeleton />
                     <QuestCardSkeleton />
                     <QuestCardSkeleton />
@@ -142,7 +128,7 @@ export const Quests = () => {
     if (error) {
         return (
              <div>
-                <SectionTitle icon={<Target className="h-6 w-6 text-indigo-500" />} title="Challenges & Quests" />
+                <SectionTitle icon={<Target className="h-6 w-6 text-csway-orange" />} title="Challenges & Quests" />
                 <p className="text-red-500">Could not load quests: {error}</p>
             </div>
         )
@@ -150,7 +136,7 @@ export const Quests = () => {
 
     return (
         <div>
-            <SectionTitle icon={<Target className="h-6 w-6 text-indigo-500" />} title="Challenges & Quests" />
+            <SectionTitle icon={<Target className="h-6 w-6 text-csway-orange" />} title="Challenges & Quests" />
             <p className={QUESTS_STYLES.pageDescription}>Engage in challenges to earn points, unlock badges, and grow your skills.</p>
             <div className={QUESTS_STYLES.questsGrid}>
                 {quests.map(quest => (

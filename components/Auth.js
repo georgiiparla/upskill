@@ -1,4 +1,3 @@
-// components/Auth.js
 "use client";
 import { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
@@ -38,7 +37,7 @@ export const Auth = () => {
         <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
             <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md dark:bg-gray-800">
                 <div className="flex justify-center">
-                     <Image src="/rs2logo.png" alt="Upskill Logo" width={48} height={48} />
+                     <Image src="/csway-logo.png" alt="CSway Logo" width={48} height={48} />
                 </div>
                 <h2 className="text-2xl font-bold text-center text-gray-900 dark:text-white">
                     {isLogin ? 'Welcome Back!' : 'Create an Account'}
@@ -83,7 +82,7 @@ export const Auth = () => {
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full px-4 py-2 font-bold text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-blue-400 flex items-center justify-center"
+                        className="w-full px-4 py-2 font-bold text-white bg-csway-green rounded-md hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-csway-green/50 disabled:bg-csway-green/40 flex items-center justify-center"
                     >
                         {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                         {isLogin ? 'Login' : 'Sign Up'}
@@ -92,7 +91,7 @@ export const Auth = () => {
 
                 <p className="text-sm text-center text-gray-600 dark:text-gray-400">
                     {isLogin ? "Don't have an account?" : 'Already have an account?'}
-                    <button onClick={() => { setIsLogin(!isLogin); setError(''); }} className="ml-1 font-medium text-blue-600 hover:underline">
+                    <button onClick={() => { setIsLogin(!isLogin); setError(''); }} className="ml-1 font-medium text-csway-orange hover:underline">
                         {isLogin ? 'Sign up' : 'Login'}
                     </button>
                 </p>

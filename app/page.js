@@ -1,12 +1,10 @@
-// app/page.js
 "use client"
 
-import React, { useState, useEffect } from 'react';
+import { React, useState, useEffect } from 'react';
 import { useTheme } from 'next-themes';
 import { Menu, X, Sun, Moon, LogOut, Loader2 } from 'lucide-react';
 import Image from 'next/image';
 
-// MODIFIED: Import the default DashboardPage component instead of the named one
 import Dashboard from "../components/Dashboard"; 
 import { Feedback } from "../components/Feedback";
 import { Leaderboard } from "../components/Leaderboard";
@@ -15,7 +13,7 @@ import { Auth } from '@/components/Auth';
 import { useAuth } from '@/context/AuthContext';
 import { Modal } from '@/components/Modal';
 
-// --- Style Definitions (can remain as they are) ---
+// --- Style Definitions ---
 const APP_STYLES = {
     appContainer: `
         min-h-screen 
@@ -89,7 +87,7 @@ const APP_STYLES = {
         hover:bg-gray-100 dark:hover:bg-gray-700 
         focus:outline-none 
         focus:ring-2 
-        focus:ring-indigo-500 dark:focus:ring-white 
+        focus:ring-csway-green dark:focus:ring-white 
         focus:ring-offset-2 dark:focus:ring-offset-gray-800
     `,
     hamburgerMenuWrapper: `
@@ -138,7 +136,7 @@ const NAVLINK_STYLES = {
         ease-in-out
     `,
     activeDefault: `
-        border-blue-700 dark:border-blue-700 
+        border-csway-green dark:border-csway-green 
         text-gray-900 dark:text-gray-100
     `,
     inactiveDefault: `
@@ -166,7 +164,7 @@ const NAVLINK_STYLES = {
     activeDot: `
       absolute left-0 top-1/2 -translate-y-1/2 
       h-1.5 w-1.5 
-      bg-blue-700 rounded-full 
+      bg-csway-green rounded-full 
       transition-opacity duration-300
     `
 };
@@ -181,8 +179,8 @@ const MOBILE_NAVLINK_STYLES = {
         rounded-md
     `,
     active: `
-        bg-indigo-50 dark:bg-gray-700 
-        text-indigo-700 dark:text-white
+        bg-csway-green/10 dark:bg-gray-700 
+        text-csway-green dark:text-white
     `,
     inactive: `
         text-gray-600 dark:text-gray-300 
@@ -221,7 +219,7 @@ export default function App() {
     if (!mounted || loading) {
         return (
             <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
-                <Loader2 className="h-12 w-12 animate-spin text-blue-600" />
+                <Loader2 className="h-12 w-12 animate-spin text-csway-green" />
             </div>
         );
     }
@@ -269,7 +267,6 @@ export default function App() {
 
     const renderPage = () => {
         switch (currentPage) {
-            // MODIFIED: Render the self-contained DashboardPage
             case 'dashboard': return <Dashboard />;
             case 'quests': return <Quests />;
             case 'feedback': return <Feedback />;
@@ -294,7 +291,7 @@ export default function App() {
                     <div className={`${APP_STYLES.navFlexContainer} ${scrolled ? APP_STYLES.navFlexContainerScrolled : ''}`}>
                         <div className={APP_STYLES.logoAndLinksContainer}>
                             <div className={APP_STYLES.logoContainer}>
-                                <Image src="/rs2logo.png" alt="Upskill Logo" width={24} height={24} className={APP_STYLES.logoImage} />
+                                <Image src="/csway-logo.png" alt="CSway Logo" width={24} height={24} className={APP_STYLES.logoImage} />
                                 <span className={`${APP_STYLES.logoText} ${scrolled ? APP_STYLES.logoTextScrolled : ''}`}>Upskill</span>
                             </div>
                             <div className={APP_STYLES.desktopNavWrapper}>

@@ -1,10 +1,9 @@
-// app/layout.js
 import { Inter } from "next/font/google";
 import "./globals.css";
 
 import { ThemeProvider } from '../components/ThemeProvider';
 import { AuthProvider } from "@/context/AuthContext";
-import { GlobalErrorNotifier } from "@/components/GlobalErrorNotifier"; // IMPORT the new component
+import { GlobalErrorNotifier } from "@/components/GlobalErrorNotifier";
 
 const inter = Inter({ subsets: ["latin"] });
 
