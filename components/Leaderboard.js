@@ -177,7 +177,7 @@ export const Leaderboard = () => {
             try {
                 await new Promise(resolve => setTimeout(resolve, 1000));
                 // MODIFIED LINE
-                const response = await fetch('http://localhost:9292/leaderboard', { credentials: 'include' });
+                const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/leaderboard`, { credentials: 'include' });
                 if (!response.ok) {
                     throw new Error(`Server responded with status: ${response.status}`);
                 }

@@ -42,7 +42,7 @@ export const FeedbackHistory = () => {
 
             try {
                 await new Promise(resolve => setTimeout(resolve, 1000));
-                const response = await fetch(`http://localhost:9292/feedback?page=${page}&limit=${ITEMS_PER_PAGE}`, { credentials: 'include' });
+                const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/feedback?page=${page}&limit=${ITEMS_PER_PAGE}`, { credentials: 'include' });
                 if (!response.ok) {
                     throw new Error(`The server responded with status: ${response.status}`);
                 }

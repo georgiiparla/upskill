@@ -107,7 +107,7 @@ export const Quests = () => {
             try {
                 await new Promise(resolve => setTimeout(resolve, 1000));
                 // MODIFIED LINE
-                const response = await fetch('http://localhost:9292/quests', { credentials: 'include' });
+                const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/quests`, { credentials: 'include' });
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }

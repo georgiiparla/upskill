@@ -11,7 +11,7 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null); // ADDED: State for global errors
 
-    const API_URL = 'http://localhost:9292/auth';
+    const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/auth`;
 
     // ADDED: A user-friendly error message for network issues
     const friendlyError = "Could not connect to the server. Please check your connection and try again later.";

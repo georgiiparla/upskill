@@ -1,7 +1,6 @@
 "use client";
 import { React, useState, useEffect } from 'react';
-import { 
-    Loader2, AlertTriangle, Activity as ActivityIcon, Calendar, BookOpen, 
+import { AlertTriangle, Activity as ActivityIcon, Calendar, BookOpen, 
     Timer, Shield, ThumbsUp, Star, Flame 
 } from 'lucide-react';
 import { Card, SectionTitle } from "./Helper";
@@ -175,10 +174,11 @@ export default function Dashboard() {
         const fetchDashboardData = async () => {
             try {
                 await new Promise(resolve => setTimeout(resolve, 1000));
-                const response = await fetch('http://localhost:9292/dashboard', { credentials: 'include' });
+                const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/dashboard`, { credentials: 'include' });
                 if (!response.ok) throw new Error(`Server responded with status: ${response.status}`);
                 const dashboardData = await response.json();
                 setData(dashboardData);
+                console.log("Dashboard Data Received:", dashboardData);
             } catch (err) {
                 setError(err.message);
             } finally {
