@@ -14,12 +14,12 @@ export const Modal = ({ isOpen, onClose, onConfirm, title, children }) => {
             className="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm"
             onClick={onClose} // Close modal on backdrop click
         >
-            {/* Modal Content */}
+
             <div
                 className="relative w-full max-w-md p-6 bg-white rounded-lg shadow-xl dark:bg-gray-800"
                 onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the modal
             >
-                {/* Header */}
+
                 <div className="flex items-center justify-between pb-4 border-b border-gray-200 dark:border-gray-700">
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{title}</h3>
                     <button
@@ -30,12 +30,12 @@ export const Modal = ({ isOpen, onClose, onConfirm, title, children }) => {
                     </button>
                 </div>
 
-                {/* Body */}
+
                 <div className="py-6 text-sm text-gray-600 dark:text-gray-300">
                     {children}
                 </div>
 
-                {/* Footer with Buttons */}
+
                 <div className="flex justify-end space-x-4">
                     <button
                         onClick={onClose}
@@ -50,6 +50,7 @@ export const Modal = ({ isOpen, onClose, onConfirm, title, children }) => {
                         Sign Out
                     </button>
                 </div>
+                
             </div>
         </div>
     );

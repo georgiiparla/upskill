@@ -5,28 +5,103 @@ import { AlertTriangle, Activity as ActivityIcon, Calendar, BookOpen,
 } from 'lucide-react';
 import { Card, SectionTitle } from "./Helper";
 
-// --- Style Definitions ---
-const DASHBOARD_STYLES = {
-    agendaTimeline: `relative border-l border-gray-200 dark:border-gray-700 ml-3`,
-    agendaIconWrapperBase: `absolute flex items-center justify-center w-6 h-6 rounded-full -left-3`,
-    agendaIconWrapperArticle: `bg-purple-200 dark:bg-purple-900`,
-    agendaIconWrapperMeeting: `bg-csway-red/20 dark:bg-csway-red/20`,
-    agendaCard: `p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600 shadow-sm group hover:bg-csway-green/10 dark:hover:bg-gray-700 transition-all cursor-pointer`,
-    agendaDetails: `text-sm font-normal text-gray-500 dark:text-gray-400 mb-1`,
-    agendaTitle: `text-sm font-semibold text-gray-900 dark:text-white group-hover:text-csway-green dark:group-hover:text-csway-green transition-colors`,
-    cardScrollableContent: `flex-grow overflow-y-auto no-scrollbar max-h-[350px]`,
-    activityListItem: `flex items-start p-3 rounded-lg transition-colors hover:bg-gray-500/10`,
-    activityUser: `font-bold text-gray-900 dark:text-white`,
-    activityTime: `text-xs text-gray-500 dark:text-gray-400 mt-0.5`,
-    meetingsListItem: `flex items-center justify-between p-3 rounded-lg transition-colors hover:bg-gray-500/10`,
-    meetingsStatusBase: `text-xs font-semibold mr-4 px-2 py-1 rounded-full`,
-    meetingsStatusUpcoming: `bg-csway-orange/20 text-csway-orange dark:bg-csway-orange/20 dark:text-csway-orange`,
-    meetingsStatusRecent: `bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200`,
-    meetingsTitle: `font-semibold text-gray-800 dark:text-white`,
-    meetingsDate: `text-xs text-gray-500 dark:text-gray-400`,
+const tailwind = {
+
+    agendaTimeline: `
+        relative border-l border-gray-200 
+        dark:border-gray-700 
+        ml-3`,
+
+    agendaIconWrapperBase: `
+        absolute 
+        flex items-center justify-center 
+        w-6 h-6 
+        rounded-full -left-3`,
+
+    agendaIconWrapperArticle: `
+        bg-purple-200 dark:bg-purple-900`,
+
+    agendaIconWrapperMeeting: `
+        bg-csway-red/20 dark:bg-csway-red/20`,
+
+    agendaCard: `
+        p-4 
+        bg-gray-50 dark:bg-gray-700/50 
+        rounded-lg 
+        border border-gray-200 dark:border-gray-600 
+        shadow-sm 
+        group 
+        hover:bg-csway-green/10 dark:hover:bg-gray-700 
+        transition-all cursor-pointer`,
+
+    agendaDetails: `
+        text-sm font-normal 
+        text-gray-500 dark:text-gray-400 
+        mb-1`,
+
+    agendaTitle: `
+        text-sm font-semibold 
+        text-gray-900 dark:text-white 
+        group-hover:text-csway-green 
+        dark:group-hover:text-csway-green 
+        transition-colors`,
+
+    cardScrollableContent: `
+        flex-grow 
+        overflow-y-auto 
+        no-scrollbar 
+        max-h-[350px]`,
+
+    activityListItem: `
+        flex items-start 
+        p-3 rounded-lg 
+        transition-colors 
+        hover:bg-gray-500/10`,
+
+    activityUser: `
+        font-bold 
+        text-gray-900 dark:text-white`,
+
+    activityTime: `
+        text-xs 
+        text-gray-500 dark:text-gray-400 
+        mt-0.5`,
+
+    meetingsListItem: `
+        flex 
+        items-center justify-between 
+        p-3 
+        rounded-lg 
+        transition-colors 
+        hover:bg-gray-500/10`,
+
+    meetingsStatusBase: `
+        text-xs font-semibold 
+        mr-4 
+        px-2 py-1 
+        rounded-full`,
+
+    meetingsStatusUpcoming: `
+        bg-csway-orange/20 text-csway-orange 
+        dark:bg-csway-orange/20 dark:text-csway-orange`,
+
+    meetingsStatusRecent: `
+        bg-green-100 
+        text-green-800 
+        dark:bg-green-900 
+        dark:text-green-200`,
+
+    meetingsTitle: `
+        font-semibold 
+        text-gray-800 
+        dark:text-white`,
+
+    meetingsDate: `
+        text-xs 
+        text-gray-500 dark:text-gray-400`,
 };
 
-// --- Reusable Metric Component ---
+
 const MetricItem = ({ icon, label, allTime, thisWeek }) => (
     <div className="bg-slate-50/50 dark:bg-slate-800/50 p-4 rounded-lg border border-slate-200 dark:border-slate-700">
         <div className="flex items-start space-x-4">
@@ -44,10 +119,9 @@ const MetricItem = ({ icon, label, allTime, thisWeek }) => (
     </div>
 );
 
-// --- Reusable iOS-style Toggle Switch Component ---
+
 const ToggleSwitch = ({ options, activeOption, setActiveOption }) => (
     <div className="relative flex items-center bg-gray-200 dark:bg-gray-700 rounded-full p-1">
-        {/* Sliding background element */}
         <div
             className="absolute top-1 left-1 h-[calc(100%-8px)] w-[calc(50%-4px)] bg-csway-green rounded-full shadow-md transition-transform duration-300 ease-in-out"
             style={{ transform: activeOption === options[0].id ? 'translateX(0%)' : 'translateX(100%)' }}
@@ -67,7 +141,6 @@ const ToggleSwitch = ({ options, activeOption, setActiveOption }) => (
 );
 
 
-// --- Toggled Activity Card Component ---
 const ActivityCard = ({ activityData }) => {
     const [activeView, setActiveView] = useState('personal');
     const currentData = activityData[activeView];
@@ -103,15 +176,15 @@ const DashboardContent = ({ data }) => {
         <div className="space-y-8">
             <Card>
                 <SectionTitle icon={<BookOpen className="h-6 w-6 text-csway-orange" />} title="This Week's Agenda" className={'mb-7'} />
-                <ol className={DASHBOARD_STYLES.agendaTimeline}>
+                <ol className={tailwind.agendaTimeline}>
                     {data.agendaItems.map((item) => (
                         <li key={item.id} className="mb-6 ml-6">
-                            <span className={`${DASHBOARD_STYLES.agendaIconWrapperBase} ${item.type === 'article' ? DASHBOARD_STYLES.agendaIconWrapperArticle : DASHBOARD_STYLES.agendaIconWrapperMeeting}`}>
+                            <span className={`${tailwind.agendaIconWrapperBase} ${item.type === 'article' ? tailwind.agendaIconWrapperArticle : tailwind.agendaIconWrapperMeeting}`}>
                                 {item.type === 'article' ? <BookOpen className="w-3 h-3 text-purple-600 dark:text-purple-300" /> : <Calendar className="w-3 h-3 text-csway-red dark:text-csway-red" />}
                             </span>
-                            <div className={DASHBOARD_STYLES.agendaCard}>
-                                <p className={DASHBOARD_STYLES.agendaDetails}>{item.type === 'article' ? `Learning: ${item.category}` : `Meeting: ${item.due_date}`}</p>
-                                <a href="#" className={DASHBOARD_STYLES.agendaTitle}>{item.title}</a>
+                            <div className={tailwind.agendaCard}>
+                                <p className={tailwind.agendaDetails}>{item.type === 'article' ? `Learning: ${item.category}` : `Meeting: ${item.due_date}`}</p>
+                                <a href="#" className={tailwind.agendaTitle}>{item.title}</a>
                             </div>
                         </li>
                     ))}
@@ -123,14 +196,14 @@ const DashboardContent = ({ data }) => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <Card className="flex flex-col">
                     <SectionTitle icon={<Timer className="h-6 w-6 text-csway-red" />} title="Live Activity Stream" />
-                    <div className={DASHBOARD_STYLES.cardScrollableContent}>
+                    <div className={tailwind.cardScrollableContent}>
                         <ul className="space-y-4">
                             {data.activityStream.map(item => (
-                                <li key={item.id} className={DASHBOARD_STYLES.activityListItem}>
+                                <li key={item.id} className={tailwind.activityListItem}>
                                     <div className="flex-shrink-0 mt-1"><ActivityIcon className="h-5 w-5 text-gray-400" /></div>
                                     <div className="ml-4 flex-grow">
-                                        <p className="text-sm text-gray-700 dark:text-gray-300"><span className={DASHBOARD_STYLES.activityUser}>{item.user_name}</span> {item.action}</p>
-                                        <p className={DASHBOARD_STYLES.activityTime}>{item.created_at}</p>
+                                        <p className="text-sm text-gray-700 dark:text-gray-300"><span className={tailwind.activityUser}>{item.user_name}</span> {item.action}</p>
+                                        <p className={tailwind.activityTime}>{item.created_at}</p>
                                     </div>
                                 </li>
                             ))}
@@ -140,17 +213,17 @@ const DashboardContent = ({ data }) => {
 
                 <Card className="flex flex-col">
                     <SectionTitle icon={<Calendar className="h-6 w-6 text-purple-500" />} title="Upcoming & Recent Meetings" />
-                    <div className={DASHBOARD_STYLES.cardScrollableContent}>
+                    <div className={tailwind.cardScrollableContent}>
                         <ul className="space-y-3">
                             {data.meetings.map(item => (
-                                <li key={item.id} className={DASHBOARD_STYLES.meetingsListItem}>
+                                <li key={item.id} className={tailwind.meetingsListItem}>
                                     <div className="flex items-center">
-                                        <span className={`${DASHBOARD_STYLES.meetingsStatusBase} ${item.status === 'Upcoming' ? DASHBOARD_STYLES.meetingsStatusUpcoming : DASHBOARD_STYLES.meetingsStatusRecent}`}>
+                                        <span className={`${tailwind.meetingsStatusBase} ${item.status === 'Upcoming' ? tailwind.meetingsStatusUpcoming : tailwind.meetingsStatusRecent}`}>
                                             {item.status}
                                         </span>
                                         <div>
-                                            <p className={DASHBOARD_STYLES.meetingsTitle}>{item.title}</p>
-                                            <p className={DASHBOARD_STYLES.meetingsDate}>{item.meeting_date}</p>
+                                            <p className={tailwind.meetingsTitle}>{item.title}</p>
+                                            <p className={tailwind.meetingsDate}>{item.meeting_date}</p>
                                         </div>
                                     </div>
                                 </li>

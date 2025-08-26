@@ -7,7 +7,8 @@ import { FeedbackHistory } from './feedback/FeedbackHistory';
 import { MOCK_FEEDBACK_TOPICS } from '@/mock/mock_data';
 
 // --- Style Definitions ---
-const MAIN_STYLES = {
+const tailwind = {
+
     formLabel: `
                 block 
                 mb-2 
@@ -16,6 +17,7 @@ const MAIN_STYLES = {
                 text-gray-900 
                 dark:text-white
                 `,
+
     formSelect: `
                 block 
                 w-full 
@@ -30,6 +32,7 @@ const MAIN_STYLES = {
                 focus:ring-csway-green dark:focus:ring-csway-green
                 focus:border-csway-green dark:focus:border-csway-green
                 `,
+
     formTextArea: `
                 block 
                 px-4 
@@ -42,6 +45,7 @@ const MAIN_STYLES = {
                 focus:border-csway-green dark:focus:border-csway-green 
                 dark:placeholder-gray-400
                 `,
+
     formCheckBox: `
                 w-4 h-4 
                 text-csway-green 
@@ -52,6 +56,7 @@ const MAIN_STYLES = {
                 dark:border-gray-600 dark:ring-offset-gray-800 
                 focus:ring-2 focus:ring-csway-green 
                 dark:focus:ring-csway-green/80`,
+
     formCheckBoxLabel: `
                 ml-2 
                 text-sm 
@@ -59,6 +64,7 @@ const MAIN_STYLES = {
                 text-gray-900 
                 dark:text-gray-300
                 `,
+
     submitButton: `
                 w-full 
                 px-5 py-2.5 
@@ -69,7 +75,7 @@ const MAIN_STYLES = {
                 `,
 };
 
-// --- Merged Feedback Form & Tips Component ---
+
 const FeedbackHub = () => {
     const [topic, setTopic] = useState(MOCK_FEEDBACK_TOPICS[0]);
 
@@ -88,25 +94,25 @@ const FeedbackHub = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <form className="flex flex-col gap-6" onSubmit={(e) => e.preventDefault()}>
                         <div>
-                            <label htmlFor="feedback-topic" className={MAIN_STYLES.formLabel}>Topic</label>
+                            <label htmlFor="feedback-topic" className={tailwind.formLabel}>Topic</label>
                             <select
                                 id="feedback-topic"
                                 value={topic}
                                 onChange={(e) => setTopic(e.target.value)}
-                                className={MAIN_STYLES.formSelect}
+                                className={tailwind.formSelect}
                             >
                                 {MOCK_FEEDBACK_TOPICS.map(t => <option key={t} value={t}>{t}</option>)}
                             </select>
                         </div>
                         <div className="flex-grow">
-                            <label htmlFor="feedback-text" className={MAIN_STYLES.formLabel}>What do you think?</label>
+                            <label htmlFor="feedback-text" className={tailwind.formLabel}>What do you think?</label>
                             <textarea
                                 id="feedback-text"
-                                className={MAIN_STYLES.formTextArea}
+                                className={tailwind.formTextArea}
                                 placeholder="Provide constructive feedback..."
                             ></textarea>
                         </div>
-                        <button type="submit" className={MAIN_STYLES.submitButton}>Submit Feedback</button>
+                        <button type="submit" className={tailwind.submitButton}>Submit Feedback</button>
                     </form>
 
                     <div className="flex flex-col">

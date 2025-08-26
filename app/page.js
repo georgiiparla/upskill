@@ -14,11 +14,10 @@ import { useAuth } from '@/context/AuthContext';
 import { Modal } from '@/components/Modal';
 
 // --- Style Definitions ---
-const APP_STYLES = {
+const tailwind_app = {
     appContainer: `
         min-h-screen 
-        bg-gray-100 dark:bg-gray-900
-    `,
+        bg-gray-100 dark:bg-gray-900`,
     nav: `
         bg-white/80 dark:bg-gray-800/80
         backdrop-blur-sm
@@ -26,60 +25,48 @@ const APP_STYLES = {
         border-gray-200 dark:border-gray-700
         sticky top-0
         z-50
-        transition-all duration-300 ease-in-out
-    `,
+        transition-all duration-300 ease-in-out`,
     navContainer: `
         mx-auto 
         max-w-7xl 
-        px-4 sm:px-6 lg:px-8
-    `,
+        px-4 sm:px-6 lg:px-8`,
     navFlexContainer: `
         flex 
         items-center 
         justify-between
         h-16
-        transition-all duration-300 ease-in-out
-    `,
+        transition-all duration-300 ease-in-out`,
     navFlexContainerScrolled: `
-        h-[44px]
-    `,
+        h-[44px]`,
     logoAndLinksContainer: `
         flex 
-        items-center
-    `,
+        items-center`,
     logoContainer: `
         flex-shrink-0 
         text-gray-900 dark:text-white 
         font-bold 
         text-xl 
         flex 
-        items-center
-    `,
+        items-center`,
     logoImage: `
-        mr-2
-    `,
+        mr-2`,
     logoText: `
         transition-all duration-300 ease-in-out
         whitespace-nowrap
-        overflow-hidden
-    `,
+        overflow-hidden`,
     logoTextScrolled: `
-        w-0 opacity-0
-    `,
+        w-0 opacity-0`,
     desktopNavWrapper: `
         hidden 
-        md:block
-    `,
+        md:block`,
     desktopNavLinksContainer: `
         ml-10 
         flex 
         items-baseline 
-        space-x-4
-    `,
+        space-x-4`,
     navActionsContainer: `
         flex 
-        items-center
-    `,
+        items-center`,
     themeToggleButton: `
         p-2 
         rounded-full 
@@ -88,12 +75,10 @@ const APP_STYLES = {
         focus:outline-none 
         focus:ring-2 
         focus:ring-csway-green dark:focus:ring-white 
-        focus:ring-offset-2 dark:focus:ring-offset-gray-800
-    `,
+        focus:ring-offset-2 dark:focus:ring-offset-gray-800`,
     hamburgerMenuWrapper: `
         ml-2 
-        md:hidden
-    `,
+        md:hidden`,
     hamburgerButton: `
         inline-flex 
         items-center 
@@ -102,30 +87,26 @@ const APP_STYLES = {
         rounded-md 
         text-gray-500 dark:text-gray-400 
         hover:bg-gray-100 dark:hover:bg-gray-700 
-        focus:outline-none
-    `,
+        focus:outline-none`,
     hamburgerIcon: `
         block 
-        h-6 w-6
-    `,
+        h-6 w-6`,
     mobileMenuContainer: `
         md:hidden 
         border-t 
-        border-gray-200 dark:border-gray-700
-    `,
+        border-gray-200 dark:border-gray-700`,
     mobileMenuLinksContainer: `
         px-2 pt-2 pb-3 
         space-y-1 
-        sm:px-3
-    `,
+        sm:px-3`,
     mainContent: `
         mx-auto 
         max-w-7xl 
         px-4 py-6 
-        sm:px-6 lg:px-8
-    `
+        sm:px-6 lg:px-8`
 };
-const NAVLINK_STYLES = {
+
+const tailwind_navlink = {
     baseDefault: `
         border-b-2 
         px-1 pt-1 
@@ -133,18 +114,15 @@ const NAVLINK_STYLES = {
         font-medium 
         transition-colors 
         duration-150 
-        ease-in-out
-    `,
+        ease-in-out`,
     activeDefault: `
         border-csway-green dark:border-csway-green 
-        text-gray-900 dark:text-gray-100
-    `,
+        text-gray-900 dark:text-gray-100`,
     inactiveDefault: `
         border-transparent 
         text-gray-500 dark:text-gray-400 
         hover:border-gray-300 dark:hover:border-gray-600 
-        hover:text-gray-700 dark:hover:text-gray-300
-    `,
+        hover:text-gray-700 dark:hover:text-gray-300`,
     baseScrolled: `
         relative
         px-3 py-2
@@ -152,23 +130,21 @@ const NAVLINK_STYLES = {
         font-medium 
         transition-colors 
         duration-150 
-        ease-in-out
-    `,
+        ease-in-out`,
     activeScrolled: `
-        text-gray-900 dark:text-gray-100
-    `,
+        text-gray-900 dark:text-gray-100`,
     inactiveScrolled: `
         text-gray-500 dark:text-gray-400 
-        hover:text-gray-700 dark:hover:text-gray-300
-    `,
+        hover:text-gray-700 dark:hover:text-gray-300`,
     activeDot: `
-      absolute left-0 top-1/2 -translate-y-1/2 
-      h-1.5 w-1.5 
-      bg-csway-green rounded-full 
-      transition-opacity duration-300
-    `
+        absolute left-0 top-1/2 -translate-y-1/2 
+        h-1.5 w-1.5 
+        bg-csway-green rounded-full 
+        transition-opacity duration-300`
 };
-const MOBILE_NAVLINK_STYLES = {
+
+        
+const tailwind_navlink_mobile = {
     base: `
         block 
         w-full 
@@ -176,19 +152,17 @@ const MOBILE_NAVLINK_STYLES = {
         px-4 py-2 
         text-base 
         font-medium 
-        rounded-md
-    `,
+        rounded-md`,
     active: `
         bg-csway-green/10 dark:bg-gray-700 
-        text-csway-green dark:text-white
-    `,
+        text-csway-green dark:text-white`,
     inactive: `
         text-gray-600 dark:text-gray-300 
-        hover:bg-gray-50 dark:hover:bg-gray-700
-    `
+        hover:bg-gray-50 dark:hover:bg-gray-700`
 };
 
 export default function App() {
+    
     const { theme, setTheme } = useTheme();
     const [mounted, setMounted] = useState(false);
     const [currentPage, setCurrentPage] = useState('dashboard');
@@ -230,10 +204,10 @@ export default function App() {
 
     const NavLink = ({ pageName, children, scrolled }) => {
         const isActive = currentPage === pageName;
-        const baseClass = scrolled ? NAVLINK_STYLES.baseScrolled : NAVLINK_STYLES.baseDefault;
+        const baseClass = scrolled ? tailwind_navlink.baseScrolled : tailwind_navlink.baseDefault;
         const activeClass = isActive 
-            ? (scrolled ? NAVLINK_STYLES.activeScrolled : NAVLINK_STYLES.activeDefault) 
-            : (scrolled ? NAVLINK_STYLES.inactiveScrolled : NAVLINK_STYLES.inactiveDefault);
+            ? (scrolled ? tailwind_navlink.activeScrolled : tailwind_navlink.activeDefault) 
+            : (scrolled ? tailwind_navlink.inactiveScrolled : tailwind_navlink.inactiveDefault);
         
         return (
             <button
@@ -243,7 +217,7 @@ export default function App() {
                 }}
                 className={`${baseClass} ${activeClass}`}
             >
-                <span className={`${NAVLINK_STYLES.activeDot} ${isActive && scrolled ? 'opacity-100' : 'opacity-0'}`}></span>
+                <span className={`${tailwind_navlink.activeDot} ${isActive && scrolled ? 'opacity-100' : 'opacity-0'}`}></span>
                 {children}
             </button>
         );
@@ -251,14 +225,14 @@ export default function App() {
 
     const MobileNavLink = ({ pageName, children }) => {
         const isActive = currentPage === pageName;
-        const activeClass = isActive ? MOBILE_NAVLINK_STYLES.active : MOBILE_NAVLINK_STYLES.inactive;
+        const activeClass = isActive ? tailwind_navlink_mobile.active : tailwind_navlink_mobile.inactive;
         return (
             <button
                 onClick={() => {
                     setCurrentPage(pageName);
                     setIsMenuOpen(false);
                 }}
-                className={`${MOBILE_NAVLINK_STYLES.base} ${activeClass}`}
+                className={`${tailwind_navlink_mobile.base} ${activeClass}`}
             >
                 {children}
             </button>
@@ -276,7 +250,7 @@ export default function App() {
     };
 
     return (
-        <div className={APP_STYLES.appContainer}>
+        <div className={tailwind_app.appContainer}>
             <Modal
                 isOpen={isLogoutModalOpen}
                 onClose={() => setIsLogoutModalOpen(false)}
@@ -286,16 +260,16 @@ export default function App() {
                 Are you sure you want to sign out of your account?
             </Modal>
 
-            <nav className={APP_STYLES.nav}>
-                <div className={APP_STYLES.navContainer}>
-                    <div className={`${APP_STYLES.navFlexContainer} ${scrolled ? APP_STYLES.navFlexContainerScrolled : ''}`}>
-                        <div className={APP_STYLES.logoAndLinksContainer}>
-                            <div className={APP_STYLES.logoContainer}>
-                                <Image src="/csway-logo.png" alt="CSway Logo" width={24} height={24} className={APP_STYLES.logoImage} />
-                                <span className={`${APP_STYLES.logoText} ${scrolled ? APP_STYLES.logoTextScrolled : ''}`}>Upskill</span>
+            <nav className={tailwind_app.nav}>
+                <div className={tailwind_app.navContainer}>
+                    <div className={`${tailwind_app.navFlexContainer} ${scrolled ? tailwind_app.navFlexContainerScrolled : ''}`}>
+                        <div className={tailwind_app.logoAndLinksContainer}>
+                            <div className={tailwind_app.logoContainer}>
+                                <Image src="/csway-logo.png" alt="CSway Logo" width={24} height={24} className={tailwind_app.logoImage} />
+                                <span className={`${tailwind_app.logoText} ${scrolled ? tailwind_app.logoTextScrolled : ''}`}>Upskill</span>
                             </div>
-                            <div className={APP_STYLES.desktopNavWrapper}>
-                                <div className={APP_STYLES.desktopNavLinksContainer}>
+                            <div className={tailwind_app.desktopNavWrapper}>
+                                <div className={tailwind_app.desktopNavLinksContainer}>
                                     <NavLink pageName="dashboard" scrolled={scrolled}>Dashboard</NavLink>
                                     <NavLink pageName="quests" scrolled={scrolled}>Quests</NavLink>
                                     <NavLink pageName="feedback" scrolled={scrolled}>Feedback</NavLink>
@@ -303,7 +277,7 @@ export default function App() {
                                 </div>
                             </div>
                         </div>
-                        <div className={APP_STYLES.navActionsContainer}>
+                        <div className={tailwind_app.navActionsContainer}>
                             <div className="flex items-center space-x-3">
                                 <span className="hidden sm:inline text-sm text-gray-700 dark:text-gray-300">
                                     Welcome, <span className="font-bold">{user.username}</span>
@@ -316,22 +290,22 @@ export default function App() {
                                 </button>
                                 <button
                                     onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-                                    className={APP_STYLES.themeToggleButton}
+                                    className={tailwind_app.themeToggleButton}
                                 >
                                     {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
                                 </button>
                             </div>
-                            <div className={APP_STYLES.hamburgerMenuWrapper}>
-                                <button onClick={() => setIsMenuOpen(!isMenuOpen)} className={APP_STYLES.hamburgerButton}>
-                                    {isMenuOpen ? <X className={APP_STYLES.hamburgerIcon} /> : <Menu className={APP_STYLES.hamburgerIcon} />}
+                            <div className={tailwind_app.hamburgerMenuWrapper}>
+                                <button onClick={() => setIsMenuOpen(!isMenuOpen)} className={tailwind_app.hamburgerButton}>
+                                    {isMenuOpen ? <X className={tailwind_app.hamburgerIcon} /> : <Menu className={tailwind_app.hamburgerIcon} />}
                                 </button>
                             </div>
                         </div>
                     </div>
                 </div>
                 {isMenuOpen && (
-                    <div className={APP_STYLES.mobileMenuContainer}>
-                        <div className={APP_STYLES.mobileMenuLinksContainer}>
+                    <div className={tailwind_app.mobileMenuContainer}>
+                        <div className={tailwind_app.mobileMenuLinksContainer}>
                             <MobileNavLink pageName="dashboard">Dashboard</MobileNavLink>
                             <MobileNavLink pageName="quests">Quests</MobileNavLink>
                             <MobileNavLink pageName="feedback">Feedback</MobileNavLink>
@@ -341,7 +315,7 @@ export default function App() {
                 )}
             </nav>
             <main>
-                <div className={APP_STYLES.mainContent}>{renderPage()}</div>
+                <div className={tailwind_app.mainContent}>{renderPage()}</div>
             </main>
         </div>
     );
