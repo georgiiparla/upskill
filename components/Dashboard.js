@@ -1,106 +1,12 @@
 "use client";
 import { React, useState, useEffect } from 'react';
-import { AlertTriangle, Activity as ActivityIcon, Calendar, BookOpen, 
+import { 
+    AlertTriangle, Activity as ActivityIcon, Calendar, BookOpen, 
     Timer, Shield, ThumbsUp, Star, Flame 
 } from 'lucide-react';
-import { Card, SectionTitle } from "./Helper";
+import { Card, SectionTitle, InfoCard } from "./Helper";
 
-const tailwind = {
-
-    agendaTimeline: `
-        relative border-l border-gray-200 
-        dark:border-gray-700 
-        ml-3`,
-
-    agendaIconWrapperBase: `
-        absolute 
-        flex items-center justify-center 
-        w-6 h-6 
-        rounded-full -left-3`,
-
-    agendaIconWrapperArticle: `
-        bg-purple-200 dark:bg-purple-900`,
-
-    agendaIconWrapperMeeting: `
-        bg-csway-red/20 dark:bg-csway-red/20`,
-
-    agendaCard: `
-        p-4 
-        bg-gray-50 dark:bg-gray-700/50 
-        rounded-lg 
-        border border-gray-200 dark:border-gray-600 
-        shadow-sm 
-        group 
-        hover:bg-csway-green/10 dark:hover:bg-gray-700 
-        transition-all cursor-pointer`,
-
-    agendaDetails: `
-        text-sm font-normal 
-        text-gray-500 dark:text-gray-400 
-        mb-1`,
-
-    agendaTitle: `
-        text-sm font-semibold 
-        text-gray-900 dark:text-white 
-        group-hover:text-csway-green 
-        dark:group-hover:text-csway-green 
-        transition-colors`,
-
-    cardScrollableContent: `
-        flex-grow 
-        overflow-y-auto 
-        no-scrollbar 
-        max-h-[350px]`,
-
-    activityListItem: `
-        flex items-start 
-        p-3 rounded-lg 
-        transition-colors 
-        hover:bg-gray-500/10`,
-
-    activityUser: `
-        font-bold 
-        text-gray-900 dark:text-white`,
-
-    activityTime: `
-        text-xs 
-        text-gray-500 dark:text-gray-400 
-        mt-0.5`,
-
-    meetingsListItem: `
-        flex 
-        items-center justify-between 
-        p-3 
-        rounded-lg 
-        transition-colors 
-        hover:bg-gray-500/10`,
-
-    meetingsStatusBase: `
-        text-xs font-semibold 
-        mr-4 
-        px-2 py-1 
-        rounded-full`,
-
-    meetingsStatusUpcoming: `
-        bg-csway-orange/20 text-csway-orange 
-        dark:bg-csway-orange/20 dark:text-csway-orange`,
-
-    meetingsStatusRecent: `
-        bg-green-100 
-        text-green-800 
-        dark:bg-green-900 
-        dark:text-green-200`,
-
-    meetingsTitle: `
-        font-semibold 
-        text-gray-800 
-        dark:text-white`,
-
-    meetingsDate: `
-        text-xs 
-        text-gray-500 dark:text-gray-400`,
-};
-
+import HypedToggleSwitch from './HypedToggleSwitch';
 
 const MetricItem = ({ icon, label, allTime, thisWeek }) => (
     <div className="bg-slate-50/50 dark:bg-slate-800/50 p-4 rounded-lg border border-slate-200 dark:border-slate-700">
@@ -119,52 +25,28 @@ const MetricItem = ({ icon, label, allTime, thisWeek }) => (
     </div>
 );
 
-
-const ToggleSwitch = ({ options, activeOption, setActiveOption }) => (
-    <div className="relative flex items-center bg-gray-200 dark:bg-gray-700 rounded-full p-1">
-        <div
-            className="absolute top-1 left-1 h-[calc(100%-8px)] w-[calc(50%-4px)] bg-csway-green rounded-full shadow-md transition-transform duration-300 ease-in-out"
-            style={{ transform: activeOption === options[0].id ? 'translateX(0%)' : 'translateX(100%)' }}
-        />
-        {options.map(option => (
-            <button
-                key={option.id}
-                onClick={() => setActiveOption(option.id)}
-                className={`relative z-10 w-24 py-1.5 text-sm font-semibold text-center transition-colors duration-300 rounded-full ${
-                    activeOption === option.id ? 'text-white' : 'text-gray-500 dark:text-gray-400'
-                }`}
-            >
-                {option.label}
-            </button>
-        ))}
-    </div>
-);
-
-
 const ActivityCard = ({ activityData }) => {
     const [activeView, setActiveView] = useState('personal');
     const currentData = activityData[activeView];
     const isPersonal = activeView === 'personal';
 
     const toggleOptions = [
-        { id: 'personal', label: 'You' },
+        { id: 'personal', label: 'Me' },
         { id: 'team', label: 'Team' },
     ];
 
     return (
         <Card>
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
-                <SectionTitle icon={<ActivityIcon className="h-6 w-6 text-csway-orange" />} title="Activity Overview" />
-                <div className="mt-4 sm:mt-0">
-                    <ToggleSwitch options={toggleOptions} activeOption={activeView} setActiveOption={setActiveView} />
-                </div>
+                <SectionTitle icon={<HypedToggleSwitch options={toggleOptions} activeOption={activeView} setActiveOption={setActiveView} />} title="" />
+
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4">
                 <MetricItem icon={<Shield className="h-6 w-6 text-csway-green" />} label="Quests Completed" allTime={currentData.quests.allTime} thisWeek={currentData.quests.thisWeek} />
                 <MetricItem icon={<ThumbsUp className="h-6 w-6 text-csway-red" />} label="Feedback Given" allTime={currentData.feedback.allTime} thisWeek={currentData.feedback.thisWeek} />
-                {currentData.points && <MetricItem icon={<Star className="h-6 w-6 text-csway-orange" />} label="Total Points" allTime={currentData.points.allTime} thisWeek={currentData.points.thisWeek} />}
-                {currentData.streak !== undefined && <MetricItem icon={<Flame className="h-6 w-6 text-orange-500" />} label={isPersonal ? "Current Streak" : "Avg. Streak"} allTime={`${currentData.streak} days`} thisWeek={0} />}
+                {/* {currentData.points && <MetricItem icon={<Star className="h-6 w-6 text-csway-orange" />} label="Total Points" allTime={currentData.points.allTime} thisWeek={currentData.points.thisWeek} />}
+                {currentData.streak !== undefined && <MetricItem icon={<Flame className="h-6 w-6 text-orange-500" />} label={isPersonal ? "Current Streak" : "Avg. Streak"} allTime={`${currentData.streak} days`} thisWeek={0} />} */}
             </div>
         </Card>
     );
@@ -174,64 +56,52 @@ const ActivityCard = ({ activityData }) => {
 const DashboardContent = ({ data }) => {
     return (
         <div className="space-y-8">
+
             <Card>
                 <SectionTitle icon={<BookOpen className="h-6 w-6 text-csway-orange" />} title="This Week's Agenda" className={'mb-7'} />
-                <ol className={tailwind.agendaTimeline}>
+                <ol className="relative border-l border-gray-200 dark:border-gray-700 ml-3">
                     {data.agendaItems.map((item) => (
                         <li key={item.id} className="mb-6 ml-6">
-                            <span className={`${tailwind.agendaIconWrapperBase} ${item.type === 'article' ? tailwind.agendaIconWrapperArticle : tailwind.agendaIconWrapperMeeting}`}>
+                            <span className={`absolute flex items-center justify-center w-6 h-6 rounded-full -left-3 ${item.type === 'article' ? 'bg-purple-200 dark:bg-purple-900' : 'bg-csway-red/20 dark:bg-csway-red/20'}`}>
                                 {item.type === 'article' ? <BookOpen className="w-3 h-3 text-purple-600 dark:text-purple-300" /> : <Calendar className="w-3 h-3 text-csway-red dark:text-csway-red" />}
                             </span>
-                            <div className={tailwind.agendaCard}>
-                                <p className={tailwind.agendaDetails}>{item.type === 'article' ? `Learning: ${item.category}` : `Meeting: ${item.due_date}`}</p>
-                                <a href="#" className={tailwind.agendaTitle}>{item.title}</a>
+                            <div className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600 shadow-sm group hover:bg-csway-green/10 dark:hover:bg-gray-700 transition-all cursor-pointer">
+                                <p className="text-sm font-normal text-gray-500 dark:text-gray-400 mb-1">{item.type === 'article' ? `Learning: ${item.category}` : `Meeting: ${item.due_date}`}</p>
+                                <a href="#" className="text-base font-semibold text-gray-900 dark:text-white group-hover:text-csway-green dark:group-hover:text-csway-green transition-colors">{item.title}</a>
                             </div>
                         </li>
                     ))}
                 </ol>
             </Card>
 
-            <ActivityCard activityData={data.activityData} />
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8"> 
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <Card className="flex flex-col">
-                    <SectionTitle icon={<Timer className="h-6 w-6 text-csway-red" />} title="Live Activity Stream" />
-                    <div className={tailwind.cardScrollableContent}>
-                        <ul className="space-y-4">
-                            {data.activityStream.map(item => (
-                                <li key={item.id} className={tailwind.activityListItem}>
-                                    <div className="flex-shrink-0 mt-1"><ActivityIcon className="h-5 w-5 text-gray-400" /></div>
-                                    <div className="ml-4 flex-grow">
-                                        <p className="text-sm text-gray-700 dark:text-gray-300"><span className={tailwind.activityUser}>{item.user_name}</span> {item.action}</p>
-                                        <p className={tailwind.activityTime}>{item.created_at}</p>
-                                    </div>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                </Card>
+                <div className="md:col-span-1">
+                    <ActivityCard activityData={data.activityData} />
+                </div>
 
-                <Card className="flex flex-col">
-                    <SectionTitle icon={<Calendar className="h-6 w-6 text-purple-500" />} title="Upcoming & Recent Meetings" />
-                    <div className={tailwind.cardScrollableContent}>
-                        <ul className="space-y-3">
-                            {data.meetings.map(item => (
-                                <li key={item.id} className={tailwind.meetingsListItem}>
-                                    <div className="flex items-center">
-                                        <span className={`${tailwind.meetingsStatusBase} ${item.status === 'Upcoming' ? tailwind.meetingsStatusUpcoming : tailwind.meetingsStatusRecent}`}>
-                                            {item.status}
-                                        </span>
-                                        <div>
-                                            <p className={tailwind.meetingsTitle}>{item.title}</p>
-                                            <p className={tailwind.meetingsDate}>{item.meeting_date}</p>
-                                        </div>
-                                    </div>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                </Card>
+                <div className="md:col-span-2">
+                    <InfoCard
+                        icon={<Timer className="h-6 w-6 text-red-500" />}
+                        title="Live Activity Stream"
+                        items={data.activityStream}
+                        listClassName="space-y-4"
+                        renderItem={(item) => (
+                             <li key={item.id} className="flex items-start p-3 rounded-lg transition-colors hover:bg-gray-500/10">
+                                <div className="flex-shrink-0 mt-1"><ActivityIcon className="h-5 w-5 text-gray-400" /></div>
+                                <div className="ml-4 flex-grow">
+                                    <p className="text-sm text-gray-700 dark:text-gray-300">
+                                        <span className="font-bold text-gray-900 dark:text-white">{item.user_name}</span> {item.action}
+                                    </p>
+                                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{item.created_at}</p>
+                                </div>
+                            </li>
+                        )}
+                    />
+                </div>
+                    
             </div>
+
         </div>
     );
 };
@@ -249,7 +119,6 @@ export default function Dashboard() {
                 if (!response.ok) throw new Error(`Server responded with status: ${response.status}`);
                 const dashboardData = await response.json();
                 setData(dashboardData);
-                console.log("Dashboard Data Received:", dashboardData);
             } catch (err) {
                 setError(err.message);
             } finally {
@@ -259,7 +128,9 @@ export default function Dashboard() {
         fetchDashboardData();
     }, []);
 
+
     if (loading) return <DashboardSkeleton />;
+
 
     if (error) {
         return (
@@ -270,11 +141,13 @@ export default function Dashboard() {
             </div>
         );
     }
+
     
     return <DashboardContent data={data} />;
 }
 
 // --- Skeleton Loader Component ---
+
 const DashboardSkeleton = () => (
     <div className="space-y-8 animate-pulse">
         <Card>
@@ -290,7 +163,7 @@ const DashboardSkeleton = () => (
         </Card>
         <Card>
             <div className="flex justify-between items-center mb-4">
-                <div className="h-7 w-1/3 bg-gray-300 dark:bg-gray-700 rounded"></div>
+                {/* <div className="h-7 w-1/3 bg-gray-300 dark:bg-gray-700 rounded"></div> */}
                 <div className="h-9 w-48 bg-gray-300 dark:bg-gray-700 rounded-full"></div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -299,7 +172,8 @@ const DashboardSkeleton = () => (
                 ))}
             </div>
         </Card>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        
+        {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <Card>
                 <div className="h-7 w-1/2 bg-gray-300 dark:bg-gray-700 rounded mb-4"></div>
                 <div className="flex-grow space-y-4">
@@ -322,6 +196,6 @@ const DashboardSkeleton = () => (
                     ))}
                 </div>
             </Card>
-        </div>
+        </div> */}
     </div>
 );

@@ -13,153 +13,7 @@ import { Auth } from '@/components/Auth';
 import { useAuth } from '@/context/AuthContext';
 import { Modal } from '@/components/Modal';
 
-// --- Style Definitions ---
-const tailwind_app = {
-    appContainer: `
-        min-h-screen 
-        bg-gray-100 dark:bg-gray-900`,
-    nav: `
-        bg-white/80 dark:bg-gray-800/80
-        backdrop-blur-sm
-        border-b 
-        border-gray-200 dark:border-gray-700
-        sticky top-0
-        z-50
-        transition-all duration-300 ease-in-out`,
-    navContainer: `
-        mx-auto 
-        max-w-7xl 
-        px-4 sm:px-6 lg:px-8`,
-    navFlexContainer: `
-        flex 
-        items-center 
-        justify-between
-        h-16
-        transition-all duration-300 ease-in-out`,
-    navFlexContainerScrolled: `
-        h-[44px]`,
-    logoAndLinksContainer: `
-        flex 
-        items-center`,
-    logoContainer: `
-        flex-shrink-0 
-        text-gray-900 dark:text-white 
-        font-bold 
-        text-xl 
-        flex 
-        items-center`,
-    logoImage: `
-        mr-2`,
-    logoText: `
-        transition-all duration-300 ease-in-out
-        whitespace-nowrap
-        overflow-hidden`,
-    logoTextScrolled: `
-        w-0 opacity-0`,
-    desktopNavWrapper: `
-        hidden 
-        md:block`,
-    desktopNavLinksContainer: `
-        ml-10 
-        flex 
-        items-baseline 
-        space-x-4`,
-    navActionsContainer: `
-        flex 
-        items-center`,
-    themeToggleButton: `
-        p-2 
-        rounded-full 
-        text-gray-500 dark:text-gray-400 
-        hover:bg-gray-100 dark:hover:bg-gray-700 
-        focus:outline-none 
-        focus:ring-2 
-        focus:ring-csway-green dark:focus:ring-white 
-        focus:ring-offset-2 dark:focus:ring-offset-gray-800`,
-    hamburgerMenuWrapper: `
-        ml-2 
-        md:hidden`,
-    hamburgerButton: `
-        inline-flex 
-        items-center 
-        justify-center 
-        p-2 
-        rounded-md 
-        text-gray-500 dark:text-gray-400 
-        hover:bg-gray-100 dark:hover:bg-gray-700 
-        focus:outline-none`,
-    hamburgerIcon: `
-        block 
-        h-6 w-6`,
-    mobileMenuContainer: `
-        md:hidden 
-        border-t 
-        border-gray-200 dark:border-gray-700`,
-    mobileMenuLinksContainer: `
-        px-2 pt-2 pb-3 
-        space-y-1 
-        sm:px-3`,
-    mainContent: `
-        mx-auto 
-        max-w-7xl 
-        px-4 py-6 
-        sm:px-6 lg:px-8`
-};
 
-const tailwind_navlink = {
-    baseDefault: `
-        border-b-2 
-        px-1 pt-1 
-        text-sm 
-        font-medium 
-        transition-colors 
-        duration-150 
-        ease-in-out`,
-    activeDefault: `
-        border-csway-green dark:border-csway-green 
-        text-gray-900 dark:text-gray-100`,
-    inactiveDefault: `
-        border-transparent 
-        text-gray-500 dark:text-gray-400 
-        hover:border-gray-300 dark:hover:border-gray-600 
-        hover:text-gray-700 dark:hover:text-gray-300`,
-    baseScrolled: `
-        relative
-        px-3 py-2
-        text-sm 
-        font-medium 
-        transition-colors 
-        duration-150 
-        ease-in-out`,
-    activeScrolled: `
-        text-gray-900 dark:text-gray-100`,
-    inactiveScrolled: `
-        text-gray-500 dark:text-gray-400 
-        hover:text-gray-700 dark:hover:text-gray-300`,
-    activeDot: `
-        absolute left-0 top-1/2 -translate-y-1/2 
-        h-1.5 w-1.5 
-        bg-csway-green rounded-full 
-        transition-opacity duration-300`
-};
-
-        
-const tailwind_navlink_mobile = {
-    base: `
-        block 
-        w-full 
-        text-left 
-        px-4 py-2 
-        text-base 
-        font-medium 
-        rounded-md`,
-    active: `
-        bg-csway-green/10 dark:bg-gray-700 
-        text-csway-green dark:text-white`,
-    inactive: `
-        text-gray-600 dark:text-gray-300 
-        hover:bg-gray-50 dark:hover:bg-gray-700`
-};
 
 export default function App() {
     
@@ -169,8 +23,9 @@ export default function App() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
     const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
-
     const { isAuthenticated, user, logout, loading } = useAuth();
+
+    
 
     useEffect(() => {
         const handleScroll = () => {
@@ -185,10 +40,14 @@ export default function App() {
 
     useEffect(() => { setMounted(true) }, []);
 
+    
+
     const handleLogoutConfirm = () => {
         logout();
         setIsLogoutModalOpen(false);
     };
+
+    
 
     if (!mounted || loading) {
         return (
@@ -202,13 +61,19 @@ export default function App() {
         return <Auth />;
     }
 
+    
+
     const NavLink = ({ pageName, children, scrolled }) => {
         const isActive = currentPage === pageName;
-        const baseClass = scrolled ? tailwind_navlink.baseScrolled : tailwind_navlink.baseDefault;
-        const activeClass = isActive 
-            ? (scrolled ? tailwind_navlink.activeScrolled : tailwind_navlink.activeDefault) 
-            : (scrolled ? tailwind_navlink.inactiveScrolled : tailwind_navlink.inactiveDefault);
         
+        const baseClass = scrolled
+            ? "relative px-3 py-2 text-sm font-medium transition-colors duration-150 ease-in-out"
+            : "border-b-2 px-1 pt-1 text-sm font-medium transition-colors duration-150 ease-in-out";
+
+        const activeClass = isActive
+            ? (scrolled ? "text-gray-900 dark:text-gray-100" : "border-csway-green dark:border-csway-green text-gray-900 dark:text-gray-100")
+            : (scrolled ? "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300" : "border-transparent text-gray-500 dark:text-gray-400 hover:border-gray-300 dark:hover:border-gray-600 hover:text-gray-700 dark:hover:text-gray-300");
+
         return (
             <button
                 onClick={() => {
@@ -217,7 +82,7 @@ export default function App() {
                 }}
                 className={`${baseClass} ${activeClass}`}
             >
-                <span className={`${tailwind_navlink.activeDot} ${isActive && scrolled ? 'opacity-100' : 'opacity-0'}`}></span>
+                <span className={`absolute left-0 top-1/2 -translate-y-1/2 h-1.5 w-1.5 bg-csway-green rounded-full transition-opacity duration-300 ${isActive && scrolled ? 'opacity-100' : 'opacity-0'}`}></span>
                 {children}
             </button>
         );
@@ -225,19 +90,24 @@ export default function App() {
 
     const MobileNavLink = ({ pageName, children }) => {
         const isActive = currentPage === pageName;
-        const activeClass = isActive ? tailwind_navlink_mobile.active : tailwind_navlink_mobile.inactive;
+        const activeClass = isActive 
+            ? "bg-csway-green/10 dark:bg-gray-700 text-csway-green dark:text-white"
+            : "text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700";
+        
         return (
             <button
                 onClick={() => {
                     setCurrentPage(pageName);
                     setIsMenuOpen(false);
                 }}
-                className={`${tailwind_navlink_mobile.base} ${activeClass}`}
+                className={`block w-full text-left px-4 py-2 text-base font-medium rounded-md ${activeClass}`}
             >
                 {children}
             </button>
         );
     };
+
+    
 
     const renderPage = () => {
         switch (currentPage) {
@@ -249,8 +119,12 @@ export default function App() {
         }
     };
 
+    
+
     return (
-        <div className={tailwind_app.appContainer}>
+        <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
+
+            
             <Modal
                 isOpen={isLogoutModalOpen}
                 onClose={() => setIsLogoutModalOpen(false)}
@@ -259,25 +133,26 @@ export default function App() {
             >
                 Are you sure you want to sign out of your account?
             </Modal>
+            
 
-            <nav className={tailwind_app.nav}>
-                <div className={tailwind_app.navContainer}>
-                    <div className={`${tailwind_app.navFlexContainer} ${scrolled ? tailwind_app.navFlexContainerScrolled : ''}`}>
-                        <div className={tailwind_app.logoAndLinksContainer}>
-                            <div className={tailwind_app.logoContainer}>
-                                <Image src="/csway-logo.png" alt="CSway Logo" width={24} height={24} className={tailwind_app.logoImage} />
-                                <span className={`${tailwind_app.logoText} ${scrolled ? tailwind_app.logoTextScrolled : ''}`}>Upskill</span>
+            <nav className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50 transition-all duration-300 ease-in-out">
+                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                    <div className={`flex items-center justify-between h-16 transition-all duration-300 ease-in-out ${scrolled ? 'h-[44px]' : ''}`}>
+                        <div className="flex items-center">
+                            <div className="flex-shrink-0 text-gray-900 dark:text-white font-bold text-xl flex items-center">
+                                <Image src="/csway-logo.png" alt="CSway Logo" width={24} height={24} className="mr-2" />
+                                <span className={`transition-all duration-300 ease-in-out whitespace-nowrap overflow-hidden ${scrolled ? 'w-0 opacity-0' : ''}`}>Upskill</span>
                             </div>
-                            <div className={tailwind_app.desktopNavWrapper}>
-                                <div className={tailwind_app.desktopNavLinksContainer}>
+                            <div className="hidden md:block">
+                                <div className="ml-10 flex items-baseline space-x-4">
                                     <NavLink pageName="dashboard" scrolled={scrolled}>Dashboard</NavLink>
                                     <NavLink pageName="quests" scrolled={scrolled}>Quests</NavLink>
-                                    <NavLink pageName="feedback" scrolled={scrolled}>Feedback</NavLink>
+                                    <NavLink pageName="feedback" scrolled={scrolled}>My Feedback</NavLink>
                                     <NavLink pageName="leaderboard" scrolled={scrolled}>Leaderboard</NavLink>
                                 </div>
                             </div>
                         </div>
-                        <div className={tailwind_app.navActionsContainer}>
+                        <div className="flex items-center">
                             <div className="flex items-center space-x-3">
                                 <span className="hidden sm:inline text-sm text-gray-700 dark:text-gray-300">
                                     Welcome, <span className="font-bold">{user.username}</span>
@@ -290,33 +165,41 @@ export default function App() {
                                 </button>
                                 <button
                                     onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-                                    className={tailwind_app.themeToggleButton}
+                                    className="p-2 rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-csway-green dark:focus:ring-white focus:ring-offset-2 dark:focus:ring-offset-gray-800"
                                 >
                                     {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
                                 </button>
                             </div>
-                            <div className={tailwind_app.hamburgerMenuWrapper}>
-                                <button onClick={() => setIsMenuOpen(!isMenuOpen)} className={tailwind_app.hamburgerButton}>
-                                    {isMenuOpen ? <X className={tailwind_app.hamburgerIcon} /> : <Menu className={tailwind_app.hamburgerIcon} />}
+                            <div className="ml-2 md:hidden">
+                                <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="inline-flex items-center justify-center p-2 rounded-md text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none">
+                                    {isMenuOpen ? <X className="block h-6 w-6" /> : <Menu className="block h-6 w-6" />}
                                 </button>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                
+
                 {isMenuOpen && (
-                    <div className={tailwind_app.mobileMenuContainer}>
-                        <div className={tailwind_app.mobileMenuLinksContainer}>
+                    <div className="md:hidden border-t border-gray-200 dark:border-gray-700">
+                        <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
                             <MobileNavLink pageName="dashboard">Dashboard</MobileNavLink>
                             <MobileNavLink pageName="quests">Quests</MobileNavLink>
-                            <MobileNavLink pageName="feedback">Feedback</MobileNavLink>
+                            <MobileNavLink pageName="feedback">My Feedback</MobileNavLink>
                             <MobileNavLink pageName="leaderboard">Leaderboard</MobileNavLink>
                         </div>
                     </div>
                 )}
             </nav>
+
+            
+
             <main>
-                <div className={tailwind_app.mainContent}>{renderPage()}</div>
+                <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">{renderPage()}</div>
             </main>
+
+            
         </div>
     );
 }

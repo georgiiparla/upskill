@@ -4,143 +4,13 @@ import React, { useState, useEffect } from 'react';
 import { Trophy, Award, AlertTriangle } from 'lucide-react';
 import { Card, SectionTitle } from "./Helper";
 
-const tailwind = {
-    
-    podiumGrid: `
-                grid 
-                grid-cols-1 md:grid-cols-3 
-                gap-4 items-end
-                `,
 
-    cardBase: `
-                border-2 
-                text-center 
-                p-4
-                `,
-
-    card2nd: `
-            border-gray-300 
-            dark:border-gray-600
-            `,
-
-    card1st: `
-                border-csway-orange dark:border-csway-orange 
-                p-6 
-                transform md:scale-110 
-                shadow-lg
-                `,
-
-    card3rd: `
-                border-csway-red/50 dark:border-csway-red/80
-                `,
-
-    podiumTrophy1st: `
-                        h-12 w-12 
-                        text-csway-orange 
-                        mx-auto 
-                        mb-2
-                        `,
-
-    podiumTrophy2nd3rd: `
-                        h-10 w-10 
-                        mx-auto mb-2
-                        `,
-
-    podiumName1st: `
-                    font-bold 
-                    text-xl 
-                    text-gray-800 
-                    dark:text-white
-                    `,
-
-    podiumName2nd3rd: `
-                        font-bold text-lg 
-                        text-gray-800 dark:text-white`,
-
-    podiumPlace1st: `
-                    font-semibold 
-                    text-csway-orange
-                    `,
-
-    podiumPlace2nd: `
-                    font-semibold 
-                    text-gray-500 dark:text-gray-400
-                    `,
-
-    podiumPlace3rd: `
-                    font-semibold 
-                    text-csway-red
-                    `,
-
-    podiumPoints1st: `
-                    text-3xl 
-                    font-bold 
-                    text-csway-green mt-2
-                    `,
-
-    podiumPoints2nd3rd: `
-                        text-2xl 
-                        font-bold 
-                        text-csway-green 
-                        mt-2`,
-
-    table: `
-            w-full 
-            text-sm 
-            text-left 
-            text-gray-500 dark:text-gray-400
-            `,
-
-    tableHead: `
-                text-xs 
-                text-gray-700 
-                uppercase 
-                bg-gray-50 dark:bg-gray-700 
-                dark:text-gray-400
-                `,
-
-    tableHeadCell: `
-                    px-6 
-                    py-3
-                    `,
-
-    tableRow: `
-                bg-white 
-                border-b 
-                dark:bg-gray-800 
-                dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600
-                `,
-
-    tableCell: `px-6 py-4`,
-
-    tableCellRank: `
-                    text-gray-500 
-                    dark:text-gray-400 
-                    font-bold 
-                    w-6 
-                    text-center`,
-
-    tableCellUser: `
-                    font-medium 
-                    text-gray-900 
-                    whitespace-nowrap 
-                    dark:text-white
-                    `,
-
-    tableCellPoints: `
-                    text-right 
-                    font-bold 
-                    text-gray-800 
-                    dark:text-white
-                    `,
-
-};
 
 const PodiumSkeleton = () => (
-    <div className={tailwind.podiumGrid}>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
         {/* 2nd Place Skeleton */}
         <div className="md:order-1 animate-pulse">
-            <Card className={`${tailwind.cardBase} ${tailwind.card2nd}`}>
+            <Card className="border-2 text-center p-4 !border-gray-300 !dark:border-gray-600">
                 <div className="h-10 w-10 mx-auto mb-2 bg-gray-300 dark:bg-gray-700 rounded-full"></div>
                 <div className="h-6 w-3/4 mx-auto bg-gray-300 dark:bg-gray-700 rounded"></div>
                 <div className="h-4 w-1/2 mx-auto mt-2 bg-gray-300 dark:bg-gray-700 rounded"></div>
@@ -149,7 +19,7 @@ const PodiumSkeleton = () => (
         </div>
         {/* 1st Place Skeleton */}
         <div className="md:order-2 relative z-10 animate-pulse">
-            <Card className={`${tailwind.cardBase} ${tailwind.card1st}`}>
+            <Card className="border-2 text-center p-6 !border-csway-orange dark:border-csway-orange transform md:scale-110 shadow-lg">
                 <div className="h-12 w-12 mx-auto mb-2 bg-gray-300 dark:bg-gray-700 rounded-full"></div>
                 <div className="h-7 w-3/4 mx-auto bg-gray-300 dark:bg-gray-700 rounded"></div>
                 <div className="h-5 w-1/2 mx-auto mt-2 bg-gray-300 dark:bg-gray-700 rounded"></div>
@@ -158,7 +28,7 @@ const PodiumSkeleton = () => (
         </div>
         {/* 3rd Place Skeleton */}
         <div className="md:order-3 animate-pulse">
-            <Card className={`${tailwind.cardBase} ${tailwind.card3rd}`}>
+            <Card className="border-2 text-center p-4 !border-csway-red/50 dark:border-csway-red/80">
                 <div className="h-10 w-10 mx-auto mb-2 bg-gray-300 dark:bg-gray-700 rounded-full"></div>
                 <div className="h-6 w-3/4 mx-auto bg-gray-300 dark:bg-gray-700 rounded"></div>
                 <div className="h-4 w-1/2 mx-auto mt-2 bg-gray-300 dark:bg-gray-700 rounded"></div>
@@ -167,6 +37,8 @@ const PodiumSkeleton = () => (
         </div>
     </div>
 );
+
+
 
 const LadderSkeleton = () => (
     <Card>
@@ -184,10 +56,16 @@ const LadderSkeleton = () => (
     </Card>
 );
 
+
+
+
+
+
 export const Leaderboard = () => {
     const [leaderboard, setLeaderboard] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    
 
     useEffect(() => {
         const fetchLeaderboard = async () => {
@@ -207,14 +85,17 @@ export const Leaderboard = () => {
         };
         fetchLeaderboard();
     }, []);
+    
 
     const getTrophyIcon = (rank) => {
         if (rank === 1) return <Trophy className="h-6 w-6 text-csway-orange" />;
         if (rank === 2) return <Trophy className="h-6 w-6 text-gray-400" />;
         if (rank === 3) return <Trophy className="h-6 w-6 text-csway-red" />;
-        return <span className={tailwind.tableCellRank}>{rank}</span>;
+        return <span className="text-gray-500 dark:text-gray-400 font-bold w-6 text-center">{rank}</span>;
     };
+    
 
+    
     if (loading) {
         return (
             <div className="space-y-12">
@@ -239,77 +120,95 @@ export const Leaderboard = () => {
             </div>
         );
     }
+    
 
+
+    
     const topThree = leaderboard.slice(0, 3);
     const restOfLeaderboard = leaderboard.slice(3);
 
     return (
         <div className="space-y-12">
             <div>
+
+                
                 <SectionTitle icon={<Award className="h-6 w-6 text-csway-orange" />} title="COMMS Podium Finishers" />
-                <div className={tailwind.podiumGrid}>
+                
+
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+
+                    
                     <div className="md:order-1">
                         {topThree[1] && (
-                            <Card className={`${tailwind.cardBase} ${tailwind.card2nd}`}>
-                                <Trophy className={`${tailwind.podiumTrophy2nd3rd} text-gray-400`} />
-                                <h3 className={tailwind.podiumName2nd3rd}>{topThree[1].name}</h3>
-                                <p className={tailwind.podiumPlace2nd}>2nd Place</p>
-                                <p className={tailwind.podiumPoints2nd3rd}>{topThree[1].points.toLocaleString()} PTS</p>
+                            <Card className="border-2 text-center p-4 !border-gray-300 !dark:border-gray-600">
+                                <Trophy className="h-10 w-10 mx-auto mb-2 text-gray-400" />
+                                <h3 className="font-bold text-lg text-gray-800 dark:text-white">{topThree[1].name}</h3>
+                                <p className="font-semibold text-gray-500 dark:text-gray-400">2nd Place</p>
+                                <p className="text-2xl font-bold text-gray-800 dark:text-white mt-2">{topThree[1].points.toLocaleString()} PTS</p>
                             </Card>
                         )}
                     </div>
 
                     <div className="md:order-2 relative z-10">
                          {topThree[0] && (
-                            <Card className={`${tailwind.cardBase} ${tailwind.card1st}`}>
-                                <Trophy className={tailwind.podiumTrophy1st} />
-                                <h3 className={tailwind.podiumName1st}>{topThree[0].name}</h3>
-                                <p className={tailwind.podiumPlace1st}>1st Place</p>
-                                <p className={tailwind.podiumPoints1st}>{topThree[0].points.toLocaleString()} PTS</p>
+                            <Card className="border-2 text-center p-6 !border-csway-orange dark:border-csway-orange transform md:scale-110 shadow-lg">
+                                <Trophy className="h-12 w-12 text-csway-orange mx-auto mb-2" />
+                                <h3 className="font-bold text-xl text-gray-800 dark:text-white">{topThree[0].name}</h3>
+                                <p className="font-semibold text-csway-orange">1st Place</p>
+                                <p className="text-3xl font-bold text-gray-800 dark:text-white mt-2">{topThree[0].points.toLocaleString()} PTS</p>
                             </Card>
                         )}
                     </div>
 
                     <div className="md:order-3">
                         {topThree[2] && (
-                             <Card className={`${tailwind.cardBase} ${tailwind.card3rd}`}>
-                                <Trophy className={`${tailwind.podiumTrophy2nd3rd} text-csway-red`} />
-                                <h3 className={tailwind.podiumName2nd3rd}>{topThree[2].name}</h3>
-                                <p className={tailwind.podiumPlace3rd}>3rd Place</p>
-                                <p className={tailwind.podiumPoints2nd3rd}>{topThree[2].points.toLocaleString()} PTS</p>
+                             <Card className="border-2 text-center p-4 !border-csway-red/50 dark:border-csway-red/80">
+                                <Trophy className="h-10 w-10 mx-auto mb-2 text-csway-red" />
+                                <h3 className="font-bold text-lg text-gray-800 dark:text-white">{topThree[2].name}</h3>
+                                <p className="font-semibold text-csway-red">3rd Place</p>
+                                <p className="text-2xl font-bold text-gray-800 dark:text-white mt-2">{topThree[2].points.toLocaleString()} PTS</p>
                             </Card>
                         )}
                     </div>
+                    
                 </div>
             </div>
 
             <div>
+                
                 <SectionTitle icon={<Trophy className="h-6 w-6 text-csway-orange" />} title="Ladder" />
+                
+
                 <div className="hidden md:block">
+                    
                     <Card>
                         <div className="overflow-x-auto">
-                            <table className={tailwind.table}>
-                                <thead className={tailwind.tableHead}>
+                            
+                            <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                                <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                     <tr>
-                                        <th scope="col" className={tailwind.tableHeadCell}>Rank</th>
-                                        <th scope="col" className={tailwind.tableHeadCell}>User</th>
-                                        <th scope="col" className={tailwind.tableHeadCell}>Badges</th>
-                                        <th scope="col" className={`${tailwind.tableHeadCell} text-right`}>Points</th>
+                                        <th scope="col" className="px-6 py-3">Rank</th>
+                                        <th scope="col" className="px-6 py-3">User</th>
+                                        <th scope="col" className="px-6 py-3">Badges</th>
+                                        <th scope="col" className="px-6 py-3 text-right">Points</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {restOfLeaderboard.map((user, index) => (
-                                        <tr key={user.id} className={tailwind.tableRow}>
-                                            <td className={tailwind.tableCell}>{getTrophyIcon(index + 4)}</td>
-                                            <th scope="row" className={`${tailwind.tableCell} ${tailwind.tableCellUser}`}>{user.name}</th>
-                                            <td className={tailwind.tableCell}><div className="flex space-x-2">{user.badges.map((badge, i) => <span key={i} className="text-xl">{badge}</span>)}</div></td>
-                                            <td className={`${tailwind.tableCell} ${tailwind.tableCellPoints}`}>{user.points.toLocaleString()}</td>
+                                        <tr key={user.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                            <td className="px-6 py-4">{getTrophyIcon(index + 4)}</td>
+                                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{user.name}</th>
+                                            <td className="px-6 py-4"><div className="flex space-x-2">{user.badges.map((badge, i) => <span key={i} className="text-xl">{badge}</span>)}</div></td>
+                                            <td className="px-6 py-4 text-right font-bold text-gray-800 dark:text-white">{user.points.toLocaleString()}</td>
                                         </tr>
                                     ))}
                                 </tbody>
                             </table>
+                            
                         </div>
                     </Card>
+                    
                 </div>
             </div>
         </div>

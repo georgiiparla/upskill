@@ -117,13 +117,23 @@ export const SENTIMENT_COLORS = ['#22c55e', '#f59e0b', '#ef4444'];
 
 // For the new scrollable history list
 export const MOCK_FEEDBACK_HISTORY = [
-    { id: 1, subject: 'Q3 Marketing Plan', content: 'The plan is well-structured, but the timeline seems a bit too aggressive. Consider adding a buffer week.', date: '2025-08-15', sentiment: 'Neutral' },
-    { id: 2, subject: 'New Feature Design', content: 'I love the new UI! It\'s much more intuitive than the previous version. Great work!', date: '2025-08-14', sentiment: 'Positive' },
-    { id: 3, subject: 'API Documentation', content: 'The endpoint for user authentication is missing examples. It was difficult to understand the required request body.', date: '2025-08-12', sentiment: 'Negative' },
-    { id: 4, subject: 'Onboarding Process', content: 'The new hire checklist is very helpful, but links to the HR system are broken.', date: '2025-08-11', sentiment: 'Negative' },
-    { id: 5, subject: 'Weekly Sync Meeting', content: 'These meetings are productive. The agenda is clear and we stick to the topics. No changes needed.', date: '2025-08-08', sentiment: 'Positive' },
-    { id: 6, subject: 'Project Alpha Performance', content: 'The application is running slower this week. We should investigate potential memory leaks.', date: '2025-08-07', sentiment: 'Neutral' },
-    { id: 7, subject: 'Team Offsite Event', content: 'The proposed venue looks great and the activities seem fun. I\'m looking forward to it.', date: '2025-08-05', sentiment: 'Positive' },
+    { user_id: 1, subject: 'Q3 Marketing Plan', content: 'The plan is well-structured, but the timeline seems a bit too aggressive. Consider adding a buffer week.', created_at: '2025-08-15', sentiment: 'Neutral' },
+    { user_id: 2, subject: 'New Feature Design', content: 'I love the new UI! It\'s much more intuitive than the previous version. Great work!', created_at: '2025-08-14', sentiment: 'Positive' },
+    { user_id: 3, subject: 'API Documentation', content: 'The endpoint for user authentication is missing examples. It was difficult to understand the required request body.', created_at: '2025-08-12', sentiment: 'Negative' },
+    { user_id: 4, subject: 'Onboarding Process', content: 'The new hire checklist is very helpful, but links to the HR system are broken.', created_at: '2025-08-11', sentiment: 'Negative' },
+    { user_id: 5, subject: 'Weekly Sync Meeting', content: 'These meetings are productive. The agenda is clear and we stick to the topics. No changes needed.', created_at: '2025-08-08', sentiment: 'Positive' },
+    { user_id: 6, subject: 'Project Alpha Performance', content: 'The application is running slower this week. We should investigate potential memory leaks.', created_at: '2025-08-07', sentiment: 'Neutral' },
+    { user_id: 7, subject: 'Team Offsite Event', content: 'The proposed venue looks great and the activities seem fun. I\'m looking forward to it.', created_at: '2025-08-05', sentiment: 'Positive' },
+];
+
+export const MOCK_REQUESTS_HISTORY = [
+    { user_id: 1, subject: 'Q3 Marketing Plan', content: 'The plan is well-structured, but the timeline seems a bit too aggressive. Consider adding a buffer week.', created_at: '2025-08-15', sentiment: 'Neutral' },
+    { user_id: 2, subject: 'New Feature Design', content: 'I love the new UI! It\'s much more intuitive than the previous version. Great work!', created_at: '2025-08-14', sentiment: 'Positive' },
+    { user_id: 3, subject: 'API Documentation', content: 'The endpoint for user authentication is missing examples. It was difficult to understand the required request body.', created_at: '2025-08-12', sentiment: 'Negative' },
+    { user_id: 4, subject: 'Onboarding Process', content: 'The new hire checklist is very helpful, but links to the HR system are broken.', created_at: '2025-08-11', sentiment: 'Negative' },
+    { user_id: 5, subject: 'Weekly Sync Meeting', content: 'These meetings are productive. The agenda is clear and we stick to the topics. No changes needed.', created_at: '2025-08-08', sentiment: 'Positive' },
+    { user_id: 6, subject: 'Project Alpha Performance', content: 'The application is running slower this week. We should investigate potential memory leaks.', created_at: '2025-08-07', sentiment: 'Neutral' },
+    { user_id: 7, subject: 'Team Offsite Event', content: 'The proposed venue looks great and the activities seem fun. I\'m looking forward to it.', created_at: '2025-08-05', sentiment: 'Positive' },
 ];
 
 // --- NEW: Data for the Quick Insights component ---
