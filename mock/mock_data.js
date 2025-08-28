@@ -93,7 +93,7 @@ export const FEEDBACK_TRENDS_DATA = [
     { name: 'Workload', value: 12 },
 ];
 
-export const TRENDS_COLORS = ['#818cf8', '#a78bfa', '#c084fc', '#f472b6']; // Indigo, Purple, Fuchsia, Pink
+export const TRENDS_COLORS = ['#818cf8', '#a78bfa', '#c084fc', '#f472b6'];
 
 // For the new Topic dropdown in the form
 export const MOCK_FEEDBACK_TOPICS = [
@@ -157,7 +157,6 @@ export const MOCK_FEEDBACK_REQUESTS = [
     },
 ];
 
-// --- NEW: Data for the Quick Insights component ---
 export const MOCK_FEEDBACK_STATS = {
     totalSubmissions: 600,
     responseRate: 82,

@@ -8,7 +8,6 @@ export const SectionTitle = ({ icon, title, className = '' }) => (
     </div>
 );
 
-// In your Card.jsx file
 export const Card = ({ children, className = '', innerClassName = '' }) => (
     <div className={`bg-white/50 dark:bg-gray-800/50 backdrop-blur-lg rounded-xl border border-white/20 shadow-md transition-all duration-300 ${className}`}>
         <div className={`p-6 ${innerClassName}`}>{children}</div>
@@ -17,9 +16,10 @@ export const Card = ({ children, className = '', innerClassName = '' }) => (
 
 export const InfoCard = ({ icon, title, items, renderItem, listClassName = "space-y-3" }) => {
     return (
-        <Card className="flex flex-col">
+        <Card className="flex flex-col ">
             <SectionTitle icon={icon} title={title} />
-            <div className="flex-grow overflow-y-auto no-scrollbar max-h-[350px]">
+            {/* //!Technical debt with Height */}
+            <div className="flex-grow overflow-y-auto no-scrollbar max-h-[210px]">
                 {items && items.length > 0 ? (
                     <ul className={listClassName}>
                         {items.map(item => renderItem(item))}

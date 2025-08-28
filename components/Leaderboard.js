@@ -176,15 +176,11 @@ export const Leaderboard = () => {
             </div>
 
             <div>
-
                 <SectionTitle icon={<Trophy className="h-6 w-6 text-csway-orange" />} title="Ladder" />
 
-
                 <div className="hidden md:block">
-
                     <Card>
                         <div className="overflow-x-auto">
-
                             <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                                 <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                     <tr>
@@ -205,10 +201,25 @@ export const Leaderboard = () => {
                                     ))}
                                 </tbody>
                             </table>
-
                         </div>
                     </Card>
-
+                </div>
+                                
+                {/* Mobile view */}
+                <div className="md:hidden">
+                    <Card>
+                        <div className="space-y-2">
+                            {restOfLeaderboard.map((user, index) => (
+                                <div key={user.id} className="flex items-center justify-between p-3 bg-white dark:bg-gray-800 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 border-b dark:border-gray-700 last:border-b-0">
+                                    <div className="flex items-center space-x-4">
+                                        <div>{getTrophyIcon(index + 4)}</div>
+                                        <span className=" text-gray-900 dark:text-white">{user.name}</span>
+                                    </div>
+                                    <span className="font-medium text-gray-800 dark:text-white">{user.points.toLocaleString()} PTS</span>
+                                </div>
+                            ))}
+                        </div>
+                    </Card>
                 </div>
             </div>
         </div>

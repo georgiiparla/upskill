@@ -1,12 +1,15 @@
 "use client"
-import { PlusCircle, Send, BarChart2, MessageSquare } from 'lucide-react';
-import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts';
+import { useState } from 'react';
+import { PlusCircle, Send, BarChart2, MessageSquare, ChevronDown, Check, TrendingUp } from 'lucide-react';
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
 import { useTheme } from 'next-themes';
 
 import { Card, SectionTitle } from "./Helper";
 import { MOCK_FEEDBACK_HISTORY, MOCK_FEEDBACK_REQUESTS } from "@/mock/mock_data";
 
-// --- Reusable Action Button Component ---
+import Link from 'next/link';
+
+// *Reusable button
 const ActionButton = ({ icon, text, shortText, colorScheme = 'orange' }) => {
     const colorClasses = {
         orange: 'text-csway-orange focus:ring-csway-orange',
@@ -38,7 +41,7 @@ const ActionButton = ({ icon, text, shortText, colorScheme = 'orange' }) => {
 };
 
 
-// --- Reusable History List Item Component ---
+// ^Reusable History List Item Component
 const HistoryListItem = ({ subject, createdAt, content, borderColorClass }) => {
     return (
         <li
@@ -59,126 +62,127 @@ const HistoryListItem = ({ subject, createdAt, content, borderColorClass }) => {
     );
 };
 
-// --- NEW Focus Bar Chart Component ---
-const FocusBarChart = ({ title, data, colors, className = '' }) => { // 1. Add className here
-    const { theme } = useTheme();
+const FocusActivityCard = ({ title, data, className = '' }) => {
+    const ICONS = {
+        "Requests Sent": <Send className="h-5 w-5 text-blue-500" />,
+        "Requests Answered": <Check className="h-5 w-5 text-teal-500" />,
+        "Requests Ignored": <MessageSquare className="h-5 w-5 text-gray-500" />,
+    };
 
     return (
-        // 2. Apply the className to the root Card element
         <Card className={className}>
-            <SectionTitle icon={<BarChart2 className="h-5 w-5 text-csway-green" />} title={title} />
-            <div className="mt-4">
-                <ResponsiveContainer width="100%" height={400}>
-                    <BarChart data={data} margin={{ top: 5, right: 20, left: -10, bottom: 5 }}>
-                        <CartesianGrid strokeDasharray="3 3" stroke={theme === 'dark' ? '#374151' : '#e5e7eb'} />
-                        <XAxis
-                            dataKey="name"
-                            stroke={theme === 'dark' ? '#9ca3af' : '#6b7280'}
-                            fontSize={12}
-                            tickLine={false}
-                            axisLine={false}
-                        />
-                        <YAxis
-                            stroke={theme === 'dark' ? '#9ca3af' : '#6b7280'}
-                            fontSize={12}
-                            tickLine={false}
-                            axisLine={false}
-                        />
-                        <Tooltip
-                            cursor={{ fill: theme === 'dark' ? 'rgba(55, 65, 81, 0.3)' : 'rgba(229, 231, 235, 0.5)' }}
-                            contentStyle={{
-                                backgroundColor: theme === 'dark' ? 'rgba(31, 41, 55, 0.8)' : 'rgba(255, 255, 255, 0.8)',
-                                backdropFilter: 'blur(4px)',
-                                borderRadius: '0.5rem',
-                                border: '1px solid',
-                                borderColor: theme === 'dark' ? '#374151' : '#e5e7eb'
-                            }}
-                            itemStyle={{ color: theme === 'dark' ? '#ffffff' : '#000000' }}
-                        />
-                        <Bar dataKey="value" radius={[4, 4, 0, 0]} isAnimationActive={false}>
-                            {data.map((entry, index) => (
-                                <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
-                            ))}
-                        </Bar>
-                    </BarChart>
-                </ResponsiveContainer>
+            <SectionTitle className='mb-7' icon={<TrendingUp className="h-5 w-5 text-csway-green" />} title={title} />
+            <div className="mt-4 space-y-2">
+                {data.map((item) => (
+                    <div key={item.name} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800/60 rounded-lg">
+                        <div className="flex items-center gap-3">
+                            <div className="bg-gray-200 dark:bg-gray-700 p-2 rounded-full">
+                                {ICONS[item.name] || <BarChart2 className="h-5 w-5 text-gray-500" />}
+                            </div>
+                            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{item.name}</span>
+                        </div>
+                        <span className="text-xl font-bold text-gray-800 dark:text-gray-100">{item.value}</span>
+                    </div>
+                ))}
             </div>
         </Card>
     );
 };
 
-
-// --- NEW Component for the combined feedback charts ---
-const FeedbackAnalysisCard = ({ givenData, receivedData, givenColors, receivedColors, className, title }) => {
+const FeedbackSentimentChart = ({ title, givenData, receivedData, givenColors, receivedColors, className }) => {
+    const [view, setView] = useState('given'); // 'given' or 'received'
     const { theme } = useTheme();
-    const totalGiven = givenData.reduce((acc, entry) => acc + entry.value, 0);
-    const totalReceived = receivedData.reduce((acc, entry) => acc + entry.value, 0);
 
-    const DualLegend = () => (
-        <div className="mt-6 pt-4 text-sm">
-            <div className="flex justify-between items-center text-xs text-gray-500 dark:text-gray-400 mb-3 px-2">
-                <span>Category</span>
-                <div className="flex space-x-8">
-                    <span>Given</span>
-                    <span>Received</span>
-                </div>
-            </div>
-            <ul className="space-y-2">
-                {givenData.map((entry, index) => (
-                    <li key={`legend-${index}`} className="flex items-center justify-between p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800/50">
+    const isGivenView = view === 'given';
+    const currentData = isGivenView ? givenData : receivedData;
+    const currentColors = isGivenView ? givenColors : receivedColors;
+    const total = currentData.reduce((acc, entry) => acc + entry.value, 0);
+
+    const Legend = () => (
+        <div className="mt-4 space-y-2">
+            {currentData.map((entry, index) => (
+                <div key={`legend-${index}`} className="flex items-center justify-between text-sm">
+                    <div className="flex items-center gap-2">
+                        <span
+                            className="w-3 h-3 rounded-full"
+                            style={{ backgroundColor: currentColors[index % currentColors.length] }}
+                        />
                         <span className="text-gray-600 dark:text-gray-400">{entry.name}</span>
-                        <div className="flex items-center space-x-10">
-                            <span className="font-semibold text-gray-800 dark:text-gray-200 flex items-center">
-                                <span className="w-3 h-3 rounded-full mr-2" style={{ backgroundColor: givenColors[index] }} />
-                                {entry.value}
-                            </span>
-                            <span className="font-semibold text-gray-800 dark:text-gray-200 flex items-center">
-                                <span className="w-3 h-3 rounded-full mr-2" style={{ backgroundColor: receivedColors[index] }} />
-                                {receivedData[index].value}
-                            </span>
-                        </div>
-                    </li>
-                ))}
-            </ul>
+                    </div>
+                    <span className="font-semibold text-gray-800 dark:text-gray-200">{entry.value}</span>
+                </div>
+            ))}
         </div>
     );
 
     return (
         <Card className={className}>
-            <SectionTitle icon={<BarChart2 className="h-5 w-5 text-csway-green" />} title={title} />
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4 items-center">
-                {/* Given Chart */}
-                <div className="text-center">
-                    <ResponsiveContainer width="100%" height={200}>
-                        <PieChart>
-                            <Pie data={givenData} innerRadius={70} outerRadius={90} paddingAngle={5} dataKey="value" isAnimationActive={false}>
-                                {givenData.map((entry, index) => <Cell key={`cell-given-${index}`} fill={givenColors[index]} stroke={theme === 'dark' ? '#1f2937' : '#ffffff'} />)}
-                            </Pie>
-                            <Tooltip />
-                            <text x="50%" y="50%" textAnchor="middle" dominantBaseline="middle" className="text-3xl font-bold fill-current text-gray-800 dark:text-gray-200">{totalGiven}</text>
-                        </PieChart>
-                    </ResponsiveContainer>
-                </div>
-
-                <div className="text-center">
-                    <ResponsiveContainer width="100%" height={200}>
-                        <PieChart>
-                            <Pie data={receivedData} innerRadius={70} outerRadius={90} paddingAngle={5} dataKey="value" isAnimationActive={false}>
-                                {receivedData.map((entry, index) => <Cell key={`cell-received-${index}`} fill={receivedColors[index]} stroke={theme === 'dark' ? '#1f2937' : '#ffffff'} />)}
-                            </Pie>
-                            <Tooltip />
-                            <text x="50%" y="50%" textAnchor="middle" dominantBaseline="middle" className="text-3xl font-bold fill-current text-gray-800 dark:text-gray-200">{totalReceived}</text>
-                        </PieChart>
-                    </ResponsiveContainer>
+             <div className="flex justify-between items-center">
+                <SectionTitle icon={<BarChart2 className="h-5 w-5 text-csway-green" />} title={title} />
+                <div className="relative">
+                    <select
+                        value={view}
+                        onChange={(e) => setView(e.target.value)}
+                        className="
+                            appearance-none bg-gray-200/50 dark:bg-gray-700/50 text-xs font-semibold
+                            text-gray-700 dark:text-gray-300 py-1.5 pl-3 pr-8 rounded-md
+                            focus:outline-none focus:ring-2 focus:ring-csway-orange
+                        "
+                    >
+                        <option value="given">Feedback Given</option>
+                        <option value="received">Feedback Received</option>
+                    </select>
+                    <ChevronDown className="h-4 w-4 absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none" />
                 </div>
             </div>
-            <DualLegend />
+
+            <div className="mt-4">
+                <ResponsiveContainer width="100%" height={200}>
+                    <PieChart>
+                        <Pie
+                            data={currentData}
+                            innerRadius={60}
+                            outerRadius={80}
+                            paddingAngle={5}
+                            dataKey="value"
+                            isAnimationActive={false}
+                        >
+                            {currentData.map((entry, index) => (
+                                <Cell
+                                    key={`cell-${view}-${index}`}
+                                    fill={currentColors[index % currentColors.length]}
+                                    stroke={theme === 'dark' ? '#1f2937' : '#ffffff'}
+                                    strokeWidth={2}
+                                />
+                            ))}
+                        </Pie>
+                        <Tooltip
+                            cursor={{ fill: 'transparent' }}
+                             contentStyle={{
+                                backgroundColor: theme === 'dark' ? 'rgba(31, 41, 55, 0.8)' : 'rgba(255, 255, 255, 0.8)',
+                                backdropFilter: 'blur(4px)',
+                                borderRadius: '0.5rem',
+                                border: '1px solid',
+                                borderColor: theme === 'dark' ? '#374151' : '#e5e7eb',
+                                
+                            }}
+                            itemStyle={{
+                                color: theme === 'dark' ? '#e5e7eb' : '#1f2937',
+                            }}
+                        />
+                        <text x="50%" y="50%" textAnchor="middle" dominantBaseline="middle" className="text-3xl font-bold fill-current text-gray-800 dark:text-gray-200">
+                            {total}
+                        </text>
+                    </PieChart>
+                </ResponsiveContainer>
+            </div>
+
+            <Legend />
         </Card>
     );
 };
 
 
-// --- Main Feedback Component ---
 export const Feedback = () => {
     const givenSentimentData = [
         { name: 'Exceeds Expectations', value: 21 },
@@ -196,11 +200,8 @@ export const Feedback = () => {
         { name: 'Requests Ignored', value: 5 },
     ];
 
-    const GIVEN_SENTIMENT_COLORS = ['#14b8a6', '#f59e0b', '#f43f5e']; // Teal, Amber, Rose
-
-    const RECEIVED_SENTIMENT_COLORS = ['#D1D5DB', '#6B7280', '#374151']; // Light Gray, Medium Gray, Dark Gray
-
-    const FOCUS_COLORS = ['#3b82f6', '#14b8a6', '#6B7280'];
+    const GIVEN_SENTIMENT_COLORS = ['#14b8a6', '#f59e0b', '#f43f5e'];
+    const RECEIVED_SENTIMENT_COLORS = ['#3b82f6', '#8b5cf6', '#ec4899'];
 
     const getSentimentColor = (sentiment) => {
         switch (sentiment) {
@@ -221,34 +222,41 @@ export const Feedback = () => {
         <div className="space-y-8">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
 
-                {/* Focus chart taking the remaining column */}
-                <FocusBarChart
-                    title="Focus Activity"
-                    data={focusData}
-                    colors={FOCUS_COLORS}
-                    className="lg:col-span-6"
-                />
+                <Card className="flex flex-col lg:col-span-8">
+                    <div className="flex justify-between items-center mb-6">
+                        <SectionTitle icon={<MessageSquare className="h-6 w-6 text-csway-orange" />} title="Feedback History" />
+                        <Link href="/feedback/new"> {/* Or whatever your route is */}
+                            <ActionButton icon={<PlusCircle className="h-4 w-4 mr-1.5" />} text="Add Feedback" shortText="Add" colorScheme="orange" />
+                        </Link>
+                    </div>
+                    <div className="flex-grow overflow-y-auto no-scrollbar max-h-[270px]">
+                        <ul className="space-y-4">
+                            {MOCK_FEEDBACK_HISTORY.map((item, index) => (
+                                <HistoryListItem key={`${item.id}-feedback-${index}`} subject={item.subject} createdAt={item.created_at} content={item.content} borderColorClass={getSentimentColor(item.sentiment)} />
+                            ))}
+                        </ul>
+                    </div>
+                </Card>
 
-                {/* Merged chart card spanning two columns */}
-                <FeedbackAnalysisCard
+
+                <FeedbackSentimentChart
+                    title="Feedback"
                     givenData={givenSentimentData}
                     receivedData={receivedSentimentData}
                     givenColors={GIVEN_SENTIMENT_COLORS}
                     receivedColors={RECEIVED_SENTIMENT_COLORS}
-                    className="lg:col-span-6"
-                    title="Feedback summary"
+                    className="lg:col-span-4"
                 />
 
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {/* Feedback and Requests History cards remain the same */}
-                <Card className="flex flex-col">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <Card className="flex flex-col lg:col-span-8">
                     <div className="flex justify-between items-center mb-6">
                         <SectionTitle icon={<MessageSquare className="h-6 w-6 text-blue-500" />} title="Requests History" />
                         <ActionButton icon={<PlusCircle className="h-4 w-4 mr-1.5" />} text="Request New" shortText="Request" colorScheme="blue" />
                     </div>
-                    <div className="flex-grow overflow-y-auto no-scrollbar max-h-[180]">
+                    <div className="flex-grow overflow-y-auto no-scrollbar max-h-[184px]">
                         <ul className="space-y-4">
                             {MOCK_FEEDBACK_REQUESTS.map((item) => (
                                 <HistoryListItem key={item.id} subject={item.subject} createdAt={item.requested_at} content={item.question} borderColorClass={getRequestStatusColor(item.status)} />
@@ -257,19 +265,12 @@ export const Feedback = () => {
                     </div>
                 </Card>
 
-                <Card className="flex flex-col">
-                    <div className="flex justify-between items-center mb-6">
-                        <SectionTitle icon={<MessageSquare className="h-6 w-6 text-csway-orange" />} title="Feedback History" />
-                        <ActionButton icon={<PlusCircle className="h-4 w-4 mr-1.5" />} text="Add Feedback" shortText="Add" colorScheme="orange" />
-                    </div>
-                    <div className="flex-grow overflow-y-auto no-scrollbar max-h-[180]">
-                        <ul className="space-y-4">
-                            {MOCK_FEEDBACK_HISTORY.map((item, index) => (
-                                <HistoryListItem key={`${item.id}-feedback-${index}`} subject={item.subject} createdAt={item.created_at} content={item.content} borderColorClass={getSentimentColor(item.sentiment)} />
-                            ))}
-                        </ul>
-                    </div>
-                </Card>
+                
+                <FocusActivityCard
+                    title="Overview"
+                    data={focusData}
+                    className="lg:col-span-4"
+                />
             </div>
         </div>
     );

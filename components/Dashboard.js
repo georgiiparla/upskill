@@ -37,11 +37,9 @@ const ActivityCard = ({ activityData }) => {
 
     return (
         <Card
-            className='h-full'
-            // Pass the layout classes to the new prop
+            className='h-full min-h-[300px]'
             innerClassName='h-full flex flex-col justify-between'
         >
-            {/* No extra wrapper div needed! */}
 
             <HypedToggleSwitch
                 options={toggleOptions}
@@ -67,7 +65,7 @@ const ActivityCard = ({ activityData }) => {
     );
 };
 
-// --- Main Display Component ---
+// MAIN!
 const DashboardContent = ({ data }) => {
     return (
         <div className="space-y-8">
@@ -91,9 +89,6 @@ const DashboardContent = ({ data }) => {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
 
-                <div className="md:col-span-1">
-                    <ActivityCard activityData={data.activityData} />
-                </div>
 
                 <div className="md:col-span-2">
                     <InfoCard
@@ -113,6 +108,11 @@ const DashboardContent = ({ data }) => {
                             </li>
                         )}
                     />
+                </div>
+
+                
+                <div className="md:col-span-1">
+                    <ActivityCard activityData={data.activityData} />
                 </div>
 
             </div>
@@ -183,26 +183,7 @@ const DashboardSkeleton = () => (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
 
 
-
-            {/* Column 1: Accurate Skeleton for Original ActivityCard */}
-            <div className="md:col-span-1">
-                <Card className='h-full' innerClassName='h-full flex flex-col justify-between'>
-                    <div className='h-full flex flex-col justify-between'>
-
-                        <div className="h-10 w-full bg-gray-300 dark:bg-gray-700 rounded-lg"></div>
-
-                        <div className="space-y-4 w-full">
-
-                            <div className="bg-slate-200/50 dark:bg-slate-700/50 p-4 rounded-lg h-[88px]"></div>
-
-                            <div className="bg-slate-200/50 dark:bg-slate-700/50 p-4 rounded-lg h-[88px]"></div>
-                        </div>
-
-                    </div>
-                </Card>
-            </div>
-
-            {/* Column 2: Live Activity Stream (InfoCard) Skeleton */}
+            {/* Column 1: Live Activity Stream (InfoCard) Skeleton */}
             <div className="md:col-span-2">
                 <Card>
                     {/* Title skeleton */}
@@ -221,6 +202,26 @@ const DashboardSkeleton = () => (
                     </div>
                 </Card>
             </div>
+
+            {/* Column 2: Accurate Skeleton for Original ActivityCard */}
+            <div className="md:col-span-1">
+                <Card className='h-full' innerClassName='h-full flex flex-col justify-between'>
+                    <div className='h-full flex flex-col justify-between'>
+
+                        <div className="h-10 w-full bg-gray-300 dark:bg-gray-700 rounded-lg"></div>
+
+                        <div className="space-y-4 w-full">
+
+                            <div className="bg-slate-200/50 dark:bg-slate-700/50 p-4 rounded-lg h-[88px]"></div>
+
+                            <div className="bg-slate-200/50 dark:bg-slate-700/50 p-4 rounded-lg h-[88px]"></div>
+                        </div>
+
+                    </div>
+                </Card>
+            </div>
+
+
         </div>
     </div>
 );
