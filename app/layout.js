@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from '../components/ThemeProvider';
 import { AuthProvider } from "@/context/AuthContext";
 import { GlobalErrorNotifier } from "@/components/GlobalErrorNotifier";
+import AppLayout from "@/components/AppLayout";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,7 +22,7 @@ export default function RootLayout({ children }) {
                 <AuthProvider>
                     <GlobalErrorNotifier />
 				    <ThemeProvider>
-					    {children}
+					    <AppLayout>{children}</AppLayout>
 				    </ThemeProvider>
                 </AuthProvider>
 			</body>

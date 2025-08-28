@@ -97,14 +97,12 @@ export const TRENDS_COLORS = ['#818cf8', '#a78bfa', '#c084fc', '#f472b6'];
 
 // For the new Topic dropdown in the form
 export const MOCK_FEEDBACK_TOPICS = [
-    'General',
-    'Q3 Marketing Plan',
-    'New Feature Design',
-    'API Documentation',
-    'Onboarding Process',
-    'Weekly Sync Meeting',
-    'Project Alpha Performance',
-    'Team Offsite Event',
+    'General Feedback',
+    '[28 Aug 10:03] Strategy Deck, Alex Rivera',
+    '[28 Aug 09:45] API Refactor, Casey Jordan',
+    '[27 Aug 15:30] Client Presentation, Taylor Morgan',
+    '[27 Aug 11:15] Dashboard Mockup, Jordan Smith',
+    '[26 Aug 16:50] Onboarding Process, Jamie Lee',
 ];
 
 // For the Sentiment Analysis chart
