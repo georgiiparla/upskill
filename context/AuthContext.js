@@ -8,27 +8,27 @@ const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
 
-    
+
     const [user, setUser] = useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    
 
-    
+
+
     const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/auth`;
-    
 
-    
+
+
     const friendlyError = "Could not connect to the server. Please check your connection and try again later.";
-    
+
 
     // Function to clear the error
     const clearError = () => setError(null);
-    
 
 
-    
+
+
     const checkSession = async () => {
         try {
             const response = await fetch(`${API_URL}/profile`, { credentials: 'include' });
@@ -55,16 +55,16 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    
+
 
     useEffect(() => {
         checkSession();
     }, []);
 
-    
 
 
-    
+
+
     const login = async (email, password) => {
         try {
             const response = await fetch(`${API_URL}/login`, {
@@ -86,7 +86,7 @@ export const AuthProvider = ({ children }) => {
             return { success: false, error: friendlyError };
         }
     };
-    
+
 
     const signup = async (username, email, password) => {
         try {
@@ -107,7 +107,7 @@ export const AuthProvider = ({ children }) => {
             return { success: false, error: friendlyError };
         }
     };
-    
+
 
     const logout = async () => {
         try {
@@ -120,22 +120,21 @@ export const AuthProvider = ({ children }) => {
             setIsAuthenticated(false);
         }
     };
-    
 
-    
+
+
     const value = { user, isAuthenticated, loading, login, signup, logout, error, clearError };
-    
 
 
-    
+
+
     return (
         <AuthContext.Provider value={value}>
             {children}
         </AuthContext.Provider>
     );
-    
+
 };
 
-// *-----------------------------------------------------------------*
+
 export const useAuth = () => useContext(AuthContext);
-// *-----------------------------------------------------------------*

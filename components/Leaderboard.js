@@ -65,7 +65,7 @@ export const Leaderboard = () => {
     const [leaderboard, setLeaderboard] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    
+
 
     useEffect(() => {
         const fetchLeaderboard = async () => {
@@ -85,7 +85,7 @@ export const Leaderboard = () => {
         };
         fetchLeaderboard();
     }, []);
-    
+
 
     const getTrophyIcon = (rank) => {
         if (rank === 1) return <Trophy className="h-6 w-6 text-csway-orange" />;
@@ -93,9 +93,9 @@ export const Leaderboard = () => {
         if (rank === 3) return <Trophy className="h-6 w-6 text-csway-red" />;
         return <span className="text-gray-500 dark:text-gray-400 font-bold w-6 text-center">{rank}</span>;
     };
-    
 
-    
+
+
     if (loading) {
         return (
             <div className="space-y-12">
@@ -110,7 +110,7 @@ export const Leaderboard = () => {
             </div>
         );
     }
-    
+
     if (error) {
         return (
             <div className="flex flex-col items-center justify-center text-center p-8 bg-red-50 dark:bg-red-900/20 rounded-lg">
@@ -120,10 +120,10 @@ export const Leaderboard = () => {
             </div>
         );
     }
-    
 
 
-    
+
+
     const topThree = leaderboard.slice(0, 3);
     const restOfLeaderboard = leaderboard.slice(3);
 
@@ -131,14 +131,14 @@ export const Leaderboard = () => {
         <div className="space-y-12">
             <div>
 
-                
+
                 <SectionTitle icon={<Award className="h-6 w-6 text-csway-orange" />} title="COMMS Podium Finishers" />
-                
+
 
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
 
-                    
+
                     <div className="md:order-1">
                         {topThree[1] && (
                             <Card className="border-2 text-center p-4 !border-gray-300 !dark:border-gray-600">
@@ -151,7 +151,7 @@ export const Leaderboard = () => {
                     </div>
 
                     <div className="md:order-2 relative z-10">
-                         {topThree[0] && (
+                        {topThree[0] && (
                             <Card className="border-2 text-center p-6 !border-csway-orange dark:border-csway-orange transform md:scale-110 shadow-lg">
                                 <Trophy className="h-12 w-12 text-csway-orange mx-auto mb-2" />
                                 <h3 className="font-bold text-xl text-gray-800 dark:text-white">{topThree[0].name}</h3>
@@ -163,7 +163,7 @@ export const Leaderboard = () => {
 
                     <div className="md:order-3">
                         {topThree[2] && (
-                             <Card className="border-2 text-center p-4 !border-csway-red/50 dark:border-csway-red/80">
+                            <Card className="border-2 text-center p-4 !border-csway-red/50 dark:border-csway-red/80">
                                 <Trophy className="h-10 w-10 mx-auto mb-2 text-csway-red" />
                                 <h3 className="font-bold text-lg text-gray-800 dark:text-white">{topThree[2].name}</h3>
                                 <p className="font-semibold text-csway-red">3rd Place</p>
@@ -171,20 +171,20 @@ export const Leaderboard = () => {
                             </Card>
                         )}
                     </div>
-                    
+
                 </div>
             </div>
 
             <div>
-                
+
                 <SectionTitle icon={<Trophy className="h-6 w-6 text-csway-orange" />} title="Ladder" />
-                
+
 
                 <div className="hidden md:block">
-                    
+
                     <Card>
                         <div className="overflow-x-auto">
-                            
+
                             <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                                 <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                     <tr>
@@ -205,10 +205,10 @@ export const Leaderboard = () => {
                                     ))}
                                 </tbody>
                             </table>
-                            
+
                         </div>
                     </Card>
-                    
+
                 </div>
             </div>
         </div>
