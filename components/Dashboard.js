@@ -28,7 +28,6 @@ const MetricItem = ({ icon, label, allTime, thisWeek }) => (
 const ActivityCard = ({ activityData }) => {
     const [activeView, setActiveView] = useState('personal');
     const currentData = activityData[activeView];
-    // const isPersonal = activeView === 'personal';     // streak feature
 
     const toggleOptions = [
         { id: 'personal', label: 'Me' },
@@ -88,7 +87,10 @@ const DashboardContent = ({ data }) => {
             </Card>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-
+                
+                <div className="md:col-span-1">
+                    <ActivityCard activityData={data.activityData} />
+                </div>
 
                 <div className="md:col-span-2">
                     <InfoCard
@@ -108,11 +110,6 @@ const DashboardContent = ({ data }) => {
                             </li>
                         )}
                     />
-                </div>
-
-                
-                <div className="md:col-span-1">
-                    <ActivityCard activityData={data.activityData} />
                 </div>
 
             </div>

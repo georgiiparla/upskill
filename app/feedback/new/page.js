@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import toast, { Toaster } from 'react-hot-toast';
 import { ThumbsUp, Check, ThumbsDown, Send, Loader2, Lightbulb, ChevronDown } from 'lucide-react';
 
-import { Card, SectionTitle } from "@/components/Helper";
+import { Card } from "@/components/Helper";
 import { MOCK_FEEDBACK_TOPICS } from '@/mock/mock_data';
 
 const SentimentPicker = ({ selected, onSelect }) => {
@@ -78,8 +78,6 @@ const NewFeedbackForm = () => {
                 transition={{ duration: 0.5 }}
                 className="max-w-3xl mx-auto"
             >
-                <SectionTitle icon={<ThumbsUp className="h-6 w-6 text-csway-orange" />} title="Provide Constructive Feedback" />
-
                 <form onSubmit={handleSubmit}>
                     <Card className="mt-4">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -120,7 +118,7 @@ const NewFeedbackForm = () => {
                         </div>
 
 
-                        <details className="mt-8 group">
+                        <details className="mt-10 group">
                             <summary className="flex items-center gap-2 text-sm font-medium text-gray-500 dark:text-gray-400 cursor-pointer list-none">
                                 <Lightbulb className="h-4 w-4 text-yellow-500" />
                                 Tips for effective feedback
