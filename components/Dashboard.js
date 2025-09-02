@@ -4,7 +4,7 @@ import {
     Activity as ActivityIcon, Calendar, BookOpen,
     Timer, Shield, ThumbsUp
 } from 'lucide-react';
-import { Card, SectionTitle, InfoCard } from "./Helper";
+import { Card, SectionTitle, InfoCard } from "./shared/Helper";
 import HypedToggleSwitch from './HypedToggleSwitch';
 
 const MetricItem = ({ icon, label, allTime, thisWeek }) => (

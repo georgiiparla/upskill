@@ -1,6 +1,6 @@
 "use client";
 import { Shield, Target } from 'lucide-react';
-import { Card, SectionTitle } from "./Helper";
+import { Card, SectionTitle } from "./shared/Helper";
 
 export const Quests = ({ initialQuests }) => {
     return (

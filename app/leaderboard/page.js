@@ -1,7 +1,7 @@
 import { Leaderboard } from "@/components/Leaderboard";
 import { serverFetch } from "@/lib/server-api"; // Import the centralized fetcher
 
-const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+import { sleep } from "@/lib/delay";
 
 async function getLeaderboardData() {
     await sleep(2000);

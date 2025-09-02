@@ -1,7 +1,7 @@
 "use client"
 import React from 'react';
 import { Trophy, Award } from 'lucide-react';
-import { Card, SectionTitle } from "./Helper";
+import { Card, SectionTitle } from "./shared/Helper";
 
 export const Leaderboard = ({ initialData }) => {
     const getTrophyIcon = (rank) => {

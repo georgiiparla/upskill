@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from 'react';
-import { RouteErrorUI } from '@/components/RouteErrorUI';
+import { RouteErrorUI } from '@/components/shared/RouteErrorUI';
 
 export default function Error({ error, reset }) {
   useEffect(() => {

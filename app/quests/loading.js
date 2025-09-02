@@ -1,6 +1,4 @@
-// File: app/quests/loading.js
-
-import { Card } from "@/components/Helper"; // Assuming you centralize Card/Skeletons
+import { Card } from "@/components/shared/Helper";
 
 const QuestCardSkeleton = () => {
     return (
@@ -20,6 +18,7 @@ const QuestCardSkeleton = () => {
                 </div>
                 <div className="w-full bg-gray-300 dark:bg-gray-700 rounded-full h-2.5"></div>
             </div>
+            <br/>
         </Card>
     );
 };
@@ -27,10 +26,12 @@ const QuestCardSkeleton = () => {
 export default function QuestsLoading() {
     return (
         <div className="animate-pulse">
-            {/* You can replicate the page's title/description structure */}
             <div className="h-7 w-1/2 bg-gray-300 dark:bg-gray-700 rounded mb-4"></div>
             <div className="h-5 w-3/4 bg-gray-300 dark:bg-gray-700 rounded mb-6"></div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <QuestCardSkeleton />
+                <QuestCardSkeleton />
+                <QuestCardSkeleton />
                 <QuestCardSkeleton />
                 <QuestCardSkeleton />
                 <QuestCardSkeleton />

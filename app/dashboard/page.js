@@ -1,12 +1,9 @@
-import Dashboard from "../../components/Dashboard";
-import { serverFetch } from "@/lib/server-api"; // Import the centralized fetcher
-
-// Helper for testing
-const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+import Dashboard from "@/components/Dashboard";
+import { serverFetch } from "@/lib/server-api";
+import { sleep } from "@/lib/delay";
 
 async function getDashboardData() {
-    await sleep(2000); // Simulate network delay
-    // Use the clean, centralized fetcher. Cookies are handled automatically.
+    await sleep(2000);
     return serverFetch('/dashboard');
 }
 

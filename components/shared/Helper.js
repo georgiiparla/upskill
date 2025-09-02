@@ -33,3 +33,23 @@ export const InfoCard = ({ icon, title, items, renderItem, listClassName = "spac
         </Card>
     );
 };
+
+export const HistoryListItem = ({ subject, createdAt, content, borderColorClass }) => {
+    return (
+        <li
+            className={`
+                bg-gray-50 dark:bg-gray-800/60 p-4 rounded-lg
+                transition-colors hover:bg-gray-100 dark:hover:bg-gray-700/80
+                border-l-2 ${borderColorClass}
+            `}
+        >
+            <div className="flex justify-between items-center mb-1">
+                <h4 className="text-sm font-semibold text-gray-800 dark:text-gray-200">{subject}</h4>
+                <span className="text-xs text-gray-500 dark:text-gray-400">{createdAt}</span>
+            </div>
+            <p className="text-sm text-gray-600 dark:text-gray-300 truncate">
+                {content}
+            </p>
+        </li>
+    );
+};

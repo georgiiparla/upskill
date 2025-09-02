@@ -1,7 +1,7 @@
 import { Quests } from "@/components/Quests";
 import { serverFetch } from "@/lib/server-api";
 
-const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+import { sleep } from "@/lib/delay";
 
 async function getQuestsData() {
     await sleep(2000);

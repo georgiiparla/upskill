@@ -34,3 +34,5 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+During our last sprint, I noticed that the API documentation you provided was missing key information about the expected response codes. This caused delays for the frontend team as they had to reach out multiple times for clarification. Providing complete and accurate documentation upfront would help improve cross-team efficiency and reduce back-and-forth. For future tasks, consider using our internal API documentation template to ensure all key fields are covered. Let me know if you'd like a quick walkthrough of the template.

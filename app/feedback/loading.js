@@ -1,14 +1,4 @@
-// Reusable Skeleton for a Card component
-const CardSkeleton = ({ children, className = '' }) => (
-    <div className={`p-6 bg-white dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700 ${className}`}>
-        {children}
-    </div>
-);
-
-// Skeleton for a line of text
-const TextSkeleton = ({ className = '' }) => (
-    <div className={`bg-gray-200 dark:bg-gray-700 rounded-md ${className}`} />
-);
+import { CardSkeleton, TextSkeleton } from "@/components/shared/skeletons/Skeletons";
 
 // Skeleton for a list item in the history cards
 const HistoryListItemSkeleton = () => (
@@ -21,7 +11,7 @@ const HistoryListItemSkeleton = () => (
     </li>
 );
 
-// Skeleton for an item in the Focus Activity card - NOW AN <li>
+// Skeleton for an item in the Focus Activity card
 const FocusActivityItemSkeleton = () => (
     <li className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800/60 rounded-lg">
         <div className="flex items-center gap-3">
@@ -39,30 +29,25 @@ export default function FeedbackLoadingSkeleton() {
         <div className="animate-pulse space-y-8">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                 
-                {/* Feedback History Skeleton */}
                 <CardSkeleton className="lg:col-span-8 flex flex-col">
                     <div className="flex justify-between items-center mb-6">
                         <TextSkeleton className="h-6 w-48" />
-                        <TextSkeleton className="h-8 w-28 rounded-md" />
                     </div>
-                    {/* 👇 CHANGED from <div> to <ul> */}
                     <ul className="space-y-4 list-none">
                         {[...Array(4)].map((_, i) => <HistoryListItemSkeleton key={`feedback-hist-${i}`} />)}
                     </ul>
                 </CardSkeleton>
                 
-                {/* ... Feedback Sentiment Chart Skeleton (unchanged) ... */}
                 <CardSkeleton className="lg:col-span-4">
                     <div className="flex justify-between items-center">
                         <TextSkeleton className="h-5 w-36" />
-                        <TextSkeleton className="h-8 w-40 rounded-md" />
                     </div>
                     <div className="relative flex justify-center items-center my-4 h-[200px]">
                         <div className="h-48 w-48 rounded-full bg-gray-200 dark:bg-gray-700" />
                         <div className="absolute h-40 w-40 rounded-full bg-white dark:bg-gray-800/50" />
                         <TextSkeleton className="absolute h-8 w-10" />
                     </div>
-                    <div className="mt-4 space-y-3">
+                    <div className="mt-14 space-y-3">
                         {[...Array(3)].map((_, i) => (
                             <div key={`legend-${i}`} className="flex items-center justify-between text-sm">
                                 <div className="flex items-center gap-2">
@@ -78,22 +63,17 @@ export default function FeedbackLoadingSkeleton() {
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                 
-                {/* Requests History Skeleton */}
                 <CardSkeleton className="lg:col-span-8 flex flex-col">
                     <div className="flex justify-between items-center mb-6">
                         <TextSkeleton className="h-6 w-52" />
-                        <TextSkeleton className="h-8 w-32 rounded-md" />
                     </div>
-                    {/* This one was already correct, just adding list-none */}
                     <ul className="space-y-4 list-none">
                         {[...Array(3)].map((_, i) => <HistoryListItemSkeleton key={`request-hist-${i}`} />)}
                     </ul>
                 </CardSkeleton>
                 
-                {/* Focus Activity Skeleton */}
                 <CardSkeleton className="lg:col-span-4">
                     <TextSkeleton className="h-5 w-32 mb-7" />
-                    {/* This one was already correct, just adding list-none */}
                     <ul className="mt-4 space-y-2 list-none">
                         {[...Array(3)].map((_, i) => <FocusActivityItemSkeleton key={`focus-item-${i}`} />)}
                     </ul>

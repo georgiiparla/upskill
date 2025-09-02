@@ -1,116 +1,181 @@
+"use client"
 import React, { useState } from 'react';
-import { ThumbsUp, Lightbulb } from 'lucide-react';
+import { motion } from 'framer-motion';
+import toast, { Toaster } from 'react-hot-toast';
+import { Star, Check, ThumbsDown, Send, Loader2, Lightbulb, ChevronDown, HelpCircle } from 'lucide-react';
+import { sleep } from '@/lib/delay';
 
-import { Card, SectionTitle } from "./Helper";
+import { Card } from "@/components/shared/Helper";
 import { MOCK_FEEDBACK_TOPICS } from '@/mock/mock_data';
 
-
-
-export const FeedbackHub = () => {
-    const [topic, setTopic] = useState(MOCK_FEEDBACK_TOPICS[0]);
-
-    
-
-    const tips = [
-        "Be specific: Provide concrete examples instead of vague statements.",
-        "Focus on behavior, not personality. Describe the action and its impact.",
-        "Offer solutions: If you identify a problem, suggest a potential improvement.",
-        "Be timely: Provide feedback as soon as possible after the event.",
-        "Keep it constructive: The goal is to help and improve, not to criticize."
+const SentimentPicker = ({ selected, onSelect }) => {
+    const sentiments = [
+        { name: 'Exceeds Expectations', icon: <Star className="h-8 w-8" />, color: 'text-green-500', bgColor: 'hover:bg-teal-500/10' },
+        { name: 'Meets Expectations', icon: <Check className="h-8 w-8" />, color: 'text-amber-500', bgColor: 'hover:bg-amber-500/10' },
+        { name: 'Needs Improvement', icon: <ThumbsDown className="h-8 w-8" />, color: 'text-red-500', bgColor: 'hover:bg-red-500/10' },
     ];
-
-    
 
     return (
         <div>
-            <SectionTitle icon={<ThumbsUp className="h-6 w-6 text-csway-orange" />} title="Provide Feedback" />
-
-            
-            <Card>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-
-                    
-
-                    <form className="flex flex-col gap-6" onSubmit={(e) => e.preventDefault()}>
-                        <div>
-
-                            <label 
-                                htmlFor="feedback-topic" 
-                                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                            >
-                                Topic
-                            </label>
-
-                            
-
-                            <select
-                                id="feedback-topic"
-                                value={topic}
-                                onChange={(e) => setTopic(e.target.value)}
-                                className="block w-full px-4 py-3 text-sm text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-csway-green dark:focus:ring-csway-green focus:border-csway-green dark:focus:border-csway-green"
-                            >
-                                {MOCK_FEEDBACK_TOPICS.map(t => <option key={t} value={t}>{t}</option>)}
-                            </select>
-
-                            
-
-                        </div>
-                        <div className="flex-grow">
-
-                            <label 
-                                htmlFor="feedback-text" 
-                                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                            >
-                                What do you think?
-                            </label>
-
-                            
-
-                            <textarea
-                                id="feedback-text"
-                                className="block px-4 py-3 w-full min-h-[200px] text-sm text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-csway-green dark:focus:ring-csway-green focus:border-csway-green dark:focus:border-csway-green dark:placeholder-gray-400"
-                                placeholder="Provide constructive feedback..."
-                            ></textarea>
-
-                            
-
-                        </div>
-
-                        
-
-                        <button 
-                            type="submit" 
-                            className="w-full px-5 py-2.5 bg-csway-green hover:bg-opacity-90 focus:ring-4 focus:outline-none focus:ring-csway-green/50 dark:bg-csway-green dark:hover:bg-opacity-90 dark:focus:ring-csway-green/80 text-white font-medium text-sm text-center rounded-lg"
-                        >
-                            Submit Feedback
-                        </button>
-                    </form>
-
-                    
-
-
-                    
-                    <div className="flex flex-col">
-                        <h3 className="flex items-center text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                            <Lightbulb className="h-6 w-6 text-yellow-500 mr-3" />
-                            Tips for Effective Feedback
-                        </h3>
-
-                        
-                        <ul className="space-y-4">
-                            {tips.map((tip, index) => (
-                                <li key={index} className="flex items-start text-sm text-gray-600 dark:text-gray-300">
-                                    <span className="ml-2 mt-1 mr-5 flex-shrink-0 h-2 w-2 rounded-full bg-csway-orange"></span>
-                                    {tip}
-                                </li>
-                            ))}
-                        </ul>
-                        
-                        
-                    </div>
-                    
-                </div>
-            </Card>
+            <label className="block mb-2 text-base font-medium text-gray-700 dark:text-gray-300">Assessment</label>
+            <div className="grid grid-cols-3 gap-3">
+                {sentiments.map(sentiment => (
+                    <button
+                        key={sentiment.name}
+                        type="button"
+                        onClick={() => onSelect(sentiment.name)}
+                        className={`
+                            flex flex-col items-center justify-center p-3 h-[80px] rounded-lg border-2 transition-all
+                            ${selected === sentiment.name
+                                ? `${sentiment.color} border-current`
+                                : `text-gray-500 dark:text-gray-400 border-gray-200 dark:border-gray-700 ${sentiment.bgColor}`
+                            }
+                        `}
+                    >
+                        {sentiment.icon}
+                    </button>
+                ))}
+            </div>
         </div>
     );
 };
+
+
+const NewFeedbackForm = () => {
+    const [topic, setTopic] = useState(MOCK_FEEDBACK_TOPICS[0]);
+    const [sentiment, setSentiment] = useState('Meets Expectations');
+    const [content, setContent] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (content.trim().length < 10) {
+            toast.error('Please provide more detailed feedback.');
+            return;
+        }
+
+        setIsSubmitting(true);
+        const toastId = toast.loading('Submitting your feedback...');
+        await sleep(1500);
+        toast.success('Feedback submitted successfully!', { id: toastId });
+        console.log({ topic, sentiment, content });
+
+        setContent('');
+        setSentiment('Meets Expectations');
+        setIsSubmitting(false);
+    };
+
+    return (
+        <>
+            <Toaster position="bottom-right" toastOptions={{ style: { background: '#333', color: '#fff' } }} />
+
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="max-w-xl mx-auto"
+            >
+                <form onSubmit={handleSubmit}>
+                    <Card className="mt-4">
+                        {/* --- MODIFICATION: Increased gap from gap-6 to gap-8 for better separation --- */}
+                        <div className="flex flex-col gap-10">
+
+                            {/* 1. Topic Dropdown */}
+                            <div>
+                                <label htmlFor="feedback-topic" className="block mb-2 text-base font-medium text-gray-700 dark:text-gray-300">
+                                    Topic
+                                </label>
+                                <div className="relative">
+                                    <select
+                                        id="feedback-topic"
+                                        value={topic}
+                                        onChange={(e) => setTopic(e.target.value)}
+                                        className="appearance-none block w-full px-4 py-3 bg-gray-50 dark:bg-gray-800/60 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-csway-orange focus:border-csway-orange transition-colors"
+                                    >
+                                        {MOCK_FEEDBACK_TOPICS.map(t => <option key={t} value={t}>{t}</option>)}
+                                    </select>
+                                    <ChevronDown className="h-5 w-5 absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                                </div>
+                            </div>
+
+                            {/* 2. Assessment Buttons */}
+                            <SentimentPicker selected={sentiment} onSelect={setSentiment} />
+
+                            {/* --- MODIFICATION: Removed negative margin for consistent spacing --- */}
+                            <details className="group">
+                                <summary className="flex items-center gap-2 text-sm font-medium text-gray-500 dark:text-gray-400 cursor-pointer list-none select-none">
+                                    <HelpCircle className="h-4 w-4 text-sky-500" />
+                                    What do these ratings mean?
+                                    <ChevronDown className="h-4 w-4 transition-transform group-open:rotate-180" />
+                                </summary>
+                                <ul className="mt-3 pl-6 text-xs text-gray-600 dark:text-gray-400 space-y-2">
+                                    <li className="list-disc"><strong>Exceeds Expectations:</strong> For work that is truly exceptional and goes above and beyond.</li>
+                                    <li className="list-disc"><strong>Meets Expectations:</strong> For work that is solid and meets all requirements.</li>
+                                    <li className="list-disc"><strong>Needs Improvement:</strong> For work that could use some revisions.</li>
+                                </ul>
+                            </details>
+
+                            {/* 3. Text Area */}
+                            <div>
+                                <label htmlFor="feedback-text" className="block mb-2 text-base font-medium text-gray-700 dark:text-gray-300">
+                                    What are your thoughts?
+                                </label>
+                                <textarea
+                                    id="feedback-text"
+                                    value={content}
+                                    onChange={(e) => setContent(e.target.value)}
+                                    className="block w-full min-h-[200px] p-4 bg-gray-50 dark:bg-gray-800/60 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-csway-orange focus:border-csway-orange transition-colors resize-y"
+                                    placeholder="Be specific and provide examples..."
+                                ></textarea>
+                            </div>
+
+                            {/* 4. Tips Section */}
+                            <details className="group">
+                                <summary className="flex items-center gap-2 text-sm font-medium text-gray-500 dark:text-gray-400 cursor-pointer list-none select-none">
+                                    <Lightbulb className="h-4 w-4 text-yellow-500" />
+                                    Tips for effective feedback
+                                    <ChevronDown className="h-4 w-4 transition-transform group-open:rotate-180" />
+                                </summary>
+                                <ul className="mt-4 pl-6 text-xs text-gray-600 dark:text-gray-400 space-y-2">
+                                    <li className="list-disc">Focus on specific behaviors and their impact, not on personality.</li>
+                                    <li className="list-disc">Offer actionable suggestions for improvement.</li>
+                                    <li className="list-disc">Ensure your feedback is timely and constructive.</li>
+                                </ul>
+                            </details>
+
+                            {/* 5. Submit Button */}
+                            {/* --- MODIFICATION: Removed top padding to rely on parent gap --- */}
+                            <div>
+                                <button
+                                    type="submit"
+                                    disabled={isSubmitting}
+                                    className="w-full inline-flex items-center justify-center px-6 py-3 font-semibold text-white bg-csway-green rounded-lg shadow-sm hover:bg-csway-green/90 focus:outline-none focus:ring-2 focus:ring-csway-green/50 focus:ring-offset-2 dark:focus:ring-offset-gray-900 disabled:bg-gray-400 disabled:cursor-not-allowed transition-all"
+                                >
+                                    {isSubmitting ? (
+                                        <>
+                                            <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                                            Submitting...
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Send className="mr-2 h-4 w-4" />
+                                            Submit Feedback
+                                        </>
+                                    )}
+                                </button>
+                            </div>
+                        </div>
+                    </Card>
+                </form>
+            </motion.div>
+        </>
+    );
+};
+
+export default function NewFeedbackPage() {
+    return (
+        <div className="container mx-auto px-4">
+            <NewFeedbackForm />
+        </div>
+    );
+}

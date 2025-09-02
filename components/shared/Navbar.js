@@ -8,7 +8,7 @@ import { Menu, X, Sun, Moon, LogOut, Loader2 } from 'lucide-react';
 import Image from 'next/image';
 
 import { useAuth } from '@/context/AuthContext';
-import { Modal } from '@/components/Modal';
+import { Modal } from '@/components/auth/Modal';
 
 // Helper NavLink component that uses the current URL path to determine its state
 const NavLink = ({ href, children, scrolled }) => {

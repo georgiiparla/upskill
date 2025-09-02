@@ -1,9 +1,7 @@
-import { Feedback } from "@/components/Feedback";
-import { serverFetch } from "@/lib/server-api";
-// We import the mock data here, on the server, as a fallback
+import { Feedback } from "@/components/feedback/Feedback";
+// import { serverFetch } from "@/lib/server-api";
 import { MOCK_FEEDBACK_HISTORY, MOCK_FEEDBACK_REQUESTS } from "@/mock/mock_data";
-
-const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+import { sleep } from "@/lib/delay";
 
 async function getFeedbackData() {
     await sleep(3000);

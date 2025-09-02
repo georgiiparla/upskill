@@ -1,8 +1,8 @@
 "use client"
 
 import { useAuth } from '@/context/AuthContext';
-import { Auth } from '@/components/Auth';
-import { Navbar } from '@/components/Navbar';
+import { Auth } from '@/components/auth/Auth';
+import { Navbar } from '@/components/shared/Navbar';
 import { Loader2 } from 'lucide-react';
 
 export default function AppLayout({ children }) {

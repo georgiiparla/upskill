@@ -2,60 +2,10 @@
 
 import dynamic from 'next/dynamic';
 import { PlusCircle, Send, BarChart2, MessageSquare, Check, TrendingUp } from 'lucide-react';
-import { Card, SectionTitle } from "./Helper";
+import { Card, SectionTitle, HistoryListItem } from "../shared/Helper";
 import Link from 'next/link';
-
-// *Reusable button
-const ActionButton = ({ icon, text, shortText, colorScheme = 'orange' }) => {
-    const colorClasses = {
-        orange: 'text-csway-orange focus:ring-csway-orange',
-        blue: 'text-blue-500 dark:text-blue-400 focus:ring-blue-500',
-    };
-
-    const selectedColor = colorClasses[colorScheme] || colorClasses.orange;
-
-    return (
-        <button className={`
-            flex items-center justify-center px-3 py-1.5 text-xs font-semibold
-            bg-gray-200/50 hover:bg-gray-200
-            dark:bg-gray-700/50 dark:hover:bg-gray-700
-            rounded-md transition-colors focus:outline-none focus:ring-2
-            focus:ring-offset-2 dark:focus:ring-offset-gray-800
-            ${selectedColor}
-        `}>
-            {icon}
-            {shortText ? (
-                <>
-                    <span className="hidden md:inline">{text}</span>
-                    <span className="inline md:hidden">{shortText}</span>
-                </>
-            ) : (
-                <span>{text}</span>
-            )}
-        </button>
-    );
-};
-
-// ^Reusable History List Item Component
-const HistoryListItem = ({ subject, createdAt, content, borderColorClass }) => {
-    return (
-        <li
-            className={`
-                bg-gray-50 dark:bg-gray-800/60 p-4 rounded-lg
-                transition-colors hover:bg-gray-100 dark:hover:bg-gray-700/80
-                border-l-2 ${borderColorClass}
-            `}
-        >
-            <div className="flex justify-between items-center mb-1">
-                <h4 className="text-sm font-semibold text-gray-800 dark:text-gray-200">{subject}</h4>
-                <span className="text-xs text-gray-500 dark:text-gray-400">{createdAt}</span>
-            </div>
-            <p className="text-sm text-gray-600 dark:text-gray-300 truncate">
-                {content}
-            </p>
-        </li>
-    );
-};
+import { CardSkeleton, TextSkeleton } from "@/components/shared/skeletons/Skeletons";
+import { ActionButton } from '../shared/Buttons';
 
 const FocusActivityCard = ({ title, data, className = '' }) => {
     const ICONS = {
@@ -84,39 +34,30 @@ const FocusActivityCard = ({ title, data, className = '' }) => {
     );
 };
 
-const CardSkeleton = ({ children, className = '' }) => (
-    <div className={`p-6 bg-white dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700 ${className}`}>
-        {children}
-    </div>
-);
-
-const TextSkeleton = ({ className = '' }) => (
-    <div className={`bg-gray-200 dark:bg-gray-700 rounded-md ${className}`} />
-);
-
 const SentimentChartSkeleton = () => {
-                return (<CardSkeleton className="lg:col-span-4">
-                    <div className="flex justify-between items-center">
-                        <TextSkeleton className="h-5 w-36" />
-                        <TextSkeleton className="h-8 w-40 rounded-md" />
+    return (
+        <CardSkeleton className="lg:col-span-4">
+            <div className="flex justify-between items-center">
+                <TextSkeleton className="h-5 w-36" />
+            </div>
+            <div className="relative flex justify-center items-center my-4 h-[200px]">
+                <div className="h-48 w-48 rounded-full bg-gray-200 dark:bg-gray-700" />
+                <div className="absolute h-40 w-40 rounded-full bg-white dark:bg-gray-800/50" />
+                 <TextSkeleton className="absolute h-8 w-10" />
+            </div>
+             <div className="mt-14 space-y-3">
+                {[...Array(3)].map((_, i) => (
+                    <div key={`legend-${i}`} className="flex items-center justify-between text-sm">
+                        <div className="flex items-center gap-2">
+                            <div className="w-3 h-3 rounded-full bg-gray-300 dark:bg-gray-600" />
+                            <TextSkeleton className="h-4 w-32" />
+                        </div>
+                        <TextSkeleton className="h-4 w-6" />
                     </div>
-                    <div className="relative flex justify-center items-center my-4 h-[200px]">
-                        <div className="h-48 w-48 rounded-full bg-gray-200 dark:bg-gray-700" />
-                        <div className="absolute h-40 w-40 rounded-full bg-white dark:bg-gray-800/50" />
-                         <TextSkeleton className="absolute h-8 w-10" />
-                    </div>
-                     <div className="mt-4 space-y-3">
-                        {[...Array(3)].map((_, i) => (
-                            <div key={`legend-${i}`} className="flex items-center justify-between text-sm">
-                                <div className="flex items-center gap-2">
-                                    <div className="w-3 h-3 rounded-full bg-gray-300 dark:bg-gray-600" />
-                                    <TextSkeleton className="h-4 w-32" />
-                                </div>
-                                <TextSkeleton className="h-4 w-6" />
-                            </div>
-                        ))}
-                    </div>
-                </CardSkeleton>)
+                ))}
+            </div>
+        </CardSkeleton>
+    )
 }
 
 const FeedbackSentimentChart = dynamic(
@@ -127,7 +68,6 @@ const FeedbackSentimentChart = dynamic(
     }
 );
 
-// Accept all initial data as props
 export const Feedback = ({ 
     initialHistory, 
     initialRequests, 
@@ -136,7 +76,6 @@ export const Feedback = ({
     focusData 
 }) => {
     
-    // Data for charts is now passed in as props
     const GIVEN_SENTIMENT_COLORS = ['#14b8a6', '#f59e0b', '#f43f5e'];
     const RECEIVED_SENTIMENT_COLORS = ['#3b82f6', '#8b5cf6', '#ec4899'];
 
@@ -160,12 +99,12 @@ export const Feedback = ({
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                 <Card className="flex flex-col lg:col-span-8">
                     <div className="flex justify-between items-center mb-6">
-                        <SectionTitle icon={<MessageSquare className="h-6 w-6 text-csway-orange" />} title="Feedback History" />
+                        <SectionTitle icon={<MessageSquare className="h-6 w-6 text-csway-orange" />} title="Feedback" />
                         <Link href="/feedback/new">
-                            <ActionButton icon={<PlusCircle className="h-4 w-4 mr-1.5" />} text="Add Feedback" shortText="Add" colorScheme="orange" />
+                            <ActionButton icon={<PlusCircle className="h-4 w-4 mr-1.5" />} text="Send Feedback" shortText="Send" colorScheme="orange" />
                         </Link>
                     </div>
-                    <div className="flex-grow overflow-y-auto no-scrollbar max-h-[270px]">
+                    <div className="flex-grow overflow-y-auto no-scrollbar max-h-[365px]">
                         <ul className="space-y-4">
                             {initialHistory.map((item, index) => (
                                 <HistoryListItem key={`${item.id}-feedback-${index}`} subject={item.subject} createdAt={item.created_at} content={item.content} borderColorClass={getSentimentColor(item.sentiment)} />
@@ -175,7 +114,7 @@ export const Feedback = ({
                 </Card>
 
                 <FeedbackSentimentChart
-                    title="Feedback"
+                    title="Sentiment"
                     givenData={givenSentimentData}
                     receivedData={receivedSentimentData}
                     givenColors={GIVEN_SENTIMENT_COLORS}
@@ -187,7 +126,7 @@ export const Feedback = ({
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                 <Card className="flex flex-col lg:col-span-8">
                     <div className="flex justify-between items-center mb-6">
-                        <SectionTitle icon={<MessageSquare className="h-6 w-6 text-blue-500" />} title="Requests History" />
+                        <SectionTitle icon={<MessageSquare className="h-6 w-6 text-blue-500" />} title="Requests" />
                         <ActionButton icon={<PlusCircle className="h-4 w-4 mr-1.5" />} text="Request New" shortText="Request" colorScheme="blue" />
                     </div>
                     <div className="flex-grow overflow-y-auto no-scrollbar max-h-[184px]">

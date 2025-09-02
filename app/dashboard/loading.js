@@ -1,15 +1,10 @@
-// Reusable Skeleton for a Card component
-const CardSkeleton = ({ children, className = '' }) => (
-    <div className={`p-6 bg-white dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700 ${className}`}>
-        {children}
-    </div>
-);
+import { CardSkeleton } from "@/components/shared/skeletons/Skeletons";
 
 export default function DashboardSkeleton() {
     return (
         <div className="space-y-8 animate-pulse">
             {/* Skeleton for "This Week's Agenda" Card */}
-            <CardSkeleton>
+            <CardSkeleton className="!py-16">
                 <div className="h-7 w-1/2 bg-gray-300 dark:bg-gray-700 rounded mb-7"></div>
                 <div className="relative border-l border-gray-200 dark:border-gray-700 ml-3 space-y-6">
                     {[...Array(3)].map((_, i) => (
@@ -26,10 +21,40 @@ export default function DashboardSkeleton() {
                 <div className="md:col-span-1">
                     <CardSkeleton className='h-full' innerClassName='h-full flex flex-col justify-between'>
                         <div className='h-full flex flex-col justify-between'>
-                            <div className="h-10 w-full bg-gray-300 dark:bg-gray-700 rounded-lg"></div>
+                            {/* Replaced solid bar with a two-button toggle skeleton */}
+                            <div className="flex space-x-1 rounded-lg bg-gray-300 dark:bg-gray-700 p-1 h-10">
+                                <div className="w-full rounded-md bg-white dark:bg-gray-800"></div>
+                                <div className="w-full rounded-md"></div>
+                            </div>
+
+                            {/* Replaced solid blocks with outlined cards containing inner shapes */}
                             <div className="space-y-4 w-full">
-                                <div className="bg-slate-200/50 dark:bg-slate-700/50 p-4 rounded-lg h-[88px]"></div>
-                                <div className="bg-slate-200/50 dark:bg-slate-700/50 p-4 rounded-lg h-[88px]"></div>
+                                {/* First Stat Box */}
+                                <div className="border border-gray-200 dark:border-gray-700 p-4 rounded-lg h-[88px]">
+                                    <div className="flex items-start space-x-4">
+                                        <div className="h-6 w-6 rounded-md bg-gray-300 dark:bg-gray-600 mt-1"></div>
+                                        <div className="flex-1 space-y-2">
+                                            <div className="h-4 w-3/4 rounded bg-gray-300 dark:bg-gray-600"></div>
+                                            <div className="flex items-baseline space-x-2">
+                                                <div className="h-6 w-1/4 rounded bg-gray-300 dark:bg-gray-600"></div>
+                                                <div className="h-4 w-1/3 rounded bg-gray-300 dark:bg-gray-600"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {/* Second Stat Box */}
+                                <div className="border border-gray-200 dark:border-gray-700 p-4 rounded-lg h-[88px]">
+                                     <div className="flex items-start space-x-4">
+                                        <div className="h-6 w-6 rounded-md bg-gray-300 dark:bg-gray-600 mt-1"></div>
+                                        <div className="flex-1 space-y-2">
+                                            <div className="h-4 w-3/4 rounded bg-gray-300 dark:bg-gray-600"></div>
+                                            <div className="flex items-baseline space-x-2">
+                                                <div className="h-6 w-1/4 rounded bg-gray-300 dark:bg-gray-600"></div>
+                                                <div className="h-4 w-1/3 rounded bg-gray-300 dark:bg-gray-600"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </CardSkeleton>
