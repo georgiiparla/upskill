@@ -1,119 +1,23 @@
-"use client"
+"use client";
 import { Shield, Target } from 'lucide-react';
 import { Card, SectionTitle } from "./Helper";
-import React, { useState, useEffect } from 'react';
 
-
-
-
-const QuestCardSkeleton = () => {
-    return (
-        <Card className="animate-pulse">
-            <div className="flex justify-between items-start">
-                <div className="h-6 bg-gray-300 dark:bg-gray-700 rounded w-3/4"></div>
-                <div className="h-5 bg-gray-300 dark:bg-gray-700 rounded-full w-12"></div>
-            </div>
-            <div className="mt-3 space-y-2">
-                <div className="h-4 bg-gray-300 dark:bg-gray-700 rounded w-full"></div>
-                <div className="h-4 bg-gray-300 dark:bg-gray-700 rounded w-5/6"></div>
-            </div>
-            <div className="mt-5">
-                <div className="flex justify-between mb-1">
-                    <div className="h-4 bg-gray-300 dark:bg-gray-700 rounded w-1/4"></div>
-                    <div className="h-4 bg-gray-300 dark:bg-gray-700 rounded w-1/6"></div>
-                </div>
-                <div className="w-full bg-gray-300 dark:bg-gray-700 rounded-full h-2.5"></div>
-            </div>
-        </Card>
-    );
-};
-
-
-
-export const Quests = () => {
-    
-    const [quests, setQuests] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    
-
-    useEffect(() => {
-        const fetchQuests = async () => {
-            try {
-                await new Promise(resolve => setTimeout(resolve, 1000));
-                const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/quests`, { credentials: 'include' });
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const data = await response.json();
-                setQuests(data);
-            } catch (e) {
-                console.error("Failed to fetch quests:", e);
-                setError(e.message);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchQuests();
-    }, []);
-
-    
-
-
-    
-    if (loading) {
-        return (
-            <div>
-                <SectionTitle icon={<Target className="h-6 w-6 text-csway-orange" />} title="Challenges & Quests" />
-                <p className="mb-6 text-gray-600 dark:text-gray-400">Engage in challenges to earn points, unlock badges, and grow your skills.</p>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <QuestCardSkeleton />
-                    <QuestCardSkeleton />
-                    <QuestCardSkeleton />
-                </div>
-            </div>
-        );
-    }
-
-    if (error) {
-        return (
-             <div>
-                <SectionTitle icon={<Target className="h-6 w-6 text-csway-orange" />} title="Challenges & Quests" />
-                <p className="text-red-500">Could not load quests: {error}</p>
-            </div>
-        )
-    }
-    
-
+export const Quests = ({ initialQuests }) => {
     return (
         <div>
-
-            
             <SectionTitle icon={<Target className="h-6 w-6 text-csway-orange" />} title="Challenges & Quests" />
-            
-
             <p className="mb-6 text-gray-600 dark:text-gray-400">Engage in challenges to earn points, unlock badges, and grow your skills.</p>
             
-
-
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                
-                {quests.map(quest => (
-
-                    
+                {initialQuests.map(quest => (
                     <Card key={quest.id} className={quest.completed ? 'opacity-60 bg-gray-50 dark:bg-gray-800/50' : ''}>
-
-                        
                         <div className="flex justify-between items-start">
                             <h3 className="text-lg font-bold text-gray-900 dark:text-white">{quest.title}</h3>
                             <span className="bg-yellow-100 text-yellow-800 text-xs font-semibold px-2.5 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300">{quest.points} PTS</span>
                         </div>
                         
-
-                        
+                        {/* 👇 The description and all other UI elements are preserved */}
                         <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">{quest.description}</p>
-                        
-
                         
                         <div className="mt-4">
                             <div className="flex justify-between mb-1">
@@ -130,11 +34,8 @@ export const Quests = () => {
                                 <span className="ml-2 text-sm font-semibold">Completed</span>
                             </div>
                         )}
-                        
                     </Card>
-                    
                 ))}
-                
             </div>
         </div>
     );

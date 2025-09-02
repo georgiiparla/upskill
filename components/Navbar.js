@@ -91,7 +91,7 @@ export const Navbar = () => {
                             </Link>
                             <div className="hidden md:block">
                                 <div className="ml-10 flex items-baseline space-x-4">
-                                    <NavLink href="/" scrolled={scrolled}>Home</NavLink>
+                                    <NavLink href="/dashboard" scrolled={scrolled}>Home</NavLink>
                                     <NavLink href="/feedback" scrolled={scrolled}>My Feedback</NavLink>
                                     <NavLink href="/quests" scrolled={scrolled}>Quests</NavLink>
                                     <NavLink href="/leaderboard" scrolled={scrolled}>Leaderboard</NavLink>

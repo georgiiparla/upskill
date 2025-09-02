@@ -59,8 +59,8 @@ const FeedbackSentimentChart = ({ title, givenData, receivedData, givenColors, r
                     <PieChart>
                         <Pie
                             data={currentData}
-                            innerRadius={60}
-                            outerRadius={80}
+                            innerRadius={75}
+                            outerRadius={90}
                             paddingAngle={5}
                             dataKey="value"
                             isAnimationActive={false}
