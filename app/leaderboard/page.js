@@ -1,11 +1,13 @@
 import { Leaderboard } from "@/components/Leaderboard";
-import { serverFetch } from "@/lib/server-api"; // Import the centralized fetcher
-
+import { serverFetch } from "@/lib/server-api"; 
 import { sleep } from "@/lib/delay";
+import { MOCK_LEADERBOARD } from "@/mock/mock_data";
 
 async function getLeaderboardData() {
     await sleep(2000);
-    // Use the clean, centralized fetcher.
+    if (process.env.NEXT_PUBLIC_USE_MOCK_LEADERBOARD === 'true') {
+        return MOCK_LEADERBOARD;
+    }
     return serverFetch('/leaderboard');
 }
 

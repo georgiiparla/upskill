@@ -1,3 +1,5 @@
+import { formatRelativeTime } from "@/lib/helper_func";
+
 export const SectionTitle = ({ icon, title, className = '' }) => (
     <div className={`flex items-center mb-4 ${className}`}>
 
@@ -45,7 +47,7 @@ export const HistoryListItem = ({ subject, createdAt, content, borderColorClass 
         >
             <div className="flex justify-between items-center mb-1">
                 <h4 className="text-sm font-semibold text-gray-800 dark:text-gray-200">{subject}</h4>
-                <span className="text-xs text-gray-500 dark:text-gray-400">{createdAt}</span>
+                <span className="text-xs text-gray-500 dark:text-gray-400">{formatRelativeTime(createdAt)}</span>
             </div>
             <p className="text-sm text-gray-600 dark:text-gray-300 truncate">
                 {content}

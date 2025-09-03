@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { Card, SectionTitle, InfoCard } from "./shared/Helper";
 import HypedToggleSwitch from './HypedToggleSwitch';
+import { formatRelativeTime } from '@/lib/helper_func';
 
 const MetricItem = ({ icon, label, allTime, thisWeek }) => (
     <div className="bg-slate-50/50 dark:bg-slate-800/50 p-4 rounded-lg border border-slate-200 dark:border-slate-700">
@@ -97,7 +98,7 @@ export default function Dashboard({ initialData }) {
                                     <p className="text-sm text-gray-700 dark:text-gray-300">
                                         <span className="font-bold text-gray-900 dark:text-white">{item.user_name}</span> {item.action}
                                     </p>
-                                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{item.created_at}</p>
+                                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{formatRelativeTime(item.created_at)}</p>
                                 </div>
                             </li>
                         )}

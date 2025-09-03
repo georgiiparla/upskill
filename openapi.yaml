@@ -1,0 +1,235 @@
+openapi: 3.0.0
+info:
+  title: "Upskill API"
+  version: "1.0.0"
+  description: "API for the Upskill platform, managing quests, feedback, leaderboards, and user dashboards."
+servers:
+  - url: http://localhost:9292
+    description: Local development server
+tags:
+  - name: Auth
+    description: User authentication and session management
+  - name: Dashboard
+    description: Endpoints for the main user dashboard
+  - name: Feedback
+    description: Operations related to user feedback
+  - name: Quests
+    description: Access to quests and challenges
+  - name: Leaderboard
+    description: User rankings and points
+paths:
+  /auth/signup:
+    post:
+      tags: [Auth]
+      summary: "Register a new user"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [username, email, password]
+              properties:
+                username: { type: string, example: "NewUser" }
+                email: { type: string, format: email, example: "user@example.com" }
+                password: { type: string, format: password, example: "securepassword123" }
+      responses:
+        '201':
+          description: "User created successfully"
+        '400':
+          description: "Missing required fields"
+        '409':
+          description: "User with this email already exists"
+  /auth/login:
+    post:
+      tags: [Auth]
+      summary: "Log in a user"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email: { type: string, format: email, example: "user@example.com" }
+                password: { type: string, format: password, example: "securepassword123" }
+      responses:
+        '200':
+          description: "Login successful, session cookie is set"
+          content:
+            application/json:
+              schema:
+                properties:
+                  message: { type: string, example: "Logged in successfully" }
+                  user: { $ref: '#/components/schemas/User' }
+        '401':
+          description: "Invalid email or password"
+  /auth/logout:
+    post:
+      tags: [Auth]
+      summary: "Log out a user"
+      responses:
+        '200':
+          description: "Logout successful"
+  /auth/profile:
+    get:
+      tags: [Auth]
+      summary: "Check current user session"
+      responses:
+        '200':
+          description: "Returns the current user's session status"
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - properties:
+                      logged_in: { type: boolean, example: true }
+                      user: { $ref: '#/components/schemas/User' }
+                  - properties:
+                      logged_in: { type: boolean, example: false }
+  /dashboard:
+    get:
+      tags: [Dashboard]
+      summary: "Get dashboard data"
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: "Successful response with all dashboard data"
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/DashboardData' }
+        '401':
+          description: "Unauthorized"
+  /feedback:
+    get:
+      tags: [Feedback]
+      summary: "Get feedback history for current user"
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: page
+          in: query
+          schema: { type: integer, default: 1 }
+        - name: limit
+          in: query
+          schema: { type: integer, default: 5 }
+      responses:
+        '200':
+          description: "A paginated list of feedback items"
+          content:
+            application/json:
+              schema:
+                properties:
+                  items:
+                    type: array
+                    items: { $ref: '#/components/schemas/FeedbackItem' }
+                  hasMore: { type: boolean }
+        '401':
+          description: "Unauthorized"
+  /quests:
+    get:
+      tags: [Quests]
+      summary: "Get all quests"
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: "A list of all available quests"
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Quest' }
+        '401':
+          description: "Unauthorized"
+  /leaderboard:
+    get:
+      tags: [Leaderboard]
+      summary: "Get the leaderboard"
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: "A list of users sorted by points"
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/LeaderboardEntry' }
+        '401':
+          description: "Unauthorized"
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id: { type: integer, example: 1 }
+        username: { type: string, example: "Alex Rivera" }
+        email: { type: string, format: email, example: "alex@example.com" }
+    Quest:
+      type: object
+      properties:
+        id: { type: integer }
+        title: { type: string }
+        description: { type: string }
+        points: { type: integer }
+        progress: { type: integer }
+        completed: { type: boolean }
+    FeedbackItem:
+      type: object
+      properties:
+        id: { type: integer }
+        user_id: { type: integer }
+        subject: { type: string }
+        content: { type: string }
+        created_at: { type: string, format: date }
+        sentiment: { type: string, enum: [Positive, Neutral, Negative] }
+    LeaderboardEntry:
+      type: object
+      properties:
+        id: { type: integer }
+        name: { type: string, example: "Alex Rivera" }
+        points: { type: integer, example: 4250 }
+        badges:
+          type: array
+          items: { type: string, example: "🚀" }
+    DashboardData:
+      type: object
+      properties:
+        agendaItems:
+          type: array
+          items:
+            type: object
+            properties:
+              id: { type: integer }
+              type: { type: string }
+              title: { type: string }
+              category: { type: string }
+              due_date: { type: string, format: date }
+        activityStream:
+          type: array
+          items:
+            type: object
+            properties:
+              id: { type: integer }
+              user_name: { type: string }
+              action: { type: string }
+              created_at: { type: string }
+        meetings:
+          type: array
+          items:
+            type: object
+            properties:
+              id: { type: integer }
+              title: { type: string }
+              meeting_date: { type: string, format: date }
+              status: { type: string }
+        activityData:
+          type: object
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: rack.session

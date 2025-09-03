@@ -1,5 +1,5 @@
 import { Feedback } from "@/components/feedback/Feedback";
-// import { serverFetch } from "@/lib/server-api";
+import { serverFetch } from "@/lib/server-api";
 import { MOCK_FEEDBACK_HISTORY, MOCK_FEEDBACK_REQUESTS } from "@/mock/mock_data";
 import { sleep } from "@/lib/delay";
 
@@ -9,22 +9,23 @@ async function getFeedbackData() {
     let historyData;
     let requestsData;
 
-    historyData = MOCK_FEEDBACK_HISTORY;
-    requestsData = MOCK_FEEDBACK_REQUESTS;
+    if (process.env.NEXT_PUBLIC_USE_MOCK_FEEDBACK === 'true') {
+        historyData = MOCK_FEEDBACK_HISTORY;
+        requestsData = MOCK_FEEDBACK_REQUESTS;
+    } else {
+        try {
+            const feedbackResponse = await serverFetch('/feedback');
+            historyData = feedbackResponse.items || [];
+        } catch (error) {
+            console.warn("Could not fetch feedback history", error.message);
+        }
 
-    // try {
-    //     historyData = await serverFetch('/feedback/history');
-    // } catch (error) {
-    //     console.warn("Could not fetch feedback history, falling back to mock data.");
-    //     historyData = MOCK_FEEDBACK_HISTORY;
-    // }
-
-    // try {
-    //     requestsData = await serverFetch('/feedback/requests');
-    // } catch (error) {
-    //     console.warn("Could not fetch feedback requests, falling back to mock data.");
-    //     requestsData = MOCK_FEEDBACK_REQUESTS;
-    // }
+        try {
+            requestsData = await serverFetch('/feedback/requests');
+        } catch (error) {
+            console.warn("Could not fetch feedback requests", error.message);
+        }
+    }
     
     // For data that doesn't have an API endpoint yet, we source it here
     const givenSentimentData = [
