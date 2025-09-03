@@ -9,6 +9,8 @@ import { Card } from "@/components/shared/Helper";
 import { MOCK_FEEDBACK_TOPICS } from '@/mock/mock_data';
 
 const SentimentPicker = ({ selected, onSelect }) => {
+
+    // component-specific sentiment data
     const sentiments = [
         { name: 'Exceeds Expectations', icon: <Star className="h-8 w-8" />, color: 'text-green-500', bgColor: 'hover:bg-teal-500/10' },
         { name: 'Meets Expectations', icon: <Check className="h-8 w-8" />, color: 'text-amber-500', bgColor: 'hover:bg-amber-500/10' },
@@ -16,9 +18,14 @@ const SentimentPicker = ({ selected, onSelect }) => {
     ];
 
     return (
+        // Assesment block
         <div>
+
             <label className="block mb-2 text-base font-medium text-gray-700 dark:text-gray-300">Assessment</label>
+            {/* Sentiment buttons block*/}
             <div className="grid grid-cols-3 gap-3">
+                {/* Buttons */}
+                {/* TODO: May be make reusable later */}
                 {sentiments.map(sentiment => (
                     <button
                         key={sentiment.name}
@@ -26,6 +33,7 @@ const SentimentPicker = ({ selected, onSelect }) => {
                         onClick={() => onSelect(sentiment.name)}
                         className={`
                             flex flex-col items-center justify-center p-3 h-[80px] rounded-lg border-2 transition-all
+
                             ${selected === sentiment.name
                                 ? `${sentiment.color} border-current`
                                 : `text-gray-500 dark:text-gray-400 border-gray-200 dark:border-gray-700 ${sentiment.bgColor}`
@@ -36,17 +44,21 @@ const SentimentPicker = ({ selected, onSelect }) => {
                     </button>
                 ))}
             </div>
+
         </div>
+
     );
 };
 
 
 const NewFeedbackForm = () => {
+    // React stuff
     const [topic, setTopic] = useState(MOCK_FEEDBACK_TOPICS[0]);
     const [sentiment, setSentiment] = useState('Meets Expectations');
     const [content, setContent] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
 
+    // Handle submit
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (content.trim().length < 10) {
@@ -67,25 +79,33 @@ const NewFeedbackForm = () => {
 
     return (
         <>
+            {/* Pop up */}
             <Toaster position="bottom-right" toastOptions={{ style: { background: '#333', color: '#fff' } }} />
 
+            {/* Animation */}
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
                 className="max-w-xl mx-auto"
             >
+
+                {/* Form*/}
                 <form onSubmit={handleSubmit}>
+                    {/* Form card*/}
                     <Card className="mt-4">
-                        {/* --- MODIFICATION: Increased gap from gap-6 to gap-8 for better separation --- */}
+
+                        {/* Form block*/}
                         <div className="flex flex-col gap-10">
 
-                            {/* 1. Topic Dropdown */}
+                            {/* First row*/}
                             <div>
                                 <label htmlFor="feedback-topic" className="block mb-2 text-base font-medium text-gray-700 dark:text-gray-300">
                                     Topic
                                 </label>
+
                                 <div className="relative">
+                                    {/* Dropdown */}
                                     <select
                                         id="feedback-topic"
                                         value={topic}
@@ -98,10 +118,10 @@ const NewFeedbackForm = () => {
                                 </div>
                             </div>
 
-                            {/* 2. Assessment Buttons */}
+                            {/* Second row */}
                             <SentimentPicker selected={sentiment} onSelect={setSentiment} />
-
-                            {/* --- MODIFICATION: Removed negative margin for consistent spacing --- */}
+                            
+                            {/* Third row */}
                             <details className="group">
                                 <summary className="flex items-center gap-2 text-sm font-medium text-gray-500 dark:text-gray-400 cursor-pointer list-none select-none">
                                     <HelpCircle className="h-4 w-4 text-sky-500" />
@@ -115,7 +135,7 @@ const NewFeedbackForm = () => {
                                 </ul>
                             </details>
 
-                            {/* 3. Text Area */}
+                            {/* Fourth row */}
                             <div>
                                 <label htmlFor="feedback-text" className="block mb-2 text-base font-medium text-gray-700 dark:text-gray-300">
                                     What are your thoughts?
@@ -129,7 +149,7 @@ const NewFeedbackForm = () => {
                                 ></textarea>
                             </div>
 
-                            {/* 4. Tips Section */}
+                            {/* Fifth row */}
                             <details className="group">
                                 <summary className="flex items-center gap-2 text-sm font-medium text-gray-500 dark:text-gray-400 cursor-pointer list-none select-none">
                                     <Lightbulb className="h-4 w-4 text-yellow-500" />
@@ -143,13 +163,12 @@ const NewFeedbackForm = () => {
                                 </ul>
                             </details>
 
-                            {/* 5. Submit Button */}
-                            {/* --- MODIFICATION: Removed top padding to rely on parent gap --- */}
+                            {/* Sixth row */}
                             <div>
                                 <button
                                     type="submit"
                                     disabled={isSubmitting}
-                                    className="w-full inline-flex items-center justify-center px-6 py-3 font-semibold text-white bg-csway-green rounded-lg shadow-sm hover:bg-csway-green/90 focus:outline-none focus:ring-2 focus:ring-csway-green/50 focus:ring-offset-2 dark:focus:ring-offset-gray-900 disabled:bg-gray-400 disabled:cursor-not-allowed transition-all"
+                                    className="w-full inline-flex items-center justify-center px-6 py-3 font-semibold text-white bg-csway-orange rounded-lg shadow-sm hover:bg-csway-orange/90 focus:outline-none focus:ring-2 focus:ring-csway-orange/50 focus:ring-offset-2 dark:focus:ring-offset-gray-900 disabled:bg-gray-400 disabled:cursor-not-allowed transition-all"
                                 >
                                     {isSubmitting ? (
                                         <>
@@ -165,8 +184,11 @@ const NewFeedbackForm = () => {
                                 </button>
                             </div>
                         </div>
+
                     </Card>
+
                 </form>
+
             </motion.div>
         </>
     );
@@ -174,6 +196,7 @@ const NewFeedbackForm = () => {
 
 export default function NewFeedbackPage() {
     return (
+        // Page block
         <div className="container mx-auto px-4">
             <NewFeedbackForm />
         </div>

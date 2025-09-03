@@ -7,7 +7,9 @@ import Link from 'next/link';
 import { CardSkeleton, TextSkeleton } from "@/components/shared/skeletons/Skeletons";
 import { ActionButton } from '../shared/Buttons';
 
+// Focus activity card (Overview) component for overview feedback page
 const FocusActivityCard = ({ title, data, className = '' }) => {
+    // utility data for component
     const ICONS = {
         "Requests Sent": <Send className="h-5 w-5 text-blue-500" />,
         "Requests Answered": <Check className="h-5 w-5 text-teal-500" />,
@@ -16,17 +18,29 @@ const FocusActivityCard = ({ title, data, className = '' }) => {
 
     return (
         <Card className={className}>
+
+            {/* Card title (e.g. Overview) */}
             <SectionTitle className='mb-7' icon={<TrendingUp className="h-5 w-5 text-csway-green" />} title={title} />
+
             <div className="mt-4 space-y-2">
+                {/* Requests Sent, Requests Answered, Requests Ignored... */}
                 {data.map((item) => (
                     <div key={item.name} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800/60 rounded-lg">
+
                         <div className="flex items-center gap-3">
+
+                            {/* Icon (e.g. Message Square) */}
                             <div className="bg-gray-200 dark:bg-gray-700 p-2 rounded-full">
                                 {ICONS[item.name] || <BarChart2 className="h-5 w-5 text-gray-500" />}
                             </div>
+                            {/* Title (e.g. Requests Sent) */}
                             <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{item.name}</span>
+
                         </div>
+
+                        {/* Value (e.g. 5) */}
                         <span className="text-xl font-bold text-gray-800 dark:text-gray-100">{item.value}</span>
+
                     </div>
                 ))}
             </div>
@@ -34,6 +48,7 @@ const FocusActivityCard = ({ title, data, className = '' }) => {
     );
 };
 
+// Unique sentiment chart skeleton (required only for client side first time chart rendering)
 const SentimentChartSkeleton = () => {
     return (
         <CardSkeleton className="lg:col-span-4">
@@ -60,6 +75,7 @@ const SentimentChartSkeleton = () => {
     )
 }
 
+// Chart rendering (dynamic to not slow a webpage)
 const FeedbackSentimentChart = dynamic(
     () => import('./FeedbackSentimentChart'),
     {
@@ -68,6 +84,7 @@ const FeedbackSentimentChart = dynamic(
     }
 );
 
+// required props passed to Feedback component from outside
 export const Feedback = ({ 
     initialHistory, 
     initialRequests, 
@@ -76,9 +93,11 @@ export const Feedback = ({
     focusData 
 }) => {
     
+    // component-specific data
     const GIVEN_SENTIMENT_COLORS = ['#14b8a6', '#f59e0b', '#f43f5e'];
     const RECEIVED_SENTIMENT_COLORS = ['#3b82f6', '#8b5cf6', '#ec4899'];
 
+    // component-specific getSentimentColor function
     const getSentimentColor = (sentiment) => {
         switch (sentiment) {
             case 'Positive': return 'border-green-500';
@@ -86,6 +105,8 @@ export const Feedback = ({
             default: return 'border-amber-500';
         }
     }
+
+    // component-specific getRequestStatusColor function
     const getRequestStatusColor = (status) => {
         switch (status) {
             case 'Posted': return 'border-blue-500';
@@ -95,15 +116,24 @@ export const Feedback = ({
     }
 
     return (
+        // "space-y-8" = Add vertical spacing (margin) of 2rem (which equals 32 pixels) between all direct child elements stacked vertically
         <div className="space-y-8">
+
+            {/* First row-section */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                
+                {/* Feedback card */}
                 <Card className="flex flex-col lg:col-span-8">
+
+                    {/* Upper block (title + button) */}
                     <div className="flex justify-between items-center mb-6">
                         <SectionTitle icon={<MessageSquare className="h-6 w-6 text-csway-orange" />} title="Feedback" />
                         <Link href="/feedback/new">
                             <ActionButton icon={<PlusCircle className="h-4 w-4 mr-1.5" />} text="Send Feedback" shortText="Send" colorScheme="orange" />
                         </Link>
                     </div>
+
+                    {/* Bottom block (history list) */}
                     <div className="flex-grow overflow-y-auto no-scrollbar max-h-[365px]">
                         <ul className="space-y-4">
                             {initialHistory.map((item, index) => (
@@ -111,8 +141,10 @@ export const Feedback = ({
                             ))}
                         </ul>
                     </div>
+
                 </Card>
 
+                {/* Sentiment chart */}
                 <FeedbackSentimentChart
                     title="Sentiment"
                     givenData={givenSentimentData}
@@ -121,14 +153,24 @@ export const Feedback = ({
                     receivedColors={RECEIVED_SENTIMENT_COLORS}
                     className="lg:col-span-4"
                 />
+
             </div>
 
+            {/* Second row-section */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+                {/* Requests card */}
                 <Card className="flex flex-col lg:col-span-8">
+
+                    {/* Upper block (title + button) */}
                     <div className="flex justify-between items-center mb-6">
                         <SectionTitle icon={<MessageSquare className="h-6 w-6 text-blue-500" />} title="Requests" />
-                        <ActionButton icon={<PlusCircle className="h-4 w-4 mr-1.5" />} text="Request New" shortText="Request" colorScheme="blue" />
+                        <Link href="/feedback/request">
+                            <ActionButton icon={<PlusCircle className="h-4 w-4 mr-1.5" />} text="Request New" shortText="Request" colorScheme="blue" />
+                        </Link>
                     </div>
+
+                    {/* Bottom block (history list) */}
                     <div className="flex-grow overflow-y-auto no-scrollbar max-h-[184px]">
                         <ul className="space-y-4">
                             {initialRequests.map((item) => (
@@ -136,14 +178,18 @@ export const Feedback = ({
                             ))}
                         </ul>
                     </div>
+
                 </Card>
                 
+                {/* Focus Activity Card */}
                 <FocusActivityCard
                     title="Overview"
                     data={focusData}
                     className="lg:col-span-4"
                 />
+
             </div>
+
         </div>
     );
 };
