@@ -1,3 +1,4 @@
+import { redirect } from 'next/navigation';
 import Dashboard from "@/components/Dashboard";
 import { serverFetch } from "@/lib/server-api";
 import { sleep } from "@/lib/delay";
@@ -12,7 +13,15 @@ async function getDashboardData() {
 }
 
 export default async function HomePage() {
-  const dashboardData = await getDashboardData();
-  
-  return <Dashboard initialData={dashboardData} />;
+  try {
+    const dashboardData = await getDashboardData();
+    return <Dashboard initialData={dashboardData} />;
+  } catch (error) {
+    if (error.message === 'Unauthorized') {
+      // If unauthorized, redirect to the new login page.
+      redirect('/login'); 
+    }
+    // For other errors, let the Next.js error boundary handle it.
+    throw error;
+  }
 }

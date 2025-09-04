@@ -2,52 +2,82 @@
 
 import React, { createContext, useState, useContext, useEffect } from 'react';
 
+// Helper function to set the JWT in a browser cookie.
+const setTokenCookie = (token) => {
+    // Set cookie to expire in 1 day, to match the JWT expiry
+    const expires = new Date(Date.now() + 86400 * 1000).toUTCString();
+    // SameSite=Lax is a good default for a cookie the server needs to read on navigation
+    document.cookie = `token=${token}; expires=${expires}; path=/; SameSite=Lax`;
+};
+
+// Helper function to remove the JWT cookie on logout
+const removeTokenCookie = () => {
+    document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/;';
+};
+
+// Helper function to read the JWT from the browser cookie
+const getTokenFromCookie = () => {
+    const cookies = document.cookie.split(';');
+    for (let cookie of cookies) {
+        const [name, value] = cookie.trim().split('=');
+        if (name === 'token') {
+            return value;
+        }
+    }
+    return null;
+};
 
 const AuthContext = createContext(null);
 
-
 export const AuthProvider = ({ children }) => {
-
-
     const [user, setUser] = useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
-
-
     const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/auth`;
-
-
-
     const friendlyError = "Could not connect to the server. Please check your connection and try again later.";
-
-
-    // Function to clear the error
+    
     const clearError = () => setError(null);
 
-
-
-
     const checkSession = async () => {
+        const token = getTokenFromCookie();
+
+        if (!token) {
+            // If no token exists, we know the user isn't logged in.
+            setIsAuthenticated(false);
+            setUser(null);
+            setLoading(false);
+            return;
+        }
+
         try {
-            const response = await fetch(`${API_URL}/profile`, { credentials: 'include' });
+            // A token exists, so we'll verify it with the backend.
+            const response = await fetch(`${API_URL}/profile`, {
+                headers: {
+                    // Manually include the token in the Authorization header.
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            
             if (response.ok) {
                 const data = await response.json();
                 if (data.logged_in) {
                     setUser(data.user);
                     setIsAuthenticated(true);
                 } else {
+                    // The token was invalid, so clear everything.
                     setIsAuthenticated(false);
                     setUser(null);
+                    removeTokenCookie();
                 }
             } else {
                 setIsAuthenticated(false);
                 setUser(null);
+                removeTokenCookie();
             }
         } catch (err) {
             console.error("Session check failed:", err);
-            setError(friendlyError); // Set the global error
+            setError(friendlyError);
             setIsAuthenticated(false);
             setUser(null);
         } finally {
@@ -55,15 +85,9 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-
-
     useEffect(() => {
         checkSession();
     }, []);
-
-
-
-
 
     const login = async (email, password) => {
         try {
@@ -71,30 +95,28 @@ export const AuthProvider = ({ children }) => {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password }),
-                credentials: 'include'
             });
             const data = await response.json();
             if (response.ok) {
                 setUser(data.user);
                 setIsAuthenticated(true);
+                setTokenCookie(data.token); 
                 return { success: true };
             }
             return { success: false, error: data.error };
         } catch (err) {
             console.error("Login failed:", err);
-            setError(friendlyError); // Set the global error
+            setError(friendlyError);
             return { success: false, error: friendlyError };
         }
     };
-
-
+    
     const signup = async (username, email, password) => {
         try {
             const response = await fetch(`${API_URL}/signup`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username, email, password }),
-                credentials: 'include'
             });
             const data = await response.json();
             if (response.ok) {
@@ -108,33 +130,26 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-
     const logout = async () => {
         try {
-            await fetch(`${API_URL}/logout`, { method: 'POST', credentials: 'include' });
+            await fetch(`${API_URL}/logout`, { method: 'POST' });
         } catch (err) {
             console.error("Logout failed:", err);
-            setError(friendlyError); // Set the global error
+            setError(friendlyError);
         } finally {
             setUser(null);
             setIsAuthenticated(false);
+            removeTokenCookie(); 
         }
     };
 
-
-
     const value = { user, isAuthenticated, loading, login, signup, logout, error, clearError };
-
-
-
 
     return (
         <AuthContext.Provider value={value}>
             {children}
         </AuthContext.Provider>
     );
-
 };
-
 
 export const useAuth = () => useContext(AuthContext);
