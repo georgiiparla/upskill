@@ -9,15 +9,13 @@ export function RouteErrorUI({ error, reset }) {
             <h2 className="text-xl font-bold text-red-700 dark:text-red-300">
                 Something went wrong!
             </h2>
+            
             <p className="mt-2 text-sm text-red-600 dark:text-red-400">
-                {/* Display a generic message or the actual error for debugging */}
-                {error?.message || "An unexpected error occurred on the server."}
+                We're having trouble loading this page. Please try again or contact support if the problem persists.
             </p>
+
             <button
-                onClick={
-                    // Attempt to recover by trying to re-render the segment
-                    () => reset()
-                }
+                onClick={() => reset()}
                 className="mt-6 px-4 py-2 text-sm font-semibold text-white bg-red-600 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
             >
                 Try again
