@@ -2,30 +2,7 @@
 
 import React, { createContext, useState, useContext, useEffect } from 'react';
 
-// Helper function to set the JWT in a browser cookie.
-const setTokenCookie = (token) => {
-    // Set cookie to expire in 1 day, to match the JWT expiry
-    const expires = new Date(Date.now() + 86400 * 1000).toUTCString();
-    // SameSite=Lax is a good default for a cookie the server needs to read on navigation
-    document.cookie = `token=${token}; expires=${expires}; path=/; SameSite=Lax`;
-};
-
-// Helper function to remove the JWT cookie on logout
-const removeTokenCookie = () => {
-    document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/;';
-};
-
-// Helper function to read the JWT from the browser cookie
-const getTokenFromCookie = () => {
-    const cookies = document.cookie.split(';');
-    for (let cookie of cookies) {
-        const [name, value] = cookie.trim().split('=');
-        if (name === 'token') {
-            return value;
-        }
-    }
-    return null;
-};
+import { setTokenCookie, removeTokenCookie, getTokenFromCookie } from '@/context/token_helpers'
 
 const AuthContext = createContext(null);
 
@@ -36,7 +13,7 @@ export const AuthProvider = ({ children }) => {
     const [error, setError] = useState(null);
     const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/auth`;
     const friendlyError = "Could not connect to the server. Please check your connection and try again later.";
-    
+
     const clearError = () => setError(null);
 
     const checkSession = async () => {
@@ -58,7 +35,7 @@ export const AuthProvider = ({ children }) => {
                     'Authorization': `Bearer ${token}`
                 }
             });
-            
+
             if (response.ok) {
                 const data = await response.json();
                 if (data.logged_in) {
@@ -91,28 +68,37 @@ export const AuthProvider = ({ children }) => {
 
     const login = async (email, password) => {
         try {
+
             const response = await fetch(`${API_URL}/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password }),
             });
+
             const data = await response.json();
+
             if (response.ok) {
                 setUser(data.user);
                 setIsAuthenticated(true);
-                setTokenCookie(data.token); 
+                setTokenCookie(data.token);
                 return { success: true };
             }
+
             return { success: false, error: data.error };
+
         } catch (err) {
+
             console.error("Login failed:", err);
             setError(friendlyError);
             return { success: false, error: friendlyError };
+
         }
     };
-    
+
     const signup = async (username, email, password) => {
+
         try {
+
             const response = await fetch(`${API_URL}/signup`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -123,14 +109,17 @@ export const AuthProvider = ({ children }) => {
                 return { success: true };
             }
             return { success: false, error: data.error };
+
         } catch (err) {
             console.error("Signup failed:", err);
             setError(friendlyError);
             return { success: false, error: friendlyError };
         }
+
     };
 
     const logout = async () => {
+
         try {
             await fetch(`${API_URL}/logout`, { method: 'POST' });
         } catch (err) {
@@ -139,8 +128,9 @@ export const AuthProvider = ({ children }) => {
         } finally {
             setUser(null);
             setIsAuthenticated(false);
-            removeTokenCookie(); 
+            removeTokenCookie();
         }
+
     };
 
     const value = { user, isAuthenticated, loading, login, signup, logout, error, clearError };

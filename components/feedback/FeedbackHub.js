@@ -120,7 +120,7 @@ const NewFeedbackForm = () => {
 
                             {/* Second row */}
                             <SentimentPicker selected={sentiment} onSelect={setSentiment} />
-                            
+
                             {/* Third row */}
                             <details className="group">
                                 <summary className="flex items-center gap-2 text-sm font-medium text-gray-500 dark:text-gray-400 cursor-pointer list-none select-none">
@@ -194,7 +194,7 @@ const NewFeedbackForm = () => {
     );
 };
 
-export default function NewFeedbackPage() {
+export default function FeedbackHub() {
     return (
         // Page block
         <div className="container mx-auto px-4">

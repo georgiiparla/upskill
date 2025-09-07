@@ -7,14 +7,18 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
 export const Auth = ({ mode }) => {
+
     const isLoginView = mode === 'login';
+
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+
+    const { login, signup, isAuthenticated } = useAuth();
+
+    const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
-    const { login, signup, isAuthenticated } = useAuth();
-    const [showPassword, setShowPassword] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
 
     const router = useRouter();
@@ -29,13 +33,16 @@ export const Auth = ({ mode }) => {
 
     // Effect to show a success message after signing up
     useEffect(() => {
+
         if (searchParams.get('signup') === 'success') {
             setError('Signup successful! Please log in.');
             setIsSuccess(true);
         }
+
     }, [searchParams]);
 
     const handleSubmit = async (e) => {
+
         e.preventDefault();
         setLoading(true);
         setError('');
@@ -55,6 +62,7 @@ export const Auth = ({ mode }) => {
         }
         // On successful login, the `isAuthenticated` state will change,
         // and the first useEffect will redirect to the dashboard.
+
     };
 
     return (

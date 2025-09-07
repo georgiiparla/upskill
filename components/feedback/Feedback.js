@@ -9,7 +9,6 @@ import { ActionButton } from '../shared/Buttons';
 
 // Focus activity card (Overview) component for overview feedback page
 const FocusActivityCard = ({ title, data, className = '' }) => {
-    // utility data for component
     const ICONS = {
         "Requests Sent": <Send className="h-5 w-5 text-blue-500" />,
         "Requests Answered": <Check className="h-5 w-5 text-teal-500" />,
@@ -18,29 +17,17 @@ const FocusActivityCard = ({ title, data, className = '' }) => {
 
     return (
         <Card className={className}>
-
-            {/* Card title (e.g. Overview) */}
             <SectionTitle className='mb-7' icon={<TrendingUp className="h-5 w-5 text-csway-green" />} title={title} />
-
             <div className="mt-4 space-y-2">
-                {/* Requests Sent, Requests Answered, Requests Ignored... */}
                 {data.map((item) => (
                     <div key={item.name} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800/60 rounded-lg">
-
                         <div className="flex items-center gap-3">
-
-                            {/* Icon (e.g. Message Square) */}
                             <div className="bg-gray-200 dark:bg-gray-700 p-2 rounded-full">
                                 {ICONS[item.name] || <BarChart2 className="h-5 w-5 text-gray-500" />}
                             </div>
-                            {/* Title (e.g. Requests Sent) */}
                             <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{item.name}</span>
-
                         </div>
-
-                        {/* Value (e.g. 5) */}
                         <span className="text-xl font-bold text-gray-800 dark:text-gray-100">{item.value}</span>
-
                     </div>
                 ))}
             </div>
@@ -58,9 +45,9 @@ const SentimentChartSkeleton = () => {
             <div className="relative flex justify-center items-center my-4 h-[200px]">
                 <div className="h-48 w-48 rounded-full bg-gray-200 dark:bg-gray-700" />
                 <div className="absolute h-40 w-40 rounded-full bg-white dark:bg-gray-800/50" />
-                 <TextSkeleton className="absolute h-8 w-10" />
+                <TextSkeleton className="absolute h-8 w-10" />
             </div>
-             <div className="mt-14 space-y-3">
+            <div className="mt-14 space-y-3">
                 {[...Array(3)].map((_, i) => (
                     <div key={`legend-${i}`} className="flex items-center justify-between text-sm">
                         <div className="flex items-center gap-2">
@@ -84,20 +71,17 @@ const FeedbackSentimentChart = dynamic(
     }
 );
 
-// required props passed to Feedback component from outside
-export const Feedback = ({ 
-    initialHistory, 
-    initialRequests, 
-    givenSentimentData, 
-    receivedSentimentData, 
-    focusData 
+export const Feedback = ({
+    initialSubmissions,
+    initialPrompts,
+    givenSentimentData,
+    receivedSentimentData,
+    focusData
 }) => {
-    
-    // component-specific data
+
     const GIVEN_SENTIMENT_COLORS = ['#14b8a6', '#f59e0b', '#f43f5e'];
     const RECEIVED_SENTIMENT_COLORS = ['#3b82f6', '#8b5cf6', '#ec4899'];
 
-    // component-specific getSentimentColor function
     const getSentimentColor = (sentiment) => {
         switch (sentiment) {
             case 'Positive': return 'border-green-500';
@@ -106,42 +90,33 @@ export const Feedback = ({
         }
     }
 
-    // component-specific getRequestStatusColor function
     const getRequestStatusColor = (status) => {
         switch (status) {
-            case 'Posted': return 'border-blue-500';
-            case 'Pending': return 'border-gray-500';
-            default: return 'border-gray-400';
+            case 'pending': return 'border-gray-500';
+            case 'completed': return 'border-green-500';
+            default: return 'border-blue-500';
         }
     }
 
     return (
-        // "space-y-8" = Add vertical spacing (margin) of 2rem (which equals 32 pixels) between all direct child elements stacked vertically
         <div className="space-y-8">
-
             {/* First row-section */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                
                 {/* Feedback card */}
                 <Card className="flex flex-col lg:col-span-8">
-
-                    {/* Upper block (title + button) */}
                     <div className="flex justify-between items-center mb-6">
-                        <SectionTitle icon={<MessageSquare className="h-6 w-6 text-csway-orange" />} title="Feedback" />
+                        <SectionTitle icon={<MessageSquare className="h-6 w-6 text-csway-orange" />} title="Feedback Submissions" />
                         <Link href="/feedback/new">
                             <ActionButton icon={<PlusCircle className="h-4 w-4 mr-1.5" />} text="Send Feedback" shortText="Send" colorScheme="orange" />
                         </Link>
                     </div>
-
-                    {/* Bottom block (history list) */}
                     <div className="flex-grow overflow-y-auto no-scrollbar max-h-[365px]">
                         <ul className="space-y-4">
-                            {initialHistory.map((item, index) => (
+                            {initialSubmissions.map((item, index) => (
                                 <HistoryListItem key={`${item.id}-feedback-${index}`} subject={item.subject} createdAt={item.created_at} content={item.content} borderColorClass={getSentimentColor(item.sentiment)} />
                             ))}
                         </ul>
                     </div>
-
                 </Card>
 
                 {/* Sentiment chart */}
@@ -153,43 +128,40 @@ export const Feedback = ({
                     receivedColors={RECEIVED_SENTIMENT_COLORS}
                     className="lg:col-span-4"
                 />
-
             </div>
 
             {/* Second row-section */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-
                 {/* Requests card */}
                 <Card className="flex flex-col lg:col-span-8">
-
-                    {/* Upper block (title + button) */}
                     <div className="flex justify-between items-center mb-6">
-                        <SectionTitle icon={<MessageSquare className="h-6 w-6 text-blue-500" />} title="Requests" />
+                        <SectionTitle icon={<MessageSquare className="h-6 w-6 text-blue-500" />} title="Feedback Prompts" />
                         <Link href="/feedback/request">
                             <ActionButton icon={<PlusCircle className="h-4 w-4 mr-1.5" />} text="Request New" shortText="Request" colorScheme="blue" />
                         </Link>
                     </div>
-
-                    {/* Bottom block (history list) */}
                     <div className="flex-grow overflow-y-auto no-scrollbar max-h-[184px]">
                         <ul className="space-y-4">
-                            {initialRequests.map((item) => (
-                                <HistoryListItem key={item.id} subject={item.subject} createdAt={item.requested_at} content={item.question} borderColorClass={getRequestStatusColor(item.status)} />
+                            {initialPrompts.map((item) => (
+                                <HistoryListItem
+                                    key={item.id}
+                                    subject={item.topic}
+                                    createdAt={item.created_at}
+                                    content={item.details}
+                                    borderColorClass={getRequestStatusColor(item.status)}
+                                />
                             ))}
                         </ul>
                     </div>
-
                 </Card>
-                
+
                 {/* Focus Activity Card */}
                 <FocusActivityCard
                     title="Overview"
                     data={focusData}
                     className="lg:col-span-4"
                 />
-
             </div>
-
         </div>
     );
 };

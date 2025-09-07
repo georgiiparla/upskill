@@ -70,29 +70,19 @@ export const MOCK_FEEDBACK_TOPICS = [
     '[26 Aug 16:50] Onboarding Process, Jamie Lee',
 ];
 
-// For the scrollable history list
-export const MOCK_FEEDBACK_HISTORY = [
-    { user_id: 1, subject: 'Q3 Marketing Plan', content: 'The plan is well-structured...', created_at: '2025-08-15T09:00:00Z', sentiment: 'Neutral' },
-    { user_id: 2, subject: 'New Feature Design', content: 'I love the new UI!...', created_at: '2025-08-14T11:30:00Z', sentiment: 'Positive' },
-    { user_id: 3, subject: 'API Documentation', content: 'The endpoint for user authentication is missing...', created_at: '2025-08-12T16:45:00Z', sentiment: 'Negative' },
-    { user_id: 4, subject: 'API Documentation', content: 'The endpoint for user authentication is missing...', created_at: '2025-08-13T16:45:00Z', sentiment: 'Negative' },
-    { user_id: 5, subject: 'API Documentation', content: 'The endpoint for user authentication is missing...', created_at: '2025-08-14T16:45:00Z', sentiment: 'Negative' },
-    { user_id: 6, subject: 'API Documentation', content: 'The endpoint for user authentication is missing...', created_at: '2025-08-15T16:45:00Z', sentiment: 'Negative' },
-];
+export const MOCK_FEEDBACK_SUBMISSIONS = {
+    items: [
+        { id: 1, subject: 'Q3 Marketing Plan (Mock)', content: 'The plan is well-structured, but the timeline seems aggressive.', created_at: '2025-08-15T09:00:00Z', sentiment: 'Neutral' },
+        { id: 2, subject: 'New Feature Design (Mock)', content: 'I love the new UI! It\'s much more intuitive.', created_at: '2025-08-14T11:30:00Z', sentiment: 'Positive' },
+        { id: 3, subject: 'API Documentation (Mock)', content: 'The endpoint for user auth is missing examples.', created_at: '2025-08-12T16:45:00Z', sentiment: 'Negative' },
+    ],
+    hasMore: true,
+};
 
-export const MOCK_FEEDBACK_REQUESTS = [
-    {
-        id: 1,
-        subject: 'Q4 Strategy Deck Review',
-        question: 'Looking for feedback on the new market analysis on slide 5.',
-        status: 'Posted',
-        requested_at: '2025-08-22'
-    },
-    {
-        id: 2,
-        subject: 'API Refactor Branch',
-        question: 'Is the new error handling logic robust enough for production?',
-        status: 'Pending',
-        requested_at: '2025-08-26'
-    },
-];
+export const MOCK_FEEDBACK_PROMPTS = {
+    items: [
+        { id: 1, topic: 'Q4 Strategy Deck Review (Mock)', details: 'Looking for feedback on the new market analysis on slide 5.', status: 'pending', requester_username: 'Alex Rivera' },
+        { id: 2, topic: 'API Refactor Branch (Mock)', details: 'Is the new error handling logic robust enough for production?', status: 'pending', requester_username: 'Casey Jordan' },
+    ],
+    hasMore: true,
+};
