@@ -1,4 +1,5 @@
 import { formatRelativeTime } from "@/lib/helper_func";
+import Link from "next/link";
 
 export const SectionTitle = ({ icon, title, className = '' }) => (
     <div className={`flex items-center mb-4 ${className}`}>
@@ -36,22 +37,35 @@ export const InfoCard = ({ icon, title, items, renderItem, listClassName = "spac
     );
 };
 
-export const HistoryListItem = ({ subject, createdAt, content, borderColorClass }) => {
+export const HistoryListItem = ({ subject, createdAt, content, borderColorClass, href }) => {
+    const itemContent = (
+        <>
+            <div className="flex justify-between items-center mb-1">
+                <h4 className="text-sm md:text-base font-semibold text-gray-800 dark:text-gray-200 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{subject}</h4>
+                <span className="text-xs text-gray-500 dark:text-gray-400 flex-shrink-0 ml-2">{formatRelativeTime(createdAt)}</span>
+            </div>
+            <p className="text-xs md:text-sm text-gray-600 dark:text-gray-300 truncate">
+                {content}
+            </p>
+        </>
+    );
+
     return (
         <li
             className={`
-                bg-gray-50 dark:bg-gray-800/60 p-4 rounded-lg
+                bg-gray-50 dark:bg-gray-800/60 p-4 rounded-lg group
                 transition-colors hover:bg-gray-100 dark:hover:bg-gray-700/80
-                border-l-2 ${borderColorClass}
+                border-l-4 ${borderColorClass}
+                ${href ? 'cursor-pointer' : ''}
             `}
         >
-            <div className="flex justify-between items-center mb-1">
-                <h4 className="text-sm font-semibold text-gray-800 dark:text-gray-200">{subject}</h4>
-                <span className="text-xs text-gray-500 dark:text-gray-400">{formatRelativeTime(createdAt)}</span>
-            </div>
-            <p className="text-sm text-gray-600 dark:text-gray-300 truncate">
-                {content}
-            </p>
+            {href ? (
+                <Link href={href} passHref>
+                    {itemContent}
+                </Link>
+            ) : (
+                itemContent
+            )}
         </li>
     );
 };

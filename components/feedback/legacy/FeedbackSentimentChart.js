@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { BarChart2, ChevronDown } from 'lucide-react';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
 import { useTheme } from 'next-themes';
-import { Card, SectionTitle } from "../shared/Helper";
+import { Card, SectionTitle } from "../../shared/Helper";
 
 const FeedbackSentimentChart = ({ title, givenData, receivedData, givenColors, receivedColors, className }) => {
     //  React stuff
@@ -24,8 +24,8 @@ const FeedbackSentimentChart = ({ title, givenData, receivedData, givenColors, r
 
             {currentData.map((entry, index) => (
                 // Legend row generation
-                <div 
-                    key={`legend-${index}`} 
+                <div
+                    key={`legend-${index}`}
                     className="flex items-center justify-between text-sm"
                 >
 
@@ -53,7 +53,7 @@ const FeedbackSentimentChart = ({ title, givenData, receivedData, givenColors, r
         <Card className={className}>
 
             {/* First row */}
-             <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center">
 
                 <SectionTitle icon={<BarChart2 className="h-5 w-5 text-csway-green" />} title={title} />
 
@@ -103,11 +103,11 @@ const FeedbackSentimentChart = ({ title, givenData, receivedData, givenColors, r
                                 />
                             ))}
                         </Pie>
-                        
+
                         {/* Hint on hover */}
                         <Tooltip
                             cursor={{ fill: 'transparent' }}
-                             contentStyle={{
+                            contentStyle={{
                                 backgroundColor: theme === 'dark' ? 'rgba(31, 41, 55, 0.8)' : 'rgba(255, 255, 255, 0.8)',
                                 backdropFilter: 'blur(4px)',
                                 borderRadius: '0.5rem',
@@ -118,7 +118,7 @@ const FeedbackSentimentChart = ({ title, givenData, receivedData, givenColors, r
                                 color: theme === 'dark' ? '#e5e7eb' : '#1f2937',
                             }}
                         />
-                        
+
                         {/* Central total counter */}
                         <text x="50%" y="50%" textAnchor="middle" dominantBaseline="middle" className="text-3xl font-bold fill-current text-gray-800 dark:text-gray-200">
                             {total}
