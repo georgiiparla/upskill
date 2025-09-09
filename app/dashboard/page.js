@@ -18,10 +18,8 @@ export default async function HomePage() {
     return <Dashboard initialData={dashboardData} />;
   } catch (error) {
     if (error.message === 'Unauthorized') {
-      // If unauthorized, redirect to the new login page.
       redirect('/login'); 
     }
-    // For other errors, let the Next.js error boundary handle it.
     throw error;
   }
 }

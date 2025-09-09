@@ -2,14 +2,13 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 import { Send, Loader2, RefreshCw, Clipboard } from 'lucide-react';
 
 import { clientFetch } from '@/lib/client-api';
 import { Card } from '../shared/Helper';
 import { generateRandomTag } from '@/lib/helper_func';
 
-// --- Animation Variants for Framer Motion ---
 const formContainerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -34,7 +33,6 @@ const formItemVariants = {
     },
 };
 
-// Request form component
 const CreateRequestForm = () => {
 
     const [topic, setTopic] = useState('');
@@ -91,8 +89,6 @@ const CreateRequestForm = () => {
 
     return (
         <>
-            <Toaster position="bottom-right" toastOptions={{ style: { background: '#333', color: '#fff' } }} />
-
             <div className="max-w-xl mx-auto">
                 <form onSubmit={handleSubmit}>
                     <motion.div

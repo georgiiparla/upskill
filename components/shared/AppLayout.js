@@ -1,7 +1,7 @@
 "use client"
 
 import { useAuth } from '@/context/AuthContext';
-import { Navbar } from '@/components/shared/Navbar';
+import { Navbar } from '@/components/shared/navbar/Navbar';
 import { Loader2 } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
@@ -23,14 +23,11 @@ export default function AppLayout({ children }) {
     const isPublicRoute = PUBLIC_ROUTES.includes(pathname);
 
     useEffect(() => {
-        // If loading is finished and the user is NOT authenticated on a PROTECTED route,
-        // redirect them to the login page.
         if (!loading && !isAuthenticated && !isPublicRoute) {
             router.push('/login');
         }
     }, [loading, isAuthenticated, isPublicRoute, router, pathname]);
 
-    // Show a global loading screen while checking auth state
     if (loading) {
         return (
             <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
@@ -39,12 +36,10 @@ export default function AppLayout({ children }) {
         );
     }
 
-    // For public routes, just render the page content.
     if (isPublicRoute) {
         return <>{children}</>;
     }
 
-    // For authenticated users on protected routes, render the full app layout.
     if (isAuthenticated && !isPublicRoute) {
         return (
             <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
@@ -58,7 +53,6 @@ export default function AppLayout({ children }) {
         );
     }
 
-    // This renders a loader for the brief moment before the redirect effect kicks in for unauthenticated users.
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
             <Loader2 className="h-12 w-12 animate-spin text-csway-green" />

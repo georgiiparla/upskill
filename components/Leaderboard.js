@@ -53,7 +53,7 @@ export const Leaderboard = ({ initialData }) => {
             </div>
             <div>
                 <SectionTitle icon={<Trophy className="h-6 w-6 text-csway-orange" />} title="Ladder" />
-                {/* Desktop View */}
+                
                 <div className="hidden md:block">
                     <Card>
                         <div className="overflow-x-auto">
@@ -80,7 +80,7 @@ export const Leaderboard = ({ initialData }) => {
                         </div>
                     </Card>
                 </div>
-                {/* Mobile view */}
+                
                 <div className="md:hidden">
                     <Card>
                         <div className="space-y-2">

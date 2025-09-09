@@ -1,4 +1,3 @@
-// File: components/feedback/Feedback.js
 "use client"
 
 import { useState } from 'react';
@@ -14,13 +13,19 @@ export const Feedback = ({
     const [view, setView] = useState('active');
     const [searchTerm, setSearchTerm] = useState('');
 
-    const getSentimentColor = (sentiment) => {
-        switch (sentiment) {
-            case 'Positive': return 'border-green-500';
-            case 'Negative': return 'border-red-500';
-            default: return 'border-amber-500';
+    const getSentimentColor = (sentimentText) => {
+        switch (sentimentText) {
+            case 'Far Exceeds Expectations':
+                return 'border-teal-500';
+            case 'Exceeds Expectations':
+                return 'border-green-500';
+            case 'Needs Improvement':
+                return 'border-red-500';
+            case 'Meets Expectations':
+            default:
+                return 'border-amber-500';
         }
-    }
+    };
 
     const getRequestStatusColor = (status) => {
         switch (status) {
@@ -40,8 +45,8 @@ export const Feedback = ({
 
     const searchedRequests = initialRequests.filter(item => {
         const topicMatch = item.topic?.toLowerCase().includes(lowerCaseSearchTerm) || false;
-        const detailsMatch = item.details?.toLowerCase().includes(lowerCaseSearchTerm) || false;
-        return topicMatch || detailsMatch;
+        const authorMatch = item.requester_username?.toLowerCase().includes(lowerCaseSearchTerm) || false;
+        return topicMatch || authorMatch;
     });
 
     const myRequests = searchedRequests.filter(item => item.isOwner);
@@ -73,17 +78,22 @@ export const Feedback = ({
         
         return (
             <ul className="space-y-4">
-                {listToRender.map((item) => (
-                    <HistoryListItem
-                        // Use a more unique key for submissions to prevent potential conflicts
-                        key={view === 'submissions' ? `sub-${item.id}` : `req-${item.id}`}
-                        href={item.tag ? `/feedback/request/${item.tag}` : (item.requestTag ? `/feedback/request/${item.requestTag}`: undefined)}
-                        subject={view === 'submissions' ? item.subject : item.topic}
-                        createdAt={item.created_at}
-                        content={view === 'submissions' ? item.content : `Requested by: ${item.isOwner ? 'Me' : item.requester_username}`}
-                        borderColorClass={view === 'submissions' ? getSentimentColor(item.sentiment) : getRequestStatusColor(item.status)}
-                    />
-                ))}
+                {listToRender.map((item) => {
+                    const href = view === 'submissions'
+                        ? (item.request_tag ? `/feedback/request/${item.request_tag}` : undefined)
+                        : (item.tag ? `/feedback/request/${item.tag}` : undefined);
+                    
+                    return (
+                        <HistoryListItem
+                            key={view === 'submissions' ? `sub-${item.id}` : `req-${item.id}`}
+                            href={href}
+                            subject={view === 'submissions' ? item.subject : item.topic}
+                            createdAt={item.created_at}
+                            content={view === 'submissions' ? item.content : `Requested by: ${item.isOwner ? 'Me' : item.requester_username}`}
+                            borderColorClass={view === 'submissions' ? getSentimentColor(item.sentiment_text) : getRequestStatusColor(item.status)}
+                        />
+                    );
+                })}
             </ul>
         );
     };
@@ -106,7 +116,7 @@ export const Feedback = ({
                 <SearchBar
                     searchTerm={searchTerm}
                     onSearchChange={setSearchTerm}
-                    placeholder="Search list..."
+                    placeholder="Search by topic or author..."
                     className="mb-6"
                 />
 

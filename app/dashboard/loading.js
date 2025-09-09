@@ -3,7 +3,7 @@ import { CardSkeleton } from "@/components/shared/skeletons/Skeletons";
 export default function DashboardSkeleton() {
     return (
         <div className="space-y-8 animate-pulse">
-            {/* Skeleton for "This Week's Agenda" Card */}
+            
             <CardSkeleton className="!py-16">
                 <div className="h-7 w-1/2 bg-gray-300 dark:bg-gray-700 rounded mb-7"></div>
                 <div className="relative border-l border-gray-200 dark:border-gray-700 ml-3 space-y-6">
@@ -17,19 +17,19 @@ export default function DashboardSkeleton() {
             </CardSkeleton>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                {/* Column 1: ActivityCard Skeleton */}
+                
                 <div className="md:col-span-1">
                     <CardSkeleton className='h-full' innerClassName='h-full flex flex-col justify-between'>
                         <div className='h-full flex flex-col justify-between'>
-                            {/* Replaced solid bar with a two-button toggle skeleton */}
+                            
                             <div className="flex space-x-1 rounded-lg bg-gray-300 dark:bg-gray-700 p-1 h-10">
                                 <div className="w-full rounded-md bg-white dark:bg-gray-800"></div>
                                 <div className="w-full rounded-md"></div>
                             </div>
 
-                            {/* Replaced solid blocks with outlined cards containing inner shapes */}
+                            
                             <div className="space-y-4 w-full">
-                                {/* First Stat Box */}
+                                
                                 <div className="border border-gray-200 dark:border-gray-700 p-4 rounded-lg h-[88px]">
                                     <div className="flex items-start space-x-4">
                                         <div className="h-6 w-6 rounded-md bg-gray-300 dark:bg-gray-600 mt-1"></div>
@@ -42,7 +42,7 @@ export default function DashboardSkeleton() {
                                         </div>
                                     </div>
                                 </div>
-                                {/* Second Stat Box */}
+                                
                                 <div className="border border-gray-200 dark:border-gray-700 p-4 rounded-lg h-[88px]">
                                      <div className="flex items-start space-x-4">
                                         <div className="h-6 w-6 rounded-md bg-gray-300 dark:bg-gray-600 mt-1"></div>
@@ -59,7 +59,7 @@ export default function DashboardSkeleton() {
                         </div>
                     </CardSkeleton>
                 </div>
-                 {/* Column 2: Live Activity Stream Skeleton */}
+                 
                 <div className="md:col-span-2">
                     <CardSkeleton>
                         <div className="h-7 w-1/2 bg-gray-300 dark:bg-gray-700 rounded mb-4"></div>

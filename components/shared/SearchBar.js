@@ -1,4 +1,3 @@
-// components/shared/SearchBar.js
 
 import { Search } from 'lucide-react';
 

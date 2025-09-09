@@ -2,23 +2,21 @@
 
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
 import { useTheme } from 'next-themes';
-import { Card, SectionTitle } from "@/components/shared/Helper"; // Assuming path based on previous files
+import { Card, SectionTitle } from "@/components/shared/Helper";
 import { BarChart2 } from 'lucide-react';
 
-// Color mapping for sentiments, consistent with previous bar chart logic
 const SENTIMENT_COLOR_MAP = {
-    Positive: '#22a55e', // csway-green
-    Neutral: '#f59e0b',  // amber-500
-    Negative: '#e37a7b', // csway-red
+    'Far Exceeds Expectations': '#14b8a6',
+    'Exceeds Expectations': '#22a55e',
+    'Meets Expectations': '#f59e0b',
+    'Needs Improvement': '#e37a7b',
 };
 
 export const RequestSentimentDonutChart = ({ title, data, className }) => {
     const { theme } = useTheme();
 
-    // Calculate total from the 'count' property in the data array
     const total = data.reduce((acc, entry) => acc + entry.count, 0);
 
-    // Legend component for displaying breakdown below the chart
     const Legend = () => (
         <div className="space-y-2 mt-4">
             {data.map((entry) => (
@@ -44,18 +42,16 @@ export const RequestSentimentDonutChart = ({ title, data, className }) => {
             <SectionTitle icon={<BarChart2 className="h-5 w-5 text-csway-green" />} title={title} />
 
             <div className="relative flex justify-center items-center h-[200px]">
-                {/* Background fill */}
                 <div className="absolute h-[160px] w-[160px] rounded-full bg-gray-100 dark:bg-gray-900"></div>
-
                 <ResponsiveContainer width="100%" height="100%" className="absolute">
                     <PieChart>
                         <Pie
                             data={data}
-                            dataKey="count" // Use 'count' key from requestData calculation
+                            dataKey="count"
                             innerRadius={70}
                             outerRadius={85}
                             paddingAngle={5}
-                            isAnimationActive={false}
+                            isAnimationActive={true}
                         >
                             {data.map((entry) => (
                                 <Cell
@@ -78,7 +74,6 @@ export const RequestSentimentDonutChart = ({ title, data, className }) => {
                                 color: theme === 'dark' ? '#e5e7eb' : '#1f2937',
                             }}
                         />
-                        {/* Central total counter */}
                         <text x="50%" y="50%" textAnchor="middle" dominantBaseline="middle" className="text-3xl font-bold fill-current text-gray-800 dark:text-gray-200">
                             {total}
                         </text>

@@ -24,14 +24,12 @@ export const Auth = ({ mode }) => {
     const router = useRouter();
     const searchParams = useSearchParams();
 
-    // Effect to redirect already-authenticated users away from login/signup
     useEffect(() => {
         if (isAuthenticated) {
             router.push('/dashboard');
         }
     }, [isAuthenticated, router]);
 
-    // Effect to show a success message after signing up
     useEffect(() => {
 
         if (searchParams.get('signup') === 'success') {
@@ -57,11 +55,8 @@ export const Auth = ({ mode }) => {
         if (!response.success) {
             setError(response.error || `An unknown error occurred.`);
         } else if (!isLoginView) {
-            // After successful signup, redirect to login page with a success flag
             router.push('/login?signup=success');
         }
-        // On successful login, the `isAuthenticated` state will change,
-        // and the first useEffect will redirect to the dashboard.
 
     };
 

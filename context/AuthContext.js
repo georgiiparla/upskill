@@ -20,7 +20,6 @@ export const AuthProvider = ({ children }) => {
         const token = getTokenFromCookie();
 
         if (!token) {
-            // If no token exists, we know the user isn't logged in.
             setIsAuthenticated(false);
             setUser(null);
             setLoading(false);
@@ -28,10 +27,8 @@ export const AuthProvider = ({ children }) => {
         }
 
         try {
-            // A token exists, so we'll verify it with the backend.
             const response = await fetch(`${API_URL}/profile`, {
                 headers: {
-                    // Manually include the token in the Authorization header.
                     'Authorization': `Bearer ${token}`
                 }
             });
@@ -42,7 +39,6 @@ export const AuthProvider = ({ children }) => {
                     setUser(data.user);
                     setIsAuthenticated(true);
                 } else {
-                    // The token was invalid, so clear everything.
                     setIsAuthenticated(false);
                     setUser(null);
                     removeTokenCookie();

@@ -21,7 +21,7 @@ export const InfoCard = ({ icon, title, items, renderItem, listClassName = "spac
     return (
         <Card className="flex flex-col ">
             <SectionTitle icon={icon} title={title} />
-            {/* //!Technical debt with Height */}
+            
             <div className="flex-grow overflow-y-auto no-scrollbar max-h-[210px]">
                 {items && items.length > 0 ? (
                     <ul className={listClassName}>

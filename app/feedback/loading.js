@@ -1,6 +1,5 @@
 import { CardSkeleton, TextSkeleton } from "@/components/shared/skeletons/Skeletons";
 
-// Skeleton for a list item in the history cards
 const HistoryListItemSkeleton = () => (
     <li className="bg-gray-50 dark:bg-gray-800/60 p-4 rounded-lg border-l-2 border-gray-300 dark:border-gray-600">
         <div className="flex justify-between items-center mb-2">
@@ -11,7 +10,6 @@ const HistoryListItemSkeleton = () => (
     </li>
 );
 
-// Skeleton for an item in the Focus Activity card
 const FocusActivityItemSkeleton = () => (
     <li className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800/60 rounded-lg">
         <div className="flex items-center gap-3">

@@ -1,6 +1,8 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 
+import { Toaster } from 'react-hot-toast';
+
 import { ThemeProvider } from '../components/shared/ThemeProvider';
 import { AuthProvider } from "@/context/AuthContext";
 import { GlobalErrorNotifier } from "@/components/shared/GlobalErrorNotifier";
@@ -22,6 +24,7 @@ export default function RootLayout({ children }) {
                 <AuthProvider>
                     <GlobalErrorNotifier />
 				    <ThemeProvider>
+                        <Toaster position="bottom-right" />
 					    <AppLayout>{children}</AppLayout>
 				    </ThemeProvider>
                 </AuthProvider>

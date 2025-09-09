@@ -16,7 +16,7 @@ export const Quests = ({ initialQuests }) => {
                             <span className="bg-yellow-100 text-yellow-800 text-xs font-semibold px-2.5 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300">{quest.points} PTS</span>
                         </div>
                         
-                        {/* 👇 The description and all other UI elements are preserved */}
+                        
                         <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">{quest.description}</p>
                         
                         <div className="mt-4">

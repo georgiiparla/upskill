@@ -7,7 +7,7 @@ export const GlobalErrorNotifier = () => {
     const { error, clearError } = useAuth();
 
     if (!error) {
-        return null; // Don't render anything if there is no error
+        return null;
     }
 
     return (

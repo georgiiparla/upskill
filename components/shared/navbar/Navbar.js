@@ -1,4 +1,3 @@
-// File: components/shared/Navbar.js
 "use client"
 
 import { React, useState, useEffect } from 'react';
@@ -9,25 +8,19 @@ import { Menu, X, Sun, Moon, LogOut } from 'lucide-react';
 import Image from 'next/image';
 
 import { useAuth } from '@/context/AuthContext';
-import { Modal } from '@/components/auth/Modal';
+import { Modal } from '@/components/shared/Modal';
+import { DesktopDropdown, DropdownItem } from './NavDropdown';
 
-// Helper NavLink component - REFACTORED TO FIX ANIMATION BUG
 const NavLink = ({ href, children, scrolled }) => {
     const pathname = usePathname();
     const isActive = pathname === href;
 
-    // Base classes are now consistent. We always have a border.
     const baseClasses = "border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out";
-
-    // Conditionally set padding for the folded/unfolded state.
     const paddingClass = scrolled ? "px-3 py-2" : "px-1 pt-1";
-
-    // Explicitly control ONLY the text and border colors based on state.
     const colorClasses = isActive
         ? `text-gray-900 dark:text-gray-100 ${scrolled ? 'border-transparent' : 'border-csway-green dark:border-csway-green'}`
         : `text-gray-500 dark:text-gray-400 border-transparent hover:text-gray-700 dark:hover:text-gray-300 ${!scrolled ? 'hover:border-gray-300 dark:hover:border-gray-600' : ''}`;
     
-    // The small dot indicator for the active link in the scrolled state
     const activeIndicator = (
         <span className={`absolute left-0 top-1/2 -translate-y-1/2 h-1.5 w-1.5 bg-csway-green rounded-full transition-opacity duration-300 ${isActive && scrolled ? 'opacity-100' : 'opacity-0'}`}></span>
     );
@@ -40,7 +33,6 @@ const NavLink = ({ href, children, scrolled }) => {
     );
 };
 
-// Helper Mobile NavLink component (no changes needed here)
 const MobileNavLink = ({ href, children, closeMenu }) => {
     const pathname = usePathname();
     const isActive = pathname === href;
@@ -55,13 +47,13 @@ const MobileNavLink = ({ href, children, closeMenu }) => {
     );
 };
 
-
 export const Navbar = () => {
     const { theme, setTheme } = useTheme();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
     const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
     const { user, logout } = useAuth();
+
 
     useEffect(() => {
         const handleScroll = () => {
@@ -70,6 +62,7 @@ export const Navbar = () => {
         document.addEventListener('scroll', handleScroll);
         return () => document.removeEventListener('scroll', handleScroll);
     }, []);
+
 
     const handleLogoutConfirm = () => {
         logout();
@@ -83,6 +76,7 @@ export const Navbar = () => {
                 onClose={() => setIsLogoutModalOpen(false)}
                 onConfirm={handleLogoutConfirm}
                 title="Confirm Sign Out"
+                confirmText="Sign Out"
             >
                 Are you sure you want to sign out of your account?
             </Modal>
@@ -91,21 +85,27 @@ export const Navbar = () => {
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className={`flex items-center justify-between h-16 transition-[height] duration-300 ease-in-out ${scrolled ? 'h-[44px]' : ''}`}>
                         <div className="flex items-center">
-                            <Link href="/" className="flex-shrink-0 text-gray-900 dark:text-white font-bold text-xl flex items-center">
+                            <Link href="/dashboard" className="flex-shrink-0 text-gray-900 dark:text-white font-bold text-xl flex items-center">
                                 <Image src="/csway-logo.png" alt="CSway Logo" width={24} height={24} className="mr-2" />
                                 <span className={`transition-all duration-300 ease-in-out whitespace-nowrap overflow-hidden ${scrolled ? 'w-0 opacity-0' : ''}`}>Upskill</span>
                             </Link>
                             <div className="hidden md:block">
                                 <div className="ml-10 flex items-baseline space-x-4">
                                     <NavLink href="/dashboard" scrolled={scrolled}>Home</NavLink>
-                                    <NavLink href="/feedback" scrolled={scrolled}>My Feedback</NavLink>
-                                    <NavLink href="/feedback/request/new" scrolled={scrolled}>Request New</NavLink>
+                                    
+                                    
+                                    <DesktopDropdown title="Feedback" scrolled={scrolled} activePath="/feedback">
+                                        <DropdownItem href="/feedback">My Feedback</DropdownItem>
+                                        <DropdownItem href="/feedback/request/new">Request New</DropdownItem>
+                                    </DesktopDropdown>
+                                    
                                     <NavLink href="/quests" scrolled={scrolled}>Quests</NavLink>
                                     <NavLink href="/leaderboard" scrolled={scrolled}>Leaderboard</NavLink>
                                 </div>
                             </div>
                         </div>
                         <div className="flex items-center">
+                            
                             <div className="flex items-center space-x-3">
                                 <span className="hidden sm:inline text-sm text-gray-700 dark:text-gray-300">
                                     Welcome, <span className="font-bold">{user?.username}</span>
@@ -132,10 +132,11 @@ export const Navbar = () => {
                     </div>
                 </div>
 
+                
                 {isMenuOpen && (
                     <div className="md:hidden border-t border-gray-200 dark:border-gray-700">
                         <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                            <MobileNavLink href="/" closeMenu={() => setIsMenuOpen(false)}>Home</MobileNavLink>
+                            <MobileNavLink href="/dashboard" closeMenu={() => setIsMenuOpen(false)}>Home</MobileNavLink>
                             <MobileNavLink href="/feedback" closeMenu={() => setIsMenuOpen(false)}>My Feedback</MobileNavLink>
                             <MobileNavLink href="/feedback/request/new" closeMenu={() => setIsMenuOpen(false)}>Request New</MobileNavLink>
                             <MobileNavLink href="/quests" closeMenu={() => setIsMenuOpen(false)}>Quests</MobileNavLink>

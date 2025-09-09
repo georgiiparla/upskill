@@ -5,7 +5,7 @@ const ActionButton = ({ icon, text, shortText, colorScheme = 'orange', onClick, 
         orange: 'text-csway-orange dark:text-csway-orange ring-csway-orange',
         blue: 'text-blue-600 dark:text-blue-500 ring-blue-500',
         green: 'text-csway-green dark:text-csway-green ring-csway-green',
-        gray: 'text-gray-600 dark:text-gray-400 ring-gray-500', // Added gray style
+        gray: 'text-gray-600 dark:text-gray-400 ring-gray-500',
     };
     const selectedColor = colorClasses[colorScheme] || colorClasses.orange;
 
