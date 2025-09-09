@@ -1,16 +1,15 @@
 "use client"
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import toast, { Toaster } from 'react-hot-toast';
 import { Star, Check, ThumbsDown, Send, Loader2, Lightbulb, ChevronDown, HelpCircle } from 'lucide-react';
-import { sleep } from '@/lib/delay';
+import { useRouter } from 'next/navigation';
+import { clientFetch } from '@/lib/client-api';
 
 import { Card } from "@/components/shared/Helper";
 import { MOCK_FEEDBACK_TOPICS } from '@/mock/mock_data';
 
 const SentimentPicker = ({ selected, onSelect }) => {
-
-    // component-specific sentiment data
     const sentiments = [
         { name: 'Exceeds Expectations', icon: <Star className="h-8 w-8" />, color: 'text-green-500', bgColor: 'hover:bg-teal-500/10' },
         { name: 'Meets Expectations', icon: <Check className="h-8 w-8" />, color: 'text-amber-500', bgColor: 'hover:bg-amber-500/10' },
@@ -18,14 +17,9 @@ const SentimentPicker = ({ selected, onSelect }) => {
     ];
 
     return (
-        // Assesment block
         <div>
-
             <label className="block mb-2 text-base font-medium text-gray-700 dark:text-gray-300">Assessment</label>
-            {/* Sentiment buttons block*/}
             <div className="grid grid-cols-3 gap-3">
-                {/* Buttons */}
-                {/* TODO: May be make reusable later */}
                 {sentiments.map(sentiment => (
                     <button
                         key={sentiment.name}
@@ -33,7 +27,6 @@ const SentimentPicker = ({ selected, onSelect }) => {
                         onClick={() => onSelect(sentiment.name)}
                         className={`
                             flex flex-col items-center justify-center p-3 h-[80px] rounded-lg border-2 transition-all
-
                             ${selected === sentiment.name
                                 ? `${sentiment.color} border-current`
                                 : `text-gray-500 dark:text-gray-400 border-gray-200 dark:border-gray-700 ${sentiment.bgColor}`
@@ -44,84 +37,113 @@ const SentimentPicker = ({ selected, onSelect }) => {
                     </button>
                 ))}
             </div>
-
         </div>
-
     );
 };
 
-
-const NewFeedbackForm = () => {
-    // React stuff
+const NewFeedbackForm = ({ requestTag }) => {
     const [topic, setTopic] = useState(MOCK_FEEDBACK_TOPICS[0]);
+    const [requestTopic, setRequestTopic] = useState('');
     const [sentiment, setSentiment] = useState('Meets Expectations');
     const [content, setContent] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const router = useRouter();
 
-    // Handle submit
+    useEffect(() => {
+        if (requestTag) {
+            const fetchRequestTopic = async () => {
+                const response = await clientFetch(`/feedback_requests/${requestTag}`);
+                if (response.success) {
+                    setRequestTopic(response.data.requestData.topic);
+                } else {
+                    toast.error('Could not load request topic.');
+                }
+            };
+            fetchRequestTopic();
+        }
+    }, [requestTag]);
+    
+    const mapSentimentForApi = (formSentiment) => {
+        switch(formSentiment) {
+            case 'Exceeds Expectations': return 'Positive';
+            case 'Meets Expectations': return 'Neutral';
+            case 'Needs Improvement': return 'Negative';
+            default: return 'Neutral';
+        }
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (content.trim().length < 10) {
             toast.error('Please provide more detailed feedback.');
             return;
         }
-
         setIsSubmitting(true);
         const toastId = toast.loading('Submitting your feedback...');
-        await sleep(1500);
-        toast.success('Feedback submitted successfully!', { id: toastId });
-        console.log({ topic, sentiment, content });
 
-        setContent('');
-        setSentiment('Meets Expectations');
+        if (requestTag) {
+            const response = await clientFetch('/feedback_submissions', {
+                method: 'POST',
+                body: {
+                    request_tag: requestTag,
+                    content: content,
+                    sentiment: mapSentimentForApi(sentiment)
+                }
+            });
+
+            if (response.success) {
+                toast.success('Feedback submitted successfully!', { id: toastId });
+                // Redirect back to the detail page after a short delay
+                setTimeout(() => router.push(`/feedback/request/${requestTag}`), 1000);
+            } else {
+                toast.error(`Error: ${response.error}`, { id: toastId });
+            }
+        } else {
+            // Mock submission for general feedback page
+            console.log({ topic, sentiment, content });
+            toast.success('Mock feedback submitted successfully!', { id: toastId });
+        }
+
         setIsSubmitting(false);
     };
 
     return (
         <>
-            {/* Pop up */}
             <Toaster position="bottom-right" toastOptions={{ style: { background: '#333', color: '#fff' } }} />
-
-            {/* Animation */}
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
                 className="max-w-xl mx-auto"
             >
-
-                {/* Form*/}
                 <form onSubmit={handleSubmit}>
-                    {/* Form card*/}
                     <Card className="mt-4">
-
-                        {/* Form block*/}
                         <div className="flex flex-col gap-10">
-
-                            {/* First row*/}
                             <div>
                                 <label htmlFor="feedback-topic" className="block mb-2 text-base font-medium text-gray-700 dark:text-gray-300">
                                     Topic
                                 </label>
-
-                                <div className="relative">
-                                    {/* Dropdown */}
-                                    <select
-                                        id="feedback-topic"
-                                        value={topic}
-                                        onChange={(e) => setTopic(e.target.value)}
-                                        className="appearance-none block w-full px-4 py-3 bg-gray-50 dark:bg-gray-800/60 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-csway-orange focus:border-csway-orange transition-colors"
-                                    >
-                                        {MOCK_FEEDBACK_TOPICS.map(t => <option key={t} value={t}>{t}</option>)}
-                                    </select>
-                                    <ChevronDown className="h-5 w-5 absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
-                                </div>
+                                {requestTag ? (
+                                    <div className="block w-full px-4 py-3 bg-gray-100 dark:bg-gray-800/60 border border-gray-300 dark:border-gray-700 rounded-lg">
+                                        <p className="font-semibold text-gray-800 dark:text-gray-200">{requestTopic || "Loading topic..."}</p>
+                                    </div>
+                                ) : (
+                                    <div className="relative">
+                                        <select
+                                            id="feedback-topic"
+                                            value={topic}
+                                            onChange={(e) => setTopic(e.target.value)}
+                                            className="appearance-none block w-full px-4 py-3 bg-gray-50 dark:bg-gray-800/60 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-csway-orange focus:border-csway-orange transition-colors"
+                                        >
+                                            {MOCK_FEEDBACK_TOPICS.map(t => <option key={t} value={t}>{t}</option>)}
+                                        </select>
+                                        <ChevronDown className="h-5 w-5 absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                                    </div>
+                                )}
                             </div>
 
-                            {/* Second row */}
                             <SentimentPicker selected={sentiment} onSelect={setSentiment} />
-
-                            {/* Third row */}
+                            
                             <details className="group">
                                 <summary className="flex items-center gap-2 text-sm font-medium text-gray-500 dark:text-gray-400 cursor-pointer list-none select-none">
                                     <HelpCircle className="h-4 w-4 text-sky-500" />
@@ -135,7 +157,6 @@ const NewFeedbackForm = () => {
                                 </ul>
                             </details>
 
-                            {/* Fourth row */}
                             <div>
                                 <label htmlFor="feedback-text" className="block mb-2 text-base font-medium text-gray-700 dark:text-gray-300">
                                     What are your thoughts?
@@ -149,7 +170,6 @@ const NewFeedbackForm = () => {
                                 ></textarea>
                             </div>
 
-                            {/* Fifth row */}
                             <details className="group">
                                 <summary className="flex items-center gap-2 text-sm font-medium text-gray-500 dark:text-gray-400 cursor-pointer list-none select-none">
                                     <Lightbulb className="h-4 w-4 text-yellow-500" />
@@ -163,7 +183,6 @@ const NewFeedbackForm = () => {
                                 </ul>
                             </details>
 
-                            {/* Sixth row */}
                             <div>
                                 <button
                                     type="submit"
@@ -184,21 +203,17 @@ const NewFeedbackForm = () => {
                                 </button>
                             </div>
                         </div>
-
                     </Card>
-
                 </form>
-
             </motion.div>
         </>
     );
 };
 
-export default function FeedbackHub() {
+export default function FeedbackHub({ requestTag }) {
     return (
-        // Page block
         <div className="container mx-auto px-4">
-            <NewFeedbackForm />
+            <NewFeedbackForm requestTag={requestTag} />
         </div>
     );
 }

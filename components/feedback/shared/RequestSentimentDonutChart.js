@@ -1,5 +1,3 @@
-// components/feedback/PromptSentimentDonutChart.js
-
 "use client";
 
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
@@ -14,7 +12,7 @@ const SENTIMENT_COLOR_MAP = {
     Negative: '#e37a7b', // csway-red
 };
 
-export const PromptSentimentDonutChart = ({ title, data, className }) => {
+export const RequestSentimentDonutChart = ({ title, data, className }) => {
     const { theme } = useTheme();
 
     // Calculate total from the 'count' property in the data array
@@ -53,8 +51,8 @@ export const PromptSentimentDonutChart = ({ title, data, className }) => {
                     <PieChart>
                         <Pie
                             data={data}
-                            dataKey="count" // Use 'count' key from promptData calculation
-                            innerRadius={75}
+                            dataKey="count" // Use 'count' key from requestData calculation
+                            innerRadius={70}
                             outerRadius={85}
                             paddingAngle={5}
                             isAnimationActive={false}

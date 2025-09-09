@@ -1,51 +1,32 @@
 import { redirect } from 'next/navigation';
 import { Feedback } from "@/components/feedback/Feedback";
 import { serverFetch } from "@/lib/server-api";
-import { MOCK_FEEDBACK_SUBMISSIONS, MOCK_FEEDBACK_PROMPTS } from "@/mock/mock_data";
+import { MOCK_FEEDBACK_SUBMISSIONS, MOCK_FEEDBACK_PROMPTS as MOCK_FEEDBACK_REQUESTS } from "@/mock/mock_data";
 import { sleep } from "@/lib/delay";
 
 async function getFeedbackData() {
     await sleep(1000);
 
     let submissionData = {};
-    let promptData = {};
+    let requestData = {};
 
     if (process.env.NEXT_PUBLIC_USE_MOCK_FEEDBACK === 'true') {
         console.log("Using mock data for feedback page.");
         submissionData = MOCK_FEEDBACK_SUBMISSIONS;
-        promptData = MOCK_FEEDBACK_PROMPTS;
+        requestData = MOCK_FEEDBACK_REQUESTS;
     } else {
         console.log("Fetching real data for feedback page.");
-        const [submissions, prompts] = await Promise.all([
+        const [submissions, requests] = await Promise.all([
             serverFetch('/feedback_submissions'),
-            serverFetch('/feedback_prompts')
+            serverFetch('/feedback_requests')
         ]);
         submissionData = submissions;
-        promptData = prompts;
+        requestData = requests;
     }
-
-    const givenSentimentData = [
-        { name: 'Exceeds Expectations', value: 21 },
-        { name: 'Meets Expectations', value: 45 },
-        { name: 'Needs Improvement', value: 8 },
-    ];
-    const receivedSentimentData = [
-        { name: 'Exceeds Expectations', value: 2 },
-        { name: 'Meets Expectations', value: 20 },
-        { name: 'Needs Improvement', value: 3 },
-    ];
-    const focusData = [
-        { name: 'Requests Sent', value: 12 },
-        { name: 'Requests Answered', value: 38 },
-        { name: 'Requests Ignored', value: 5 },
-    ];
 
     return {
         submissions: submissionData.items,
-        prompts: promptData.items,
-        givenSentiment: givenSentimentData,
-        receivedSentiment: receivedSentimentData,
-        focus: focusData
+        requests: requestData.items,
     };
 }
 
@@ -55,10 +36,7 @@ export default async function FeedbackPage() {
         return (
             <Feedback
                 initialSubmissions={data.submissions}
-                initialPrompts={data.prompts}
-                givenSentimentData={data.givenSentiment}
-                receivedSentimentData={data.receivedSentiment}
-                focusData={data.focus}
+                initialRequests={data.requests}
             />
         );
     } catch (error) {

@@ -4,33 +4,30 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import toast, { Toaster } from 'react-hot-toast';
 import { Send, Loader2, RefreshCw, Clipboard } from 'lucide-react';
-import { sleep } from '@/lib/delay';
 
+import { clientFetch } from '@/lib/client-api';
 import { Card } from '../shared/Helper';
 import { generateRandomTag } from '@/lib/helper_func';
 
 // --- Animation Variants for Framer Motion ---
-
-// 1. Variant for the main container to orchestrate staggering
 const formContainerVariants = {
     hidden: { opacity: 0 },
     visible: {
         opacity: 1,
         transition: {
-            staggerChildren: 0.1, // Time delay between each child animation
-            delayChildren: 0.2,   // Wait 0.2s before the first child starts
+            staggerChildren: 0.1,
+            delayChildren: 0.2,
         },
     },
 };
 
-// 2. Variant for each form item (label, input, button)
 const formItemVariants = {
     hidden: { y: 20, opacity: 0 },
     visible: {
         y: 0,
         opacity: 1,
         transition: {
-            type: "spring",    // Use a spring animation for a more natural feel
+            type: "spring",
             stiffness: 100,
             damping: 12,
         },
@@ -38,7 +35,7 @@ const formItemVariants = {
 };
 
 // Request form component
-const RequestFeedbackForm = () => {
+const CreateRequestForm = () => {
 
     const [topic, setTopic] = useState('');
     const [description, setDescription] = useState('');
@@ -69,13 +66,26 @@ const RequestFeedbackForm = () => {
             return;
         }
         setIsSubmitting(true);
-        const toastId = toast.loading('Generating your request...');
-        await sleep(1500);
-        console.log("Feedback Request Submitted:", { topic, description, tag: generatedTag });
-        toast.success('Feedback request created!', { id: toastId });
-        setTopic('');
-        setDescription('');
-        setGeneratedTag(generateRandomTag());
+        const toastId = toast.loading('Submitting your request...');
+
+        const response = await clientFetch('/feedback_requests', {
+            method: 'POST',
+            body: {
+                topic: topic,
+                details: description,
+                tag: generatedTag
+            }
+        });
+
+        if (response.success) {
+            toast.success('Feedback request created!', { id: toastId });
+            setTopic('');
+            setDescription('');
+            setGeneratedTag(generateRandomTag());
+        } else {
+            toast.error(`Error: ${response.error}`, { id: toastId });
+        }
+
         setIsSubmitting(false);
     };
 
@@ -85,7 +95,6 @@ const RequestFeedbackForm = () => {
 
             <div className="max-w-xl mx-auto">
                 <form onSubmit={handleSubmit}>
-                    {/* Apply container variants here. It controls the children's animations. */}
                     <motion.div
                         variants={formContainerVariants}
                         initial="hidden"
@@ -93,7 +102,6 @@ const RequestFeedbackForm = () => {
                     >
                         <Card className="mt-4">
                             <div className="flex flex-col gap-8">
-                                {/* Each form section is now a motion component with item variants */}
                                 <motion.div variants={formItemVariants}>
                                     <label className="block mb-2 text-base font-medium text-gray-700 dark:text-gray-300">
                                         Your Unique Share Tag
@@ -143,7 +151,7 @@ const RequestFeedbackForm = () => {
                                     <button
                                         type="submit"
                                         disabled={isSubmitting}
-                                        className="w-full inline-flex items-center justify-center px-6 py-3.5 font-semibold text-white bg-blue-600 rounded-lg shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:ring-offset-2 dark:focus:ring-offset-gray-900 disabled:bg-gray-400 disabled:cursor-not-allowed transition-all"
+                                        className="w-full inline-flex items-center justify-center px-6 py-3.5 font-semibold text-white bg-csway-green rounded-lg shadow-sm hover:bg-green-500/70 focus:outline-none focus:ring-2 focus:ring-csway-green/50 focus:ring-offset-2 dark:focus:ring-offset-gray-900 disabled:bg-gray-400 disabled:cursor-not-allowed transition-all"
                                     >
                                         {isSubmitting ? (
                                             <><Loader2 className="mr-2 h-5 w-5 animate-spin" />Submitting...</>
@@ -162,10 +170,10 @@ const RequestFeedbackForm = () => {
 };
 
 
-export default function RequestFeedbackPage() {
+export default function RequestHub() {
     return (
         <div className="container mx-auto px-4">
-            <RequestFeedbackForm />
+            <CreateRequestForm />
         </div>
     );
 }

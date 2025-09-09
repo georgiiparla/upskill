@@ -1,16 +1,16 @@
+// File: components/feedback/Feedback.js
 "use client"
 
 import { useState } from 'react';
-import Link from 'next/link';
-import { Card, HistoryListItem } from "../shared/Helper";
+import { HistoryListItem } from "../shared/Helper";
 import { ActionButton } from '../shared/Buttons';
 import { SearchBar } from '../shared/SearchBar';
+import { Card } from "@/components/shared/Helper";
 
 export const Feedback = ({
-    initialSubmissions,
-    initialPrompts,
+    initialSubmissions = [],
+    initialRequests = [],
 }) => {
-
     const [view, setView] = useState('active');
     const [searchTerm, setSearchTerm] = useState('');
 
@@ -38,11 +38,55 @@ export const Feedback = ({
         return subjectMatch || contentMatch;
     });
 
-    const filteredPrompts = initialPrompts.filter(item => {
+    const searchedRequests = initialRequests.filter(item => {
         const topicMatch = item.topic?.toLowerCase().includes(lowerCaseSearchTerm) || false;
         const detailsMatch = item.details?.toLowerCase().includes(lowerCaseSearchTerm) || false;
         return topicMatch || detailsMatch;
     });
+
+    const myRequests = searchedRequests.filter(item => item.isOwner);
+    
+    const activeRequests = searchedRequests;
+
+    const renderList = () => {
+        let listToRender = [];
+        let emptyMessage = "No items to display.";
+
+        if (view === 'active') {
+            listToRender = activeRequests;
+            emptyMessage = "There are no active feedback requests right now.";
+        } else if (view === 'requests') {
+            listToRender = myRequests;
+            emptyMessage = "You haven't created any feedback requests yet.";
+        } else if (view === 'submissions') {
+            listToRender = filteredSubmissions;
+            emptyMessage = "You haven't submitted any feedback yet.";
+        }
+
+        if (listToRender.length === 0) {
+            return (
+                <div className="flex items-center justify-center h-full text-gray-500 dark:text-gray-400 py-16">
+                    <p className="text-xs md:text-sm">{emptyMessage}</p>
+                </div>
+            )
+        }
+        
+        return (
+            <ul className="space-y-4">
+                {listToRender.map((item) => (
+                    <HistoryListItem
+                        // Use a more unique key for submissions to prevent potential conflicts
+                        key={view === 'submissions' ? `sub-${item.id}` : `req-${item.id}`}
+                        href={item.tag ? `/feedback/request/${item.tag}` : (item.requestTag ? `/feedback/request/${item.requestTag}`: undefined)}
+                        subject={view === 'submissions' ? item.subject : item.topic}
+                        createdAt={item.created_at}
+                        content={view === 'submissions' ? item.content : `Requested by: ${item.isOwner ? 'Me' : item.requester_username}`}
+                        borderColorClass={view === 'submissions' ? getSentimentColor(item.sentiment) : getRequestStatusColor(item.status)}
+                    />
+                ))}
+            </ul>
+        );
+    };
 
     return (
         <div className="space-y-8">
@@ -54,9 +98,9 @@ export const Feedback = ({
                     <ActionButton text="Submissions" shortText="Submissions" colorScheme="orange"
                         onClick={() => setView("submissions")}
                         isActive={view === 'submissions'} />
-                    <ActionButton text="My Prompts" shortText="Prompts" colorScheme="green"
-                        onClick={() => setView("prompts")}
-                        isActive={view === 'prompts'} />
+                    <ActionButton text="My Requests" shortText="Requests" colorScheme="green"
+                        onClick={() => setView("requests")}
+                        isActive={view === 'requests'} />
                 </div>
 
                 <SearchBar
@@ -66,38 +110,8 @@ export const Feedback = ({
                     className="mb-6"
                 />
 
-                <div className="overflow-y-auto no-scrollbar max-h-[62.5vh]">
-                    {
-                        view === "submissions" ?
-                            <ul className="space-y-4">
-                                {filteredSubmissions.map((item, index) => (
-                                    <HistoryListItem
-                                        key={`${item.id}-feedback-${index}`}
-                                        href={item.promptTag ? `/feedback/prompt/${item.promptTag}` : undefined}
-                                        subject={item.subject}
-                                        createdAt={item.created_at}
-                                        content={item.content}
-                                        borderColorClass={getSentimentColor(item.sentiment)} />
-                                ))}
-                            </ul>
-                            : view === "prompts" ?
-                                <ul className="space-y-4">
-                                    {filteredPrompts.map((item) => (
-                                        <HistoryListItem
-                                            key={item.id}
-                                            href={`/feedback/prompt/${item.tag}`}
-                                            subject={item.topic}
-                                            createdAt={item.created_at}
-                                            content={item.details}
-                                            borderColorClass={getRequestStatusColor(item.status)}
-                                        />
-                                    ))}
-                                </ul>
-                                :
-                                <div className="flex items-center justify-center h-full text-gray-500 dark:text-gray-400 py-16">
-                                    <p className="text-xs md:text-sm">Active items view placeholder.</p>
-                                </div>
-                    }
+                <div className="overflow-y-auto no-scrollbar min-h-[65vh]">
+                    {renderList()}
                 </div>
             </Card>
         </div>
