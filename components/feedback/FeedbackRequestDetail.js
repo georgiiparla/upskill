@@ -54,6 +54,12 @@ export default function FeedbackRequestDetail() {
         fetchRequestDetails();
     }, [currentTag]);
 
+    const handleDeleteSuccess = (deletedId) => {
+        setSubmissions(currentSubmissions => 
+            currentSubmissions.filter(sub => sub.id !== deletedId)
+        );
+    };
+
     if (loading) {
         return <DetailPageSkeleton />;
     }
@@ -78,7 +84,7 @@ export default function FeedbackRequestDetail() {
         const sentiment = sub.sentiment_text || 'Meets Expectations';
         acc[sentiment] = (acc[sentiment] || 0) + 1;
         return acc;
-    }, );
+    }, {});
 
     const sentimentChartData = [
         { name: 'Far Exceeds Expectations', count: sentimentBreakdown['Far Exceeds Expectations'] || 0 },
@@ -90,7 +96,7 @@ export default function FeedbackRequestDetail() {
     return (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
             
-            <div className="lg:col-span-1 space-y-8 lg:sticky top-24 self-start">
+            <div className="lg:col-span-1 space-y-8 lg:sticky top-24 self-start z-20">
                 <RequestDetailsCard requestData={requestData} />
 
                 
@@ -108,7 +114,11 @@ export default function FeedbackRequestDetail() {
                     Received Feedback ({submissions.length})
                 </h2>
                 {submissions.length > 0 ? submissions.map((feedbackItem) => (
-                    <FeedbackCommentItem key={feedbackItem.id} feedback={feedbackItem} />
+                    <FeedbackCommentItem 
+                        key={feedbackItem.id} 
+                        feedback={feedbackItem}
+                        onDeleteSuccess={handleDeleteSuccess}
+                    />
                 )) : (
                     <div className="p-4 rounded-lg bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700">
                         <p className="text-center text-gray-500 dark:text-gray-400 py-8">No feedback submissions received for this request yet.</p>

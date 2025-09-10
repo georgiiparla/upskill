@@ -13,6 +13,9 @@ module.exports = {
                     'orange': '#f3b75a',
                     'red': '#e37a7b',
                 }
+            },
+            animation: {
+                'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
             }
         },
     },

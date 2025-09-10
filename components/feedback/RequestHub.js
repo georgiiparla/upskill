@@ -1,6 +1,7 @@
 "use client"
 import React from 'react';
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { Send, Loader2, RefreshCw, Clipboard } from 'lucide-react';
@@ -34,7 +35,7 @@ const formItemVariants = {
 };
 
 const CreateRequestForm = () => {
-
+    const router = useRouter();
     const [topic, setTopic] = useState('');
     const [description, setDescription] = useState('');
     const [generatedTag, setGeneratedTag] = useState('');
@@ -77,9 +78,9 @@ const CreateRequestForm = () => {
 
         if (response.success) {
             toast.success('Feedback request created!', { id: toastId });
-            setTopic('');
-            setDescription('');
-            setGeneratedTag(generateRandomTag());
+            const newRequestTag = response.data.tag;
+            setTimeout(() => router.push(`/feedback/request/${newRequestTag}`), 1000);
+
         } else {
             toast.error(`Error: ${response.error}`, { id: toastId });
         }
@@ -106,10 +107,10 @@ const CreateRequestForm = () => {
                                         <div className="flex-grow px-4 py-3 bg-gray-100 dark:bg-gray-700/50 border border-dashed border-gray-300 dark:border-gray-600 rounded-lg text-center font-mono tracking-wider text-gray-800 dark:text-gray-200">
                                             {generatedTag}
                                         </div>
-                                        <button type="button" onClick={handleCopyToClipboard} className="p-3 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors" title="Copy to Clipboard">
+                                        <button type="button" onClick={handleCopyToClipboard} disabled={isSubmitting} className="p-3 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors disabled:opacity-50" title="Copy to Clipboard">
                                             <Clipboard className="h-5 w-5" />
                                         </button>
-                                        <button type="button" onClick={handleRegenerateTag} className="p-3 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors" title="Generate New Tag">
+                                        <button type="button" onClick={handleRegenerateTag} disabled={isSubmitting} className="p-3 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors disabled:opacity-50" title="Generate New Tag">
                                             <RefreshCw className="h-5 w-5" />
                                         </button>
                                     </div>
@@ -124,9 +125,10 @@ const CreateRequestForm = () => {
                                         type="text"
                                         value={topic}
                                         onChange={(e) => setTopic(e.target.value)}
-                                        className="block w-full px-4 py-3 bg-gray-50 dark:bg-gray-800/60 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 transition-colors"
+                                        className="block w-full px-4 py-3 bg-gray-50 dark:bg-gray-800/60 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 transition-colors disabled:opacity-50"
                                         placeholder="e.g., Q3 Project Proposal"
                                         required
+                                        disabled={isSubmitting}
                                     />
                                 </motion.div>
 
@@ -138,8 +140,9 @@ const CreateRequestForm = () => {
                                         id="feedback-desc"
                                         value={description}
                                         onChange={(e) => setDescription(e.target.value)}
-                                        className="block w-full min-h-[200px] p-4 bg-gray-50 dark:bg-gray-800/60 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 transition-colors resize-y"
+                                        className="block w-full min-h-[200px] p-4 bg-gray-50 dark:bg-gray-800/60 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 transition-colors resize-y disabled:opacity-50"
                                         placeholder="Add any context or specific questions..."
+                                        disabled={isSubmitting}
                                     ></textarea>
                                 </motion.div>
 

@@ -30,7 +30,7 @@ export const Feedback = ({
     const getRequestStatusColor = (status) => {
         switch (status) {
             case 'pending': return 'border-blue-500';
-            case 'completed': return 'border-gray-500';
+            case 'closed': return 'border-gray-500';
             default: return 'border-gray-500';
         }
     }
@@ -46,12 +46,13 @@ export const Feedback = ({
     const searchedRequests = initialRequests.filter(item => {
         const topicMatch = item.topic?.toLowerCase().includes(lowerCaseSearchTerm) || false;
         const authorMatch = item.requester_username?.toLowerCase().includes(lowerCaseSearchTerm) || false;
-        return topicMatch || authorMatch;
+        const tagMatch = item.tag?.toLowerCase().includes(lowerCaseSearchTerm) || false;
+        return topicMatch || authorMatch || tagMatch;
     });
 
     const myRequests = searchedRequests.filter(item => item.isOwner);
-    
-    const activeRequests = searchedRequests;
+    const activeRequests = searchedRequests.filter(item => item.status !== 'closed');
+    const closedRequests = searchedRequests.filter(item => item.status === 'closed');
 
     const renderList = () => {
         let listToRender = [];
@@ -60,6 +61,9 @@ export const Feedback = ({
         if (view === 'active') {
             listToRender = activeRequests;
             emptyMessage = "There are no active feedback requests right now.";
+        } else if (view === 'closed') {
+            listToRender = closedRequests;
+            emptyMessage = "You don't have any closed feedback requests.";
         } else if (view === 'requests') {
             listToRender = myRequests;
             emptyMessage = "You haven't created any feedback requests yet.";
@@ -105,7 +109,11 @@ export const Feedback = ({
                     <ActionButton text="Active" shortText="Active" colorScheme="blue"
                         onClick={() => setView("active")}
                         isActive={view === 'active'} />
-                    <ActionButton text="Submissions" shortText="Submissions" colorScheme="orange"
+                    {/* 5. Add the "Closed" button you already created */}
+                    <ActionButton text="Closed" shortText="Done" colorScheme="gray"
+                        onClick={() => setView("closed")}
+                        isActive={view === 'closed'} />
+                    <ActionButton text="Submissions" shortText="Sent" colorScheme="orange"
                         onClick={() => setView("submissions")}
                         isActive={view === 'submissions'} />
                     <ActionButton text="My Requests" shortText="Requests" colorScheme="green"
@@ -116,11 +124,11 @@ export const Feedback = ({
                 <SearchBar
                     searchTerm={searchTerm}
                     onSearchChange={setSearchTerm}
-                    placeholder="Search by topic or author..."
+                    placeholder="Search by topic, author, or tag..."
                     className="mb-6"
                 />
 
-                <div className="overflow-y-auto no-scrollbar min-h-[65vh]">
+                <div className="overflow-y-auto no-scrollbar max-h-[67.5vh]">
                     {renderList()}
                 </div>
             </Card>

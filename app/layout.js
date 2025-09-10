@@ -18,13 +18,32 @@ export const metadata = {
 export default function RootLayout({ children }) {
 	return (
 		<html lang="en" suppressHydrationWarning>
-			<body
-				className={`${inter.className} antialiased`}
-			>
+			<body className={`${inter.className} antialiased`}>
                 <AuthProvider>
                     <GlobalErrorNotifier />
 				    <ThemeProvider>
-                        <Toaster position="bottom-right" />
+
+                        <Toaster 
+                            position="bottom-right" 
+                            toastOptions={{
+                                className: 'bg-white dark:bg-gray-800 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg p-4',
+                                
+                                success: {
+                                    iconTheme: {
+                                        primary: '#22a55e',
+                                        secondary: '#ffffff',
+                                    },
+                                },
+
+                                error: {
+                                    iconTheme: {
+                                        primary: '#e37a7b',
+                                        secondary: '#ffffff',
+                                    },
+                                },
+                            }}
+                        />
+						
 					    <AppLayout>{children}</AppLayout>
 				    </ThemeProvider>
                 </AuthProvider>

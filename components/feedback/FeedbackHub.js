@@ -2,12 +2,11 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
-import { Star, Check, ThumbsUp, ThumbsDown, Send, Loader2, ChevronDown } from 'lucide-react';
+import { Star, Check, ThumbsUp, ThumbsDown, Send, Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { clientFetch } from '@/lib/client-api';
 
 import { Card } from "@/components/shared/Helper";
-import { MOCK_FEEDBACK_TOPICS } from '@/mock/mock_data';
 
 const formContainerVariants = {
     hidden: { opacity: 0 },
@@ -68,7 +67,6 @@ const SentimentPicker = ({ selected, onSelect }) => {
 };
 
 const NewFeedbackForm = ({ requestTag }) => {
-    const [topic, setTopic] = useState(MOCK_FEEDBACK_TOPICS[0]);
     const [requestTopic, setRequestTopic] = useState('');
     const [sentiment, setSentiment] = useState(2);
     const [content, setContent] = useState('');
@@ -98,25 +96,20 @@ const NewFeedbackForm = ({ requestTag }) => {
         setIsSubmitting(true);
         const toastId = toast.loading('Submitting your feedback...');
 
-        if (requestTag) {
-            const response = await clientFetch('/feedback_submissions', {
-                method: 'POST',
-                body: {
-                    request_tag: requestTag,
-                    content: content,
-                    sentiment: sentiment
-                }
-            });
-
-            if (response.success) {
-                toast.success('Feedback submitted successfully!', { id: toastId });
-                setTimeout(() => router.push(`/feedback/request/${requestTag}`), 1000);
-            } else {
-                toast.error(`Error: ${response.error}`, { id: toastId });
+        const response = await clientFetch('/feedback_submissions', {
+            method: 'POST',
+            body: {
+                request_tag: requestTag,
+                content: content,
+                sentiment: sentiment
             }
+        });
+
+        if (response.success) {
+            toast.success('Feedback submitted successfully!', { id: toastId });
+            setTimeout(() => router.push(`/feedback/request/${requestTag}`), 1000);
         } else {
-            console.log({ topic, sentiment, content });
-            toast.success('Mock feedback submitted successfully!', { id: toastId });
+            toast.error(`Error: ${response.error}`, { id: toastId });
         }
 
         setIsSubmitting(false);
@@ -139,23 +132,9 @@ const NewFeedbackForm = ({ requestTag }) => {
                                     <label htmlFor="feedback-topic" className="block mb-2 text-base font-medium text-gray-700 dark:text-gray-300">
                                         Topic
                                     </label>
-                                    {requestTag ? (
-                                        <div className="block w-full px-4 py-3 bg-gray-100 dark:bg-gray-800/60 border border-gray-300 dark:border-gray-700 rounded-lg">
-                                            <p className="font-semibold text-gray-800 dark:text-gray-200">{requestTopic || "Loading topic..."}</p>
-                                        </div>
-                                    ) : (
-                                        <div className="relative">
-                                            <select
-                                                id="feedback-topic"
-                                                value={topic}
-                                                onChange={(e) => setTopic(e.target.value)}
-                                                className="appearance-none block w-full px-4 py-3 bg-gray-50 dark:bg-gray-800/60 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-csway-orange focus:border-csway-orange transition-colors"
-                                            >
-                                                {MOCK_FEEDBACK_TOPICS.map(t => <option key={t} value={t}>{t}</option>)}
-                                            </select>
-                                            <ChevronDown className="h-5 w-5 absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
-                                        </div>
-                                    )}
+                                    <div className="block w-full px-4 py-3 bg-gray-100 dark:bg-gray-800/60 border border-gray-300 dark:border-gray-700 rounded-lg">
+                                        <p className="font-semibold text-gray-800 dark:text-gray-200">{requestTopic || "Loading topic..."}</p>
+                                    </div>
                                 </motion.div>
 
                                 

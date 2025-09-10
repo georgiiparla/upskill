@@ -96,7 +96,7 @@ export const Navbar = () => {
                                     
                                     <DesktopDropdown title="Feedback" scrolled={scrolled} activePath="/feedback">
                                         <DropdownItem href="/feedback">My Feedback</DropdownItem>
-                                        <DropdownItem href="/feedback/request/new">Request New</DropdownItem>
+                                        <DropdownItem href="/feedback/request/new">Request Feedback</DropdownItem>
                                     </DesktopDropdown>
                                     
                                     <NavLink href="/quests" scrolled={scrolled}>Quests</NavLink>
@@ -138,7 +138,7 @@ export const Navbar = () => {
                         <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
                             <MobileNavLink href="/dashboard" closeMenu={() => setIsMenuOpen(false)}>Home</MobileNavLink>
                             <MobileNavLink href="/feedback" closeMenu={() => setIsMenuOpen(false)}>My Feedback</MobileNavLink>
-                            <MobileNavLink href="/feedback/request/new" closeMenu={() => setIsMenuOpen(false)}>Request New</MobileNavLink>
+                            <MobileNavLink href="/feedback/request/new" closeMenu={() => setIsMenuOpen(false)}>Request Feedback</MobileNavLink>
                             <MobileNavLink href="/quests" closeMenu={() => setIsMenuOpen(false)}>Quests</MobileNavLink>
                             <MobileNavLink href="/leaderboard" closeMenu={() => setIsMenuOpen(false)}>Leaderboard</MobileNavLink>
                         </div>

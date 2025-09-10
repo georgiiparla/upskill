@@ -1,17 +1,40 @@
 import { Card } from "@/components/shared/Helper";
-import { Tag, MessageSquarePlus, Trash2, Pencil } from "lucide-react";
+import { Tag, MessageSquarePlus, Trash2, Archive } from "lucide-react";
 import Link from 'next/link';
-
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { Modal } from '@/components/shared/Modal';
 import { clientFetch } from '@/lib/client-api';
+import { DetailActionButton } from '@/components/shared/Buttons';
 
 export const RequestDetailsCard = ({ requestData }) => {
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [isCloseModalOpen, setIsCloseModalOpen] = useState(false); // 1. Add state for the close modal
     const [isDeleting, setIsDeleting] = useState(false);
+    const [isClosing, setIsClosing] = useState(false);
     const router = useRouter();
+
+    const handleClose = async () => {
+        setIsClosing(true);
+        const toastId = toast.loading('Closing request...');
+        
+        const response = await clientFetch(`/feedback_requests/${requestData.id}`, {
+            method: 'PATCH',
+            body: { status: 'closed' }
+        });
+
+        setIsClosing(false);
+        setIsCloseModalOpen(false); // Close the modal on completion
+        
+        if (response.success) {
+            toast.success('Request closed successfully!', { id: toastId });
+            router.push('/feedback');
+            router.refresh();
+        } else {
+            toast.error(`Error: ${response.error}`, { id: toastId });
+        }
+    };
 
     const handleDelete = async () => {
         setIsDeleting(true);
@@ -47,44 +70,56 @@ export const RequestDetailsCard = ({ requestData }) => {
                 <p>Are you sure you want to delete this feedback request? This action cannot be undone.</p>
             </Modal>
 
-            <div className="space-y-4">
-                
-                <Card innerClassName="!p-2">
-                    <div className="flex justify-center items-center space-x-4">
-                        <Link href={`/feedback/request/${requestData.tag}/new`} passHref>
-                            <button
-                                title="Give Feedback"
-                                className="flex items-center px-4 py-2 rounded-md text-csway-orange hover:bg-csway-orange/10 transition-colors text-sm font-medium"
-                            >
-                                <MessageSquarePlus className="h-4 w-4 mr-2" />
-                                <span>Comment</span>
-                            </button>
-                        </Link>
+            <Modal
+                isOpen={isCloseModalOpen}
+                onClose={() => setIsCloseModalOpen(false)}
+                onConfirm={handleClose}
+                title="Confirm Close"
+                confirmText="Close Request"
+                confirmButtonClass="bg-blue-600 hover:bg-blue-700"
+                isConfirming={isClosing}
+            >
+                <p>Are you sure you want to close this feedback request? Once closed, no new feedback can be submitted.</p>
+            </Modal>
 
-                        
-                        {requestData.isOwner && (
-                            <>
-                                <button
-                                    title="Edit Request"
-                                    className="flex items-center px-4 py-2 rounded-md text-gray-500 hover:bg-gray-500/10 transition-colors text-sm font-medium"
-                                    onClick={() => alert('Edit action not implemented yet.')}
-                                >
-                                    <Pencil className="h-4 w-4 mr-2" />
-                                    <span>Edit</span>
-                                </button>
-                                <button
-                                    title="Delete Request"
-                                    className="flex items-center px-4 py-2 rounded-md text-gray-500 hover:text-red-500 hover:bg-red-500/10 transition-colors text-sm font-medium"
-                                    onClick={() => setIsDeleteModalOpen(true)}
-                                >
-                                    <Trash2 className="h-4 w-4 mr-2" />
-                                    <span>Delete</span>
-                                </button>
-                            </>
-                        )}
-                    </div>
-                </Card>
-                
+
+            <div className="space-y-4">
+                {requestData.status !== 'closed' && (
+                    <Card innerClassName="!p-2">
+                        <div className="flex justify-center items-center space-x-4">
+                            {!requestData.isOwner && (
+                                <Link href={`/feedback/request/${requestData.tag}/new`} passHref>
+                                    <DetailActionButton
+                                        icon={MessageSquarePlus}
+                                        text="Comment"
+                                        colorScheme="orange"
+                                        title="Give Feedback"
+                                    />
+                                </Link>
+                            )}
+
+                            {requestData.isOwner && (
+                                <>
+                                    <DetailActionButton
+                                        icon={Archive}
+                                        text="Close"
+                                        colorScheme="blue"
+                                        onClick={() => setIsCloseModalOpen(true)}
+                                        isLoading={isClosing}
+                                        title="Close Request"
+                                    />
+                                    <DetailActionButton
+                                        icon={Trash2}
+                                        text="Delete"
+                                        colorScheme="red"
+                                        onClick={() => setIsDeleteModalOpen(true)}
+                                        title="Delete Request"
+                                    />
+                                </>
+                            )}
+                        </div>
+                    </Card>
+                )}
                 
                 <Card>
                     <div className="space-y-8">
