@@ -1,7 +1,7 @@
 import React from 'react';
 import { Loader2 } from 'lucide-react';
 
-const ActionButton = ({ icon, text, shortText, colorScheme = 'orange', onClick, isActive = false }) => {
+export const ActionButton = ({ icon, text, shortText, colorScheme = 'orange', onClick, isActive = false }) => {
     const colorClasses = {
         orange: 'text-csway-orange dark:text-csway-orange ring-csway-orange',
         blue: 'text-blue-600 dark:text-blue-500 ring-blue-500',
@@ -76,5 +76,3 @@ export const DetailActionButton = ({
         </button>
     );
 };
-
-export { ActionButton, DetailActionButton };
