@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
-import { Send, Loader2, RefreshCw, Clipboard } from 'lucide-react';
+import { Send, Loader2, RefreshCw } from 'lucide-react';
 
 import { clientFetch } from '@/lib/client-api';
 import { Card } from '../shared/Helper';
@@ -48,14 +48,6 @@ const CreateRequestForm = () => {
     const handleRegenerateTag = () => {
         setGeneratedTag(generateRandomTag());
         toast('New tag generated!', { icon: '✨' });
-    };
-
-    const handleCopyToClipboard = () => {
-        navigator.clipboard.writeText(generatedTag).then(() => {
-            toast.success('Tag copied to clipboard!');
-        }, () => {
-            toast.error('Failed to copy tag.');
-        });
     };
 
     const handleSubmit = async (e) => {
@@ -107,9 +99,7 @@ const CreateRequestForm = () => {
                                         <div className="flex-grow px-4 py-3 bg-gray-100 dark:bg-gray-700/50 border border-dashed border-gray-300 dark:border-gray-600 rounded-lg text-center font-mono tracking-wider text-gray-800 dark:text-gray-200">
                                             {generatedTag}
                                         </div>
-                                        <button type="button" onClick={handleCopyToClipboard} disabled={isSubmitting} className="p-3 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors disabled:opacity-50" title="Copy to Clipboard">
-                                            <Clipboard className="h-5 w-5" />
-                                        </button>
+
                                         <button type="button" onClick={handleRegenerateTag} disabled={isSubmitting} className="p-3 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors disabled:opacity-50" title="Generate New Tag">
                                             <RefreshCw className="h-5 w-5" />
                                         </button>
