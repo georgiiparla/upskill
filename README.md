@@ -1,3 +1,1 @@
-Start with Feedback.js to explore
-
-ctrl-f -> export
+bundle config set frozen true && bundle install && bundle exec rake db:migrate
