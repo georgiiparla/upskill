@@ -34,10 +34,10 @@ const formItemVariants = {
 
 const SentimentPicker = ({ selected, onSelect }) => {
     const sentiments = [
-        { name: 'Needs Improvement', value: 1, icon: <ThumbsDown className="h-6 w-6" />, color: 'text-red-500', bgColor: 'hover:bg-red-500/10' },
-        { name: 'Meets Expectations', value: 2, icon: <Check className="h-6 w-6" />, color: 'text-amber-500', bgColor: 'hover:bg-amber-500/10' },
-        { name: 'Exceeds Expectations', value: 3, icon: <ThumbsUp className="h-6 w-6" />, color: 'text-green-500', bgColor: 'hover:bg-green-500/10' },
-        { name: 'Far Exceeds Expectations', value: 4, icon: <Star className="h-6 w-6" />, color: 'text-teal-500', bgColor: 'hover:bg-teal-500/10' },
+        { name: 'Needs Improvement', value: 1, color: 'text-red-500', bgColor: 'hover:bg-red-500/10' },
+        { name: 'Meets Expectations', value: 2, color: 'text-amber-500', bgColor: 'hover:bg-amber-500/10' },
+        { name: 'Exceeds Expectations', value: 3, color: 'text-green-500', bgColor: 'hover:bg-green-500/10' },
+        { name: 'Far Exceeds Expectations', value: 4, color: 'text-teal-500', bgColor: 'hover:bg-teal-500/10' },
     ];
 
     return (
@@ -57,7 +57,9 @@ const SentimentPicker = ({ selected, onSelect }) => {
                             }
                         `}
                     >
-                        {sentiment.icon}
+                        <div className="flex items-center justify-center h-6 w-6 text-xl font-bold">
+                            {sentiment.value}
+                        </div>
                         <span className="text-xs text-center mt-1">{sentiment.name}</span>
                     </button>
                 ))}
