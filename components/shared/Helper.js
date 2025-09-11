@@ -37,11 +37,48 @@ export const InfoCard = ({ icon, title, items, renderItem, listClassName = "spac
     );
 };
 
-export const HistoryListItem = ({ subject, createdAt, content, borderColorClass, href }) => {
+export const HistoryListItem = ({
+    subject,
+    createdAt,
+    content,
+    href,
+    variant = 'border',
+    color = 'gray',
+}) => {
+
+    const borderColorMap = {
+        teal: 'border-teal-500',
+        green: 'border-green-500',
+        red: 'border-red-500',
+        amber: 'border-yellow-400',
+        blue: 'border-blue-500',
+        gray: 'border-gray-500',
+    };
+
+    const backgroundColorMap = {
+        teal: 'bg-teal-500/10 hover:bg-teal-500/20 dark:bg-teal-500/15 dark:hover:bg-teal-500/25',
+        green: 'bg-green-500/10 hover:bg-green-500/20 dark:bg-green-500/15 dark:hover:bg-green-500/25',
+        red: 'bg-red-500/10 hover:bg-red-500/20 dark:bg-red-500/15 dark:hover:bg-red-500/25',
+        amber: 'bg-yellow-400/25 hover:bg-yellow-400/35 dark:bg-yellow-400/30 dark:hover:bg-yellow-400/40',
+        blue: 'bg-blue-500/10 hover:bg-blue-500/20 dark:bg-blue-500/15 dark:hover:bg-blue-500/25',
+        gray: 'bg-gray-500/10 hover:bg-gray-500/20 dark:bg-gray-500/15 dark:hover:bg-gray-500/25',
+    };
+
+    const getContainerClasses = () => {
+        const baseClasses = "py-4 px-5 rounded-lg group transition-all";
+
+        if (variant === 'background') {
+            return `${baseClasses} ${backgroundColorMap[color] || backgroundColorMap.gray}`;
+        }
+        
+        const defaultBg = "bg-gray-50 dark:bg-gray-800/60 hover:bg-gray-100 dark:hover:bg-gray-700/80";
+        return `${baseClasses} ${defaultBg} border-l-4 ${borderColorMap[color] || borderColorMap.gray}`;
+    };
+
     const itemContent = (
         <>
             <div className="flex justify-between items-center mb-1">
-                <h4 className="text-sm md:text-base font-semibold text-gray-800 dark:text-gray-200 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{subject}</h4>
+                <h4 className="truncate text-sm md:text-base font-semibold text-gray-800 dark:text-gray-200 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{subject}</h4>
                 <span className="text-xs text-gray-500 dark:text-gray-400 flex-shrink-0 ml-2">{formatRelativeTime(createdAt)}</span>
             </div>
             <p className="text-xs md:text-sm text-gray-600 dark:text-gray-300 truncate">
@@ -50,21 +87,19 @@ export const HistoryListItem = ({ subject, createdAt, content, borderColorClass,
         </>
     );
 
+    const contentWrapperClasses = "flex-grow w-full min-w-0";
+
     return (
-        <li
-            className={`
-                bg-gray-50 dark:bg-gray-800/60 p-4 rounded-lg group
-                transition-colors hover:bg-gray-100 dark:hover:bg-gray-700/80
-                border-l-4 ${borderColorClass}
-                ${href ? 'cursor-pointer' : ''}
-            `}
-        >
+        <li className={getContainerClasses()}>
+            
             {href ? (
-                <Link href={href} passHref>
+                <Link href={href} className={contentWrapperClasses}>
                     {itemContent}
                 </Link>
             ) : (
-                itemContent
+                <div className={contentWrapperClasses}>
+                    {itemContent}
+                </div>
             )}
         </li>
     );
