@@ -22,7 +22,7 @@ export const InfoCard = ({ icon, title, items, renderItem, listClassName = "spac
         <Card className="flex flex-col ">
             <SectionTitle icon={icon} title={title} />
             
-            <div className="flex-grow overflow-y-auto no-scrollbar max-h-[210px]">
+            <div className="flex-grow overflow-y-auto no-scrollbar max-h-[180px] sm:max-h-[210px]">
                 {items && items.length > 0 ? (
                     <ul className={listClassName}>
                         {items.map(item => renderItem(item))}
