@@ -15,23 +15,19 @@ export const Feedback = ({
 
     const getSentimentColor = (sentimentText) => {
         switch (sentimentText) {
-            case 'Far Exceeds Expectations':
-                return 'border-teal-500';
-            case 'Exceeds Expectations':
-                return 'border-green-500';
-            case 'Needs Improvement':
-                return 'border-red-500';
+            case 'Far Exceeds Expectations': return 'teal';
+            case 'Exceeds Expectations': return 'green';
+            case 'Needs Improvement': return 'red';
             case 'Meets Expectations':
-            default:
-                return 'border-amber-500';
+            default: return 'amber';
         }
     };
 
     const getRequestStatusColor = (status) => {
         switch (status) {
-            case 'pending': return 'border-blue-500';
-            case 'closed': return 'border-gray-500';
-            default: return 'border-gray-500';
+            case 'pending': return 'blue';
+            case 'closed': return 'gray';
+            default: return 'gray';
         }
     }
 
@@ -96,12 +92,13 @@ export const Feedback = ({
 
                     return (
                         <HistoryListItem
+                            variant={view === 'submissions' ? 'background' : 'dot'}
                             key={view === 'submissions' ? `sub-${item.id}` : `req-${item.id}`}
                             href={href}
                             subject={view === 'submissions' ? item.subject : item.topic}
                             createdAt={item.created_at}
-                            content={view === 'submissions' ? item.content : requestContent}
-                            borderColorClass={view === 'submissions' ? getSentimentColor(item.sentiment_text) : getRequestStatusColor(item.status)}
+                            content={view === 'submissions' ? null : requestContent}
+                            color={view === 'submissions' ? getSentimentColor(item.sentiment_text) : getRequestStatusColor(item.status)}
                         />
                     );
                 })}
