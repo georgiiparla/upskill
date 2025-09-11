@@ -5,24 +5,9 @@ import { usePathname } from 'next/navigation';
 import { clientFetch } from '@/lib/client-api';
 
 import { RequestDetailsCard } from './shared/RequestDetailsCard';
+import { Loader2 } from 'lucide-react';
 import { FeedbackCommentItem } from './shared/FeedbackCommentItem';
 import { RequestSentimentDonutChart } from './shared/RequestSentimentDonutChart';
-import { CardSkeleton, TextSkeleton } from '@/components/shared/skeletons/Skeletons';
-
-const DetailPageSkeleton = () => (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto animate-pulse">
-        <div className="lg:col-span-1 space-y-8">
-            <CardSkeleton className="h-48" />
-            <CardSkeleton className="h-64" />
-        </div>
-        <div className="lg:col-span-2 space-y-6">
-            <TextSkeleton className="h-7 w-48" />
-            <CardSkeleton className="h-32" />
-            <CardSkeleton className="h-32" />
-        </div>
-    </div>
-);
-
 
 export default function FeedbackRequestDetail() {
     const pathname = usePathname();
@@ -61,7 +46,11 @@ export default function FeedbackRequestDetail() {
     };
 
     if (loading) {
-        return <DetailPageSkeleton />;
+        return (
+            <div className="flex justify-center items-center min-h-[50vh]">
+                <Loader2 className="h-10 w-10 animate-spin text-gray-500 dark:text-gray-400" />
+            </div>
+        );
     }
 
     if (error) {
@@ -96,7 +85,7 @@ export default function FeedbackRequestDetail() {
     return (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
             
-            <div className="lg:col-span-1 space-y-8 lg:sticky top-24 self-start z-20">
+            <div className="lg:col-span-1 space-y-8 lg:sticky top-16 self-start z-20">
                 <RequestDetailsCard requestData={requestData} />
 
                 

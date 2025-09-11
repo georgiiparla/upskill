@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
-import { Star, Check, ThumbsUp, ThumbsDown, Send, Loader2 } from 'lucide-react';
+import { Send, Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { clientFetch } from '@/lib/client-api';
 
@@ -163,7 +163,7 @@ const NewFeedbackForm = ({ requestTag }) => {
                                     <button
                                         type="submit"
                                         disabled={isSubmitting}
-                                        className="w-full inline-flex items-center justify-center px-6 py-3 font-semibold text-white bg-csway-orange rounded-lg shadow-sm hover:bg-csway-orange/90 focus:outline-none focus:ring-2 focus:ring-csway-orange/50 focus:ring-offset-2 dark:focus:ring-offset-gray-900 disabled:bg-gray-400 disabled:cursor-not-allowed transition-all"
+                                        className="w-full inline-flex items-center justify-center px-6 py-3 font-semibold text-white bg-csway-orange/90 rounded-lg shadow-sm hover:bg-csway-orange focus:outline-none focus:ring-2 focus:ring-csway-orange/50 focus:ring-offset-2 dark:focus:ring-offset-gray-900 disabled:bg-gray-400 disabled:cursor-not-allowed transition-all"
                                     >
                                         {isSubmitting ? (
                                             <>

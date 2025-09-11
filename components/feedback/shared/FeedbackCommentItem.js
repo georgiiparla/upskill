@@ -82,7 +82,7 @@ export const FeedbackCommentItem = ({ feedback, onDeleteSuccess }) => {
                                     {feedback.authorName} {isOwner && '(Me)'}
                                 </span>
                         </div>
-                        <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${colorClass.replace('border-l-2', '')}`}>
+                        <span className={`truncate max-w-28 sm:max-w-none text-xs font-medium px-2 py-0.5 rounded-full ${colorClass.replace('border-l-2', '')}`}>
                             {feedback.sentiment_text}
                         </span>
                     </div>

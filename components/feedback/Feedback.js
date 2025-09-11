@@ -1,10 +1,10 @@
 "use client"
 
 import { useState } from 'react';
-import { HistoryListItem } from "../shared/Helper";
+import { HistoryListItem, Card } from "@/components/shared/Helper";
 import { ActionButton } from '../shared/Buttons';
 import { SearchBar } from '../shared/SearchBar';
-import { Card } from "@/components/shared/Helper";
+import { User } from 'lucide-react';
 
 export const Feedback = ({
     initialSubmissions = [],
@@ -87,13 +87,20 @@ export const Feedback = ({
                         ? (item.request_tag ? `/feedback/request/${item.request_tag}` : undefined)
                         : (item.tag ? `/feedback/request/${item.tag}` : undefined);
                     
+                    const requestContent = (
+                        <span className="flex items-center gap-1.5">
+                            <User className="h-3.5 w-3.5 flex-shrink-0" />
+                            {item.isOwner ? 'Me' : item.requester_username}
+                        </span>
+                    );
+
                     return (
                         <HistoryListItem
                             key={view === 'submissions' ? `sub-${item.id}` : `req-${item.id}`}
                             href={href}
                             subject={view === 'submissions' ? item.subject : item.topic}
                             createdAt={item.created_at}
-                            content={view === 'submissions' ? item.content : `Requested by: ${item.isOwner ? 'Me' : item.requester_username}`}
+                            content={view === 'submissions' ? item.content : requestContent}
                             borderColorClass={view === 'submissions' ? getSentimentColor(item.sentiment_text) : getRequestStatusColor(item.status)}
                         />
                     );
@@ -109,7 +116,6 @@ export const Feedback = ({
                     <ActionButton text="Active" shortText="Active" colorScheme="blue"
                         onClick={() => setView("active")}
                         isActive={view === 'active'} />
-                    {/* 5. Add the "Closed" button you already created */}
                     <ActionButton text="Closed" shortText="Done" colorScheme="gray"
                         onClick={() => setView("closed")}
                         isActive={view === 'closed'} />
