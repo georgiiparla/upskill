@@ -9,6 +9,7 @@ export const removeTokenCookie = () => {
 
 export const getTokenFromCookie = () => {
     const cookies = document.cookie.split(';');
+    console.log(document.cookie)
     for (let cookie of cookies) {
         const [name, value] = cookie.trim().split('=');
         if (name === 'token') {

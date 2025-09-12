@@ -1,28 +1,53 @@
 "use client";
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import Image from 'next/image';
-import { Loader2, Eye, EyeOff } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import Link from 'next/link';
+import { motion } from 'framer-motion';
 
-export const Auth = ({ mode }) => {
+const GoogleIcon = () => (
+    <svg className="w-5 h-5 mr-3" viewBox="0 0 48 48">
+        <path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8c-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039L38.804 8.841C34.524 5.105 29.582 3 24 3C12.438 3 3 12.438 3 24s9.438 21 21 21s21-9.438 21-21c0-1.328-.135-2.618-.389-3.917z"></path>
+        <path fill="#FF3D00" d="M6.306 14.691L12.01 19.085C13.686 13.02 18.431 9.087 24 9.087c3.059 0 5.842 1.154 7.961 3.039L38.804 8.841C34.524 5.105 29.582 3 24 3C16.634 3 10.273 6.948 6.306 12.691z"></path>
+        <path fill="#4CAF50" d="M24 45c5.582 0 10.524-1.883 14.193-5.187l-6.024-4.57C30.344 38.337 27.352 40 24 40c-5.569 0-10.314-3.933-11.99-9.258l-5.694 4.391C10.273 41.052 16.634 45 24 45z"></path>
+        <path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303c-.792 2.237-2.231 4.166-4.087 5.571l6.024 4.57C39.993 34.61 44 28.711 44 24c0-1.328-.135-2.618-.389-3.917z"></path>
+    </svg>
+);
 
-    const isLoginView = mode === 'login';
+const LogoAnimation = () => {
+    return (
+        <div className="relative flex items-center justify-center w-48 h-48">
+            {[0, 1, 2].map((i) => (
+                <motion.div
+                    key={i}
+                    className="absolute rounded-full border border-csway-green/30"
+                    initial={{ width: 0, height: 0, opacity: 1 }}
+                    animate={{
+                        width: '100%',
+                        height: '100%',
+                        opacity: 0,
+                    }}
+                    transition={{
+                        duration: 2.5,
+                        repeat: Infinity,
+                        repeatDelay: 1,
+                        delay: i * 0.7,
+                        ease: 'easeOut',
+                    }}
+                />
+            ))}
+            <Image src="/csway-logo.png" alt="Upskill Logo" width={64} height={64} className="opacity-80" />
+        </div>
+    );
+};
 
-    const [username, setUsername] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
 
-    const { login, signup, isAuthenticated } = useAuth();
-
-    const [showPassword, setShowPassword] = useState(false);
-    const [error, setError] = useState('');
-    const [loading, setLoading] = useState(false);
-    const [isSuccess, setIsSuccess] = useState(false);
-
+export const Auth = () => {
+    const { isAuthenticated } = useAuth();
     const router = useRouter();
     const searchParams = useSearchParams();
+    const error = searchParams.get('error');
+    const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:9292';
 
     useEffect(() => {
         if (isAuthenticated) {
@@ -30,114 +55,37 @@ export const Auth = ({ mode }) => {
         }
     }, [isAuthenticated, router]);
 
-    useEffect(() => {
-
-        if (searchParams.get('signup') === 'success') {
-            setError('Signup successful! Please log in.');
-            setIsSuccess(true);
-        }
-
-    }, [searchParams]);
-
-    const handleSubmit = async (e) => {
-
-        e.preventDefault();
-        setLoading(true);
-        setError('');
-        setIsSuccess(false);
-
-        const response = isLoginView
-            ? await login(email, password)
-            : await signup(username, email, password);
-
-        setLoading(false);
-
-        if (!response.success) {
-            setError(response.error || `An unknown error occurred.`);
-        } else if (!isLoginView) {
-            router.push('/login?signup=success');
-        }
-
-    };
-
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
-            <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md dark:bg-gray-800">
-                <div className="flex justify-center">
-                    <Image src="/csway-logo.png" alt="CSway Logo" width={48} height={48} />
+        <div className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900 p-4">
+            <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.3 }}
+                className="w-full max-w-sm min-h-[450px] p-8 bg-white rounded-2xl shadow-xl dark:bg-gray-800 border border-gray-200 dark:border-gray-700 flex flex-col justify-between"
+            >
+                <div className="text-center">
+                    <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-200">
+                        Welcome to Upskill
+                    </h1>
+                    <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                        Sign in with Google to continue
+                    </p>
                 </div>
-                <h2 className="text-2xl font-bold text-center text-gray-900 dark:text-white">
-                    {isLoginView ? 'Welcome Back!' : 'Create an Account'}
-                </h2>
 
-                <form className="space-y-4" onSubmit={handleSubmit}>
-                    {!isLoginView && (
-                        <div>
-                            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-200">Username</label>
-                            <input
-                                type="text"
-                                placeholder='Your username'
-                                value={username}
-                                onChange={(e) => setUsername(e.target.value)}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                                required
-                            />
-                        </div>
-                    )}
+                <div className="flex justify-center items-center my-4">
+                    <LogoAnimation />
+                </div>
 
-                    <div>
-                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-200">Email</label>
-                        <input
-                            type="email"
-                            placeholder='Enter your email'
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                            required
-                        />
-                    </div>
+                <a
+                    href={`${backendUrl}/auth/google/login`}
+                    className="inline-flex items-center justify-center px-4 py-2 font-medium text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/20 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-csway-green/50 transition-colors"
+                >
+                    <GoogleIcon />
+                    Sign in
+                </a>
 
-                    <div>
-                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-200">Password</label>
-                        <div className="relative">
-                            <input
-                                type={showPassword ? 'text' : 'password'}
-                                value={password}
-                                placeholder='Enter the password'
-                                onChange={(e) => setPassword(e.target.value)}
-                                className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                                required
-                            />
-                            <button
-                                type="button"
-                                onClick={() => setShowPassword(!showPassword)}
-                                className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
-                                aria-label={showPassword ? "Hide password" : "Show password"}
-                            >
-                                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                            </button>
-                        </div>
-                    </div>
 
-                    {error && <p className={`text-sm text-center ${isSuccess ? "text-csway-green" : "text-red-500"}`}>{error}</p>}
-
-                    <button
-                        type="submit"
-                        disabled={loading}
-                        className="w-full px-4 py-[9px] font-bold text-white bg-csway-green rounded-md hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-csway-green/50 disabled:bg-csway-green/40 flex items-center justify-center !mt-10"
-                    >
-                        {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                        {isLoginView ? 'Login' : 'Sign Up'}
-                    </button>
-                </form>
-
-                <p className="text-sm text-center text-gray-600 dark:text-gray-400">
-                    {isLoginView ? "Don't have an account?" : 'Already have an account?'}
-                    <Link href={isLoginView ? '/signup' : '/login'} className="ml-1 font-medium text-csway-orange hover:underline">
-                        {isLoginView ? 'Sign up' : 'Login'}
-                    </Link>
-                </p>
-            </div>
+            </motion.div>
         </div>
     );
 };

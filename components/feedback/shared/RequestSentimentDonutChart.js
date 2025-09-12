@@ -42,7 +42,7 @@ export const RequestSentimentDonutChart = ({ title, data, className }) => {
             <SectionTitle icon={<BarChart2 className="h-5 w-5 text-csway-green" />} title={title} />
 
             <div className="relative flex justify-center items-center h-[200px]">
-                <div className="absolute h-[160px] w-[160px] rounded-full bg-gray-100 dark:bg-gray-900"></div>
+                <div className="absolute h-[170px] w-[170px] rounded-full bg-gray-100 dark:bg-gray-900"></div>
                 <ResponsiveContainer width="100%" height="100%" className="absolute">
                     <PieChart>
                         <Pie

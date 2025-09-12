@@ -1,4 +1,4 @@
-// // --- LEADERBOARD DATA ---
+// --- LEADERBOARD DATA ---
 // export const MOCK_LEADERBOARD = [
 //     { id: 1, name: 'Alex Rivera', points: 4250, badges: ['🚀', '🎯', '🔥'] },
 //     { id: 2, name: 'Casey Jordan', points: 3980, badges: ['💡', '🎯'] },
@@ -22,7 +22,7 @@
 //     { id: 20, name: 'Jesse Miller', points: 850, badges: [] },
 // ];
 
-// // --- QUESTS DATA ---
+// --- QUESTS DATA ---
 // export const MOCK_QUESTS = [
 //     { id: 1, title: 'Adaptability Ace', description: 'Complete the "Handling Change" module and score 90% on the quiz.', points: 150, progress: 100, completed: true },
 //     { id: 2, title: 'Communication Pro', description: 'Provide constructive feedback on 5 different project documents.', points: 200, progress: 60, completed: false },
@@ -30,7 +30,7 @@
 //     { id: 4, title: 'Teamwork Titan', description: 'Successfully complete a paired programming challenge.', points: 100, progress: 100, completed: true },
 // ];
 
-// // --- DASHBOARD DATA ---
+// --- DASHBOARD DATA ---
 // export const MOCK_DASHBOARD = {
 //     agendaItems: [
 //         { id: 1, type: 'article', title: 'The Art of Giving Constructive Feedback', category: 'Communication', due_date: '2025-08-18' },
@@ -59,7 +59,7 @@
 // };
 
 
-// // --- FEEDBACK DATA ---
+// --- FEEDBACK DATA ---
 
 // export const MOCK_FEEDBACK_TOPICS = [
 //     'General Feedback',
@@ -96,7 +96,7 @@
 
 // export const MOCK_FEEDBACK_SUBMISSIONS = {
 //     items: [
-//         // Submission linked to prompt 'strategyReviewMockTag123'
+//
 //         {
 //             id: 1,
 //             promptTag: 'strategyReviewMockTag123', // Link to prompt 1
@@ -104,12 +104,12 @@
 //             content: 'The plan is well-structured, but the timeline seems aggressive on slide 5.',
 //             created_at: '2025-08-15T09:00:00Z',
 //             sentiment: 'Neutral',
-//             // Added fields for FeedbackCommentItem component compatibility
+//
 //             authorName: 'Casey Jordan',
 //             likes: 15,
 //             initialLiked: true
 //         },
-//         // Submission linked to prompt 'strategyReviewMockTag123'
+//
 //         {
 //             id: 2,
 //             promptTag: 'strategyReviewMockTag123', // Link to prompt 1
@@ -121,7 +121,7 @@
 //             likes: 8,
 //             initialLiked: false
 //         },
-//         // Submission linked to prompt 'apiRefactorMockTag456'
+//
 //         {
 //             id: 3,
 //             promptTag: 'apiRefactorMockTag456', // Link to prompt 2

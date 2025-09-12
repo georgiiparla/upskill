@@ -75,14 +75,14 @@ export const Feedback = ({
                 </div>
             )
         }
-        
+
         return (
             <ul className="space-y-4">
                 {listToRender.map((item) => {
                     const href = view === 'submissions'
                         ? (item.request_tag ? `/feedback/request/${item.request_tag}` : undefined)
                         : (item.tag ? `/feedback/request/${item.tag}` : undefined);
-                    
+
                     const requestContent = (
                         <span className="flex items-center gap-1.5">
                             <User className="h-3.5 w-3.5 flex-shrink-0" />
@@ -119,7 +119,7 @@ export const Feedback = ({
                     <ActionButton text="Submissions" shortText="Sent" colorScheme="orange"
                         onClick={() => setView("submissions")}
                         isActive={view === 'submissions'} />
-                    <ActionButton text="My Requests" shortText="Requests" colorScheme="green"
+                    <ActionButton text="My Requests" shortText="Me" colorScheme="green"
                         onClick={() => setView("requests")}
                         isActive={view === 'requests'} />
                 </div>

@@ -10,7 +10,7 @@ import { DetailActionButton } from '@/components/shared/Buttons';
 
 export const RequestDetailsCard = ({ requestData }) => {
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-    const [isCloseModalOpen, setIsCloseModalOpen] = useState(false); // 1. Add state for the close modal
+    const [isCloseModalOpen, setIsCloseModalOpen] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
     const [isClosing, setIsClosing] = useState(false);
     const router = useRouter();
@@ -18,15 +18,15 @@ export const RequestDetailsCard = ({ requestData }) => {
     const handleClose = async () => {
         setIsClosing(true);
         const toastId = toast.loading('Closing request...');
-        
+
         const response = await clientFetch(`/feedback_requests/${requestData.id}`, {
             method: 'PATCH',
             body: { status: 'closed' }
         });
 
         setIsClosing(false);
-        setIsCloseModalOpen(false); // Close the modal on completion
-        
+        setIsCloseModalOpen(false);
+
         if (response.success) {
             toast.success('Request closed successfully!', { id: toastId });
             router.push('/feedback');
@@ -39,7 +39,7 @@ export const RequestDetailsCard = ({ requestData }) => {
     const handleDelete = async () => {
         setIsDeleting(true);
         const toastId = toast.loading('Deleting request...');
-        
+
         const response = await clientFetch(`/feedback_requests/${requestData.id}`, {
             method: 'DELETE'
         });
@@ -55,6 +55,9 @@ export const RequestDetailsCard = ({ requestData }) => {
             toast.error(`Error: ${response.error}`, { id: toastId });
         }
     };
+
+    // This condition ensures the action card only renders when there's an action to take.
+    const shouldShowActionCard = requestData.isOwner || (!requestData.isOwner && requestData.status !== 'closed');
 
     return (
         <>
@@ -90,37 +93,39 @@ export const RequestDetailsCard = ({ requestData }) => {
             </div>
 
             <div className="space-y-4">
-                    <div className="space-y-8">
-                        <div className="space-y-6 text-sm text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700/50 p-4 rounded-md border border-gray-200 dark:border-gray-700">
-                            <div>
-                                <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
-                                    {requestData.details ? requestData.details : "No additional details provided."}
-                                </p>
-                            </div>
-                            
-                            <div className="flex items-center space-x-2 bg-gray-100 dark:bg-gray-800 p-2 rounded-md">
-                                <Tag className="h-4 w-4 text-gray-500" />
-                                <span className="text-xs font-mono text-gray-600 dark:text-gray-400">{requestData.tag}</span>
-                            </div>
+                <div className="space-y-8">
+                    <div className="space-y-6 text-sm text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700/50 p-4 rounded-md border border-gray-200 dark:border-gray-700">
+                        <div>
+                            <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+                                {requestData.details ? requestData.details : "No additional details provided."}
+                            </p>
+                        </div>
+
+                        <div className="flex items-center space-x-2 bg-gray-100 dark:bg-gray-800 p-2 rounded-md">
+                            <Tag className="h-4 w-4 text-gray-500" />
+                            <span className="text-xs font-mono text-gray-600 dark:text-gray-400">{requestData.tag}</span>
                         </div>
                     </div>
+                </div>
 
-                    {requestData.status !== 'closed' && (
-                        <Card innerClassName="!p-2">
-                            <div className="flex justify-center items-center space-x-4">
-                                {!requestData.isOwner && (
-                                    <Link href={`/feedback/request/${requestData.tag}/new`} passHref>
-                                        <DetailActionButton
-                                            icon={MessageSquarePlus}
-                                            text="Comment"
-                                            colorScheme="orange"
-                                            title="Give Feedback"
-                                        />
-                                    </Link>
-                                )}
+                {shouldShowActionCard && (
+                    <Card innerClassName="!p-2">
+                        <div className="flex justify-center items-center space-x-4">
 
-                                {requestData.isOwner && (
-                                    <>
+                            {!requestData.isOwner && requestData.status !== 'closed' && (
+                                <Link href={`/feedback/request/${requestData.tag}/new`} passHref>
+                                    <DetailActionButton
+                                        icon={MessageSquarePlus}
+                                        text="Comment"
+                                        colorScheme="orange"
+                                        title="Give Feedback"
+                                    />
+                                </Link>
+                            )}
+
+                            {requestData.isOwner && (
+                                <>
+                                    {requestData.status !== 'closed' && (
                                         <DetailActionButton
                                             icon={Archive}
                                             text="Close"
@@ -129,19 +134,23 @@ export const RequestDetailsCard = ({ requestData }) => {
                                             isLoading={isClosing}
                                             title="Close Request"
                                         />
-                                        <DetailActionButton
-                                            icon={Trash2}
-                                            text="Delete"
-                                            colorScheme="red"
-                                            onClick={() => setIsDeleteModalOpen(true)}
-                                            title="Delete Request"
-                                        />
-                                    </>
-                                )}
-                            </div>
-                        </Card>
-                    )}
+                                    )}
+
+                                    <DetailActionButton
+                                        icon={Trash2}
+                                        text="Delete"
+                                        colorScheme="red"
+                                        onClick={() => setIsDeleteModalOpen(true)}
+                                        isLoading={isDeleting}
+                                        title="Delete Request"
+                                    />
+                                </>
+                            )}
+                        </div>
+                    </Card>
+                )}
             </div>
         </>
     );
 };
+

@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { Send, Loader2 } from 'lucide-react';
@@ -74,6 +74,7 @@ const NewFeedbackForm = ({ requestTag }) => {
     const [content, setContent] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const router = useRouter();
+    const isSubmittingRef = useRef(false); // Synchronous lock
 
     useEffect(() => {
         if (requestTag) {
@@ -91,37 +92,58 @@ const NewFeedbackForm = ({ requestTag }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        // Check if a submission is already in progress.
+        if (isSubmittingRef.current) {
+            return;
+        }
+
         if (content.trim().length < 10) {
             toast.error('Please provide more detailed feedback.');
             return;
         }
+
+        // Engage the lock and update UI state
+        isSubmittingRef.current = true;
         setIsSubmitting(true);
         const toastId = toast.loading('Submitting your feedback...');
 
-        const response = await clientFetch('/feedback_submissions', {
-            method: 'POST',
-            body: {
-                request_tag: requestTag,
-                content: content,
-                sentiment: sentiment
+        try {
+            const response = await clientFetch('/feedback_submissions', {
+                method: 'POST',
+                body: {
+                    request_tag: requestTag,
+                    content: content,
+                    sentiment: sentiment
+                }
+            });
+
+            if (response.success) {
+                toast.success('Feedback submitted successfully!', { id: toastId });
+                // We keep the button disabled during the redirect timeout
+                setTimeout(() => {
+                    router.push(`/feedback/request/${requestTag}`);
+                }, 1000);
+            } else {
+                toast.error(`Error: ${response.error}`, { id: toastId });
+                // Release the lock if the API call fails
+                isSubmittingRef.current = false;
+                setIsSubmitting(false);
             }
-        });
-
-        if (response.success) {
-            toast.success('Feedback submitted successfully!', { id: toastId });
-            setTimeout(() => router.push(`/feedback/request/${requestTag}`), 1000);
-        } else {
-            toast.error(`Error: ${response.error}`, { id: toastId });
+        } catch (error) {
+            toast.error('An unexpected error occurred.', { id: toastId });
+            // Always release lock on unexpected error
+            isSubmittingRef.current = false;
+            setIsSubmitting(false);
         }
-
-        setIsSubmitting(false);
+        // Note: We don't release the lock in a finally block here,
+        // because we want the button to remain disabled until the user is redirected.
     };
 
     return (
         <>
             <div className="max-w-xl mx-auto">
                 <form onSubmit={handleSubmit}>
-                    
                     <motion.div
                         variants={formContainerVariants}
                         initial="hidden"
@@ -129,7 +151,7 @@ const NewFeedbackForm = ({ requestTag }) => {
                     >
                         <Card className="mt-4">
                             <div className="flex flex-col gap-10">
-                                
+
                                 <motion.div variants={formItemVariants}>
                                     <label htmlFor="feedback-topic" className="block mb-2 text-base font-medium text-gray-700 dark:text-gray-300">
                                         Topic
@@ -139,12 +161,10 @@ const NewFeedbackForm = ({ requestTag }) => {
                                     </div>
                                 </motion.div>
 
-                                
                                 <motion.div variants={formItemVariants}>
                                     <SentimentPicker selected={sentiment} onSelect={setSentiment} />
                                 </motion.div>
 
-                                
                                 <motion.div variants={formItemVariants}>
                                     <label htmlFor="feedback-text" className="block mb-2 text-base font-medium text-gray-700 dark:text-gray-300">
                                         What are your thoughts?
@@ -158,7 +178,6 @@ const NewFeedbackForm = ({ requestTag }) => {
                                     ></textarea>
                                 </motion.div>
 
-                                
                                 <motion.div variants={formItemVariants}>
                                     <button
                                         type="submit"
@@ -194,3 +213,4 @@ export default function FeedbackHub({ requestTag }) {
         </div>
     );
 }
+
