@@ -27,28 +27,31 @@ export const Auth = () => {
     }, [isAuthenticated, router]);
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
-            <div className="w-full max-w-sm p-8 space-y-6 bg-white rounded-lg shadow-md dark:bg-gray-800">
-                <div className="flex justify-center">
-                    <Image src="/csway-logo.png" alt="CSway Logo" width={48} height={48} />
-                </div>
-                <h2 className="text-2xl font-bold text-center text-gray-900 dark:text-white">
-                    Welcome to Upskill
-                </h2>
-                <p className="text-center text-sm text-gray-600 dark:text-gray-400">
-                    Sign in with your Google account to continue.
+        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900/50 p-4">
+
+            <div className="flex items-center gap-3 mb-8">
+                <Image src="/csway-logo.png" alt="Upskill Logo" width={40} height={40} />
+                <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-200 tracking-tight">
+                    Upskill
+                </h1>
+            </div>
+
+            {error && (
+                <p className="text-sm text-center text-red-500 bg-red-50 dark:bg-red-900/20 py-2 px-3 rounded-md mb-8">
+                    {error}
                 </p>
+            )}
 
-                {error && <p className="text-sm text-center text-red-500">{error}</p>}
-
+            <div className="flex justify-center">
                 <a
                     href={`${backendUrl}/auth/google/login`}
-                    className="w-full flex items-center justify-center px-4 py-2.5 font-semibold text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-csway-green/50 transition-all"
+                    className="w-auto flex items-center justify-center px-6 py-2.5 font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-csway-green/50 transition-colors"
                 >
                     <GoogleIcon />
-                    Sign in with Google
+                    Sign in
                 </a>
             </div>
+
         </div>
     );
 };
