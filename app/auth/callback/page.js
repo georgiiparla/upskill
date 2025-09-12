@@ -1,8 +1,7 @@
 // app/auth/callback/page.js
-
 "use client";
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react'; // 1. Import useRef
 import { useSearchParams } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { Loader2 } from 'lucide-react';
@@ -10,15 +9,18 @@ import { Loader2 } from 'lucide-react';
 export default function AuthCallbackPage() {
     const searchParams = useSearchParams();
     const { handleTokenLogin } = useAuth();
+    const hasRun = useRef(false); // 2. Create a ref to track execution
 
     useEffect(() => {
-        const token = searchParams.get('token');
-        if (token) {
-            // Just call the function. The AppLayout will handle the redirect.
-            handleTokenLogin(token);
+        // 3. Only run if the effect has not run before
+        if (!hasRun.current) {
+            const token = searchParams.get('token');
+            if (token) {
+                handleTokenLogin(token);
+            }
+            hasRun.current = true; // 4. Mark it as run
         }
-        // No need for an else, AppLayout will handle unauthorized access.
-    }, [searchParams, handleTokenLogin]);
+    }, []); // The empty array is still correct
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">

@@ -1,8 +1,7 @@
 // context/AuthContext.js
-
 "use client";
 
-import React, { createContext, useState, useContext, useEffect, useCallback } from 'react';
+import React, { createContext, useState, useContext, useEffect, useCallback, useRef } from 'react';
 import { setTokenCookie, removeTokenCookie, getTokenFromCookie } from '@/context/token_helpers'
 
 const AuthContext = createContext(null);
@@ -15,12 +14,17 @@ export const AuthProvider = ({ children }) => {
     const [isAuthenticating, setIsAuthenticating] = useState(false);
     const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/auth`;
     const friendlyError = "Could not connect to the server. Please check your connection and try again later.";
+    const hasCheckedSession = useRef(false);
 
     const clearError = () => setError(null);
 
     const checkSession = useCallback(async () => {
-        const token = getTokenFromCookie();
+        // --- DEBUGGING LINES ---
+        console.log("--- checkSession CALLED ---");
+        console.trace("Tracepoint for checkSession caller");
+        // -----------------------
 
+        const token = getTokenFromCookie();
         if (!token) {
             setIsAuthenticated(false);
             setUser(null);
@@ -59,8 +63,11 @@ export const AuthProvider = ({ children }) => {
     }, [API_URL]);
 
     useEffect(() => {
-        checkSession();
-    }, [checkSession]);
+        if (!hasCheckedSession.current) {
+            checkSession();
+            hasCheckedSession.current = true;
+        }
+    }, []);
 
     const handleTokenLogin = useCallback(async (token) => {
         setIsAuthenticating(true);

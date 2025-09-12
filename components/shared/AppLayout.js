@@ -18,8 +18,11 @@ export default function AppLayout({ children }) {
     const isPublicRoute = PUBLIC_ROUTES.includes(pathname);
     const isCallbackRoute = pathname.startsWith('/auth/callback');
 
+    console.log("7. AppLayout is rendering.", { pathname, isAuthenticated, loading, isAuthenticating });
+
     useEffect(() => {
         // While the app is validating the session or a token, show the loader.
+        console.log("8. AppLayout useEffect is running.", { pathname, isAuthenticated, loading, isAuthenticating });
         if (loading || isAuthenticating) {
             return;
         }
@@ -36,12 +39,14 @@ export default function AppLayout({ children }) {
 
         // Logic for unauthenticated users
         if (!isAuthenticated) {
-            // If the user is NOT on a public page (e.g., login),
+            // If the user is NOT on a public page AND NOT on the callback page,
             // they must be sent to the login page.
-            if (!isPublicRoute) {
+            console.log("123213131312")
+            if (!isPublicRoute && !isCallbackRoute) {
                 router.push('/login');
             }
         }
+
     }, [loading, isAuthenticated, isPublicRoute, isCallbackRoute, isAuthenticating, router, pathname]);
 
     // Show a global loader when the session is first loading or during the callback authentication
@@ -54,7 +59,7 @@ export default function AppLayout({ children }) {
     }
 
     // If authenticated or on a public route, show the content
-    if (isAuthenticated || isPublicRoute) {
+    if (isAuthenticated || isPublicRoute || isCallbackRoute) {
         return (
             <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
                 {isAuthenticated && <Navbar />}
