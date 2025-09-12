@@ -1,7 +1,8 @@
+// context/AuthContext.js
+
 "use client";
 
-import React, { createContext, useState, useContext, useEffect } from 'react';
-
+import React, { createContext, useState, useContext, useEffect, useCallback } from 'react';
 import { setTokenCookie, removeTokenCookie, getTokenFromCookie } from '@/context/token_helpers'
 
 const AuthContext = createContext(null);
@@ -11,12 +12,13 @@ export const AuthProvider = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [isAuthenticating, setIsAuthenticating] = useState(false);
     const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/auth`;
     const friendlyError = "Could not connect to the server. Please check your connection and try again later.";
 
     const clearError = () => setError(null);
 
-    const checkSession = async () => {
+    const checkSession = useCallback(async () => {
         const token = getTokenFromCookie();
 
         if (!token) {
@@ -28,9 +30,7 @@ export const AuthProvider = ({ children }) => {
 
         try {
             const response = await fetch(`${API_URL}/profile`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
+                headers: { 'Authorization': `Bearer ${token}` }
             });
 
             if (response.ok) {
@@ -39,14 +39,14 @@ export const AuthProvider = ({ children }) => {
                     setUser(data.user);
                     setIsAuthenticated(true);
                 } else {
+                    removeTokenCookie();
                     setIsAuthenticated(false);
                     setUser(null);
-                    removeTokenCookie();
                 }
             } else {
+                removeTokenCookie();
                 setIsAuthenticated(false);
                 setUser(null);
-                removeTokenCookie();
             }
         } catch (err) {
             console.error("Session check failed:", err);
@@ -56,66 +56,23 @@ export const AuthProvider = ({ children }) => {
         } finally {
             setLoading(false);
         }
-    };
+    }, [API_URL]);
 
     useEffect(() => {
         checkSession();
-    }, []);
+    }, [checkSession]);
 
-    const login = async (email, password) => {
+    const handleTokenLogin = useCallback(async (token) => {
+        setIsAuthenticating(true);
         try {
-
-            const response = await fetch(`${API_URL}/login`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password }),
-            });
-
-            const data = await response.json();
-
-            if (response.ok) {
-                setUser(data.user);
-                setIsAuthenticated(true);
-                setTokenCookie(data.token);
-                return { success: true };
-            }
-
-            return { success: false, error: data.error };
-
-        } catch (err) {
-
-            console.error("Login failed:", err);
-            setError(friendlyError);
-            return { success: false, error: friendlyError };
-
+            setTokenCookie(token);
+            await checkSession();
+        } finally {
+            setIsAuthenticating(false);
         }
-    };
+    }, [checkSession]);
 
-    const signup = async (username, email, password) => {
-
-        try {
-
-            const response = await fetch(`${API_URL}/signup`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, email, password }),
-            });
-            const data = await response.json();
-            if (response.ok) {
-                return { success: true };
-            }
-            return { success: false, error: data.error };
-
-        } catch (err) {
-            console.error("Signup failed:", err);
-            setError(friendlyError);
-            return { success: false, error: friendlyError };
-        }
-
-    };
-
-    const logout = async () => {
-
+    const logout = useCallback(async () => {
         try {
             await fetch(`${API_URL}/logout`, { method: 'POST' });
         } catch (err) {
@@ -126,10 +83,9 @@ export const AuthProvider = ({ children }) => {
             setIsAuthenticated(false);
             removeTokenCookie();
         }
+    }, [API_URL]);
 
-    };
-
-    const value = { user, isAuthenticated, loading, login, signup, logout, error, clearError };
+    const value = { user, isAuthenticated, loading, logout, error, clearError, handleTokenLogin, isAuthenticating };
 
     return (
         <AuthContext.Provider value={value}>
