@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { motion } from 'framer-motion';
 
 const GoogleIcon = () => (
     <svg className="w-5 h-5 mr-3" viewBox="0 0 48 48">
@@ -12,6 +13,34 @@ const GoogleIcon = () => (
         <path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303c-.792 2.237-2.231 4.166-4.087 5.571l6.024 4.57C39.993 34.61 44 28.711 44 24c0-1.328-.135-2.618-.389-3.917z"></path>
     </svg>
 );
+
+const LogoAnimation = () => {
+    return (
+        <div className="relative flex items-center justify-center w-48 h-48">
+            {[0, 1, 2].map((i) => (
+                <motion.div
+                    key={i}
+                    className="absolute rounded-full border border-csway-green/30"
+                    initial={{ width: 0, height: 0, opacity: 1 }}
+                    animate={{
+                        width: '100%',
+                        height: '100%',
+                        opacity: 0,
+                    }}
+                    transition={{
+                        duration: 2.5,
+                        repeat: Infinity,
+                        repeatDelay: 1,
+                        delay: i * 0.7,
+                        ease: 'easeOut',
+                    }}
+                />
+            ))}
+            <Image src="/csway-logo.png" alt="Upskill Logo" width={64} height={64} className="opacity-80" />
+        </div>
+    );
+};
+
 
 export const Auth = () => {
     const { isAuthenticated } = useAuth();
@@ -27,31 +56,36 @@ export const Auth = () => {
     }, [isAuthenticated, router]);
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900/50 p-4">
+        <div className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900 p-4">
+            <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.3 }}
+                className="w-full max-w-sm min-h-[450px] p-8 bg-white rounded-2xl shadow-xl dark:bg-gray-800 border border-gray-200 dark:border-gray-700 flex flex-col justify-between"
+            >
+                <div className="text-center">
+                    <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-200">
+                        Welcome to Upskill
+                    </h1>
+                    <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                        Sign in with Google to continue
+                    </p>
+                </div>
 
-            <div className="flex items-center gap-3 mb-8">
-                <Image src="/csway-logo.png" alt="Upskill Logo" width={40} height={40} />
-                <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-200 tracking-tight">
-                    Upskill
-                </h1>
-            </div>
+                <div className="flex justify-center items-center my-4">
+                    <LogoAnimation />
+                </div>
 
-            {error && (
-                <p className="text-sm text-center text-red-500 bg-red-50 dark:bg-red-900/20 py-2 px-3 rounded-md mb-8">
-                    {error}
-                </p>
-            )}
-
-            <div className="flex justify-center">
                 <a
                     href={`${backendUrl}/auth/google/login`}
-                    className="w-auto flex items-center justify-center px-6 py-2.5 font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-csway-green/50 transition-colors"
+                    className="inline-flex items-center justify-center px-4 py-2 font-medium text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/20 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-csway-green/50 transition-colors"
                 >
                     <GoogleIcon />
                     Sign in
                 </a>
-            </div>
 
+
+            </motion.div>
         </div>
     );
 };
