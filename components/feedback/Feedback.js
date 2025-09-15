@@ -110,7 +110,7 @@ export const Feedback = ({
         <div className="space-y-8">
             <Card className="flex flex-col">
                 <div className="flex items-center gap-4 mb-10">
-                    <ActionButton text="Active" shortText="Active" colorScheme="blue"
+                    <ActionButton text="Active" shortText="Open" colorScheme="blue"
                         onClick={() => setView("active")}
                         isActive={view === 'active'} />
                     <ActionButton text="Closed" shortText="Done" colorScheme="gray"

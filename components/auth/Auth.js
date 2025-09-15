@@ -4,6 +4,7 @@ import { useAuth } from '@/context/AuthContext';
 import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
+import { AlertTriangle } from 'lucide-react';
 
 const GoogleIcon = () => (
     <svg className="w-5 h-5 mr-3" viewBox="0 0 48 48">
@@ -41,6 +42,32 @@ const LogoAnimation = () => {
     );
 };
 
+const ErrorMessage = () => {
+    const searchParams = useSearchParams();
+    const error = searchParams.get('error');
+
+    if (!error) return null;
+
+    let message;
+    switch (error) {
+        case 'unauthorized_email':
+            message = 'This account is not authorized to access the platform.';
+            break;
+        case 'account_creation_failed':
+            message = 'Failed to create an account. Please try again.';
+            break;
+        default:
+            message = 'An unknown error occurred.';
+    }
+
+    return (
+        <div className="bg-red-50 dark:bg-red-900/20 border border-red-300 dark:border-red-700 text-red-700 dark:text-red-300 px-4 py-3 rounded-md text-sm flex items-center gap-3 mb-4">
+            <AlertTriangle className="h-5 w-5" />
+            <span>{message}</span>
+        </div>
+    );
+};
+
 
 export const Auth = () => {
     const { isAuthenticated } = useAuth();
@@ -56,7 +83,7 @@ export const Auth = () => {
     }, [isAuthenticated, router]);
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900 p-4">
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-50 dark:bg-gray-900 p-4">
             <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -72,9 +99,14 @@ export const Auth = () => {
                     </p>
                 </div>
 
-                <div className="flex justify-center items-center my-4">
-                    <LogoAnimation />
+                <div className="my-4">
+                    {/* Render the ErrorMessage component here */}
+                    <ErrorMessage />
+                    <div className="flex justify-center items-center">
+                        <LogoAnimation />
+                    </div>
                 </div>
+
 
                 <a
                     href={`${backendUrl}/auth/google/login`}

@@ -1,3 +1,4 @@
+// File: components/shared/navbar/Navbar.js
 "use client"
 
 import { React, useState, useEffect } from 'react';
@@ -20,7 +21,7 @@ const NavLink = ({ href, children, scrolled }) => {
     const colorClasses = isActive
         ? `text-gray-900 dark:text-gray-100 ${scrolled ? 'border-transparent' : 'border-csway-green dark:border-csway-green'}`
         : `text-gray-500 dark:text-gray-400 border-transparent hover:text-gray-700 dark:hover:text-gray-300 ${!scrolled ? 'hover:border-gray-300 dark:hover:border-gray-600' : ''}`;
-    
+
     const activeIndicator = (
         <span className={`absolute left-0 top-1/2 -translate-y-1/2 h-1.5 w-1.5 bg-csway-green rounded-full transition-opacity duration-300 ${isActive && scrolled ? 'opacity-100' : 'opacity-0'}`}></span>
     );
@@ -92,20 +93,23 @@ export const Navbar = () => {
                             <div className="hidden md:block">
                                 <div className="ml-10 flex items-baseline space-x-4">
                                     <NavLink href="/dashboard" scrolled={scrolled}>Home</NavLink>
-                                    
-                                    
+
+
                                     <DesktopDropdown title="Feedback" scrolled={scrolled} activePath="/feedback">
                                         <DropdownItem href="/feedback">My Feedback</DropdownItem>
                                         <DropdownItem href="/feedback/request/new">Request Feedback</DropdownItem>
                                     </DesktopDropdown>
-                                    
+
+                                    <NavLink href="/admin/users" scrolled={scrolled}>Directory</NavLink>
+
                                     <NavLink href="/quests" scrolled={scrolled}>Quests</NavLink>
                                     <NavLink href="/leaderboard" scrolled={scrolled}>Leaderboard</NavLink>
+
                                 </div>
                             </div>
                         </div>
                         <div className="flex items-center">
-                            
+
                             <div className="flex items-center space-x-3">
                                 <span className="hidden sm:inline text-sm text-gray-700 dark:text-gray-300">
                                     Welcome, <span className="font-bold">{user?.username}</span>
@@ -132,7 +136,7 @@ export const Navbar = () => {
                     </div>
                 </div>
 
-                
+
                 {isMenuOpen && (
                     <div className="md:hidden border-t border-gray-200 dark:border-gray-700">
                         <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
@@ -141,6 +145,7 @@ export const Navbar = () => {
                             <MobileNavLink href="/feedback/request/new" closeMenu={() => setIsMenuOpen(false)}>Request Feedback</MobileNavLink>
                             <MobileNavLink href="/quests" closeMenu={() => setIsMenuOpen(false)}>Quests</MobileNavLink>
                             <MobileNavLink href="/leaderboard" closeMenu={() => setIsMenuOpen(false)}>Leaderboard</MobileNavLink>
+                            <MobileNavLink href="/admin/users" closeMenu={() => setIsMenuOpen(false)}>Directory</MobileNavLink>
                         </div>
                     </div>
                 )}
