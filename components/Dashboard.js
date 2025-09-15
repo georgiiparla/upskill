@@ -1,12 +1,11 @@
+// File: components/Dashboard.js
 "use client";
 import React, { useState } from 'react';
-import {
-    Activity as ActivityIcon, Calendar, BookOpen,
-    Timer, Shield, ThumbsUp
-} from 'lucide-react';
+import { Activity as ActivityIcon, Timer, Shield, ThumbsUp, BookOpen } from 'lucide-react';
 import { Card, SectionTitle, InfoCard } from "./shared/Helper";
-import HypedToggleSwitch from './HypedToggleSwitch';
+import SimpleToggleSwitch from './SimpleToggleSwitch';
 import { formatRelativeTime } from '@/lib/helper_func';
+import { AgendaItem } from './AgendaItem';
 
 const MetricItem = ({ icon, label, allTime, thisWeek }) => (
     <div className="bg-slate-50/50 dark:bg-slate-800/50 p-4 rounded-lg border border-slate-200 dark:border-slate-700">
@@ -39,7 +38,7 @@ const ActivityCard = ({ activityData }) => {
             className='h-full min-h-[300px]'
             innerClassName='h-full flex flex-col justify-between'
         >
-            <HypedToggleSwitch
+            <SimpleToggleSwitch
                 options={toggleOptions}
                 activeOption={activeView}
                 setActiveOption={setActiveView}
@@ -63,25 +62,33 @@ const ActivityCard = ({ activityData }) => {
 };
 
 export default function Dashboard({ initialData }) {
+    const [agendaItems, setAgendaItems] = useState(initialData.agendaItems);
+    const [editingItemId, setEditingItemId] = useState(null);
+
+    const handleUpdateAgendaItem = (updatedItem) => {
+        setAgendaItems(currentItems =>
+            currentItems.map(item => item.id === updatedItem.id ? updatedItem : item)
+        );
+    };
+
     return (
         <div className="space-y-8">
-            <Card>
+            <Card className="relative z-[45]">
                 <SectionTitle icon={<BookOpen className="h-6 w-6 text-csway-orange" />} title="This Week's Agenda" className={'mb-7'} />
                 <ol className="relative border-l border-gray-200 dark:border-gray-700 ml-3">
-                    {initialData.agendaItems.map((item) => (
-                        <li key={item.id} className="mb-6 ml-6">
-                            <span className={`absolute flex items-center justify-center w-6 h-6 rounded-full -left-3 ${item.type === 'article' ? 'bg-purple-200 dark:bg-purple-900' : 'bg-csway-red/20 dark:bg-csway-red/20'}`}>
-                                {item.type === 'article' ? <BookOpen className="w-3 h-3 text-purple-600 dark:text-purple-300" /> : <Calendar className="w-3 h-3 text-csway-red dark:text-csway-red" />}
-                            </span>
-                            <div className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600 shadow-sm group hover:bg-csway-green/10 dark:hover:bg-gray-700 transition-all cursor-pointer">
-                                <p className="text-sm font-normal text-gray-500 dark:text-gray-400 mb-1">{item.type === 'article' ? `Learning: ${item.category}` : `Meeting: ${item.due_date}`}</p>
-                                <a href="#" className="text-base font-semibold text-gray-900 dark:text-white group-hover:text-csway-green dark:group-hover:text-csway-green transition-colors">{item.title}</a>
-                            </div>
-                        </li>
+                    {agendaItems.map((item) => (
+                        <AgendaItem
+                            key={item.id}
+                            item={item}
+                            onUpdate={handleUpdateAgendaItem}
+                            isEditing={item.id === editingItemId}
+                            setEditingItemId={setEditingItemId}
+                        />
                     ))}
                 </ol>
             </Card>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+            <div className={`grid grid-cols-1 md:grid-cols-3 gap-8 transition-opacity duration-300 ${editingItemId ? 'opacity-20 pointer-events-none' : 'opacity-100'}`}>
                 <div className="md:col-span-1">
                     <ActivityCard activityData={initialData.activityData} />
                 </div>

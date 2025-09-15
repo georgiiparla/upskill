@@ -38,7 +38,7 @@ export const FeedbackCommentItem = ({ feedback, onDeleteSuccess }) => {
         setIsDeleting(true);
         const toastId = toast.loading('Deleting comment...');
         const response = await deleteSubmission(feedback.id);
-        
+
         setIsDeleting(false);
         setIsDeleteModalOpen(false);
 
@@ -78,16 +78,16 @@ export const FeedbackCommentItem = ({ feedback, onDeleteSuccess }) => {
                     <div className="flex justify-between items-center">
                         <div className="flex items-center space-x-2">
                             <User className="h-4 w-4 text-gray-500 dark:text-gray-400" />
-                                <span className="font-semibold text-gray-900 dark:text-white">
-                                    {feedback.authorName} {isOwner && '(Me)'}
-                                </span>
+                            <span className="font-semibold text-gray-900 dark:text-white">
+                                {feedback.authorName} {isOwner && '(Me)'}
+                            </span>
                         </div>
                         <span className={`truncate max-w-28 sm:max-w-none text-xs font-medium px-2 py-0.5 rounded-full ${colorClass.replace('border-l-2', '')}`}>
                             {feedback.sentiment_text}
                         </span>
                     </div>
 
-                    <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">{feedback.content}</p>
+                    <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed break-words">{feedback.content}</p>
 
                     <div className="flex justify-between items-center pt-2 border-t border-gray-200 dark:border-gray-700 mt-3">
                         <span className="text-xs text-gray-500 dark:text-gray-400">
