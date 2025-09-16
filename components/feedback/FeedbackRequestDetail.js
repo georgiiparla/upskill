@@ -9,7 +9,6 @@ import { Loader2, Lock, Eye } from 'lucide-react';
 import { FeedbackCommentItem } from './shared/FeedbackCommentItem';
 import { RequestSentimentDonutChart } from './shared/RequestSentimentDonutChart';
 
-// VisibilityBadge component is now defined here
 const VisibilityBadge = ({ visibility }) => {
     const isPublic = visibility === 'public';
     const Icon = isPublic ? Eye : Lock;
@@ -52,6 +51,10 @@ export default function FeedbackRequestDetail() {
 
         fetchRequestDetails();
     }, [currentTag]);
+
+    const handleRequestUpdate = (updatedRequestData) => {
+        setRequestData(updatedRequestData);
+    };
 
     const handleDeleteSuccess = (deletedId) => {
         setSubmissions(currentSubmissions =>
@@ -104,8 +107,10 @@ export default function FeedbackRequestDetail() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
 
             <div className="lg:col-span-1 space-y-8 lg:sticky top-16 self-start z-20">
-                <RequestDetailsCard requestData={requestData} />
-
+                <RequestDetailsCard
+                    requestData={requestData}
+                    onUpdate={handleRequestUpdate}
+                />
 
                 {isOwner && (
                     <RequestSentimentDonutChart
@@ -114,7 +119,6 @@ export default function FeedbackRequestDetail() {
                     />
                 )}
             </div>
-
 
             <div className="lg:col-span-2 space-y-6">
                 <div className="flex items-center gap-2">
