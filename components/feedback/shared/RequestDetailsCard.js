@@ -141,7 +141,7 @@ export const RequestDetailsCard = ({ requestData, onUpdate }) => {
                             {!requestData.isOwner && !isClosed && (
                                 <Link href={`/feedback/request/${requestData.tag}/new`} passHref>
                                     <DetailActionButton
-                                        icon={MessageSquarePlus} text="Comment" colorScheme="orange" title="Give Feedback"
+                                        icon={MessageSquarePlus} text="Give Feedback" colorScheme="orange" title="Give Feedback"
                                     />
                                 </Link>
                             )}
