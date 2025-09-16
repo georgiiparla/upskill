@@ -19,17 +19,9 @@ export const Leaderboard = ({ initialData }) => {
             <div>
                 <SectionTitle icon={<Award className="h-6 w-6 text-csway-orange" />} title="COMMS Podium Finishers" />
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
-                    <div className="md:order-1">
-                        {topThree[1] && (
-                            <Card className="border-2 text-center p-4 !border-gray-300 !dark:border-gray-600">
-                                <Trophy className="h-10 w-10 mx-auto mb-2 text-gray-400" />
-                                <h3 className="font-bold text-lg text-gray-800 dark:text-white">{topThree[1].name}</h3>
-                                <p className="font-semibold text-gray-500 dark:text-gray-400">2nd Place</p>
-                                <p className="text-2xl font-bold text-gray-800 dark:text-white mt-2">{topThree[1].points.toLocaleString()} PTS</p>
-                            </Card>
-                        )}
-                    </div>
-                    <div className="md:order-2 relative z-10">
+
+                    {/* 1st Place (Gold) - Physically first for correct mobile stacking */}
+                    <div className="order-1 md:order-2 relative z-10">
                         {topThree[0] && (
                             <Card className="border-2 text-center p-6 !border-csway-orange dark:border-csway-orange transform md:scale-110 shadow-lg">
                                 <Trophy className="h-12 w-12 text-csway-orange mx-auto mb-2" />
@@ -39,7 +31,21 @@ export const Leaderboard = ({ initialData }) => {
                             </Card>
                         )}
                     </div>
-                    <div className="md:order-3">
+
+                    {/* 2nd Place (Silver) - Physically second */}
+                    <div className="order-2 md:order-1">
+                        {topThree[1] && (
+                            <Card className="border-2 text-center p-4 !border-gray-300 !dark:border-gray-600">
+                                <Trophy className="h-10 w-10 mx-auto mb-2 text-gray-400" />
+                                <h3 className="font-bold text-lg text-gray-800 dark:text-white">{topThree[1].name}</h3>
+                                <p className="font-semibold text-gray-500 dark:text-gray-400">2nd Place</p>
+                                <p className="text-2xl font-bold text-gray-800 dark:text-white mt-2">{topThree[1].points.toLocaleString()} PTS</p>
+                            </Card>
+                        )}
+                    </div>
+
+                    {/* 3rd Place (Bronze) - Physically third */}
+                    <div className="order-3 md:order-3">
                         {topThree[2] && (
                             <Card className="border-2 text-center p-4 !border-csway-red/50 dark:border-csway-red/80">
                                 <Trophy className="h-10 w-10 mx-auto mb-2 text-csway-red" />
@@ -53,7 +59,7 @@ export const Leaderboard = ({ initialData }) => {
             </div>
             <div>
                 <SectionTitle icon={<Trophy className="h-6 w-6 text-csway-orange" />} title="Ladder" />
-                
+
                 <div className="hidden md:block">
                     <Card>
                         <div className="overflow-x-auto">
@@ -80,7 +86,7 @@ export const Leaderboard = ({ initialData }) => {
                         </div>
                     </Card>
                 </div>
-                
+
                 <div className="md:hidden">
                     <Card>
                         <div className="space-y-2">
