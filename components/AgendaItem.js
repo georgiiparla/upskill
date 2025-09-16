@@ -1,10 +1,9 @@
-// File: components/AgendaItem.js
 "use client";
 
 import { useState } from 'react';
 import {
     ClipboardList, Pencil, X, Check, Loader2, BookOpen,
-    Calendar, FileText, MessageSquare, Lightbulb
+    FileText, MessageSquare, Lightbulb, Link as LinkIcon, ExternalLink
 } from 'lucide-react';
 import { clientFetch } from '@/lib/client-api';
 import toast from 'react-hot-toast';
@@ -47,6 +46,7 @@ const IconDisplay = ({ name, ...props }) => {
 export const AgendaItem = ({ item, onUpdate, isEditing, setEditingItemId }) => {
     const [title, setTitle] = useState(item.title);
     const [iconName, setIconName] = useState(item.icon_name);
+    const [link, setLink] = useState(item.link || '');
     const [isLoading, setIsLoading] = useState(false);
 
     const MAX_CHARS = 94;
@@ -54,8 +54,9 @@ export const AgendaItem = ({ item, onUpdate, isEditing, setEditingItemId }) => {
     const handleSave = async () => {
         const hasTitleChanged = title.trim() !== item.title;
         const hasIconChanged = iconName !== item.icon_name;
+        const hasLinkChanged = link.trim() !== (item.link || '');
 
-        if (!hasTitleChanged && !hasIconChanged) {
+        if (!hasTitleChanged && !hasIconChanged && !hasLinkChanged) {
             setEditingItemId(null);
             return;
         }
@@ -63,7 +64,8 @@ export const AgendaItem = ({ item, onUpdate, isEditing, setEditingItemId }) => {
         setIsLoading(true);
         const payload = {
             title: title.trim(),
-            icon_name: iconName
+            icon_name: iconName,
+            link: link.trim()
         };
 
         const response = await clientFetch(`/agenda_items/${item.id}`, {
@@ -84,6 +86,7 @@ export const AgendaItem = ({ item, onUpdate, isEditing, setEditingItemId }) => {
     const handleCancel = () => {
         setTitle(item.title);
         setIconName(item.icon_name);
+        setLink(item.link || '');
         setEditingItemId(null);
     };
 
@@ -98,7 +101,7 @@ export const AgendaItem = ({ item, onUpdate, isEditing, setEditingItemId }) => {
                 </span>
                 <div className={`p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600 relative group transition-shadow duration-300 ${isEditing ? 'shadow-2xl shadow-black/20' : 'shadow-sm'}`}>
                     {isEditing ? (
-                        <div className="space-y-4">
+                        <div className="space-y-3">
                             <div>
                                 <div className="flex items-center space-x-2 mt-1">
                                     {Object.keys(ICON_MAP).map(name => (
@@ -120,10 +123,20 @@ export const AgendaItem = ({ item, onUpdate, isEditing, setEditingItemId }) => {
                                 className="w-full px-2 py-1 border rounded-md bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 outline-none"
                                 autoFocus
                             />
-                            <div className="text-right text-xs text-gray-400 mt-1">
+                            <div className="relative">
+                                <LinkIcon className="absolute left-2 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                                <input
+                                    type="text"
+                                    value={link}
+                                    onChange={(e) => setLink(e.target.value)}
+                                    placeholder="Add a URL..."
+                                    className="w-full pl-8 pr-2 py-1 border rounded-md bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 outline-none text-sm placeholder:text-gray-400"
+                                />
+                            </div>
+                            <div className="text-right text-xs text-gray-400 -mt-2">
                                 {title.length} / {MAX_CHARS}
                             </div>
-                            <div className="flex justify-end space-x-2 mt-2">
+                            <div className="flex justify-end space-x-2 pt-1">
                                 <button onClick={handleCancel} disabled={isLoading} className="p-1 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 disabled:opacity-50">
                                     <X className="h-4 w-4" />
                                 </button>
@@ -140,18 +153,32 @@ export const AgendaItem = ({ item, onUpdate, isEditing, setEditingItemId }) => {
                                     : `Last updated ${formatRelativeTime(item.updated_at)}`
                                 }
                             </p>
-                            <p className="text-base font-semibold text-gray-900 dark:text-white">{item.title}</p>
+                            <div className="flex items-center space-x-2">
+                                <p className="text-base font-semibold text-gray-900 dark:text-white">{item.title}</p>
+                            </div>
 
-                            <button
-                                onClick={() => setEditingItemId(item.id)}
-                                className="
-                                    absolute top-2 right-2 p-1.5 rounded-full bg-white/50 dark:bg-gray-800/50 
-                                    text-gray-500 dark:text-gray-400 opacity-0 group-hover:opacity-100 
-                                    transition-opacity hover:bg-gray-200 dark:hover:bg-gray-600
-                                "
-                            >
-                                <Pencil className="h-4 w-4" />
-                            </button>
+                            {/* This container is now responsive */}
+                            <div className="absolute top-2 right-2 flex flex-col space-y-1 md:flex-row md:space-y-0 md:space-x-1 items-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                                {item.link && (
+                                    <a
+                                        href={item.link}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        title="Open link"
+                                        onClick={(e) => e.stopPropagation()}
+                                        className="p-1.5 rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-200/70 dark:hover:bg-gray-600/70"
+                                    >
+                                        <ExternalLink className="h-4 w-4" />
+                                    </a>
+                                )}
+                                <button
+                                    onClick={() => setEditingItemId(item.id)}
+                                    title="Edit item"
+                                    className="p-1.5 rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-200/70 dark:hover:bg-gray-600/70"
+                                >
+                                    <Pencil className="h-4 w-4" />
+                                </button>
+                            </div>
                         </>
                     )}
                 </div>

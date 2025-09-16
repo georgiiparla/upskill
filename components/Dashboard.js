@@ -1,7 +1,7 @@
-// File: components/Dashboard.js
 "use client";
 import React, { useState } from 'react';
-import { Activity as ActivityIcon, Timer, Shield, ThumbsUp, BookOpen } from 'lucide-react';
+import Link from 'next/link';
+import { Activity as ActivityIcon, Timer, MessageSquarePlus, ThumbsUp, BookOpen } from 'lucide-react';
 import { Card, SectionTitle, InfoCard } from "./shared/Helper";
 import SimpleToggleSwitch from './SimpleToggleSwitch';
 import { formatRelativeTime } from '@/lib/helper_func';
@@ -45,10 +45,10 @@ const ActivityCard = ({ activityData }) => {
             />
             <div className="grid grid-cols-1 gap-4">
                 <MetricItem
-                    icon={<Shield className="h-6 w-6 text-csway-green" />}
-                    label="Quests Completed"
-                    allTime={currentData.quests.allTime}
-                    thisWeek={currentData.quests.thisWeek}
+                    icon={<MessageSquarePlus className="h-6 w-6 text-csway-green" />}
+                    label="Requests Created"
+                    allTime={currentData.requests.allTime}
+                    thisWeek={currentData.requests.thisWeek}
                 />
                 <MetricItem
                     icon={<ThumbsUp className="h-6 w-6 text-csway-red" />}
@@ -60,6 +60,32 @@ const ActivityCard = ({ activityData }) => {
         </Card>
     );
 };
+
+// New component to render different event types
+const ActivityText = ({ userName, eventType, targetInfo }) => {
+    const targetLink = targetInfo?.tag ? `/feedback/request/${targetInfo.tag}` : null;
+    const targetTitle = targetInfo?.title ? `"${targetInfo.title}"` : 'an item';
+
+    const renderActionText = () => {
+        switch (eventType) {
+            case 'feedback_requested':
+                return <>requested feedback on {targetLink ? <Link href={targetLink} className="font-semibold text-blue-500 hover:underline">{targetTitle}</Link> : targetTitle}.</>;
+            case 'feedback_closed':
+                return <>closed the feedback request for {targetLink ? <Link href={targetLink} className="font-semibold text-blue-500 hover:underline">{targetTitle}</Link> : targetTitle}.</>;
+            case 'agenda_updated':
+                return <>updated the agenda item {targetTitle}.</>;
+            default:
+                return <>performed an action.</>;
+        }
+    };
+
+    return (
+        <p className="text-sm text-gray-700 dark:text-gray-300">
+            <span className="font-bold text-gray-900 dark:text-white">{userName}</span> {renderActionText()}
+        </p>
+    );
+};
+
 
 export default function Dashboard({ initialData }) {
     const [agendaItems, setAgendaItems] = useState(initialData.agendaItems);
@@ -95,16 +121,18 @@ export default function Dashboard({ initialData }) {
                 <div className="md:col-span-2">
                     <InfoCard
                         icon={<Timer className="h-6 w-6 text-csway-orange" />}
-                        title="Live Activity Stream"
+                        title="Activity Stream"
                         items={initialData.activityStream}
                         listClassName="space-y-4"
                         renderItem={(item) => (
                             <li key={item.id} className="flex items-start p-3 rounded-lg transition-colors hover:bg-gray-500/10">
                                 <div className="flex-shrink-0 mt-1"><ActivityIcon className="h-5 w-5 text-csway-red" /></div>
                                 <div className="ml-4 flex-grow">
-                                    <p className="text-sm text-gray-700 dark:text-gray-300">
-                                        <span className="font-bold text-gray-900 dark:text-white">{item.user_name}</span> {item.action}
-                                    </p>
+                                    <ActivityText
+                                        userName={item.user_name}
+                                        eventType={item.event_type}
+                                        targetInfo={item.target_info}
+                                    />
                                     <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{formatRelativeTime(item.created_at)}</p>
                                 </div>
                             </li>
