@@ -1,5 +1,5 @@
 import { Card } from "@/components/shared/Helper";
-import { Tag, MessageSquarePlus, Trash2, Archive } from "lucide-react";
+import { Tag, MessageSquarePlus, Trash2, Archive, Eye, EyeOff } from "lucide-react";
 import Link from 'next/link';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -8,11 +8,12 @@ import { Modal } from '@/components/shared/Modal';
 import { clientFetch } from '@/lib/client-api';
 import { DetailActionButton } from '@/components/shared/Buttons';
 
-export const RequestDetailsCard = ({ requestData }) => {
+export const RequestDetailsCard = ({ requestData, onUpdate }) => {
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [isCloseModalOpen, setIsCloseModalOpen] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
     const [isClosing, setIsClosing] = useState(false);
+    const [isTogglingVisibility, setIsTogglingVisibility] = useState(false);
     const router = useRouter();
 
     const handleClose = async () => {
@@ -29,8 +30,7 @@ export const RequestDetailsCard = ({ requestData }) => {
 
         if (response.success) {
             toast.success('Request closed successfully!', { id: toastId });
-            router.push('/feedback');
-            router.refresh();
+            onUpdate(response.data);
         } else {
             toast.error(`Error: ${response.error}`, { id: toastId });
         }
@@ -56,8 +56,35 @@ export const RequestDetailsCard = ({ requestData }) => {
         }
     };
 
-    // This condition ensures the action card only renders when there's an action to take.
+    const handleVisibilityToggle = async () => {
+        setIsTogglingVisibility(true);
+        const newVisibility = requestData.visibility === 'public' ? 'requester_only' : 'public';
+        const toastId = toast.loading(`Making request ${newVisibility === 'public' ? 'public' : 'private'}...`);
+
+        const response = await clientFetch(`/feedback_requests/${requestData.id}/visibility`, {
+            method: 'PATCH',
+            body: { visibility: newVisibility }
+        });
+
+        setIsTogglingVisibility(false);
+
+        if (response.success) {
+            toast.success('Visibility updated!', { id: toastId });
+            onUpdate(response.data);
+        } else {
+            toast.error(`Error: ${response.error}`, { id: toastId });
+        }
+    };
+
     const shouldShowActionCard = requestData.isOwner || (!requestData.isOwner && requestData.status !== 'closed');
+
+    const isClosed = requestData.status === 'closed';
+    const displayTopic = isClosed ? `[Closed] ${requestData.topic}` : requestData.topic;
+    const topicClasses = isClosed
+        ? "text-gray-500 dark:text-gray-400"
+        : "text-gray-900 dark:text-white";
+
+    const isPublic = requestData.visibility === 'public';
 
     return (
         <>
@@ -86,7 +113,7 @@ export const RequestDetailsCard = ({ requestData }) => {
             </Modal>
 
             <div>
-                <h3 className="text-lg font-bold text-gray-900 dark:text-white">{requestData.topic}</h3>
+                <h3 className={`text-lg font-bold transition-colors ${topicClasses}`}>{displayTopic}</h3>
                 <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
                     Requested by <span className="font-medium">{requestData.requester_username}</span> on {new Date(requestData.created_at).toLocaleDateString()}
                 </p>
@@ -110,39 +137,36 @@ export const RequestDetailsCard = ({ requestData }) => {
 
                 {shouldShowActionCard && (
                     <Card innerClassName="!p-2">
-                        <div className="flex justify-center items-center space-x-4">
-
-                            {!requestData.isOwner && requestData.status !== 'closed' && (
+                        <div className="flex justify-center items-center flex-wrap gap-2">
+                            {!requestData.isOwner && !isClosed && (
                                 <Link href={`/feedback/request/${requestData.tag}/new`} passHref>
                                     <DetailActionButton
-                                        icon={MessageSquarePlus}
-                                        text="Comment"
-                                        colorScheme="orange"
-                                        title="Give Feedback"
+                                        icon={MessageSquarePlus} text="Comment" colorScheme="orange" title="Give Feedback"
                                     />
                                 </Link>
                             )}
 
                             {requestData.isOwner && (
                                 <>
-                                    {requestData.status !== 'closed' && (
+                                    <DetailActionButton
+                                        icon={isPublic ? EyeOff : Eye}
+                                        text={isPublic ? "Make Private" : "Make Public"}
+                                        colorScheme="gray"
+                                        onClick={handleVisibilityToggle}
+                                        isLoading={isTogglingVisibility}
+                                        title="Toggle visibility"
+                                    />
+                                    {!isClosed && (
                                         <DetailActionButton
-                                            icon={Archive}
-                                            text="Close"
-                                            colorScheme="blue"
+                                            icon={Archive} text="Close" colorScheme="blue"
                                             onClick={() => setIsCloseModalOpen(true)}
-                                            isLoading={isClosing}
-                                            title="Close Request"
+                                            isLoading={isClosing} title="Close Request"
                                         />
                                     )}
-
                                     <DetailActionButton
-                                        icon={Trash2}
-                                        text="Delete"
-                                        colorScheme="red"
+                                        icon={Trash2} text="Delete" colorScheme="red"
                                         onClick={() => setIsDeleteModalOpen(true)}
-                                        isLoading={isDeleting}
-                                        title="Delete Request"
+                                        isLoading={isDeleting} title="Delete Request"
                                     />
                                 </>
                             )}
@@ -153,4 +177,3 @@ export const RequestDetailsCard = ({ requestData }) => {
         </>
     );
 };
-
