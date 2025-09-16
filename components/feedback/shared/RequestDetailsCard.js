@@ -29,7 +29,7 @@ export const RequestDetailsCard = ({ requestData }) => {
 
         if (response.success) {
             toast.success('Request closed successfully!', { id: toastId });
-            router.push('/feedback');
+            // Instead of redirecting, just refresh the page's data
             router.refresh();
         } else {
             toast.error(`Error: ${response.error}`, { id: toastId });
@@ -56,8 +56,14 @@ export const RequestDetailsCard = ({ requestData }) => {
         }
     };
 
-    // This condition ensures the action card only renders when there's an action to take.
     const shouldShowActionCard = requestData.isOwner || (!requestData.isOwner && requestData.status !== 'closed');
+
+    // --- NEW LOGIC ---
+    const isClosed = requestData.status === 'closed';
+    const displayTopic = isClosed ? `[Closed] ${requestData.topic}` : requestData.topic;
+    const topicClasses = isClosed
+        ? "text-gray-500 dark:text-gray-400"
+        : "text-gray-900 dark:text-white";
 
     return (
         <>
@@ -86,7 +92,10 @@ export const RequestDetailsCard = ({ requestData }) => {
             </Modal>
 
             <div>
-                <h3 className="text-lg font-bold text-gray-900 dark:text-white">{requestData.topic}</h3>
+                <div className="flex justify-between items-start">
+                    {/* Updated h3 tag */}
+                    <h3 className={`text-lg font-bold transition-colors ${topicClasses}`}>{displayTopic}</h3>
+                </div>
                 <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
                     Requested by <span className="font-medium">{requestData.requester_username}</span> on {new Date(requestData.created_at).toLocaleDateString()}
                 </p>
@@ -112,7 +121,7 @@ export const RequestDetailsCard = ({ requestData }) => {
                     <Card innerClassName="!p-2">
                         <div className="flex justify-center items-center space-x-4">
 
-                            {!requestData.isOwner && requestData.status !== 'closed' && (
+                            {!requestData.isOwner && !isClosed && (
                                 <Link href={`/feedback/request/${requestData.tag}/new`} passHref>
                                     <DetailActionButton
                                         icon={MessageSquarePlus}
@@ -125,7 +134,7 @@ export const RequestDetailsCard = ({ requestData }) => {
 
                             {requestData.isOwner && (
                                 <>
-                                    {requestData.status !== 'closed' && (
+                                    {!isClosed && (
                                         <DetailActionButton
                                             icon={Archive}
                                             text="Close"
@@ -153,4 +162,3 @@ export const RequestDetailsCard = ({ requestData }) => {
         </>
     );
 };
-

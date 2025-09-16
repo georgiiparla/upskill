@@ -5,6 +5,7 @@ const SimpleToggleSwitch = ({ options, activeOption, setActiveOption, className 
         <div className={`flex space-x-1 rounded-lg bg-gray-200 dark:bg-slate-700 p-1 ${className}`}>
             {options.map(option => (
                 <button
+                    type="button"
                     key={option.id}
                     onClick={() => setActiveOption(option.id)}
                     className={`w-full rounded-md py-1.5 text-sm font-semibold transition-colors duration-200
