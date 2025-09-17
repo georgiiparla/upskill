@@ -17,7 +17,7 @@ export const Leaderboard = ({ initialData }) => {
     return (
         <div className="space-y-12">
             <div>
-                <SectionTitle icon={<Award className="h-6 w-6 text-csway-orange" />} title="COMMS Podium Finishers" />
+                <SectionTitle className='mb-12' icon={<Award className="h-6 w-6 text-csway-orange" />} title="COMMS Podium Finishers" />
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
 
                     {/* 1st Place (Gold) - Physically first for correct mobile stacking */}

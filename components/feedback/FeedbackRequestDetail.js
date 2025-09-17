@@ -88,7 +88,6 @@ export default function FeedbackRequestDetail() {
 
     const isOwner = requestData.isOwner;
     const isPrivate = requestData.visibility === 'requester_only';
-    const feedbackIsHidden = isPrivate && !isOwner;
 
     const sentimentBreakdown = submissions.reduce((acc, sub) => {
         const sentiment = sub.sentiment_text || 'Meets Expectations';
@@ -100,18 +99,16 @@ export default function FeedbackRequestDetail() {
         { name: 'Far Exceeds Expectations', count: sentimentBreakdown['Far Exceeds Expectations'] || 0 },
         { name: 'Exceeds Expectations', count: sentimentBreakdown['Exceeds Expectations'] || 0 },
         { name: 'Meets Expectations', count: sentimentBreakdown['Meets Expectations'] || 0 },
-        { name: 'Needs Improvement', count: sentimentBreakdown['Needs Improvement'] || 0 }
+        { name: 'Below Expectations', count: sentimentBreakdown['Below Expectations'] || 0 }
     ];
 
     return (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-
             <div className="lg:col-span-1 space-y-8 lg:sticky top-16 self-start z-20">
                 <RequestDetailsCard
                     requestData={requestData}
                     onUpdate={handleRequestUpdate}
                 />
-
                 {isOwner && (
                     <RequestSentimentDonutChart
                         title="Sentiment Breakdown"
@@ -120,32 +117,52 @@ export default function FeedbackRequestDetail() {
                 )}
             </div>
 
-            <div className="lg:col-span-2 space-y-6">
-                <div className="flex items-center gap-2">
+            <div className="lg:col-span-2">
+                <div className="flex items-center gap-2 mb-6">
                     <h2 className="text-xl font-bold text-gray-800 dark:text-gray-200">
-                        Received Feedback ({feedbackIsHidden ? 0 : submissions.length})
+                        Received Feedback ({submissions.length})
                     </h2>
                     <VisibilityBadge visibility={requestData.visibility} />
                 </div>
-                {feedbackIsHidden ? (
-                    <div className="p-4 rounded-lg bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 text-center py-12">
-                        <Lock className="h-8 w-8 mx-auto text-gray-400 mb-3" />
-                        <h3 className="font-semibold text-gray-800 dark:text-gray-200">Feedback is Private</h3>
-                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                            The feedback for this request is only visible to the requester.
-                        </p>
-                    </div>
-                ) : submissions.length > 0 ? (
-                    submissions.map((feedbackItem) => (
-                        <FeedbackCommentItem
-                            key={feedbackItem.id}
-                            feedback={feedbackItem}
-                            onDeleteSuccess={handleDeleteSuccess}
-                        />
-                    ))
-                ) : (
-                    <div className="p-4 rounded-lg bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700">
-                        <p className="text-center text-gray-500 dark:text-gray-400 py-8">No feedback submissions received for this request yet.</p>
+
+                <div className="space-y-6">
+                    {submissions.length > 0 ? (
+                        submissions.map((feedbackItem) => (
+                            <FeedbackCommentItem
+                                key={feedbackItem.id}
+                                feedback={feedbackItem}
+                                onDeleteSuccess={handleDeleteSuccess}
+                            />
+                        ))
+                    ) : (
+                        <div className="p-4 rounded-lg bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 text-center py-12">
+                            {isPrivate && !isOwner ? (
+                                <>
+                                    <Lock className="h-8 w-8 mx-auto text-gray-400 mb-3" />
+                                    <h3 className="font-semibold text-gray-800 dark:text-gray-200">Feedback is Private</h3>
+                                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                                        The feedback for this request is only visible to the requester.
+                                    </p>
+                                </>
+                            ) : (
+                                <p className="text-center text-gray-500 dark:text-gray-400">
+                                    No feedback submissions received for this request yet.
+                                </p>
+                            )}
+                        </div>
+                    )}
+                </div>
+
+                {/* This card will now only appear if there are comments to display */}
+                {isPrivate && !isOwner && submissions.length > 0 && (
+                    <div className="mt-6 p-4 rounded-lg bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700">
+                        <div className="flex items-start gap-3">
+                            <Lock className="h-5 w-5 text-gray-400 mt-0.5 flex-shrink-0" />
+                            <div>
+                                <h4 className="font-semibold text-gray-800 dark:text-gray-200">This is a Private Request</h4>
+                                <p className="text-sm text-gray-500 dark:text-gray-400">Only the requester can see all feedback. You are only able to see your own submissions.</p>
+                            </div>
+                        </div>
                     </div>
                 )}
             </div>

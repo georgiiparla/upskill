@@ -21,8 +21,8 @@ export const InfoCard = ({ icon, title, items, renderItem, listClassName = "spac
     return (
         <Card className="flex flex-col ">
             <SectionTitle icon={icon} title={title} />
-            
-            <div className="flex-grow overflow-y-auto no-scrollbar max-h-[180px] sm:max-h-[210px]">
+
+            <div className="flex-grow overflow-y-auto no-scrollbar max-h-[210px] sm:max-h-[210px]">
                 {items && items.length > 0 ? (
                     <ul className={listClassName}>
                         {items.map(item => renderItem(item))}
@@ -70,7 +70,7 @@ export const HistoryListItem = ({
         if (variant === 'background') {
             return `${baseClasses} ${backgroundColorMap[color] || backgroundColorMap.gray}`;
         }
-        
+
         const defaultBg = "bg-gray-50 dark:bg-gray-800/60 hover:bg-gray-100 dark:hover:bg-gray-700/80";
         return `${baseClasses} ${defaultBg} border-l-4 ${borderColorMap[color] || borderColorMap.gray}`;
     };
@@ -91,7 +91,7 @@ export const HistoryListItem = ({
 
     return (
         <li className={getContainerClasses()}>
-            
+
             {href ? (
                 <Link href={href} className={contentWrapperClasses}>
                     {itemContent}

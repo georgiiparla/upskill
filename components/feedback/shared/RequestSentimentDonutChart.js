@@ -9,7 +9,7 @@ const SENTIMENT_COLOR_MAP = {
     'Far Exceeds Expectations': '#14b8a6',
     'Exceeds Expectations': '#22a55e',
     'Meets Expectations': '#f59e0b',
-    'Needs Improvement': '#e37a7b',
+    'Below Expectations': '#e37a7b',
 };
 
 export const RequestSentimentDonutChart = ({ title, data, className }) => {
