@@ -34,7 +34,7 @@ const formItemVariants = {
 
 const SentimentPicker = ({ selected, onSelect }) => {
     const sentiments = [
-        { name: 'Needs Improvement', value: 1, color: 'text-red-500', bgColor: 'hover:bg-red-500/10' },
+        { name: 'Below Expectations', value: 1, color: 'text-red-500', bgColor: 'hover:bg-red-500/10' },
         { name: 'Meets Expectations', value: 2, color: 'text-amber-500', bgColor: 'hover:bg-amber-500/10' },
         { name: 'Exceeds Expectations', value: 3, color: 'text-green-500', bgColor: 'hover:bg-green-500/10' },
         { name: 'Far Exceeds Expectations', value: 4, color: 'text-teal-500', bgColor: 'hover:bg-teal-500/10' },

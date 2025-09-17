@@ -2,13 +2,14 @@
 
 import { useState } from 'react';
 import {
-    ClipboardList, Pencil, X, Check, Loader2, BookOpen,
-    FileText, MessageSquare, Lightbulb, Link as LinkIcon, ExternalLink
+    ClipboardList, Pencil, X, Check, BookOpen,
+    FileText, MessageSquare, Lightbulb, Link as LinkIcon
 } from 'lucide-react';
 import { clientFetch } from '@/lib/client-api';
 import toast from 'react-hot-toast';
 import { formatRelativeTime } from '@/lib/helper_func';
 import { BlurOverlay } from './BlurOverlay';
+import { DetailActionButton } from './shared/Buttons';
 
 const ICON_MAP = {
     ClipboardList: {
@@ -136,29 +137,36 @@ export const AgendaItem = ({ item, onUpdate, isEditing, setEditingItemId }) => {
                             <div className="text-right text-xs text-gray-400 -mt-2">
                                 {title.length} / {MAX_CHARS}
                             </div>
-                            <div className="flex justify-end space-x-2 pt-1">
-                                <button onClick={handleCancel} disabled={isLoading} className="p-1 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 disabled:opacity-50">
-                                    <X className="h-4 w-4" />
-                                </button>
-                                <button onClick={handleSave} disabled={isLoading} className="p-1 text-green-600 hover:green-blue-800 disabled:opacity-50">
-                                    {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Check className="h-4 w-4" />}
-                                </button>
+                            <div className="flex justify-end space-x-2 pt-2">
+                                <DetailActionButton
+                                    icon={X}
+                                    text="Cancel"
+                                    colorScheme="gray"
+                                    onClick={handleCancel}
+                                    disabled={isLoading}
+                                />
+                                <DetailActionButton
+                                    icon={Check}
+                                    text="Save"
+                                    colorScheme="blue"
+                                    onClick={handleSave}
+                                    isLoading={isLoading}
+                                />
                             </div>
                         </div>
                     ) : (
                         <>
-                            <p className="text-xs font-normal text-gray-500 dark:text-gray-400 mb-1">
+                            <p className="text-xs font-normal text-gray-500 dark:text-gray-400 mb-1 w-[90%]">
                                 {item.editor_username
                                     ? `Edited by ${item.editor_username} ${formatRelativeTime(item.updated_at)}`
                                     : `Last updated ${formatRelativeTime(item.updated_at)}`
                                 }
                             </p>
-                            <div className="flex items-center space-x-2">
-                                <p className="text-base font-semibold text-gray-900 dark:text-white">{item.title}</p>
-                            </div>
-
-                            {/* This container is now responsive */}
-                            <div className="absolute top-2 right-2 flex flex-col space-y-1 md:flex-row md:space-y-0 md:space-x-1 items-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                            {/* This container ensures the title and icon stay on one line */}
+                            <div className="flex items-center space-x-2 min-w-0 pr-1">
+                                <p className="text-base font-semibold text-gray-900 dark:text-white">
+                                    {item.title}
+                                </p>
                                 {item.link && (
                                     <a
                                         href={item.link}
@@ -166,19 +174,19 @@ export const AgendaItem = ({ item, onUpdate, isEditing, setEditingItemId }) => {
                                         rel="noopener noreferrer"
                                         title="Open link"
                                         onClick={(e) => e.stopPropagation()}
-                                        className="p-1.5 rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-200/70 dark:hover:bg-gray-600/70"
+                                        className="text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 flex-shrink-0"
                                     >
-                                        <ExternalLink className="h-4 w-4" />
+                                        <LinkIcon className="h-4 w-4" />
                                     </a>
                                 )}
-                                <button
-                                    onClick={() => setEditingItemId(item.id)}
-                                    title="Edit item"
-                                    className="p-1.5 rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-200/70 dark:hover:bg-gray-600/70"
-                                >
-                                    <Pencil className="h-4 w-4" />
-                                </button>
                             </div>
+                            <button
+                                onClick={() => setEditingItemId(item.id)}
+                                title="Edit item"
+                                className="absolute top-2 right-2 p-1.5 rounded-full text-gray-500 dark:text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-gray-200 dark:hover:bg-gray-600"
+                            >
+                                <Pencil className="h-4 w-4" />
+                            </button>
                         </>
                     )}
                 </div>
