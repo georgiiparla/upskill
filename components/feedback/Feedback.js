@@ -17,7 +17,7 @@ export const Feedback = ({
         switch (sentimentText) {
             case 'Far Exceeds Expectations': return 'teal';
             case 'Exceeds Expectations': return 'green';
-            case 'Needs Improvement': return 'red';
+            case 'Below Expectations': return 'red';
             case 'Meets Expectations':
             default: return 'amber';
         }

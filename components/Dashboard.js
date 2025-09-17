@@ -61,7 +61,6 @@ const ActivityCard = ({ activityData }) => {
     );
 };
 
-// New component to render different event types
 const ActivityText = ({ userName, eventType, targetInfo }) => {
     const targetLink = targetInfo?.tag ? `/feedback/request/${targetInfo.tag}` : null;
     const targetTitle = targetInfo?.title ? `"${targetInfo.title}"` : 'an item';
@@ -114,11 +113,11 @@ export default function Dashboard({ initialData }) {
                 </ol>
             </Card>
 
-            <div className={`grid grid-cols-1 md:grid-cols-3 gap-8 transition-opacity duration-300 ${editingItemId ? 'opacity-20 pointer-events-none' : 'opacity-100'}`}>
-                <div className="md:col-span-1">
+            <div className={`grid grid-cols-1 lg:grid-cols-3 gap-8 transition-opacity duration-300 ${editingItemId ? 'opacity-20 pointer-events-none' : 'opacity-100'}`}>
+                <div className="lg:col-span-1">
                     <ActivityCard activityData={initialData.activityData} />
                 </div>
-                <div className="md:col-span-2">
+                <div className="lg:col-span-2">
                     <InfoCard
                         icon={<Timer className="h-6 w-6 text-csway-orange" />}
                         title="Activity Stream"
