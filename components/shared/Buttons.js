@@ -45,6 +45,7 @@ export const DetailActionButton = ({
     icon: Icon,
     text,
     onClick,
+    type = "button",
     colorScheme = 'gray',
     isLoading = false,
     disabled = false,
@@ -52,9 +53,10 @@ export const DetailActionButton = ({
 }) => {
     const colorClasses = {
         orange: 'hover:bg-csway-orange/10 hover:text-csway-orange dark:hover:text-csway-orange',
-        blue:   'hover:bg-blue-500/10 hover:text-blue-500 dark:hover:text-blue-500',
-        red:    'hover:bg-red-500/10 hover:text-red-500 dark:hover:text-red-500',
-        gray:   'hover:bg-gray-500/10 dark:hover:bg-gray-700',
+        blue: 'hover:bg-blue-500/10 hover:text-blue-500 dark:hover:text-blue-500',
+        red: 'hover:bg-red-500/10 hover:text-red-500 dark:hover:text-red-500',
+        green: 'hover:bg-csway-green/10 hover:text-csway-green dark:hover:text-csway-green', // Added green color scheme
+        gray: 'hover:bg-gray-500/10 dark:hover:bg-gray-700',
     };
 
     const selectedColor = colorClasses[colorScheme] || colorClasses.gray;
@@ -62,6 +64,7 @@ export const DetailActionButton = ({
     return (
         <button
             title={title}
+            type={type} // Use the new type prop here
             className={`
                 flex items-center px-4 py-2 rounded-md transition-colors text-sm font-medium 
                 disabled:opacity-50 disabled:cursor-not-allowed 
