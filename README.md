@@ -1,1 +1,0 @@
-bundle config set frozen true && bundle install && bundle exec rake db:migrate
