@@ -17,10 +17,6 @@ Upskill is packed with features designed to promote interaction, recognition, an
 
 [Link to your live demo]
 
-## 📸 Screenshots
-
-*(You can replace these links with your own screenshots)*
-
 ## 💻 Tech Stack
 
 Upskill is built with a modern and powerful tech stack:
