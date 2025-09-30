@@ -9,7 +9,7 @@ const TextSkeleton = ({ className = '' }) => (
 );
 
 const SectionTitleSkeleton = () => (
-    <div className="h-7 w-1/2 bg-gray-300 dark:bg-gray-700 rounded mb-4"></div>
+    <div className="h-7 w-1/4 bg-gray-300 dark:bg-gray-700 rounded mb-4"></div>
 );
 
 export { CardSkeleton, TextSkeleton, SectionTitleSkeleton }

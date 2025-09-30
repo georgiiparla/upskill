@@ -1,16 +1,16 @@
-// File: components/shared/navbar/Navbar.js
 "use client"
 
 import { React, useState, useEffect } from 'react';
 import { useTheme } from 'next-themes';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Menu, X, Sun, Moon, LogOut } from 'lucide-react';
+import { Menu, X, Sun, Moon, User, LogOut } from 'lucide-react';
 import Image from 'next/image';
+import { Avatar } from '@/components/shared/Avatar';
 
 import { useAuth } from '@/context/AuthContext';
 import { Modal } from '@/components/shared/Modal';
-import { DesktopDropdown, DropdownItem } from './NavDropdown';
+import { DesktopDropdown, DropdownItem, UserDropdown } from './NavDropdown';
 
 const NavLink = ({ href, children, scrolled }) => {
     const pathname = usePathname();
@@ -54,6 +54,7 @@ export const Navbar = () => {
     const [scrolled, setScrolled] = useState(false);
     const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
     const { user, logout } = useAuth();
+    const pathname = usePathname();
 
 
     useEffect(() => {
@@ -93,33 +94,22 @@ export const Navbar = () => {
                             <div className="hidden md:block">
                                 <div className="ml-10 flex items-baseline space-x-4">
                                     <NavLink href="/dashboard" scrolled={scrolled}>Home</NavLink>
-
-
-                                    <DesktopDropdown title="Feedback" scrolled={scrolled} activePath="/feedback">
+                                    <DesktopDropdown title="Feedback" scrolled={scrolled} activePaths={['/feedback']}>
                                         <DropdownItem href="/feedback">My Feedback</DropdownItem>
                                         <DropdownItem href="/feedback/request/new">Request Feedback</DropdownItem>
                                     </DesktopDropdown>
-
-                                    <NavLink href="/admin/users" scrolled={scrolled}>Directory</NavLink>
-
+                                    <DesktopDropdown title="Community" scrolled={scrolled} activePaths={['/leaderboard', '/admin/users']}>
+                                        <DropdownItem href="/leaderboard">Leaderboard</DropdownItem>
+                                        <DropdownItem href="/admin/users">Members</DropdownItem>
+                                    </DesktopDropdown>
                                     <NavLink href="/quests" scrolled={scrolled}>Quests</NavLink>
-                                    <NavLink href="/leaderboard" scrolled={scrolled}>Leaderboard</NavLink>
-
                                 </div>
                             </div>
                         </div>
                         <div className="flex items-center">
-
-                            <div className="flex items-center space-x-3">
-                                <span className="hidden lg:inline text-sm text-gray-700 dark:text-gray-300">
-                                    Welcome, <span className="font-bold">{user?.username}</span>
-                                </span>
-                                <button
-                                    onClick={() => setIsLogoutModalOpen(true)}
-                                    className="p-2 rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none"
-                                >
-                                    <LogOut className="h-5 w-5" />
-                                </button>
+                            {/* --- Desktop Controls (Dropdown) --- */}
+                            <div className="hidden md:flex items-center space-x-1">
+                                <UserDropdown user={user} onLogoutClick={() => setIsLogoutModalOpen(true)} />
                                 <button
                                     onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
                                     className="p-2 rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none"
@@ -127,15 +117,26 @@ export const Navbar = () => {
                                     {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
                                 </button>
                             </div>
-                            <div className="ml-2 md:hidden">
-                                <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="inline-flex items-center justify-center p-2 rounded-md text-gray-500 dark:text-gray-400">
+
+                            {/* --- Mobile Controls (Contextual Icons) --- */}
+                            <div className="flex items-center md:hidden">
+                                {pathname === '/account' ? (
+                                    <button onClick={() => setIsLogoutModalOpen(true)} title="Sign Out" className="p-2 rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                        <LogOut className="h-5 w-5" />
+                                    </button>
+                                ) : (
+                                    <Link href="/account" title="My Account" className="p-1 rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                        <Avatar username={user?.username} className="w-7 h-7 text-xs" />
+                                    </Link>
+                                )}
+
+                                <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="p-2 rounded-md text-gray-500 dark:text-gray-400">
                                     {isMenuOpen ? <X className="block h-6 w-6" /> : <Menu className="block h-6 w-6" />}
                                 </button>
                             </div>
                         </div>
                     </div>
                 </div>
-
 
                 {isMenuOpen && (
                     <div className="md:hidden border-t border-gray-200 dark:border-gray-700">
@@ -145,7 +146,7 @@ export const Navbar = () => {
                             <MobileNavLink href="/feedback/request/new" closeMenu={() => setIsMenuOpen(false)}>Request Feedback</MobileNavLink>
                             <MobileNavLink href="/quests" closeMenu={() => setIsMenuOpen(false)}>Quests</MobileNavLink>
                             <MobileNavLink href="/leaderboard" closeMenu={() => setIsMenuOpen(false)}>Leaderboard</MobileNavLink>
-                            <MobileNavLink href="/admin/users" closeMenu={() => setIsMenuOpen(false)}>Directory</MobileNavLink>
+                            <MobileNavLink href="/admin/users" closeMenu={() => setIsMenuOpen(false)}>Members</MobileNavLink>
                         </div>
                     </div>
                 )}

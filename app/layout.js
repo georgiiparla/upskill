@@ -1,5 +1,3 @@
-// File: app/layout.js
-
 import { Inter } from "next/font/google";
 import "./globals.css";
 
@@ -9,6 +7,7 @@ import { ThemeProvider } from '../components/shared/ThemeProvider';
 import { AuthProvider } from "@/context/AuthContext";
 import { GlobalErrorNotifier } from "@/components/shared/GlobalErrorNotifier";
 import AppLayout from "@/components/shared/AppLayout";
+import { ThemeToggleButton } from "@/components/shared/ThemeToggleButton";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,7 +16,6 @@ export const metadata = {
     description: "Upskill platform",
 };
 
-// 1. Added viewport for better responsive behavior
 export const viewport = {
     width: 'device-width',
     initialScale: 1,
@@ -55,11 +53,12 @@ export default function RootLayout({ children }) {
                                     },
                                 },
                             }}
-                            // 2. Added containerClassName to prevent layout shift
                             containerClassName="fixed z-[9999]"
                         />
 
                         <AppLayout>{children}</AppLayout>
+
+                        <ThemeToggleButton />
                     </ThemeProvider>
                 </AuthProvider>
             </body>
