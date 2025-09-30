@@ -1,25 +1,32 @@
 "use client";
 
+import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { X, Loader2 } from 'lucide-react';
 
-export const Modal = ({ 
-    isOpen, 
-    onClose, 
-    onConfirm, 
-    title, 
-    children, 
-    confirmText = "Confirm", 
+export const Modal = ({
+    isOpen,
+    onClose,
+    onConfirm,
+    title,
+    children,
+    confirmText = "Confirm",
     cancelText = "Cancel",
     confirmButtonClass = "bg-red-600 hover:bg-red-700",
     isConfirming = false
 }) => {
-    
-    if (!isOpen) {
+    const [isClient, setIsClient] = useState(false);
+
+    useEffect(() => {
+        setIsClient(true);
+    }, []);
+
+    if (!isOpen || !isClient) {
         return null;
     }
 
-    return (
-        <div 
+    return createPortal(
+        <div
             className="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm"
             onClick={onClose}
         >
@@ -40,7 +47,7 @@ export const Modal = ({
                 <div className="py-6 text-sm text-gray-600 dark:text-gray-300 mb-3">
                     {children}
                 </div>
-                
+
                 <div className="flex justify-end space-x-4">
                     <button
                         onClick={onClose}
@@ -49,7 +56,7 @@ export const Modal = ({
                     >
                         {cancelText}
                     </button>
-                    
+
                     <button
                         onClick={onConfirm}
                         disabled={isConfirming}
@@ -60,6 +67,7 @@ export const Modal = ({
                     </button>
                 </div>
             </div>
-        </div>
+        </div>,
+        document.body // The modal will be "teleported" to the end of the <body> tag
     );
 };

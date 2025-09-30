@@ -2,14 +2,12 @@
 
 import { useState } from 'react';
 import toast from 'react-hot-toast';
-import { useAuth } from '@/context/AuthContext';
 import { Card, SectionTitle } from "@/components/shared/Helper";
-import { AtSign, Plus, Trash2, Loader2 } from 'lucide-react';
+import { AtSign, MailPlus, Trash2, Loader2 } from 'lucide-react';
 import { Modal } from '@/components/shared/Modal';
 import { addUserAlias, removeUserAlias } from '@/lib/client-api';
 
 export const AliasManager = ({ initialAliases = [] }) => {
-    const { user } = useAuth(); // Get current user's primary email
     const [aliases, setAliases] = useState(initialAliases);
     const [newAlias, setNewAlias] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -76,13 +74,6 @@ export const AliasManager = ({ initialAliases = [] }) => {
                     Add an alternative email you can use to sign into your account.
                 </p>
 
-                <div className="mb-4">
-                    <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Primary Email</label>
-                    <div className="flex items-center p-3 bg-gray-100 dark:bg-gray-700/50 rounded-lg text-gray-800 dark:text-gray-200 font-medium">
-                        {user?.email}
-                    </div>
-                </div>
-
                 <div className="mb-6 space-y-2">
                     {aliases.map(alias => (
                         <div key={alias.id} className="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-800/60 rounded-lg">
@@ -111,10 +102,10 @@ export const AliasManager = ({ initialAliases = [] }) => {
                         <button
                             type="submit"
                             disabled={isSubmitting}
-                            className="flex items-center justify-center px-4 py-2 text-white bg-csway-green rounded-lg shadow-sm hover:bg-green-500/80 focus:outline-none focus:ring-2 disabled:bg-gray-400"
+                            title="Add Alias"
+                            className="flex items-center justify-center p-2.5 text-white bg-csway-green rounded-lg shadow-sm hover:bg-green-500/80 focus:outline-none focus:ring-2 disabled:bg-gray-400"
                         >
-                            {isSubmitting ? <Loader2 className="h-5 w-5 animate-spin" /> : <Plus className="h-5 w-5" />}
-                            <span className="ml-2 hidden sm:inline">Add Alias</span>
+                            {isSubmitting ? <Loader2 className="h-5 w-5 animate-spin" /> : <MailPlus className="h-5 w-5" />}
                         </button>
                     </form>
                 ) : (

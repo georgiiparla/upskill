@@ -2,7 +2,7 @@ import { SectionTitleSkeleton, CardSkeleton } from "@/components/shared/skeleton
 
 const PodiumSkeleton = () => (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-5 items-end">
-        
+
         <div className="md:order-1">
             <CardSkeleton className="text-center p-10 ">
                 <div className="h-10 w-10 mx-auto mb-2 bg-gray-300 dark:bg-gray-700 rounded-full"></div>
@@ -11,7 +11,7 @@ const PodiumSkeleton = () => (
                 <div className="h-8 w-1/3 mx-auto mt-2 bg-gray-300 dark:bg-gray-700 rounded"></div>
             </CardSkeleton>
         </div>
-        
+
         <div className="md:order-2 relative z-10">
             <CardSkeleton className="text-center p-12  transform md:scale-110 shadow-lg">
                 <div className="h-12 w-12 mx-auto mb-2 bg-gray-300 dark:bg-gray-700 rounded-full"></div>
@@ -20,7 +20,7 @@ const PodiumSkeleton = () => (
                 <div className="h-9 w-1/3 mx-auto mt-2 bg-gray-300 dark:bg-gray-700 rounded"></div>
             </CardSkeleton>
         </div>
-        
+
         <div className="md:order-3">
             <CardSkeleton className="text-center p-10 ">
                 <div className="h-10 w-10 mx-auto mb-2 bg-gray-300 dark:bg-gray-700 rounded-full"></div>
