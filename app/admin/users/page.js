@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
 import { serverFetch } from "@/lib/server-api";
-import { UsersList } from "@/components/admin/UsersList";
+import { UsersList } from "@/components/features/admin/UsersList";
 
 async function getDirectoryData() {
     const users = await serverFetch('/admin/users');

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Trophy, Sparkles } from 'lucide-react';
-import { Card } from "../shared/Helper";
+import { Card } from "../../shared/helpers/Helper";
 
 // Helper functions from Leaderboard component
 const getRankColor = (rank) => {

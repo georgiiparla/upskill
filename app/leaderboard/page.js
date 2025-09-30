@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
-import { Leaderboard } from "@/components/leaderboard/Leaderboard";
+import { Leaderboard } from "@/components/features/leaderboard/Leaderboard";
 import { serverFetch } from "@/lib/server-api"; 
 import { sleep } from "@/lib/delay";
 

@@ -1,4 +1,4 @@
-import { formatRelativeTime } from "@/lib/helper_func";
+import { formatRelativeTime } from "@/lib/helper-func";
 import Link from "next/link";
 
 export const SectionTitle = ({ icon, title, className = '' }) => (

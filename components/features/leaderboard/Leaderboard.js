@@ -1,7 +1,7 @@
 "use client"
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Trophy, Award, Zap } from 'lucide-react';
-import { Card, SectionTitle } from "../shared/Helper";
+import { Card, SectionTitle } from "../../shared/helpers/Helper";
 import { PodiumCard } from './PodiumCard';
 
 // Animation component for subtle hover effects

@@ -6,7 +6,7 @@ import { Send, Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { clientFetch } from '@/lib/client-api';
 
-import { Card } from "@/components/shared/Helper";
+import { Card } from "../../shared/helpers/Helper";
 
 const formContainerVariants = {
     hidden: { opacity: 0 },

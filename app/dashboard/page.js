@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
-import Dashboard from "@/components/Dashboard";
+import Dashboard from "@/components/features/dashboard/Dashboard";
 import { serverFetch } from "@/lib/server-api";
 import { sleep } from "@/lib/delay";
 

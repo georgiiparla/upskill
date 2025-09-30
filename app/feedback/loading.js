@@ -1,4 +1,4 @@
-import { CardSkeleton, TextSkeleton } from "@/components/shared/skeletons/Skeletons";
+import { CardSkeleton, TextSkeleton } from "@/components/shared/loading/Skeletons";
 
 const ListItemSkeleton = () => (
     <div className="p-4 bg-gray-50 dark:bg-gray-800/60 rounded-lg">

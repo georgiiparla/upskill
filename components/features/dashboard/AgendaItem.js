@@ -7,9 +7,9 @@ import {
 } from 'lucide-react';
 import { clientFetch } from '@/lib/client-api';
 import toast from 'react-hot-toast';
-import { formatRelativeTime } from '@/lib/helper_func';
-import { BlurOverlay } from './BlurOverlay';
-import { DetailActionButton } from './shared/Buttons';
+import { formatRelativeTime } from '@/lib/helper-func';
+import { BlurOverlay } from '../../core/layout/BlurOverlay';
+import { DetailActionButton } from '../../core/buttons/Buttons';
 
 const ICON_MAP = {
     ClipboardList: {

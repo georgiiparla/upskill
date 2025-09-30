@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ChevronDown } from 'lucide-react';
-import { Avatar } from '@/components/shared/Avatar';
+import { Avatar } from '../ui/Avatar';
 
 export const DropdownItem = ({ href, children, onClick }) => {
     return (

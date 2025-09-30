@@ -7,9 +7,9 @@ import toast from 'react-hot-toast';
 import { Send, Loader2, RefreshCw } from 'lucide-react';
 
 import { clientFetch } from '@/lib/client-api';
-import { Card } from '../shared/Helper';
-import { generateRandomTag } from '@/lib/helper_func';
-import SimpleToggleSwitch from '../SimpleToggleSwitch';
+import { Card } from '../../shared/helpers/Helper';
+import { generateRandomTag } from '@/lib/helper-func';
+import SimpleToggleSwitch from '../../core/ui/SimpleToggleSwitch';
 
 const formContainerVariants = {
     hidden: { opacity: 0 },

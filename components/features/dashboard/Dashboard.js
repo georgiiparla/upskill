@@ -2,9 +2,9 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { Activity as ActivityIcon, Timer, MessageSquarePlus, ThumbsUp, BookOpen } from 'lucide-react';
-import { Card, SectionTitle, InfoCard } from "./shared/Helper";
-import SimpleToggleSwitch from './SimpleToggleSwitch';
-import { formatRelativeTime } from '@/lib/helper_func';
+import { Card, SectionTitle, InfoCard } from "../../shared/helpers/Helper";
+import SimpleToggleSwitch from '../../core/ui/SimpleToggleSwitch';
+import { formatRelativeTime } from '@/lib/helper-func';
 import { AgendaItem } from './AgendaItem';
 
 const MetricItem = ({ icon, label, allTime, thisWeek }) => (

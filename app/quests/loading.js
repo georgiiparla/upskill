@@ -1,4 +1,4 @@
-import { Card } from "@/components/shared/Helper";
+import { Card } from "@/components/shared/helpers/Helper";
 
 const QuestCardSkeleton = () => {
     return (

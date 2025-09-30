@@ -1,9 +1,9 @@
 "use client";
 
 import { useAuth } from '@/context/AuthContext';
-import { Card } from '@/components/shared/Helper';
-import { Avatar } from '@/components/shared/Avatar';
-import { AliasManager } from '@/components/account/AliasManager';
+import { Card } from '../../shared/helpers/Helper';
+import { Avatar } from '../../core/ui/Avatar';
+import { AliasManager } from './AliasManager';
 
 export const AccountView = ({ initialAliases }) => {
     const { user } = useAuth();

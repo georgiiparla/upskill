@@ -1,4 +1,4 @@
-import { CardSkeleton } from "@/components/shared/skeletons/Skeletons";
+import { CardSkeleton } from "@/components/shared/loading/Skeletons";
 
 export default function DashboardSkeleton() {
     return (

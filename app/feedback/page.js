@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
-import { Feedback } from "@/components/feedback/Feedback";
+import { Feedback } from "@/components/features/feedback/Feedback";
 import { serverFetch } from "@/lib/server-api";
 import { sleep } from "@/lib/delay";
 

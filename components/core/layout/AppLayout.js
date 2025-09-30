@@ -1,7 +1,7 @@
 "use client";
 
 import { useAuth } from '@/context/AuthContext';
-import { Navbar } from '@/components/shared/navbar/Navbar';
+import { Navbar } from '../navigation/Navbar';
 import { Loader2 } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect } from 'react';

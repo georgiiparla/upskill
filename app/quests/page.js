@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
-import { Quests } from "@/components/Quests";
+import { Quests } from "@/components/features/quests/Quests";
 import { serverFetch } from "@/lib/server-api";
 import { sleep } from "@/lib/delay";
 

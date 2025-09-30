@@ -1,9 +1,9 @@
 "use client";
 
-import { Card, SectionTitle } from "@/components/shared/Helper";
+import { Card, SectionTitle } from "../../shared/helpers/Helper";
 import { Users } from 'lucide-react';
-import { formatRelativeTime } from '@/lib/helper_func';
-import { Avatar } from '@/components/shared/Avatar';
+import { formatRelativeTime } from '@/lib/helper-func';
+import { Avatar } from '../../core/ui/Avatar';
 
 export const UsersList = ({ initialUsers = [] }) => {
     const filteredUsers = initialUsers.filter(user => !user.username.startsWith('Mock User'));

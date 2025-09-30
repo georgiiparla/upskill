@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
 import { serverFetch } from "@/lib/server-api";
-import { AccountView } from '@/components/account/AccountView';
+import { AccountView } from '@/components/features/account/AccountView';
 
 async function getAliases() {
     const aliases = await serverFetch('/me/aliases');

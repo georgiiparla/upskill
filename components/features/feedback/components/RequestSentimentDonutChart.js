@@ -2,7 +2,7 @@
 
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
 import { useTheme } from 'next-themes';
-import { Card, SectionTitle } from "@/components/shared/Helper";
+import { Card, SectionTitle } from "../../../shared/helpers/Helper";
 import { BarChart2 } from 'lucide-react';
 
 const SENTIMENT_COLOR_MAP = {

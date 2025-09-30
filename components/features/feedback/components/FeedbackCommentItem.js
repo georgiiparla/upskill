@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Card } from "@/components/shared/Helper";
-import { formatRelativeTime } from "@/lib/helper_func";
+import { Card } from "../../../shared/helpers/Helper";
+import { formatRelativeTime } from "@/lib/helper-func";
 import { ThumbsUp, User, Trash2 } from "lucide-react";
-import { Modal } from "@/components/shared/Modal";
+import { Modal } from "../../../core/ui/Modal";
 import { likeSubmission, unlikeSubmission, deleteSubmission } from "@/lib/client-api";
 import toast from 'react-hot-toast';
 

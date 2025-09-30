@@ -1,4 +1,4 @@
-import { SectionTitleSkeleton, CardSkeleton } from "@/components/shared/skeletons/Skeletons";
+import { SectionTitleSkeleton, CardSkeleton } from "@/components/shared/loading/Skeletons";
 
 const PodiumSkeleton = () => (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-5 items-end">

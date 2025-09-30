@@ -6,10 +6,10 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Menu, X, Sun, Moon, User, LogOut } from 'lucide-react';
 import Image from 'next/image';
-import { Avatar } from '@/components/shared/Avatar';
+import { Avatar } from '../ui/Avatar';
 
 import { useAuth } from '@/context/AuthContext';
-import { Modal } from '@/components/shared/Modal';
+import { Modal } from '../ui/Modal';
 import { DesktopDropdown, DropdownItem, UserDropdown } from './NavDropdown';
 
 const NavLink = ({ href, children, scrolled }) => {

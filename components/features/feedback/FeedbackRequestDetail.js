@@ -4,10 +4,10 @@ import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import { clientFetch } from '@/lib/client-api';
 
-import { RequestDetailsCard } from './shared/RequestDetailsCard';
+import { RequestDetailsCard } from './components/RequestDetailsCard';
 import { Loader2, Lock, Eye } from 'lucide-react';
-import { FeedbackCommentItem } from './shared/FeedbackCommentItem';
-import { RequestSentimentDonutChart } from './shared/RequestSentimentDonutChart';
+import { FeedbackCommentItem } from './components/FeedbackCommentItem';
+import { RequestSentimentDonutChart } from './components/RequestSentimentDonutChart';
 
 const VisibilityBadge = ({ visibility }) => {
     const isPublic = visibility === 'public';
