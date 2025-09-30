@@ -88,6 +88,7 @@ export const Navbar = () => {
                             <div className="hidden md:block">
                                 <div className="ml-10 flex items-baseline space-x-4">
                                     <NavLink href="/dashboard" scrolled={scrolled}>Home</NavLink>
+                                    <NavLink href="/quests" scrolled={scrolled}>Quests</NavLink>
                                     <DesktopDropdown title="Feedback" scrolled={scrolled} activePaths={['/feedback']}>
                                         <DropdownItem href="/feedback">My Feedback</DropdownItem>
                                         <DropdownItem href="/feedback/request/new">Request Feedback</DropdownItem>
@@ -96,7 +97,6 @@ export const Navbar = () => {
                                         <DropdownItem href="/leaderboard">Leaderboard</DropdownItem>
                                         <DropdownItem href="/admin/users">Members</DropdownItem>
                                     </DesktopDropdown>
-                                    <NavLink href="/quests" scrolled={scrolled}>Quests</NavLink>
                                 </div>
                             </div>
                         </div>

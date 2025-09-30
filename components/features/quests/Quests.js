@@ -1,42 +1,83 @@
 "use client";
-import { Shield, Target } from 'lucide-react';
+import { Target, CheckCircle2, Clock, Play } from 'lucide-react';
 import { Card, SectionTitle } from "../../shared/helpers/Helper";
 
 export const Quests = ({ initialQuests }) => {
     return (
-        <div>
-            <SectionTitle icon={<Target className="h-6 w-6 text-csway-orange" />} title="Challenges & Quests" />
-            <p className="mb-6 text-gray-600 dark:text-gray-400">Engage in challenges to earn points, unlock badges, and grow your skills.</p>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="space-y-6">
+            {/* Ultra-clean Header */}
+            <SectionTitle
+                icon={<Target className="h-5 w-5 text-blue-500" />}
+                title="Challenges & Quests"
+                subtitle="Complete challenges to earn points and grow your skills"
+                className="text-center"
+            />
+
+            {/* Spacious Quest Grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {initialQuests.map(quest => (
-                    <Card key={quest.id} className={quest.completed ? 'opacity-60 bg-gray-50 dark:bg-gray-800/50' : ''}>
-                        <div className="flex justify-between items-start">
-                            <h3 className="text-lg font-bold text-gray-900 dark:text-white">{quest.title}</h3>
-                            <span className="bg-yellow-100 text-yellow-800 text-xs font-semibold px-2.5 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300">{quest.points} PTS</span>
-                        </div>
-                        
-                        
-                        <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">{quest.description}</p>
-                        
-                        <div className="mt-4">
-                            <div className="flex justify-between mb-1">
-                                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Progress</span>
-                                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{quest.progress}%</span>
-                            </div>
-                            <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-                                <div className="bg-csway-green h-2.5 rounded-full" style={{ width: `${quest.progress}%` }}></div>
-                            </div>
-                        </div>
-                        {quest.completed && (
-                            <div className="mt-4 flex items-center text-green-600 dark:text-green-400">
-                                <Shield className="h-5 w-5" />
-                                <span className="ml-2 text-sm font-semibold">Completed</span>
+                    <Card
+                        key={quest.id}
+                        className={`group transition-all duration-200 hover:shadow-md relative ${quest.completed ? 'bg-green-50/30 dark:bg-green-900/5 border-green-200/30 dark:border-green-800/30' : 'hover:bg-gray-50/30 dark:hover:bg-gray-800/20'}`}
+                    >
+                        {/* Transparent Play Button in top-right corner */}
+                        {!quest.completed && (
+                            <div className="absolute top-4 right-4">
+                                <button className="flex items-center justify-center w-8 h-8 bg-transparent hover:bg-blue-500 dark:hover:bg-blue-500 text-blue-600 dark:text-blue-400 hover:text-white border border-blue-200 dark:border-blue-800 hover:border-blue-500 dark:hover:border-blue-600 rounded-lg transition-all duration-200">
+                                    <Play className="h-4 w-4" />
+                                </button>
                             </div>
                         )}
+
+                        <div className="space-y-6">
+                            {/* Clean Header */}
+                            <div className="flex items-start justify-between">
+                                <div className="flex-1 min-w-0">
+                                    <h3 className="text-lg font-medium text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors truncate mb-1">
+                                        {quest.title}
+                                    </h3>
+                                </div>
+                            </div>
+
+                            {/* Clean Description */}
+                            <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-sm">
+                                {quest.description}
+                            </p>
+
+                            {/* Action Area */}
+                            {quest.completed ? (
+                                /* Completed State */
+                                <div className="flex items-center gap-2 py-2 px-3 bg-green-50 dark:bg-green-900/10 rounded-md border border-green-200/50 dark:border-green-800/50">
+                                    <CheckCircle2 className="h-4 w-4 text-green-600 dark:text-green-400" />
+                                    <span className="text-green-700 dark:text-green-300 font-medium text-sm">Completed (+{quest.points} pts)</span>
+                                </div>
+                            ) : (
+                                /* Available State */
+                                <div className="flex items-center justify-between py-2 px-3 bg-blue-50 dark:bg-blue-900/10 rounded-md border border-blue-200/50 dark:border-blue-800/50">
+                                    <div className="flex items-center gap-2">
+                                        <Clock className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                                        <span className="text-blue-700 dark:text-blue-300 font-medium text-sm">Available to start</span>
+                                    </div>
+                                    <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 text-xs font-medium rounded-full">
+                                        +{quest.points} pts
+                                    </span>
+                                </div>
+                            )}
+                        </div>
                     </Card>
                 ))}
             </div>
+
+            {/* Minimal Empty State */}
+            {initialQuests.length === 0 && (
+                <Card className="text-center py-12">
+                    <div className="w-10 h-10 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <Target className="h-5 w-5 text-gray-400" />
+                    </div>
+                    <h3 className="text-base font-medium text-gray-900 dark:text-white mb-2">No quests available</h3>
+                    <p className="text-gray-600 dark:text-gray-400 text-sm">Check back later for new challenges.</p>
+                </Card>
+            )}
         </div>
     );
 };
