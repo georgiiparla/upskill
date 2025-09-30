@@ -2,37 +2,27 @@
 
 import { React, useState, useEffect } from 'react';
 import { useTheme } from 'next-themes';
-import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Menu, X, Sun, Moon, User, LogOut } from 'lucide-react';
+import { Menu, X, Sun, Moon, LogOut } from 'lucide-react';
 import Image from 'next/image';
 import { Avatar } from '../ui/Avatar';
 
 import { useAuth } from '@/context/AuthContext';
 import { Modal } from '../ui/Modal';
 import { DesktopDropdown, DropdownItem, UserDropdown } from './NavDropdown';
+import { NavItem } from './NavItem';
 
-const NavLink = ({ href, children, scrolled }) => {
-    const pathname = usePathname();
-    const isActive = pathname === href;
+import Link from 'next/link';
 
-    const baseClasses = "border-b-2 text-sm font-medium transition-colors duration-150 ease-in-out";
-    const paddingClass = scrolled ? "px-3 py-2" : "px-1 pt-1";
-    const colorClasses = isActive
-        ? `text-gray-900 dark:text-gray-100 ${scrolled ? 'border-transparent' : 'border-csway-green dark:border-csway-green'}`
-        : `text-gray-500 dark:text-gray-400 border-transparent hover:text-gray-700 dark:hover:text-gray-300 ${!scrolled ? 'hover:border-gray-300 dark:hover:border-gray-600' : ''}`;
-
-    const activeIndicator = (
-        <span className={`absolute left-0 top-1/2 -translate-y-1/2 h-1.5 w-1.5 bg-csway-green rounded-full transition-opacity duration-300 ${isActive && scrolled ? 'opacity-100' : 'opacity-0'}`}></span>
-    );
-
-    return (
-        <Link href={href} className={`${baseClasses} ${paddingClass} ${colorClasses} relative`}>
-            {scrolled && activeIndicator}
-            {children}
-        </Link>
-    );
-};
+const NavLink = ({ href, children, scrolled }) => (
+    <NavItem 
+        href={href}
+        scrolled={scrolled}
+        className={scrolled ? 'px-4 py-2' : 'px-4 pt-1'}
+    >
+        {children}
+    </NavItem>
+);
 
 const MobileNavLink = ({ href, children, closeMenu }) => {
     const pathname = usePathname();
@@ -42,7 +32,11 @@ const MobileNavLink = ({ href, children, closeMenu }) => {
         : "text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700";
 
     return (
-        <Link href={href} onClick={closeMenu} className={`block w-full text-left px-4 py-2 text-base font-medium rounded-md ${activeClass}`}>
+        <Link 
+            href={href} 
+            onClick={closeMenu}
+            className={`block w-full text-left px-4 py-2 text-base font-medium rounded-md ${activeClass}`}
+        >
             {children}
         </Link>
     );
