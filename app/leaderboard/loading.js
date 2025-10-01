@@ -1,7 +1,15 @@
-const SectionTitleSkeleton = () => (
-    <div className="flex items-center mb-8 animate-pulse">
-        <div className="h-6 w-6 bg-gray-300 dark:bg-gray-700 rounded mr-3"></div>
-        <div className="h-6 w-48 bg-gray-300 dark:bg-gray-700 rounded"></div>
+const HeroHeaderSkeleton = () => (
+    <div className="flex items-center gap-6 animate-pulse py-6">
+        <div className="flex-shrink-0">
+            <div className="w-14 h-14 bg-gray-300 dark:bg-gray-700 rounded-xl"></div>
+        </div>
+
+        <div className="flex-1 min-w-0">
+            <div className="space-y-2">
+                <div className="h-8 bg-gray-300 dark:bg-gray-700 rounded w-48"></div>
+                <div className="h-5 bg-gray-300 dark:bg-gray-700 rounded w-64"></div>
+            </div>
+        </div>
     </div>
 );
 
@@ -78,12 +86,12 @@ const LeaderboardSkeleton = () => (
 
 export default function LeaderboardLoading() {
     return (
-        <div className="space-y-12">
-            {/* Leaderboard Section */}
-            <div className="animate-fade-in">
-                <SectionTitleSkeleton />
-                <LeaderboardSkeleton />
-            </div>
+        <div className="space-y-8">
+            {/* Hero Header Skeleton */}
+            <HeroHeaderSkeleton />
+
+            {/* Leaderboard Skeleton */}
+            <LeaderboardSkeleton />
         </div>
     );
 }

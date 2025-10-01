@@ -1,7 +1,7 @@
 "use client";
 import React from 'react';
 import { Trophy } from 'lucide-react';
-import { SectionTitle } from '../../shared/helpers/Helper';
+import { HeroHeader } from '../../shared/helpers/HeroHeader';
 import { DesktopLeaderboard } from './DesktopLeaderboard';
 import { MobileLeaderboard } from './MobileLeaderboard';
 import { processLeaderboardData } from './utils';
@@ -12,11 +12,12 @@ export const Leaderboard = ({ initialData }) => {
 
     return (
         <div className="mx-auto w-full max-w-6xl space-y-8">
-            {/* Header Section */}
-            <SectionTitle
-                icon={<Trophy className="h-6 w-6 text-amber-500" />}
-                title="Weekly Leaderboard"
-                subtitle="Top performers this week"
+            {/* Hero Section Header */}
+            <HeroHeader
+                icon={Trophy}
+                title="Leaderboard"
+                subtitle="See who's leading the pack this week"
+                iconBg="from-amber-500 to-yellow-600"
             />
 
             {/* Desktop Layout */}
