@@ -163,9 +163,9 @@ export const Navbar = () => {
                 {isMenuOpen && (
                     <div className="md:hidden border-t border-gray-200 dark:border-gray-700">
                         <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                            <MobileNavLink href="/dashboard" closeMenu={() => setIsMenuOpen(false)}>Weekly</MobileNavLink>
                             <MobileNavLink href="/feedback" closeMenu={() => setIsMenuOpen(false)}>My Feedback</MobileNavLink>
                             <MobileNavLink href="/feedback/request/new" closeMenu={() => setIsMenuOpen(false)}>Request Feedback</MobileNavLink>
+                            <MobileNavLink href="/dashboard" closeMenu={() => setIsMenuOpen(false)}>Weekly</MobileNavLink>
                             <MobileNavLink href="/quests" closeMenu={() => setIsMenuOpen(false)}>Quests</MobileNavLink>
                             <MobileNavLink href="/leaderboard" closeMenu={() => setIsMenuOpen(false)}>Leaderboard</MobileNavLink>
                             <MobileNavLink href="/admin/users" closeMenu={() => setIsMenuOpen(false)}>Members</MobileNavLink>

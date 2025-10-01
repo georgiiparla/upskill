@@ -26,7 +26,7 @@ export const Quests = ({ initialQuests }) => {
                 {initialQuests.map(quest => (
                     <motion.div key={quest.id} variants={questItemVariants}>
                         <Card
-                            className={`group transition-all duration-200 hover:shadow-md relative ${quest.completed ? 'bg-green-50/30 dark:bg-green-900/5 border-green-200/30 dark:border-green-800/30' : 'hover:bg-gray-50/30 dark:hover:bg-gray-800/20'}`}
+                            className={`group transition-all duration-200 hover:shadow-md relative min-h-[200px] max-h-[280px] flex flex-col ${quest.completed ? 'bg-green-50/30 dark:bg-green-900/5 border-green-200/30 dark:border-green-800/30' : 'hover:bg-gray-50/30 dark:hover:bg-gray-800/20'}`}
                         >
                             {/* Transparent Play Button in top-right corner */}
                             {!quest.completed && (
@@ -37,7 +37,7 @@ export const Quests = ({ initialQuests }) => {
                                 </div>
                             )}
 
-                            <div className="space-y-6">
+                            <div className="space-y-6 flex-1 flex flex-col justify-between">
                                 {/* Enhanced Header */}
                                 <div className="flex items-start justify-between">
                                     <div className="flex-1 min-w-0">
@@ -48,9 +48,11 @@ export const Quests = ({ initialQuests }) => {
                                 </div>
 
                                 {/* Clean Description */}
-                                <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-sm">
-                                    {quest.description}
-                                </p>
+                                <div className="flex-1 min-h-0">
+                                    <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-sm overflow-hidden">
+                                        {quest.description}
+                                    </p>
+                                </div>
 
                                 {/* Action Area */}
                                 {quest.completed ? (
@@ -79,12 +81,16 @@ export const Quests = ({ initialQuests }) => {
 
             {/* Minimal Empty State */}
             {initialQuests.length === 0 && (
-                <Card className="text-center py-12">
-                    <div className="w-10 h-10 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <Target className="h-5 w-5 text-gray-400" />
+                <Card className="text-center py-12 min-h-[200px] flex items-center justify-center">
+                    <div className="space-y-4">
+                        <div className="w-10 h-10 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto">
+                            <Target className="h-5 w-5 text-gray-400" />
+                        </div>
+                        <div>
+                            <h3 className="text-base font-medium text-gray-900 dark:text-white mb-2">No quests available</h3>
+                            <p className="text-gray-600 dark:text-gray-400 text-sm">Check back later for new challenges.</p>
+                        </div>
                     </div>
-                    <h3 className="text-base font-medium text-gray-900 dark:text-white mb-2">No quests available</h3>
-                    <p className="text-gray-600 dark:text-gray-400 text-sm">Check back later for new challenges.</p>
                 </Card>
             )}
         </div>

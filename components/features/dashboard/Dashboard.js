@@ -8,15 +8,15 @@ import { formatRelativeTime } from '@/lib/helper-func';
 import { AgendaItem } from './AgendaItem';
 
 const MetricItem = ({ icon, label, allTime, thisWeek }) => (
-    <div className="bg-slate-50/50 dark:bg-slate-800/50 p-4 rounded-lg border border-slate-200 dark:border-slate-700">
+    <div className="group bg-gradient-to-br from-slate-50/80 to-slate-100/60 dark:from-slate-800/80 dark:to-slate-700/60 p-5 rounded-xl border border-slate-200/50 dark:border-slate-700/50 hover:shadow-md transition-all duration-200 hover:scale-[1.02]">
         <div className="flex items-start space-x-4">
-            <div className="flex-shrink-0 mt-1">{icon}</div>
-            <div className="flex flex-col">
-                <span className="text-sm text-gray-500 dark:text-gray-400">{label}</span>
-                <div className="flex items-baseline space-x-2">
-                    <span className="text-2xl font-bold text-gray-900 dark:text-white">{allTime.toLocaleString()}</span>
+            <div className="flex-shrink-0 mt-1 p-1.5 bg-white/80 dark:bg-slate-900/80 rounded-lg shadow-sm group-hover:shadow-md transition-shadow duration-200">{icon}</div>
+            <div className="flex flex-col flex-1 min-w-0">
+                <span className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">{label}</span>
+                <div className="flex items-baseline space-x-3">
+                    <span className="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">{allTime.toLocaleString()}</span>
                     {Number(thisWeek) > 0 && (
-                        <span className="text-sm font-semibold text-green-500">+{thisWeek.toLocaleString()} this week</span>
+                        <span className="text-sm font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 px-2 py-1 rounded-full">+{thisWeek.toLocaleString()} this week</span>
                     )}
                 </div>
             </div>
@@ -35,23 +35,27 @@ const ActivityCard = ({ activityData }) => {
 
     return (
         <Card
-            className='h-full min-h-[300px]'
-            innerClassName='h-full flex flex-col justify-between'
+            className='h-full min-h-[320px]'
+            innerClassName='h-full flex flex-col'
         >
-            <SimpleToggleSwitch
-                options={toggleOptions}
-                activeOption={activeView}
-                setActiveOption={setActiveView}
-            />
-            <div className="grid grid-cols-1 gap-4">
+            <div className="mb-6">
+                <SimpleToggleSwitch
+                    options={toggleOptions}
+                    activeOption={activeView}
+                    setActiveOption={setActiveView}
+                />
+            </div>
+
+            {/* Enhanced Metrics Grid */}
+            <div className="grid grid-cols-1 gap-5 flex-1">
                 <MetricItem
-                    icon={<MessageSquarePlus className="h-6 w-6 text-csway-green" />}
+                    icon={<MessageSquarePlus className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />}
                     label="Requests Created"
                     allTime={currentData.requests.allTime}
                     thisWeek={currentData.requests.thisWeek}
                 />
                 <MetricItem
-                    icon={<ThumbsUp className="h-6 w-6 text-csway-red" />}
+                    icon={<ThumbsUp className="h-5 w-5 text-blue-600 dark:text-blue-400" />}
                     label="Feedback Given"
                     allTime={currentData.feedback.allTime}
                     thisWeek={currentData.feedback.thisWeek}
@@ -98,9 +102,10 @@ export default function Dashboard({ initialData }) {
 
     return (
         <div className="space-y-8">
+            {/* Enhanced This Week's Agenda */}
             <Card className="relative z-[45]">
-                <SectionTitle icon={<BookOpen className="h-6 w-6 text-csway-orange" />} title="This Week's Agenda" className={'mb-7'} />
-                <ol className="relative border-l border-gray-200 dark:border-gray-700 ml-3">
+                <SectionTitle icon={<BookOpen className="h-6 w-6 text-amber-600 dark:text-amber-400" />} title="This Week's Agenda" className={'mb-5'} />
+                <ol className="relative border-l border-slate-200 dark:border-slate-700 ml-3">
                     {agendaItems.map((item) => (
                         <AgendaItem
                             key={item.id}
@@ -118,25 +123,33 @@ export default function Dashboard({ initialData }) {
                     <ActivityCard activityData={initialData.activityData} />
                 </div>
                 <div className="lg:col-span-2">
-                    <InfoCard
-                        icon={<Timer className="h-6 w-6 text-csway-orange" />}
-                        title="Activity Stream"
-                        items={initialData.activityStream}
-                        listClassName="space-y-4"
-                        renderItem={(item) => (
-                            <li key={item.id} className="flex items-start p-3 rounded-lg transition-colors hover:bg-gray-500/10">
-                                <div className="flex-shrink-0 mt-1"><ActivityIcon className="h-5 w-5 text-csway-red" /></div>
-                                <div className="ml-4 flex-grow">
-                                    <ActivityText
-                                        userName={item.user_name}
-                                        eventType={item.event_type}
-                                        targetInfo={item.target_info}
-                                    />
-                                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{formatRelativeTime(item.created_at)}</p>
-                                </div>
-                            </li>
-                        )}
-                    />
+                    <Card className="h-full">
+                        <div className="h-full flex flex-col">
+                            <SectionTitle
+                                icon={<Timer className="h-6 w-6 text-amber-600 dark:text-amber-400" />}
+                                title="Activity Stream"
+                                className="mb-6"
+                            />
+
+                            <div className="flex-1 space-y-4 overflow-y-auto max-h-[450px] sm:max-h-[250px] no-scrollbar">
+                                {initialData.activityStream.map((item) => (
+                                    <div key={item.id} className="flex items-start p-3 rounded-lg transition-all duration-200 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:shadow-sm border border-transparent hover:border-slate-200 dark:hover:border-slate-700">
+                                        <div className="flex-shrink-0 mt-1 p-1.5 bg-amber-100 dark:bg-amber-900/30 rounded-lg">
+                                            <ActivityIcon className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+                                        </div>
+                                        <div className="ml-4 flex-grow">
+                                            <ActivityText
+                                                userName={item.user_name}
+                                                eventType={item.event_type}
+                                                targetInfo={item.target_info}
+                                            />
+                                            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 font-medium">{formatRelativeTime(item.created_at)}</p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </Card>
                 </div>
             </div>
         </div>

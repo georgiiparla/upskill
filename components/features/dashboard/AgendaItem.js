@@ -116,14 +116,19 @@ export const AgendaItem = ({ item, onUpdate, isEditing, setEditingItemId }) => {
                                     ))}
                                 </div>
                             </div>
-                            <input
-                                type="text"
-                                value={title}
-                                onChange={(e) => setTitle(e.target.value)}
-                                maxLength={MAX_CHARS}
-                                className="w-full px-2 py-1 border rounded-md bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 outline-none"
-                                autoFocus
-                            />
+                            <div className="relative">
+                                <input
+                                    type="text"
+                                    value={title}
+                                    onChange={(e) => setTitle(e.target.value)}
+                                    maxLength={MAX_CHARS}
+                                    className="w-full px-2 py-1 pr-16 border rounded-md bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 outline-none"
+                                    autoFocus
+                                />
+                                <div className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-gray-400 pointer-events-none">
+                                    {title.length} / {MAX_CHARS}
+                                </div>
+                            </div>
                             <div className="relative">
                                 <LinkIcon className="absolute left-2 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
                                 <input
@@ -133,9 +138,6 @@ export const AgendaItem = ({ item, onUpdate, isEditing, setEditingItemId }) => {
                                     placeholder="Add a URL..."
                                     className="w-full pl-8 pr-2 py-1 border rounded-md bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 outline-none text-sm placeholder:text-gray-400"
                                 />
-                            </div>
-                            <div className="text-right text-xs text-gray-400 -mt-2">
-                                {title.length} / {MAX_CHARS}
                             </div>
                             <div className="flex justify-end space-x-2 pt-2">
                                 <DetailActionButton
