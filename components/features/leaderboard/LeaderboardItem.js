@@ -1,0 +1,114 @@
+"use client";
+import React from 'react';
+import { motion } from 'framer-motion';
+import { getRankColors } from './utils';
+import { leaderboardItemVariants } from './animations';
+
+export const LeaderboardItem = ({ user, maxPoints, isDesktop = true }) => {
+    const colors = getRankColors(user.rank);
+    const barWidth = `${Math.max((user.points / maxPoints) * 100, 8)}%`;
+
+    if (isDesktop) {
+        return (
+            <motion.div
+                key={user.id}
+                className="group bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-200/50 dark:border-gray-700/50 p-6 transition-all duration-300 hover:shadow-lg hover:bg-white/70 dark:hover:bg-gray-800/70"
+                variants={leaderboardItemVariants}
+            >
+                <div className="flex items-center">
+                    {/* Left Side: Rank, Avatar, Name - Fixed Width */}
+                    <div className="flex items-center gap-4 w-80 flex-shrink-0">
+                        {/* Rank Badge */}
+                        <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${colors.badge} shadow-sm`}>
+                            {user.rank}
+                        </div>
+
+                        {/* Avatar */}
+                        <div className={`w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg ${colors.avatar} shadow-md`}>
+                            {user.name.charAt(0).toUpperCase()}
+                        </div>
+
+                        {/* Name */}
+                        <span className="font-semibold text-gray-900 dark:text-white min-w-[100px]">
+                            {user.name}
+                        </span>
+                    </div>
+
+                    {/* Center: Progress Bar - Full remaining width */}
+                    <div className="flex-1 mx-8">
+                        <div className="relative">
+                            {/* Background bar */}
+                            <div className="w-full h-3 bg-gray-200 dark:bg-gray-700 rounded-full">
+                                {/* Progress bar - all start from left, different lengths */}
+                                <div
+                                    className={`h-full rounded-full transition-all duration-700 ease-out`}
+                                    style={{
+                                        width: barWidth,
+                                        background: `linear-gradient(90deg, ${user.rank === 1 ? 'rgba(245, 158, 11, 0.1)' : user.rank === 2 ? 'rgba(100, 116, 139, 0.1)' : user.rank === 3 ? 'rgba(249, 115, 22, 0.1)' : 'rgba(59, 130, 246, 0.1)'}, ${user.rank === 1 ? 'rgba(234, 179, 8, 0.1)' : user.rank === 2 ? 'rgba(107, 114, 128, 0.1)' : user.rank === 3 ? 'rgba(239, 68, 68, 0.1)' : 'rgba(99, 102, 241, 0.1)'})`,
+                                        border: `1px solid ${user.rank === 1 ? 'rgba(245, 158, 11, 0.3)' : user.rank === 2 ? 'rgba(100, 116, 139, 0.3)' : user.rank === 3 ? 'rgba(249, 115, 22, 0.3)' : 'rgba(59, 130, 246, 0.3)'}`
+                                    }}
+                                />
+                            </div>
+
+                            {/* Trophy icons for top 3 */}
+                            {user.rank <= 3 && (
+                                <div className="absolute -top-1 text-lg" style={{ left: `calc(${barWidth} - 12px)` }}>
+                                    {user.rank === 1 ? '🏆' : user.rank === 2 ? '🥈' : '🥉'}
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Right Side: Points - Fixed Width */}
+                    <div className="text-right w-20 flex-shrink-0">
+                        <div className={`font-bold text-xl ${user.rank === 1 ? 'text-amber-600 dark:text-amber-400' : user.rank === 2 ? 'text-slate-600 dark:text-slate-400' : user.rank === 3 ? 'text-orange-600 dark:text-orange-400' : 'text-gray-900 dark:text-white'}`}>
+                            {user.points.toLocaleString()}
+                        </div>
+                        <div className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+                            pts
+                        </div>
+                    </div>
+                </div>
+            </motion.div>
+        );
+    }
+
+    // Mobile version
+    return (
+        <motion.div
+            key={user.id}
+            className="group bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-200/50 dark:border-gray-700/50 p-4 transition-all duration-200 hover:shadow-lg hover:bg-white/70 dark:hover:bg-gray-800/70"
+            variants={leaderboardItemVariants}
+        >
+            <div className="flex items-center justify-between">
+                {/* Left Side: Rank Badge, Avatar, and Name */}
+                <div className="flex items-center gap-3">
+                    {/* Platform-style Rank Badge */}
+                    <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-semibold ${colors.badge} transition-transform duration-200 group-hover:scale-105`}>
+                        {user.rank}
+                    </div>
+
+                    {/* Platform-style Avatar */}
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold text-sm ${colors.avatar} transition-transform duration-200 group-hover:scale-105`}>
+                        {user.name.charAt(0).toUpperCase()}
+                    </div>
+
+                    {/* Clean Name Display */}
+                    <span className="font-medium text-gray-900 dark:text-white transition-colors group-hover:text-blue-600 dark:group-hover:text-blue-400">
+                        {user.name}
+                    </span>
+                </div>
+
+                {/* Platform-style Points Display */}
+                <div className="text-right">
+                    <div className="font-bold text-lg text-gray-900 dark:text-white">
+                        {user.points.toLocaleString()}
+                    </div>
+                    <div className="text-xs text-gray-500 dark:text-gray-400 font-medium uppercase tracking-wide">
+                        pts
+                    </div>
+                </div>
+            </div>
+        </motion.div>
+    );
+};

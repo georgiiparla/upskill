@@ -7,7 +7,7 @@ const SectionTitleSkeleton = () => (
 
 const CardSkeleton = ({ children, className = '' }) => (
     <div className={`bg-white/50 dark:bg-gray-800/50 backdrop-blur-lg rounded-xl border border-white/20 shadow-md ${className}`}>
-        <div className="p-6">{children}</div>
+        <div className="p-4">{children}</div>
     </div>
 );
 
@@ -15,8 +15,8 @@ const LeaderboardSkeleton = () => (
     <div className="animate-pulse">
         {/* Desktop Bars Layout */}
         <div className="hidden lg:block space-y-4">
-            {[...Array(3)].map((_, i) => (
-                <CardSkeleton key={i} className="p-6">
+            {[...Array(5)].map((_, i) => (
+                <CardSkeleton key={i} className="p-2">
                     <div className="flex items-center justify-between">
                         {/* Left Side: Rank, Avatar, Name */}
                         <div className="flex items-center gap-4">
@@ -31,7 +31,7 @@ const LeaderboardSkeleton = () => (
                         </div>
 
                         {/* Center: Progress Bar */}
-                        <div className="flex-1 max-w-md mx-8">
+                        <div className="flex-1 max-w-3xl mx-8">
                             <div className="w-full h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                                 {/* Simple progress bar */}
                                 <div className="h-full bg-gray-300 dark:bg-gray-600 rounded-full"></div>
@@ -50,7 +50,7 @@ const LeaderboardSkeleton = () => (
 
         {/* Mobile Cards */}
         <div className="lg:hidden space-y-3">
-            {[...Array(3)].map((_, i) => (
+            {[...Array(5)].map((_, i) => (
                 <CardSkeleton key={i} className="p-4">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-3">
@@ -78,13 +78,11 @@ const LeaderboardSkeleton = () => (
 
 export default function LeaderboardLoading() {
     return (
-        <div className="flex flex-col justify-center min-h-[calc(100vh-200px)]">
-            <div className="space-y-12">
-                {/* Leaderboard Section */}
-                <div className="animate-fade-in">
-                    <SectionTitleSkeleton />
-                    <LeaderboardSkeleton />
-                </div>
+        <div className="space-y-12">
+            {/* Leaderboard Section */}
+            <div className="animate-fade-in">
+                <SectionTitleSkeleton />
+                <LeaderboardSkeleton />
             </div>
         </div>
     );

@@ -13,9 +13,7 @@ export default async function LeaderboardPage() {
         const leaderboardData = await getLeaderboardData();
         return (
             // This wrapper creates a tall flex container to properly center its content.
-            <div className="flex flex-col justify-center min-h-[calc(100vh-200px)]">
                 <Leaderboard initialData={leaderboardData} />
-            </div>
         );
     } catch (error) {
         if (error.message === 'Unauthorized') {

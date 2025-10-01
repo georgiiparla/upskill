@@ -1,6 +1,6 @@
 "use client"
 
-import { React, useState, useEffect } from 'react';
+import { React, useState, useEffect, useRef } from 'react';
 import { useTheme } from 'next-themes';
 import { usePathname } from 'next/navigation';
 import { Menu, X, Sun, Moon, LogOut } from 'lucide-react';
@@ -50,14 +50,42 @@ export const Navbar = () => {
     const { user, logout } = useAuth();
     const pathname = usePathname();
 
+    // Scroll thresholds to prevent oscillation - VERY EARLY FOLDING
+    const FOLD_THRESHOLD = 30;    // Navbar folds when scrolling past this point (very responsive)
+    const UNFOLD_THRESHOLD = 10;  // Navbar unfolds when scrolling back up to this point (20px buffer)
+
+    // Use ref to track scrolled state for scroll handler
+    const scrolledRef = useRef(scrolled);
+    const lastScrollYRef = useRef(window.scrollY);
+
+    // Update ref when scrolled state changes
+    useEffect(() => {
+        scrolledRef.current = scrolled;
+    }, [scrolled]);
 
     useEffect(() => {
         const handleScroll = () => {
-            setScrolled(window.scrollY > 50);
+            const currentScrollY = window.scrollY;
+
+            // Only update navbar state if scroll position has changed significantly
+            if (Math.abs(currentScrollY - lastScrollYRef.current) < 5) return;
+
+            lastScrollYRef.current = currentScrollY;
+
+            // Hysteresis logic to prevent oscillation
+            if (currentScrollY > FOLD_THRESHOLD && !scrolledRef.current) {
+                // Fold navbar when scrolling down past threshold
+                setScrolled(true);
+            } else if (currentScrollY < UNFOLD_THRESHOLD && scrolledRef.current) {
+                // Unfold navbar when scrolling back up to lower threshold
+                setScrolled(false);
+            }
         };
-        document.addEventListener('scroll', handleScroll);
+
+        // Use passive listener for better performance
+        document.addEventListener('scroll', handleScroll, { passive: true });
         return () => document.removeEventListener('scroll', handleScroll);
-    }, []);
+    }, []); // Empty dependency array is safe now
 
 
     const handleLogoutConfirm = () => {
@@ -87,16 +115,16 @@ export const Navbar = () => {
                             </Link>
                             <div className="hidden md:block">
                                 <div className="ml-10 flex items-baseline space-x-4">
-                                    <NavLink href="/dashboard" scrolled={scrolled}>Home</NavLink>
-                                    <NavLink href="/quests" scrolled={scrolled}>Quests</NavLink>
                                     <DesktopDropdown title="Feedback" scrolled={scrolled} activePaths={['/feedback']}>
                                         <DropdownItem href="/feedback">My Feedback</DropdownItem>
                                         <DropdownItem href="/feedback/request/new">Request Feedback</DropdownItem>
                                     </DesktopDropdown>
+                                    <NavLink href="/dashboard" scrolled={scrolled}>Weekly</NavLink>
                                     <DesktopDropdown title="Community" scrolled={scrolled} activePaths={['/leaderboard', '/admin/users']}>
                                         <DropdownItem href="/leaderboard">Leaderboard</DropdownItem>
                                         <DropdownItem href="/admin/users">Members</DropdownItem>
                                     </DesktopDropdown>
+                                    <NavLink href="/quests" scrolled={scrolled}>Quests</NavLink>
                                 </div>
                             </div>
                         </div>
@@ -135,7 +163,7 @@ export const Navbar = () => {
                 {isMenuOpen && (
                     <div className="md:hidden border-t border-gray-200 dark:border-gray-700">
                         <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                            <MobileNavLink href="/dashboard" closeMenu={() => setIsMenuOpen(false)}>Home</MobileNavLink>
+                            <MobileNavLink href="/dashboard" closeMenu={() => setIsMenuOpen(false)}>Weekly</MobileNavLink>
                             <MobileNavLink href="/feedback" closeMenu={() => setIsMenuOpen(false)}>My Feedback</MobileNavLink>
                             <MobileNavLink href="/feedback/request/new" closeMenu={() => setIsMenuOpen(false)}>Request Feedback</MobileNavLink>
                             <MobileNavLink href="/quests" closeMenu={() => setIsMenuOpen(false)}>Quests</MobileNavLink>
