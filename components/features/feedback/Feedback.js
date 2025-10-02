@@ -99,6 +99,7 @@ export const Feedback = ({
                             createdAt={item.created_at}
                             content={view === 'submissions' ? null : requestContent}
                             color={view === 'submissions' ? getSentimentColor(item.sentiment_text) : getRequestStatusColor(item.status)}
+                            subjectBold={view !== 'submissions'}
                         />
                     );
                 })}
@@ -131,7 +132,7 @@ export const Feedback = ({
                     className="mb-6 flex-shrink-0"
                 />
 
-                <div className="flex-1 space-y-4 overflow-y-auto max-h-[400px] sm:max-h-[350px] no-scrollbar">
+                <div className="flex-1 space-y-4 overflow-y-auto max-h-[400px] sm:max-h-[450px] no-scrollbar">
                     {renderList()}
                 </div>
             </Card>

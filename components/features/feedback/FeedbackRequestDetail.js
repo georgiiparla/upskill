@@ -135,7 +135,7 @@ export default function FeedbackRequestDetail() {
                             />
                         ))
                     ) : (
-                        <div className="p-4 rounded-lg bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 text-center py-12">
+                        <div className="p-4 rounded-lg bg-gradient-to-br from-slate-50/60 to-slate-100/40 dark:from-slate-800/60 dark:to-slate-700/40 border border-slate-200/40 dark:border-slate-700/40 text-center py-12">
                             {isPrivate && !isOwner ? (
                                 <>
                                     <Lock className="h-8 w-8 mx-auto text-gray-400 mb-3" />
@@ -155,7 +155,7 @@ export default function FeedbackRequestDetail() {
 
                 {/* This card will now only appear if there are comments to display */}
                 {isPrivate && !isOwner && submissions.length > 0 && (
-                    <div className="mt-6 p-4 rounded-lg bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700">
+                    <div className="mt-6 p-4 rounded-lg bg-gradient-to-br from-slate-50/60 to-slate-100/40 dark:from-slate-800/60 dark:to-slate-700/40 border border-slate-200/40 dark:border-slate-700/40">
                         <div className="flex items-start gap-3">
                             <Lock className="h-5 w-5 text-gray-400 mt-0.5 flex-shrink-0" />
                             <div>

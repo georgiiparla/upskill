@@ -55,6 +55,7 @@ export const HistoryListItem = ({
     href,
     variant = 'border',
     color = 'gray',
+    subjectBold = true,
 }) => {
 
     const borderColorMap = {
@@ -70,7 +71,7 @@ export const HistoryListItem = ({
         teal: 'bg-teal-500/8 hover:bg-teal-500/15 dark:bg-teal-500/12 dark:hover:bg-teal-500/20',
         green: 'bg-green-500/8 hover:bg-green-500/15 dark:bg-green-500/12 dark:hover:bg-green-500/20',
         red: 'bg-red-500/8 hover:bg-red-500/15 dark:bg-red-500/12 dark:hover:bg-red-500/20',
-        amber: 'bg-amber-500/8 hover:bg-amber-500/15 dark:bg-amber-500/12 dark:hover:bg-amber-500/20',
+        amber: 'bg-yellow-500/8 hover:bg-yellow-500/15 dark:bg-yellow-500/12 dark:hover:bg-yellow-500/20',
         blue: 'bg-blue-500/8 hover:bg-blue-500/15 dark:bg-blue-500/12 dark:hover:bg-blue-500/20',
         gray: 'bg-slate-500/8 hover:bg-slate-500/15 dark:bg-slate-500/12 dark:hover:bg-slate-500/20',
     };
@@ -89,7 +90,7 @@ export const HistoryListItem = ({
     const itemContent = (
         <>
             <div className="flex justify-between items-center mb-1">
-                <h4 className="truncate text-sm md:text-base font-semibold text-gray-800 dark:text-gray-200 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{subject}</h4>
+                <h4 className={`truncate text-sm md:text-base ${subjectBold ? 'font-semibold' : 'font-normal'} text-gray-800 dark:text-gray-200 transition-colors`}>{subject}</h4>
                 <span className="text-xs text-gray-500 dark:text-gray-400 flex-shrink-0 ml-2">{formatRelativeTime(createdAt)}</span>
             </div>
             <p className="text-xs md:text-sm text-gray-600 dark:text-gray-300 truncate">

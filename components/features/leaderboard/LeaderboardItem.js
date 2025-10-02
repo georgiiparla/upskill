@@ -18,11 +18,6 @@ export const LeaderboardItem = ({ user, maxPoints, isDesktop = true }) => {
                 <div className="flex items-center">
                     {/* Left Side: Rank, Avatar, Name - Fixed Width */}
                     <div className="flex items-center gap-4 w-80 flex-shrink-0">
-                        {/* Rank Badge */}
-                        <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${colors.badge} shadow-sm`}>
-                            {user.rank}
-                        </div>
-
                         {/* Avatar */}
                         <div className={`w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg ${colors.avatar} shadow-md`}>
                             {user.name.charAt(0).toUpperCase()}
@@ -44,8 +39,8 @@ export const LeaderboardItem = ({ user, maxPoints, isDesktop = true }) => {
                                     className={`h-full rounded-full transition-all duration-700 ease-out`}
                                     style={{
                                         width: barWidth,
-                                        background: `linear-gradient(90deg, ${user.rank === 1 ? 'rgba(245, 158, 11, 0.1)' : user.rank === 2 ? 'rgba(100, 116, 139, 0.1)' : user.rank === 3 ? 'rgba(249, 115, 22, 0.1)' : 'rgba(59, 130, 246, 0.1)'}, ${user.rank === 1 ? 'rgba(234, 179, 8, 0.1)' : user.rank === 2 ? 'rgba(107, 114, 128, 0.1)' : user.rank === 3 ? 'rgba(239, 68, 68, 0.1)' : 'rgba(99, 102, 241, 0.1)'})`,
-                                        border: `1px solid ${user.rank === 1 ? 'rgba(245, 158, 11, 0.3)' : user.rank === 2 ? 'rgba(100, 116, 139, 0.3)' : user.rank === 3 ? 'rgba(249, 115, 22, 0.3)' : 'rgba(59, 130, 246, 0.3)'}`
+                                        background: `linear-gradient(90deg, ${user.rank === 1 ? 'rgba(0, 255, 255, 0.6)' : user.rank === 2 ? 'rgba(255, 0, 255, 0.6)' : user.rank === 3 ? 'rgba(255, 255, 0, 0.6)' : 'rgba(0, 255, 150, 0.6)'}, ${user.rank === 1 ? 'rgba(0, 150, 255, 0.6)' : user.rank === 2 ? 'rgba(150, 0, 255, 0.6)' : user.rank === 3 ? 'rgba(255, 150, 0, 0.6)' : 'rgba(0, 255, 100, 0.6)'})`,
+                                        boxShadow: `0 0 8px ${user.rank === 1 ? 'rgba(0, 255, 255, 0.4)' : user.rank === 2 ? 'rgba(255, 0, 255, 0.4)' : user.rank === 3 ? 'rgba(255, 255, 0, 0.4)' : 'rgba(0, 255, 150, 0.4)'}`
                                     }}
                                 />
                             </div>
@@ -53,7 +48,7 @@ export const LeaderboardItem = ({ user, maxPoints, isDesktop = true }) => {
                             {/* Trophy icons for top 3 */}
                             {user.rank <= 3 && (
                                 <div className="absolute -top-1 text-lg" style={{ left: `calc(${barWidth} - 12px)` }}>
-                                    {user.rank === 1 ? '🏆' : user.rank === 2 ? '🥈' : '🥉'}
+                                    {user.rank === 1 ? '🥇' : user.rank === 2 ? '🥈' : '🥉'}
                                 </div>
                             )}
                         </div>
@@ -83,12 +78,7 @@ export const LeaderboardItem = ({ user, maxPoints, isDesktop = true }) => {
             <div className="flex items-center justify-between">
                 {/* Left Side: Rank Badge, Avatar, and Name */}
                 <div className="flex items-center gap-3">
-                    {/* Platform-style Rank Badge */}
-                    <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-semibold ${colors.badge} transition-transform duration-200 group-hover:scale-105`}>
-                        {user.rank}
-                    </div>
-
-                    {/* Platform-style Avatar */}
+                    {/* Avatar */}
                     <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold text-sm ${colors.avatar} transition-transform duration-200 group-hover:scale-105`}>
                         {user.name.charAt(0).toUpperCase()}
                     </div>

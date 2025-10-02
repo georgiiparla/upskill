@@ -1,7 +1,7 @@
 import { CardSkeleton, TextSkeleton } from "@/components/shared/loading/Skeletons";
 
 const ListItemSkeleton = () => (
-    <div className="p-4 bg-gray-50 dark:bg-gray-800/60 rounded-lg">
+    <div className="p-4 bg-slate-50/30 dark:bg-slate-800/50 rounded-lg">
         <div className="space-y-2">
             <TextSkeleton className="h-4 w-3/5 rounded" />
             <TextSkeleton className="h-3 w-4/5 rounded" />

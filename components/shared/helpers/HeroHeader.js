@@ -18,7 +18,7 @@ export const HeroHeader = ({
 
     const containerClasses = `
         ${alignmentClasses}
-        ${alignment === "center" ? "py-8" : "py-6"}
+        ${alignment === "center" ? "py-8" : "py-2"}
         ${className}
     `.trim();
 
@@ -31,11 +31,11 @@ export const HeroHeader = ({
                     </div>
 
                     <div className="space-y-3">
-                        <h1 className={`${titleSize} font-bold text-gray-900 dark:text-white leading-tight`}>
+                        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white leading-tight">
                             {title}
                         </h1>
                         {subtitle && (
-                            <p className={`${subtitleSize} text-gray-600 dark:text-gray-300 max-w-2xl mx-auto leading-relaxed`}>
+                            <p className="text-base sm:text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto leading-relaxed">
                                 {subtitle}
                             </p>
                         )}
@@ -56,11 +56,11 @@ export const HeroHeader = ({
 
             <div className="flex-1 min-w-0">
                 <div className="space-y-2">
-                    <h1 className={`${titleSize} font-bold text-gray-900 dark:text-white leading-tight`}>
+                    <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white leading-tight">
                         {title}
                     </h1>
                     {subtitle && (
-                        <p className={`${subtitleSize} text-gray-600 dark:text-gray-300 leading-relaxed`}>
+                        <p className="text-base sm:text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
                             {subtitle}
                         </p>
                     )}

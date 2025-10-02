@@ -26,7 +26,6 @@ export const DesktopDropdown = ({ title, children, scrolled, activePaths = [] })
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef(null);
     const pathname = usePathname();
-    const isActive = activePaths.some(path => pathname.startsWith(path));
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -53,7 +52,7 @@ export const DesktopDropdown = ({ title, children, scrolled, activePaths = [] })
                 <ChevronDown className={`h-3.5 w-3.5 ml-2 transition-all duration-200 text-gray-400 dark:text-gray-500 group-hover:text-gray-600 dark:group-hover:text-gray-300 ${isOpen ? 'rotate-180' : ''}`} />
             </NavItem>
             {isOpen && (
-                <div className="absolute z-10 mt-3 w-48 origin-top-right rounded-xl bg-white/95 dark:bg-slate-900/95 shadow-xl ring-1 ring-black/5 dark:ring-white/10 focus:outline-none overflow-hidden border border-slate-200/60 dark:border-slate-700/60">
+                <div className="absolute z-10 mt-3 w-48 origin-top-right rounded-xl bg-white dark:bg-slate-900 shadow-xl ring-1 ring-black/5 dark:ring-white/10 focus:outline-none overflow-hidden border border-slate-200/60 dark:border-slate-700/60">
                     <div className="py-2" onClick={() => setIsOpen(false)}>
                         {children}
                     </div>

@@ -100,7 +100,7 @@ export const AgendaItem = ({ item, onUpdate, isEditing, setEditingItemId }) => {
                 <span className={`absolute flex items-center justify-center w-7 h-7 rounded-full -left-3.5 transition-opacity ${currentIcon.colors} ${isEditing ? 'opacity-0 duration-0' : 'opacity-100 duration-300 delay-300'}`}>
                     <IconDisplay name={item.icon_name} className="w-4 h-4" />
                 </span>
-                <div className={`p-5 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600 relative group transition-shadow duration-300 ${isEditing ? 'shadow-2xl shadow-black/20' : 'shadow-sm'}`}>
+                <div className={`p-5 bg-gradient-to-br from-slate-50/60 to-slate-100/40 dark:from-slate-800/60 dark:to-slate-700/40 rounded-lg border border-slate-200/40 dark:border-slate-700/40 relative group hover:shadow-md transition-all duration-200 ${isEditing ? 'shadow-2xl shadow-black/20' : ''}`}>
                     {isEditing ? (
                         <div className="space-y-3">
                                 <div className="flex items-center space-x-2 mt-1">

@@ -121,14 +121,14 @@ export const RequestDetailsCard = ({ requestData, onUpdate }) => {
 
             <div className="space-y-4">
                 <div className="space-y-8">
-                    <div className="space-y-6 text-sm text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700/50 p-4 rounded-md border border-gray-200 dark:border-gray-700">
+                    <div className="space-y-6 text-sm text-gray-700 dark:text-gray-300 bg-gradient-to-br from-slate-50/60 to-slate-100/40 dark:from-slate-800/60 dark:to-slate-700/40 p-4 rounded-md border border-slate-200/40 dark:border-slate-700/40">
                         <div>
                             <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
                                 {requestData.details ? requestData.details : "No additional details provided."}
                             </p>
                         </div>
 
-                        <div className="flex items-center space-x-2 bg-gray-100 dark:bg-gray-800 p-2 rounded-md">
+                        <div className="flex items-center space-x-2 bg-gradient-to-br from-slate-100/60 to-slate-200/40 dark:from-slate-700/60 dark:to-slate-600/40 p-2 rounded-md">
                             <Tag className="h-4 w-4 text-gray-500" />
                             <span className="text-xs font-mono text-gray-600 dark:text-gray-400">{requestData.tag}</span>
                         </div>
@@ -136,8 +136,8 @@ export const RequestDetailsCard = ({ requestData, onUpdate }) => {
                 </div>
 
                 {shouldShowActionCard && (
-                    <Card innerClassName="!p-2">
-                        <div className="flex justify-center items-center flex-wrap gap-2">
+                    <Card>
+                        <div className="flex justify-center items-center gap-2">
                             {!requestData.isOwner && !isClosed && (
                                 <Link href={`/feedback/request/${requestData.tag}/new`} passHref>
                                     <DetailActionButton
@@ -150,7 +150,7 @@ export const RequestDetailsCard = ({ requestData, onUpdate }) => {
                                 <>
                                     <DetailActionButton
                                         icon={isPublic ? EyeOff : Eye}
-                                        text={isPublic ? "Make Private" : "Make Public"}
+                                        text={isPublic ? "Private" : "Public"}
                                         colorScheme="gray"
                                         onClick={handleVisibilityToggle}
                                         isLoading={isTogglingVisibility}
