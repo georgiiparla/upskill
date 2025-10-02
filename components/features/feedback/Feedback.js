@@ -108,8 +108,8 @@ export const Feedback = ({
 
     return (
         <div className="space-y-8">
-            <Card className="flex flex-col">
-                <div className="flex items-center gap-4 mb-10">
+            <Card className="h-full flex flex-col">
+                <div className="flex items-center gap-4 mb-10 flex-shrink-0">
                     <ActionButton text="Active" shortText="Open" colorScheme="blue"
                         onClick={() => setView("active")}
                         isActive={view === 'active'} />
@@ -128,10 +128,10 @@ export const Feedback = ({
                     searchTerm={searchTerm}
                     onSearchChange={setSearchTerm}
                     placeholder="Search by topic, author, or tag..."
-                    className="mb-6"
+                    className="mb-6 flex-shrink-0"
                 />
 
-                <div className="overflow-y-auto no-scrollbar max-h-[67.5vh]">
+                <div className="flex-1 space-y-4 overflow-y-auto max-h-[400px] sm:max-h-[350px] no-scrollbar">
                     {renderList()}
                 </div>
             </Card>

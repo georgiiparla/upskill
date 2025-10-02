@@ -96,14 +96,13 @@ export const AgendaItem = ({ item, onUpdate, isEditing, setEditingItemId }) => {
     return (
         <>
             {isEditing && <BlurOverlay />}
-            <li className={`mb-6 ml-6 transition-all duration-300 ease-in-out ${isEditing ? 'relative z-50 scale-[1.02]' : ''}`}>
+            <li className={`mb-8 ml-6 transition-all duration-300 ease-in-out ${isEditing ? 'relative z-50 scale-[1.02]' : ''}`}>
                 <span className={`absolute flex items-center justify-center w-7 h-7 rounded-full -left-3.5 transition-opacity ${currentIcon.colors} ${isEditing ? 'opacity-0 duration-0' : 'opacity-100 duration-300 delay-300'}`}>
                     <IconDisplay name={item.icon_name} className="w-4 h-4" />
                 </span>
-                <div className={`p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600 relative group transition-shadow duration-300 ${isEditing ? 'shadow-2xl shadow-black/20' : 'shadow-sm'}`}>
+                <div className={`p-5 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600 relative group transition-shadow duration-300 ${isEditing ? 'shadow-2xl shadow-black/20' : 'shadow-sm'}`}>
                     {isEditing ? (
                         <div className="space-y-3">
-                            <div>
                                 <div className="flex items-center space-x-2 mt-1">
                                     {Object.keys(ICON_MAP).map(name => (
                                         <button
@@ -115,7 +114,6 @@ export const AgendaItem = ({ item, onUpdate, isEditing, setEditingItemId }) => {
                                         </button>
                                     ))}
                                 </div>
-                            </div>
                             <div className="relative">
                                 <input
                                     type="text"
@@ -158,30 +156,33 @@ export const AgendaItem = ({ item, onUpdate, isEditing, setEditingItemId }) => {
                         </div>
                     ) : (
                         <>
-                            <p className="text-xs font-normal text-gray-500 dark:text-gray-400 mb-1 w-[90%]">
+                            <p className="text-xs font-normal text-gray-500 dark:text-gray-400 mb-1 w-[90%] truncate">
                                 {item.editor_username
                                     ? `Edited by ${item.editor_username} ${formatRelativeTime(item.updated_at)}`
                                     : `Last updated ${formatRelativeTime(item.updated_at)}`
                                 }
                             </p>
-                            {/* This container ensures the title and icon stay on one line */}
-                            <div className="flex items-center space-x-2 min-w-0 pr-1">
-                                <p className="text-base font-semibold text-gray-900 dark:text-white">
+                            {/* Title and link icon displayed inline as part of the same element */}
+                            <p className="flex items-center space-x-2 min-w-0 pr-1">
+                                <span className="text-base font-semibold text-gray-900 dark:text-white">
                                     {item.title}
-                                </p>
-                                {item.link && (
-                                    <a
-                                        href={item.link}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        title="Open link"
-                                        onClick={(e) => e.stopPropagation()}
-                                        className="text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 flex-shrink-0"
-                                    >
-                                        <LinkIcon className="h-4 w-4" />
-                                    </a>
-                                )}
-                            </div>
+                                    {item.link && (
+                                        <>
+                                            {' '}
+                                            <a
+                                                href={item.link}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                title="Open link"
+                                                onClick={(e) => e.stopPropagation()}
+                                                className="inline-flex items-center text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 align-middle"
+                                            >
+                                                <LinkIcon className="h-4 w-4" />
+                                            </a>
+                                        </>
+                                    )}
+                                </span>
+                            </p>
                             <button
                                 onClick={() => setEditingItemId(item.id)}
                                 title="Edit item"

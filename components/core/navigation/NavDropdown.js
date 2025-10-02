@@ -53,7 +53,7 @@ export const DesktopDropdown = ({ title, children, scrolled, activePaths = [] })
                 <ChevronDown className={`h-3.5 w-3.5 ml-2 transition-all duration-200 text-gray-400 dark:text-gray-500 group-hover:text-gray-600 dark:group-hover:text-gray-300 ${isOpen ? 'rotate-180' : ''}`} />
             </NavItem>
             {isOpen && (
-                <div className="absolute z-10 mt-3 w-48 origin-top-right rounded-xl bg-white dark:bg-gray-800 shadow-xl ring-1 ring-black/5 dark:ring-white/10 focus:outline-none overflow-hidden border border-gray-100 dark:border-gray-700">
+                <div className="absolute z-10 mt-3 w-48 origin-top-right rounded-xl bg-white/95 dark:bg-slate-900/95 shadow-xl ring-1 ring-black/5 dark:ring-white/10 focus:outline-none overflow-hidden border border-slate-200/60 dark:border-slate-700/60">
                     <div className="py-2" onClick={() => setIsOpen(false)}>
                         {children}
                     </div>
@@ -93,7 +93,7 @@ export const UserDropdown = ({ user, onLogoutClick }) => {
                 <ChevronDown className={`h-3.5 w-3.5 text-gray-400 dark:text-gray-500 transition-all duration-200 hover:text-gray-600 dark:hover:text-gray-300 hidden md:inline ${isOpen ? 'rotate-180' : ''}`} />
             </button>
             {isOpen && (
-                <div className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-xl bg-white dark:bg-gray-800 shadow-xl ring-1 ring-black/5 dark:ring-white/10 focus:outline-none border border-gray-100 dark:border-gray-700">
+                <div className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-xl bg-white/95 dark:bg-slate-900/95 shadow-xl ring-1 ring-black/5 dark:ring-white/10 focus:outline-none border border-slate-200/60 dark:border-slate-700/60">
                     <div className="py-2" onClick={() => setIsOpen(false)}>
                         <div className="px-4 py-2 border-b border-gray-200 dark:border-gray-700 mb-1">
                             <p className="font-semibold text-sm text-gray-800 dark:text-gray-100 truncate">{user?.username}</p>

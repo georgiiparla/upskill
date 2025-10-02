@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { AlertTriangle } from 'lucide-react';
+import { Card } from '../../shared/helpers/Helper';
 
 const GoogleIcon = () => (
     <svg className="w-5 h-5 mr-3" viewBox="0 0 48 48">
@@ -18,26 +19,54 @@ const GoogleIcon = () => (
 const LogoAnimation = () => {
     return (
         <div className="relative flex items-center justify-center w-48 h-48">
-            {[0, 1, 2].map((i) => (
+            {/* Circular swirl particles only */}
+            {[...Array(18)].map((_, i) => (
                 <motion.div
-                    key={i}
-                    className="absolute rounded-full border border-csway-green/30"
-                    initial={{ width: 0, height: 0, opacity: 1 }}
+                    key={`swirl-${i}`}
+                    className="absolute w-1 h-1 rounded-full bg-green-300/40"
                     animate={{
-                        width: '100%',
-                        height: '100%',
-                        opacity: 0,
+                        x: [
+                            Math.cos(i * 30 * Math.PI / 180) * 80,
+                            Math.cos((i * 30 + 180) * Math.PI / 180) * 100,
+                            Math.cos(i * 30 * Math.PI / 180) * 80
+                        ],
+                        y: [
+                            Math.sin(i * 30 * Math.PI / 180) * 80,
+                            Math.sin((i * 30 + 180) * Math.PI / 180) * 100,
+                            Math.sin(i * 30 * Math.PI / 180) * 80
+                        ],
+                        opacity: [0, 0.6, 0],
+                        scale: [0, 1.5, 0],
                     }}
                     transition={{
-                        duration: 2.5,
+                        duration: 2 + Math.random() * 1.5,
                         repeat: Infinity,
-                        repeatDelay: 1,
-                        delay: i * 0.7,
-                        ease: 'easeOut',
+                        delay: i * 0.15 + Math.random() * 1,
+                        ease: 'easeInOut',
                     }}
                 />
             ))}
-            <Image src="/csway-logo.png" alt="Upskill Logo" width={64} height={64} className="opacity-80" />
+
+            {/* Centered spinning logo */}
+            <motion.div
+                className="relative z-10"
+                animate={{
+                    rotate: [0, 360],
+                }}
+                transition={{
+                    duration: 12, // Slow spin
+                    repeat: Infinity,
+                    ease: 'linear',
+                }}
+            >
+                <Image
+                    src="/csway-logo.png"
+                    alt="Upskill Logo"
+                    width={60}
+                    height={60}
+                    className="opacity-90"
+                />
+            </motion.div>
         </div>
     );
 };
@@ -84,15 +113,10 @@ export const Auth = () => {
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-50 dark:bg-gray-900 p-4">
-            <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.3 }}
-                className="w-full max-w-sm min-h-[450px] p-8 bg-white rounded-2xl shadow-xl dark:bg-gray-800 border border-gray-200 dark:border-gray-700 flex flex-col justify-between"
-            >
+            <Card className="w-full max-w-sm min-h-[450px] !p-8 !rounded-2xl flex flex-col justify-between">
                 <div className="text-center">
                     <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-200">
-                        Welcome to Upskill
+                        Welcome to upskill
                     </h1>
                     <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
                         Sign in with Google to continue
@@ -100,24 +124,19 @@ export const Auth = () => {
                 </div>
 
                 <div className="my-4">
-                    {/* Render the ErrorMessage component here */}
                     <ErrorMessage />
                     <div className="flex justify-center items-center">
                         <LogoAnimation />
                     </div>
                 </div>
 
-
                 <a
                     href={`${backendUrl}/auth/google/login`}
-                    className="inline-flex items-center justify-center px-4 py-2 font-medium text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/20 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-csway-green/50 transition-colors"
+                    className="inline-flex items-center justify-center px-4 py-2 font-medium text-gray-700 dark:text-gray-200 rounded-lg hover:bg-slate-50/80 dark:hover:bg-slate-700/30 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-csway-green/50 transition-all duration-200 bg-transparent"
                 >
                     <GoogleIcon />
                     Sign in
                 </a>
-
-
-            </motion.div>
+            </Card>
         </div>
-    );
-};
+);}

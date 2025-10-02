@@ -67,12 +67,12 @@ export const HistoryListItem = ({
     };
 
     const backgroundColorMap = {
-        teal: 'bg-teal-500/10 hover:bg-teal-500/20 dark:bg-teal-500/15 dark:hover:bg-teal-500/25',
-        green: 'bg-green-500/10 hover:bg-green-500/20 dark:bg-green-500/15 dark:hover:bg-green-500/25',
-        red: 'bg-red-500/10 hover:bg-red-500/20 dark:bg-red-500/15 dark:hover:bg-red-500/25',
-        amber: 'bg-yellow-400/25 hover:bg-yellow-400/35 dark:bg-yellow-400/30 dark:hover:bg-yellow-400/40',
-        blue: 'bg-blue-500/10 hover:bg-blue-500/20 dark:bg-blue-500/15 dark:hover:bg-blue-500/25',
-        gray: 'bg-gray-500/10 hover:bg-gray-500/20 dark:bg-gray-500/15 dark:hover:bg-gray-500/25',
+        teal: 'bg-teal-500/8 hover:bg-teal-500/15 dark:bg-teal-500/12 dark:hover:bg-teal-500/20',
+        green: 'bg-green-500/8 hover:bg-green-500/15 dark:bg-green-500/12 dark:hover:bg-green-500/20',
+        red: 'bg-red-500/8 hover:bg-red-500/15 dark:bg-red-500/12 dark:hover:bg-red-500/20',
+        amber: 'bg-amber-500/8 hover:bg-amber-500/15 dark:bg-amber-500/12 dark:hover:bg-amber-500/20',
+        blue: 'bg-blue-500/8 hover:bg-blue-500/15 dark:bg-blue-500/12 dark:hover:bg-blue-500/20',
+        gray: 'bg-slate-500/8 hover:bg-slate-500/15 dark:bg-slate-500/12 dark:hover:bg-slate-500/20',
     };
 
     const getContainerClasses = () => {
@@ -82,7 +82,7 @@ export const HistoryListItem = ({
             return `${baseClasses} ${backgroundColorMap[color] || backgroundColorMap.gray}`;
         }
 
-        const defaultBg = "bg-gray-50 dark:bg-gray-800/60 hover:bg-gray-100 dark:hover:bg-gray-700/80";
+        const defaultBg = "bg-slate-50/60 dark:bg-slate-800/40 hover:bg-slate-100/80 dark:hover:bg-slate-700/60";
         return `${baseClasses} ${defaultBg} border-l-4 ${borderColorMap[color] || borderColorMap.gray}`;
     };
 

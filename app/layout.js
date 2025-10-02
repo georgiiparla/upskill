@@ -39,7 +39,7 @@ export default function RootLayout({ children }) {
                         <Toaster
                             position="bottom-right"
                             toastOptions={{
-                                className: 'bg-white dark:bg-gray-800 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg p-4',
+                                className: 'bg-white/95 dark:bg-slate-900/95 text-gray-900 dark:text-white border border-slate-200/60 dark:border-slate-700/60 rounded-lg shadow-xl p-4 backdrop-blur-sm',
                                 success: {
                                     iconTheme: {
                                         primary: '#22a55e',

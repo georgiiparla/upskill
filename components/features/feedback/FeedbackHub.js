@@ -50,10 +50,10 @@ const SentimentPicker = ({ selected, onSelect }) => {
                         type="button"
                         onClick={() => onSelect(sentiment.value)}
                         className={`
-                            flex flex-col items-center justify-center p-3 h-[80px] rounded-lg border-2 transition-all
+                            flex flex-col items-center justify-center p-3 h-[80px] rounded-lg border-2 transition-all duration-200
                             ${selected === sentiment.value
-                                ? `${sentiment.color} border-current`
-                                : `text-gray-500 dark:text-gray-400 border-gray-200 dark:border-gray-700 ${sentiment.bgColor}`
+                                ? `${sentiment.color} border-current bg-slate-50/80 dark:bg-slate-800/60`
+                                : `text-gray-500 dark:text-gray-400 border-gray-200 dark:border-gray-700 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:border-gray-300 dark:hover:border-gray-600 ${sentiment.bgColor}`
                             }
                         `}
                     >
