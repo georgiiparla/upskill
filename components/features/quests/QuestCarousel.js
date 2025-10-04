@@ -1,15 +1,13 @@
 "use client";
 import { useState, useEffect, useRef } from 'react';
-import { flushSync } from 'react-dom';
 import { AnimatePresence } from 'framer-motion';
 import { QuestCard } from "./QuestCard";
-import { QuestIndicators } from "./QuestIndicators";
 
 export const QuestCarousel = ({ quests }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [direction, setDirection] = useState(0);
     const [showConfetti, setShowConfetti] = useState(false);
-    const directionRef = useRef(0);
+    const [pendingNavigation, setPendingNavigation] = useState(null);
 
     const swipeThreshold = 80;
 
@@ -22,6 +20,14 @@ export const QuestCarousel = ({ quests }) => {
             return () => clearTimeout(timer);
         }
     }, [currentIndex, quests]);
+
+    // Execute pending navigation after direction update
+    useEffect(() => {
+        if (pendingNavigation) {
+            pendingNavigation();
+            setPendingNavigation(null);
+        }
+    }, [direction, pendingNavigation]);
 
     const paginate = (step) => {
         if (!quests.length) return;
@@ -39,15 +45,14 @@ export const QuestCarousel = ({ quests }) => {
     const handleDragEnd = (event, info) => {
         if (Math.abs(info.offset.x) > swipeThreshold) {
             const dragDirection = info.offset.x > 0 ? -1 : 1;
-            // Force synchronous direction update
-            flushSync(() => {
-                setDirection(dragDirection);
+            setDirection(dragDirection);
+            setPendingNavigation(() => () => {
+                if (info.offset.x > 0) {
+                    prevQuest();
+                } else {
+                    nextQuest();
+                }
             });
-            if (info.offset.x > 0) {
-                prevQuest();
-            } else {
-                nextQuest();
-            }
         }
     };
 
@@ -67,15 +72,11 @@ export const QuestCarousel = ({ quests }) => {
                     showConfetti={showConfetti}
                     direction={direction}
                     onDragEnd={handleDragEnd}
+                    quests={quests}
+                    currentIndex={currentIndex}
+                    onIndicatorClick={setCurrentIndex}
                 />
             </AnimatePresence>
-
-            {/* Position Indicators */}
-            <QuestIndicators
-                quests={quests}
-                currentIndex={currentIndex}
-                onIndicatorClick={setCurrentIndex}
-            />
         </div>
     );
 };

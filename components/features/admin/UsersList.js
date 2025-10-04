@@ -18,8 +18,8 @@ export const UsersList = ({ initialUsers = [] }) => {
 
             {/* --- Desktop Table --- */}
             <div className="overflow-x-auto hidden md:block">
-                <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                    <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                <table className="w-full text-sm text-left text-slate-600 dark:text-slate-400">
+                    <thead className="text-xs text-slate-700 uppercase bg-slate-50 dark:bg-slate-700 dark:text-slate-400">
                         <tr>
                             <th scope="col" className="px-6 py-3">User</th>
                             <th scope="col" className="px-6 py-3">Email</th>
@@ -28,7 +28,7 @@ export const UsersList = ({ initialUsers = [] }) => {
                     </thead>
                     <tbody>
                         {filteredUsers.map((user) => (
-                            <tr key={user.email} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                            <tr key={user.email} className="bg-white border-b border-slate-200 dark:bg-slate-800 dark:border-slate-700">
                                 <td className="px-6 py-4">
                                     <div className="flex items-center space-x-4">
                                         <Avatar username={user.username} className="w-10 h-10 text-sm" />
@@ -46,7 +46,7 @@ export const UsersList = ({ initialUsers = [] }) => {
             {/* --- Mobile List --- */}
             <div className="md:hidden space-y-4">
                 {filteredUsers.map((user) => (
-                    <div key={user.email} className="p-4 bg-gray-50 dark:bg-gray-800/60 rounded-lg">
+                    <div key={user.email} className="p-4 bg-slate-50/50 dark:bg-slate-800/60 rounded-lg">
                         <div className="flex items-center space-x-4">
                             <Avatar username={user.username} className="w-10 h-10 text-sm" />
                             <div>

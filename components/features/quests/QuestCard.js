@@ -1,16 +1,26 @@
 "use client";
 import { motion } from 'framer-motion';
-import { CheckCircle2, Clock } from 'lucide-react';
 import { Card } from "../../shared/helpers/Helper";
 import { Confetti } from "./Confetti";
+import { QuestIndicators } from "./QuestIndicators";
+import { PointsBadge } from "./PointsBadge";
 
-export const QuestCard = ({ quest, showConfetti, direction, onDragEnd, onQuestComplete }) => {
+export const QuestCard = ({
+    quest,
+    showConfetti,
+    direction,
+    onDragEnd,
+    quests,
+    currentIndex,
+    onIndicatorClick
+}) => {
+    // Animation variants for quest card transitions
     const questVariants = {
         enter: (enterDirection) => ({
             opacity: 0,
-            x: enterDirection === 0 ? 0 : enterDirection > 0 ? 120 : -120,
+            x: (enterDirection === 0) ? 0 : ((enterDirection > 0) ? 120 : -120),
             scale: 0.9,
-            rotateY: enterDirection === 0 ? 0 : enterDirection > 0 ? -15 : 15
+            rotateY: (enterDirection === 0) ? 0 : ((enterDirection > 0) ? -15 : 15)
         }),
         center: {
             opacity: 1,
@@ -20,13 +30,24 @@ export const QuestCard = ({ quest, showConfetti, direction, onDragEnd, onQuestCo
         },
         exit: (exitDirection) => ({
             opacity: 0,
-            x: exitDirection === 0 ? 0 : exitDirection > 0 ? -120 : 120,
+            x: (exitDirection === 0) ? 0 : ((exitDirection > 0) ? -120 : 120),
             scale: 0.9,
-            rotateY: exitDirection === 0 ? 0 : exitDirection > 0 ? 15 : -15,
+            rotateY: (exitDirection === 0) ? 0 : ((exitDirection > 0) ? 15 : -15),
             transition: {
                 duration: 0.2
             }
         })
+    };
+
+    // Determine card styling based on quest status
+    const getCardStyles = () => {
+        if (quest.completed) {
+            return 'bg-gradient-to-br from-emerald-50/60 via-yellow-50/40 to-green-50/80 dark:from-emerald-900/20 dark:via-yellow-900/10 dark:to-green-900/30 border-emerald-300/60 dark:border-emerald-700/60 shadow-lg shadow-emerald-500/20';
+        } else if (quest.in_progress) {
+            return 'bg-gradient-to-br from-sky-50/60 via-purple-50/40 to-blue-50/80 dark:from-sky-900/20 dark:via-purple-900/10 dark:to-blue-900/30 border-sky-300/60 dark:border-sky-700/60 shadow-lg shadow-purple-500/20';
+        } else {
+            return 'bg-gradient-to-br from-slate-50/60 via-pink-50/40 to-gray-50/80 dark:from-slate-900/20 dark:via-pink-900/10 dark:to-gray-900/30 border-slate-300/60 dark:border-slate-700/60 shadow-lg shadow-pink-500/20';
+        }
     };
 
     return (
@@ -57,21 +78,24 @@ export const QuestCard = ({ quest, showConfetti, direction, onDragEnd, onQuestCo
             }}
             onDragEnd={onDragEnd}
         >
-            <Card variant="custom" className={`group transition-all duration-300 relative min-h-[400px] max-h-[500px] flex flex-col mx-auto max-w-5xl overflow-hidden ${
-                quest.completed
-                    ? 'bg-gradient-to-br from-emerald-50/60 via-yellow-50/40 to-green-50/80 dark:from-emerald-900/20 dark:via-yellow-900/10 dark:to-green-900/30 border-emerald-300/60 dark:border-emerald-700/60 shadow-lg shadow-emerald-500/20'
-                    : quest.in_progress
-                    ? 'bg-gradient-to-br from-sky-50/60 via-purple-50/40 to-blue-50/80 dark:from-sky-900/20 dark:via-purple-900/10 dark:to-blue-900/30 border-sky-300/60 dark:border-sky-700/60 shadow-lg shadow-purple-500/20'
-                    : 'bg-gradient-to-br from-slate-50/60 via-pink-50/40 to-gray-50/80 dark:from-slate-900/20 dark:via-pink-900/10 dark:to-gray-900/30 border-slate-300/60 dark:border-slate-700/60 shadow-lg shadow-pink-500/20'
-            }`}>
-                {/* Confetti overlay */}
-                <Confetti isActive={showConfetti && quest.completed} />
+            <Card variant="custom" className={`group transition-all duration-300 relative min-h-[400px] max-h-[500px] flex flex-col mx-auto max-w-5xl overflow-hidden ${getCardStyles()}`}>
+                {/* Confetti overlay for completed quests */}
+                <Confetti isActive={(showConfetti && quest.completed)} />
+
+                {/* Quest Position Indicator - Top Right Corner */}
+                <div className="absolute top-4 right-4 z-20">
+                    <QuestIndicators
+                        quests={quests}
+                        currentIndex={currentIndex}
+                        onIndicatorClick={onIndicatorClick}
+                    />
+                </div>
 
                 <div className="flex-1 flex flex-col items-center justify-center text-center px-8 py-6 relative z-10">
                     <div className="space-y-6 max-w-3xl w-full">
                         {/* Quest title with playful animation */}
                         <motion.h2
-                            className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white leading-tight font-['Poppins']"
+                            className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white leading-tight font-mono"
                             initial={{ y: 20, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
                             transition={{ delay: 0.2 }}
@@ -81,7 +105,7 @@ export const QuestCard = ({ quest, showConfetti, direction, onDragEnd, onQuestCo
 
                         {/* Quest description */}
                         <motion.p
-                            className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 leading-relaxed font-['Poppins']"
+                            className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 leading-relaxed font-mono"
                             initial={{ y: 20, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
                             transition={{ delay: 0.4 }}
@@ -90,39 +114,10 @@ export const QuestCard = ({ quest, showConfetti, direction, onDragEnd, onQuestCo
                         </motion.p>
 
                         {/* Points Display - Enhanced */}
-                        <motion.div
-                            className="pt-4"
-                            initial={{ scale: 0.8, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            transition={{ delay: 0.6 }}
-                        >
-                            <div className={`inline-flex items-center gap-3 px-6 py-3 rounded-full text-sm font-bold shadow-lg ${
-                                quest.completed
-                                    ? 'bg-emerald-600 text-white border border-emerald-400/50 shadow-emerald-600/30'
-                                    : quest.in_progress
-                                    ? 'bg-gradient-to-r from-sky-400 to-blue-500 text-white border border-sky-300/50 shadow-sky-500/30'
-                                    : 'bg-slate-500 text-white border border-slate-300/50 shadow-slate-500/30'
-                            }`}>
-                                {quest.completed ? (
-                                    <CheckCircle2 className="h-5 w-5" />
-                                ) : quest.in_progress ? (
-                                    <motion.div
-                                        animate={{ rotate: 360 }}
-                                        transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                                    >
-                                        <Clock className="h-5 w-5" />
-                                    </motion.div>
-                                ) : (
-                                    <motion.div
-                                        animate={{ rotate: [0, -20, 20, 0] }}
-                                        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                                    >
-                                        <Clock className="h-5 w-5" />
-                                    </motion.div>
-                                )}
-                                <span className="text-lg font-['Poppins']">+{quest.points} pts</span>
-                            </div>
-                        </motion.div>
+                        <PointsBadge
+                            points={quest.points}
+                            status={(quest.completed) ? "completed" : (quest.in_progress) ? "in_progress" : "default"}
+                        />
                     </div>
                 </div>
             </Card>

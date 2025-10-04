@@ -142,7 +142,7 @@ const CreateRequestForm = () => {
                             <motion.div variants={formItemVariants} className="pt-2">
                                 <button type="submit" disabled={isSubmitting}
                                     className="w-full inline-flex items-center justify-center px-6 py-3.5 font-semibold text-white bg-csway-green rounded-lg shadow-sm hover:bg-green-500/70 focus:outline-none focus:ring-2 focus:ring-csway-green/50 focus:ring-offset-2 dark:focus:ring-offset-gray-900 disabled:bg-gray-400 disabled:cursor-not-allowed transition-all">
-                                    {isSubmitting ? <><Loader2 className="mr-2 h-5 w-5 animate-spin" />Submitting...</> : <><Send className="mr-2 h-4 w-4" />Create Request</>}
+                                    {isSubmitting ? <><Loader2 className="mr-2 h-5 w-5 animate-spin" />Submitting...</> : <>Create Request</>}
                                 </button>
                             </motion.div>
                         </div>
