@@ -1,5 +1,6 @@
 "use client";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { flushSync } from 'react-dom';
 import { AnimatePresence } from 'framer-motion';
 import { QuestCard } from "./QuestCard";
 import { QuestIndicators } from "./QuestIndicators";
@@ -8,6 +9,7 @@ export const QuestCarousel = ({ quests }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [direction, setDirection] = useState(0);
     const [showConfetti, setShowConfetti] = useState(false);
+    const directionRef = useRef(0);
 
     const swipeThreshold = 80;
 
@@ -23,7 +25,6 @@ export const QuestCarousel = ({ quests }) => {
 
     const paginate = (step) => {
         if (!quests.length) return;
-        setDirection(step);
         setCurrentIndex((prev) => (prev + step + quests.length) % quests.length);
     };
 
@@ -37,6 +38,11 @@ export const QuestCarousel = ({ quests }) => {
 
     const handleDragEnd = (event, info) => {
         if (Math.abs(info.offset.x) > swipeThreshold) {
+            const dragDirection = info.offset.x > 0 ? -1 : 1;
+            // Force synchronous direction update
+            flushSync(() => {
+                setDirection(dragDirection);
+            });
             if (info.offset.x > 0) {
                 prevQuest();
             } else {

@@ -4,7 +4,7 @@ import { CheckCircle2, Clock } from 'lucide-react';
 import { Card } from "../../shared/helpers/Helper";
 import { Confetti } from "./Confetti";
 
-export const QuestCard = ({ quest, showConfetti, onDragEnd, onQuestComplete }) => {
+export const QuestCard = ({ quest, showConfetti, direction, onDragEnd, onQuestComplete }) => {
     const questVariants = {
         enter: (enterDirection) => ({
             opacity: 0,
@@ -35,6 +35,7 @@ export const QuestCard = ({ quest, showConfetti, onDragEnd, onQuestComplete }) =
             initial="enter"
             animate="center"
             exit="exit"
+            custom={direction}
             transition={{
                 type: "spring",
                 stiffness: 300,
