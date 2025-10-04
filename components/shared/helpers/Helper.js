@@ -10,15 +10,22 @@ export const SectionTitle = ({ icon, title, className = '' }) => (
     </div>
 );
 
-export const Card = ({ children, className = '', innerClassName = '', glass = true }) => {
-    const glassClasses = glass
-        ? 'bg-gradient-to-br from-white to-slate-50/30 dark:from-slate-900 dark:to-slate-800/50 border border-slate-200/60 dark:border-slate-700/60 shadow-sm'
-        : 'bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 shadow-sm';
+export const Card = ({ children, className = '', innerClassName = '', glass = true, variant = glass ? 'glass' : 'default' }) => {
+    const getVariantClasses = () => {
+        switch (variant) {
+            case 'glass':
+                return 'bg-gradient-to-br from-white to-slate-50/30 dark:from-slate-900 dark:to-slate-800/50 border border-slate-200/60 dark:border-slate-700/60 shadow-sm';
+            case 'custom':
+                return 'border border-slate-200/60 dark:border-slate-700/60 shadow-sm';
+            default:
+                return 'bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 shadow-sm';
+        }
+    };
 
-    const defaultPadding = glass ? 'p-6' : 'p-4';
+    const defaultPadding = 'p-6';
 
     return (
-        <div className={`rounded-xl ${glassClasses} ${defaultPadding} ${className}`}>
+        <div className={`rounded-xl ${getVariantClasses()} ${defaultPadding} ${className}`}>
             {innerClassName ? (
                 <div className={innerClassName}>{children}</div>
             ) : (

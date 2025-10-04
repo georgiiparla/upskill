@@ -56,7 +56,7 @@ export const QuestCard = ({ quest, showConfetti, onDragEnd, onQuestComplete }) =
             }}
             onDragEnd={onDragEnd}
         >
-            <Card className={`group transition-all duration-300 relative min-h-[400px] max-h-[500px] flex flex-col mx-auto max-w-5xl overflow-hidden ${
+            <Card variant="custom" className={`group transition-all duration-300 relative min-h-[400px] max-h-[500px] flex flex-col mx-auto max-w-5xl overflow-hidden ${
                 quest.completed
                     ? 'bg-gradient-to-br from-emerald-50/60 via-yellow-50/40 to-green-50/80 dark:from-emerald-900/20 dark:via-yellow-900/10 dark:to-green-900/30 border-emerald-300/60 dark:border-emerald-700/60 shadow-lg shadow-emerald-500/20'
                     : quest.in_progress

@@ -5,7 +5,7 @@ export const QuestIndicators = ({ quests, currentIndex, onIndicatorClick }) => {
     if (quests.length <= 1) return null;
 
     return (
-        <div className="flex justify-center space-x-6 mt-6">
+        <div className="flex justify-center space-x-6 mt-12">
             {quests.map((quest, index) => (
                 <div key={index} className="flex flex-col items-center">
                     <motion.div
