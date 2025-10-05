@@ -11,7 +11,7 @@ export const PointsBadge = ({
 }) => {
     // Determine styling based on quest status
     const getBadgeStyles = () => {
-        const baseStyles = "inline-flex items-center gap-3 rounded-full font-bold shadow-lg";
+        const baseStyles = "inline-flex items-center gap-3 rounded-lg font-bold shadow-lg";
 
         const sizeStyles = {
             small: "px-4 py-2 text-sm sm:px-4 sm:py-2 sm:text-sm",
@@ -20,9 +20,9 @@ export const PointsBadge = ({
         };
 
         const statusStyles = {
-            completed: "bg-emerald-600 text-white border border-emerald-400/50 shadow-emerald-600/30",
-            in_progress: "bg-gradient-to-r from-sky-400 to-blue-500 text-white border border-sky-300/50 shadow-sky-500/30",
-            default: "bg-slate-500 text-white border border-slate-300/50 shadow-slate-500/30"
+            completed: "bg-emerald-50/70 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-200 border border-emerald-200/50 dark:border-emerald-700/50 shadow-emerald-600/20 backdrop-blur-sm",
+            in_progress: "bg-sky-50/70 dark:bg-sky-900/30 text-sky-800 dark:text-sky-200 border border-sky-200/50 dark:border-sky-700/50 shadow-sky-500/20 backdrop-blur-sm",
+            default: "bg-slate-50/70 dark:bg-slate-900/30 text-slate-800 dark:text-slate-200 border border-slate-200/50 dark:border-slate-700/50 shadow-slate-500/20 backdrop-blur-sm"
         };
 
         return `${baseStyles} ${sizeStyles[size] || sizeStyles.default} ${statusStyles[status] || statusStyles.default}`;
@@ -67,7 +67,7 @@ export const PointsBadge = ({
             <div className={getBadgeStyles()}>
                 {renderIcon()}
                 <span className={`font-mono ${size === "small" ? "text-sm sm:text-sm" : size === "large" ? "text-base sm:text-lg" : "text-sm sm:text-base"}`}>
-                    {status === "completed" ? "" : "+"}{points} pts
+                    {status === "completed" ? "" : "+"}{points} Points
                 </span>
             </div>
         </motion.div>

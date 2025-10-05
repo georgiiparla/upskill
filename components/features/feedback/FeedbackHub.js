@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
-import { Send, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { clientFetch } from '@/lib/client-api';
 

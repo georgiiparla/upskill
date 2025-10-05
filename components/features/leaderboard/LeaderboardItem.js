@@ -2,10 +2,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { getRankColors } from './utils';
-import { leaderboardItemVariants } from './animations';
+import { leaderboardItemVariantsFadeUp } from './animations';
+import { Avatar } from '@/components/core/ui/Avatar';
 
 export const LeaderboardItem = ({ user, maxPoints, isDesktop = true }) => {
-    const colors = getRankColors(user.rank);
     const barWidth = `${Math.max((user.points / maxPoints) * 100, 8)}%`;
 
     if (isDesktop) {
@@ -13,15 +13,16 @@ export const LeaderboardItem = ({ user, maxPoints, isDesktop = true }) => {
             <motion.div
                 key={user.id}
                 className="group bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-200/50 dark:border-gray-700/50 p-6 transition-all duration-300 hover:shadow-lg hover:bg-white/70 dark:hover:bg-gray-800/70"
-                variants={leaderboardItemVariants}
+                variants={leaderboardItemVariantsFadeUp}
             >
                 <div className="flex items-center">
                     {/* Left Side: Rank, Avatar, Name - Fixed Width */}
                     <div className="flex items-center gap-4 w-80 flex-shrink-0">
                         {/* Avatar */}
-                        <div className={`w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg ${colors.avatar} shadow-md`}>
-                            {user.name.charAt(0).toUpperCase()}
-                        </div>
+                        <Avatar
+                            username={user.name}
+                            className="w-12 h-12 text-lg shadow-md"
+                        />
 
                         {/* Name */}
                         <span className="font-semibold text-gray-900 dark:text-white min-w-[100px]">
@@ -73,15 +74,16 @@ export const LeaderboardItem = ({ user, maxPoints, isDesktop = true }) => {
         <motion.div
             key={user.id}
             className="group bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-200/50 dark:border-gray-700/50 p-4 transition-all duration-200 hover:shadow-lg hover:bg-white/70 dark:hover:bg-gray-800/70"
-            variants={leaderboardItemVariants}
+            variants={leaderboardItemVariantsFadeUp}
         >
             <div className="flex items-center justify-between">
                 {/* Left Side: Rank Badge, Avatar, and Name */}
                 <div className="flex items-center gap-3">
                     {/* Avatar */}
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold text-sm ${colors.avatar} transition-transform duration-200 group-hover:scale-105`}>
-                        {user.name.charAt(0).toUpperCase()}
-                    </div>
+                    <Avatar
+                        username={user.name}
+                        className="w-10 h-10 text-sm font-semibold"
+                    />
 
                     {/* Clean Name Display */}
                     <span className="font-medium text-gray-900 dark:text-white transition-colors group-hover:text-blue-600 dark:group-hover:text-blue-400">
@@ -95,7 +97,6 @@ export const LeaderboardItem = ({ user, maxPoints, isDesktop = true }) => {
                         {user.points.toLocaleString()}
                     </div>
                     <div className="text-xs text-gray-500 dark:text-gray-400 font-medium uppercase tracking-wide">
-                        pts
                     </div>
                 </div>
             </div>

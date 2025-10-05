@@ -1,4 +1,3 @@
-import { redirect } from 'next/navigation';
 import { Quests } from "@/components/features/quests/Quests";
 import { serverFetch } from "@/lib/server-api";
 import { sleep } from "@/lib/delay";
@@ -9,13 +8,6 @@ async function getQuestsData() {
 }
 
 export default async function QuestsPage() {
-    try {
-        const questsData = await getQuestsData();
-        return <Quests initialQuests={questsData} />;
-    } catch (error) {
-        if (error.message === 'Unauthorized') {
-            redirect('/login');
-        }
-        throw error;
-    }
+    const questsData = await getQuestsData();
+    return <Quests initialQuests={questsData} />;
 }

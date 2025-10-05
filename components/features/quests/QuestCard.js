@@ -12,7 +12,9 @@ export const QuestCard = ({
     onDragEnd,
     quests,
     currentIndex,
-    onIndicatorClick
+    onIndicatorClick,
+    isCompleted,
+    isInProgress
 }) => {
     // Animation variants for quest card transitions
     const questVariants = {
@@ -40,10 +42,13 @@ export const QuestCard = ({
     };
 
     // Determine card styling based on quest status
+    const completed = isCompleted ?? quest?.completed;
+    const inProgress = isInProgress ?? quest?.in_progress;
+
     const getCardStyles = () => {
-        if (quest.completed) {
+        if (completed) {
             return 'bg-gradient-to-br from-emerald-50/60 via-yellow-50/40 to-green-50/80 dark:from-emerald-900/20 dark:via-yellow-900/10 dark:to-green-900/30 border-emerald-300/60 dark:border-emerald-700/60 shadow-lg shadow-emerald-500/20';
-        } else if (quest.in_progress) {
+        } else if (inProgress) {
             return 'bg-gradient-to-br from-sky-50/60 via-purple-50/40 to-blue-50/80 dark:from-sky-900/20 dark:via-purple-900/10 dark:to-blue-900/30 border-sky-300/60 dark:border-sky-700/60 shadow-lg shadow-purple-500/20';
         } else {
             return 'bg-gradient-to-br from-slate-50/60 via-pink-50/40 to-gray-50/80 dark:from-slate-900/20 dark:via-pink-900/10 dark:to-gray-900/30 border-slate-300/60 dark:border-slate-700/60 shadow-lg shadow-pink-500/20';
@@ -80,7 +85,7 @@ export const QuestCard = ({
         >
             <Card variant="custom" className={`group transition-all duration-300 relative min-h-[400px] max-h-[500px] flex flex-col mx-auto max-w-5xl overflow-hidden ${getCardStyles()}`}>
                 {/* Confetti overlay for completed quests */}
-                <Confetti isActive={(showConfetti && quest.completed)} />
+                <Confetti isActive={showConfetti} />
 
                 {/* Quest Position Indicator - Top Right Corner */}
                 <div className="absolute top-4 right-4 z-20">
@@ -116,7 +121,7 @@ export const QuestCard = ({
                         {/* Points Display - Enhanced */}
                         <PointsBadge
                             points={quest.points}
-                            status={(quest.completed) ? "completed" : (quest.in_progress) ? "in_progress" : "default"}
+                            status={completed ? "completed" : inProgress ? "in_progress" : "default"}
                         />
                     </div>
                 </div>

@@ -17,47 +17,78 @@ const GoogleIcon = () => (
 );
 
 const LogoAnimation = () => {
+    const orbPalette = [
+        { fill: 'rgba(16, 185, 129, 0.82)', shadow: '0 0 12px rgba(16,185,129,0.5)' },
+        { fill: 'rgba(59, 130, 246, 0.82)', shadow: '0 0 12px rgba(59,130,246,0.5)' },
+        { fill: 'rgba(251, 191, 36, 0.86)', shadow: '0 0 12px rgba(251,191,36,0.5)' },
+        { fill: 'rgba(239, 68, 68, 0.8)', shadow: '0 0 12px rgba(239,68,68,0.48)' },
+    ];
+
+    const orbConfigs = [
+        { key: 'orb-1', radius: 74, size: 2, duration: 7.6, delay: 0 },
+        { key: 'orb-2', radius: 60, size: 1.5, duration: 6, delay: 0.9 },
+        { key: 'orb-3', radius: 68, size: 1.7, duration: 6.6, delay: 1.8 },
+        { key: 'orb-4', radius: 52, size: 1.3, duration: 5.4, delay: 2.7 },
+        { key: 'orb-5', radius: 84, size: 2.1, duration: 8.2, delay: 3.6 },
+        { key: 'orb-6', radius: 56, size: 1.4, duration: 6.2, delay: 4.5 },
+        { key: 'orb-7', radius: 70, size: 1.8, duration: 7.1, delay: 5.4 },
+        { key: 'orb-8', radius: 62, size: 1.45, duration: 5.8, delay: 6.3 },
+        { key: 'orb-9', radius: 76, size: 1.9, duration: 7.8, delay: 7.2 },
+    ];
+
     return (
         <div className="relative flex items-center justify-center w-48 h-48">
-            {/* Circular swirl particles only */}
-            {[...Array(18)].map((_, i) => (
-                <motion.div
-                    key={`swirl-${i}`}
-                    className="absolute w-1 h-1 rounded-full bg-green-300/40"
+            <motion.div
+                className="absolute inset-0 rounded-full"
+                style={{
+                    background: 'radial-gradient(circle at center, rgba(14,165,233,0.12) 0%, rgba(16,185,129,0.08) 55%, rgba(251,191,36,0.06) 85%, rgba(15,23,42,0) 100%)',
+                    filter: 'blur(18px)',
+                }}
+                animate={{ opacity: [0.12, 0.2, 0.12], scale: [0.9, 1.05, 0.9] }}
+                transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
+            />
+
+            <motion.div
+                className="absolute z-0 w-24 h-24 rounded-full bg-emerald-300/15 blur-2xl"
+                animate={{ opacity: [0.18, 0.28, 0.18], scale: [0.9, 1.05, 0.9] }}
+                transition={{ duration: 6.5, repeat: Infinity, ease: 'easeInOut' }}
+            />
+
+            {orbConfigs.map(({ key, radius, size, duration, delay }, index) => {
+                const paletteEntry = orbPalette[index % orbPalette.length];
+                return (
+                <motion.span
+                    key={key}
+                    className="absolute rounded-full"
+                    style={{
+                        width: `${size * 4}px`,
+                        height: `${size * 4}px`,
+                        backgroundColor: paletteEntry.fill,
+                        boxShadow: paletteEntry.shadow,
+                    }}
                     animate={{
                         x: [
-                            Math.cos(i * 30 * Math.PI / 180) * 80,
-                            Math.cos((i * 30 + 180) * Math.PI / 180) * 100,
-                            Math.cos(i * 30 * Math.PI / 180) * 80
+                            Math.cos(index * 1.2) * radius,
+                            Math.cos(index * 1.2 + Math.PI / 3) * (radius + 10),
+                            Math.cos(index * 1.2 + Math.PI) * radius,
                         ],
                         y: [
-                            Math.sin(i * 30 * Math.PI / 180) * 80,
-                            Math.sin((i * 30 + 180) * Math.PI / 180) * 100,
-                            Math.sin(i * 30 * Math.PI / 180) * 80
+                            Math.sin(index * 1.2) * radius,
+                            Math.sin(index * 1.2 + Math.PI / 3) * (radius + 10),
+                            Math.sin(index * 1.2 + Math.PI) * radius,
                         ],
-                        opacity: [0, 0.6, 0],
-                        scale: [0, 1.5, 0],
+                        opacity: [0.35, 0.85, 0.35],
+                        scale: [1, 1.2, 1],
                     }}
-                    transition={{
-                        duration: 2 + Math.random() * 1.5,
-                        repeat: Infinity,
-                        delay: i * 0.15 + Math.random() * 1,
-                        ease: 'easeInOut',
-                    }}
+                    transition={{ duration, repeat: Infinity, ease: 'easeInOut', delay }}
                 />
-            ))}
+                );
+            })}
 
-            {/* Centered spinning logo */}
             <motion.div
                 className="relative z-10"
-                animate={{
-                    rotate: [0, 360],
-                }}
-                transition={{
-                    duration: 12, // Slow spin
-                    repeat: Infinity,
-                    ease: 'linear',
-                }}
+                animate={{ rotate: [0, 360], scale: [1, 1.05, 1] }}
+                transition={{ duration: 10, repeat: Infinity, ease: 'linear' }}
             >
                 <Image
                     src="/csway-logo.png"

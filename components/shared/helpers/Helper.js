@@ -84,7 +84,7 @@ export const HistoryListItem = ({
     };
 
     const getContainerClasses = () => {
-        const baseClasses = "py-4 px-5 rounded-lg group transition-all";
+        const baseClasses = "py-4 px-5 rounded-lg group transition-all duration-300 ease-out";
 
         if (variant === 'background') {
             return `${baseClasses} ${backgroundColorMap[color] || backgroundColorMap.gray}`;

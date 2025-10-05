@@ -1,4 +1,3 @@
-import { redirect } from 'next/navigation';
 import { Feedback } from "@/components/features/feedback/Feedback";
 import { serverFetch } from "@/lib/server-api";
 import { sleep } from "@/lib/delay";
@@ -19,20 +18,11 @@ async function getFeedbackData() {
 }
 
 export default async function FeedbackPage() {
-    try {
-        const data = await getFeedbackData();
-        return (
-            <Feedback
-                initialSubmissions={data.submissions}
-                initialRequests={data.requests}
-            />
-        );
-    } catch (error) {
-        if (error.message === 'Unauthorized') {
-            redirect('/login');
-        }
-
-        console.error("Failed to load feedback page data:", error);
-        throw error;
-    }
+    const data = await getFeedbackData();
+    return (
+        <Feedback
+            initialSubmissions={data.submissions}
+            initialRequests={data.requests}
+        />
+    );
 }

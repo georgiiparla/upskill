@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
-import { Send, Loader2, RefreshCw } from 'lucide-react';
+import { Loader2, RefreshCw } from 'lucide-react';
 
 import { clientFetch } from '@/lib/client-api';
 import { Card } from '../../shared/helpers/Helper';

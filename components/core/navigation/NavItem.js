@@ -17,7 +17,7 @@ export const NavItem = ({
   const pathname = usePathname();
   const isActive = isActiveProp !== undefined ? isActiveProp : pathname === href;
   
-  const baseClasses = "relative text-sm font-bold transition-colors duration-300 group";
+  const baseClasses = "relative text-sm font-normal font-mono tracking-tight transition-colors duration-300 group";
   const colorClasses = isActive 
     ? 'text-gray-900 dark:text-gray-100' 
     : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300';

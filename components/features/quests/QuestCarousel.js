@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { QuestCard } from "./QuestCard";
 
@@ -14,11 +14,15 @@ export const QuestCarousel = ({ quests }) => {
     // Trigger confetti when quest is completed
     useEffect(() => {
         const currentQuest = quests[currentIndex];
-        if (currentQuest?.completed) {
+        const isCompleted = currentQuest?.user_completed ?? currentQuest?.completed;
+
+        if (isCompleted) {
             setShowConfetti(true);
             const timer = setTimeout(() => setShowConfetti(false), 3000);
             return () => clearTimeout(timer);
         }
+
+        setShowConfetti(false);
     }, [currentIndex, quests]);
 
     // Execute pending navigation after direction update
@@ -58,6 +62,9 @@ export const QuestCarousel = ({ quests }) => {
 
     const currentQuest = quests[currentIndex];
 
+    const isCompleted = currentQuest?.user_completed ?? currentQuest?.completed;
+    const isInProgress = !isCompleted && ((currentQuest?.user_progress ?? 0) > 0);
+
     if (!currentQuest) {
         return null;
     }
@@ -69,12 +76,14 @@ export const QuestCarousel = ({ quests }) => {
                 <QuestCard
                     key={currentIndex}
                     quest={currentQuest}
-                    showConfetti={showConfetti}
+                    showConfetti={showConfetti && isCompleted}
                     direction={direction}
                     onDragEnd={handleDragEnd}
                     quests={quests}
                     currentIndex={currentIndex}
                     onIndicatorClick={setCurrentIndex}
+                    isCompleted={isCompleted}
+                    isInProgress={isInProgress}
                 />
             </AnimatePresence>
         </div>

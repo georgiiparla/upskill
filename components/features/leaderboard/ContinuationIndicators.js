@@ -1,7 +1,7 @@
 "use client";
 import React from 'react';
 import { motion } from 'framer-motion';
-import { leaderboardItemVariants } from './animations';
+import { leaderboardItemVariantsFadeUp } from './animations';
 
 export const ContinuationIndicators = ({ isDesktop = true }) => {
     const ranks = [6, 7, 8];
@@ -21,8 +21,8 @@ export const ContinuationIndicators = ({ isDesktop = true }) => {
                         className={`group ${isDesktop
                             ? 'bg-white/30 dark:bg-gray-800/30 backdrop-blur-sm rounded-xl border border-gray-200/30 dark:border-gray-700/30 p-6'
                             : 'bg-white/30 dark:bg-gray-800/30 backdrop-blur-sm rounded-xl border border-gray-200/30 dark:border-gray-700/30 p-4'
-                        } transition-all duration-${isDesktop ? '300' : '200'} hover:shadow-lg hover:bg-white/50 dark:hover:bg-gray-800/50`}
-                        variants={leaderboardItemVariants}
+                            } transition-all duration-${isDesktop ? '300' : '200'} hover:shadow-lg hover:bg-white/50 dark:hover:bg-gray-800/50`}
+                        variants={leaderboardItemVariantsFadeUp}
                         style={{
                             opacity: opacity,
                             transform: `scale(${scale})`,

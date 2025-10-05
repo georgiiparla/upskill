@@ -11,14 +11,18 @@ import { useAuth } from '@/context/AuthContext';
 import { Modal } from '../ui/Modal';
 import { DesktopDropdown, DropdownItem, UserDropdown } from './NavDropdown';
 import { NavItem } from './NavItem';
+import { useScrollBehavior, usePointsData, usePointsBadge } from './NavbarHelpers';
 
 import Link from 'next/link';
+import { Inter } from 'next/font/google';
+
+const inter = Inter({ subsets: ['latin'] });
 
 const NavLink = ({ href, children, scrolled }) => (
-    <NavItem 
+    <NavItem
         href={href}
         scrolled={scrolled}
-        className={scrolled ? 'px-4 py-2' : 'px-4 pt-1'}
+        className={`${scrolled ? 'px-4 py-2' : 'px-4 pt-1'} font-mono tracking-tight`}
     >
         {children}
     </NavItem>
@@ -32,15 +36,123 @@ const MobileNavLink = ({ href, children, closeMenu }) => {
         : "text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700";
 
     return (
-        <Link 
-            href={href} 
+        <Link
+            href={href}
             onClick={closeMenu}
-            className={`block w-full text-left px-4 py-2 text-base font-medium rounded-md ${activeClass}`}
+            className={`block w-full text-left px-4 py-2 text-base font-medium rounded-md font-mono tracking-tight ${activeClass}`}
         >
             {children}
         </Link>
     );
 };
+
+const DesktopNavLinks = ({ scrolled }) => (
+    <div className="hidden md:block">
+        <div className="ml-10 flex items-baseline space-x-4">
+            <DesktopDropdown title="Feedback" scrolled={scrolled} activePaths={["/feedback"]}>
+                <DropdownItem href="/feedback" className="font-mono tracking-tight">My Feedback</DropdownItem>
+                <DropdownItem href="/feedback/request/new" className="font-mono tracking-tight">Request Feedback</DropdownItem>
+            </DesktopDropdown>
+            <NavLink href="/dashboard" scrolled={scrolled}>Weekly</NavLink>
+            <DesktopDropdown title="Community" scrolled={scrolled} activePaths={["/leaderboard", "/admin/users"]}>
+                <DropdownItem href="/leaderboard" className="font-mono tracking-tight">Leaderboard</DropdownItem>
+                <DropdownItem href="/admin/users" className="font-mono tracking-tight">Members</DropdownItem>
+            </DesktopDropdown>
+            <NavLink href="/quests" scrolled={scrolled}>Quests</NavLink>
+        </div>
+    </div>
+);
+
+const DesktopControls = ({ user, rank, renderPointsText, getPointsBadgeClasses, setIsLogoutModalOpen, theme, setTheme }) => (
+    <div className="hidden md:flex items-center space-x-1">
+        {user && (
+            <div className={`mr-3 px-3 py-1 rounded-full text-sm font-normal font-mono tracking-tight backdrop-blur-sm ${getPointsBadgeClasses()}`} title={rank ? `Current rank: #${rank}` : undefined}>
+                <Link href="/leaderboard" className="focus:outline-none">{renderPointsText()}</Link>
+            </div>
+        )}
+        <UserDropdown user={user} onLogoutClick={() => setIsLogoutModalOpen(true)} />
+        <button
+            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+            className="p-2 rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none"
+        >
+            {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+        </button>
+    </div>
+);
+
+const MobileControls = ({ user, rank, renderPointsText, getPointsBadgeClasses, pathname, setIsLogoutModalOpen, isMenuOpen, setIsMenuOpen }) => (
+    <div className="flex items-center md:hidden">
+        {user && (
+            <span className={`mr-3 px-2.5 py-1 rounded-full text-xs font-normal font-mono tracking-tight backdrop-blur-sm ${getPointsBadgeClasses()}`} title={rank ? `Current rank: #${rank}` : undefined}>
+                <Link href="/leaderboard" className="focus:outline-none">{renderPointsText()}</Link>
+            </span>
+        )}
+        {pathname === '/account' ? (
+            <button onClick={() => setIsLogoutModalOpen(true)} title="Sign Out" className="p-2 rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700">
+                <LogOut className="h-5 w-5" />
+            </button>
+        ) : (
+            <Link href="/account" title="My Account" className="p-1 rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700">
+                <Avatar username={user?.username} className="w-7 h-7 text-xs" />
+            </Link>
+        )}
+        <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="p-2 rounded-md text-gray-500 dark:text-gray-400">
+            {isMenuOpen ? <X className="block h-6 w-6" /> : <Menu className="block h-6 w-6" />}
+        </button>
+    </div>
+);
+
+const MobileMenu = ({ isMenuOpen, setIsMenuOpen }) => (
+    isMenuOpen && (
+        <div className="md:hidden border-t border-gray-200 dark:border-gray-700">
+            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <MobileNavLink href="/feedback" closeMenu={() => setIsMenuOpen(false)}>My Feedback</MobileNavLink>
+                <MobileNavLink href="/feedback/request/new" closeMenu={() => setIsMenuOpen(false)}>Request Feedback</MobileNavLink>
+                <MobileNavLink href="/dashboard" closeMenu={() => setIsMenuOpen(false)}>Weekly</MobileNavLink>
+                <MobileNavLink href="/quests" closeMenu={() => setIsMenuOpen(false)}>Quests</MobileNavLink>
+                <MobileNavLink href="/leaderboard" closeMenu={() => setIsMenuOpen(false)}>Leaderboard</MobileNavLink>
+                <MobileNavLink href="/admin/users" closeMenu={() => setIsMenuOpen(false)}>Members</MobileNavLink>
+            </div>
+        </div>
+    )
+);
+
+const LogoAndBrand = ({ scrolled }) => (
+    <Link href="/dashboard" className="flex-shrink-0 text-gray-900 dark:text-white font-bold text-xl flex items-center">
+        <Image src="/csway-logo.png" alt="CSway Logo" width={24} height={24} className="mr-2" />
+        <span className={`transition-all duration-300 ease-in-out whitespace-nowrap overflow-hidden font-sans ${inter.className} ${scrolled ? 'w-0 opacity-0' : ''}`}>Upskill</span>
+    </Link>
+);
+
+const NavbarContent = ({ scrolled, user, rank, renderPointsText, getPointsBadgeClasses, setIsLogoutModalOpen, theme, setTheme, pathname, isMenuOpen, setIsMenuOpen }) => (
+    <div className={`flex items-center justify-between h-16 transition-[height] duration-300 ease-in-out ${scrolled ? 'h-[44px]' : ''}`}>
+        <div className="flex items-center">
+            <LogoAndBrand scrolled={scrolled} />
+            <DesktopNavLinks scrolled={scrolled} />
+        </div>
+        <div className="flex items-center">
+            <DesktopControls
+                user={user}
+                rank={rank}
+                renderPointsText={renderPointsText}
+                getPointsBadgeClasses={getPointsBadgeClasses}
+                setIsLogoutModalOpen={setIsLogoutModalOpen}
+                theme={theme}
+                setTheme={setTheme}
+            />
+            <MobileControls
+                user={user}
+                rank={rank}
+                renderPointsText={renderPointsText}
+                getPointsBadgeClasses={getPointsBadgeClasses}
+                pathname={pathname}
+                setIsLogoutModalOpen={setIsLogoutModalOpen}
+                isMenuOpen={isMenuOpen}
+                setIsMenuOpen={setIsMenuOpen}
+            />
+        </div>
+    </div>
+);
 
 export const Navbar = () => {
     const { theme, setTheme } = useTheme();
@@ -49,48 +161,31 @@ export const Navbar = () => {
     const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
     const { user, logout } = useAuth();
     const pathname = usePathname();
+    const [pointsRefreshTrigger, setPointsRefreshTrigger] = useState(0);
 
-    // Scroll thresholds to prevent oscillation - VERY EARLY FOLDING
-    const FOLD_THRESHOLD = 30;    // Navbar folds when scrolling past this point (very responsive)
-    const UNFOLD_THRESHOLD = 10;  // Navbar unfolds when scrolling back up to this point (20px buffer)
+    useScrollBehavior(scrolled, setScrolled);
+    const { points, rank, isPointsLoading } = usePointsData(user, pointsRefreshTrigger);
+    const { getPointsBadgeClasses } = usePointsBadge(rank);
 
-    // Use ref to track scrolled state for scroll handler
-    const scrolledRef = useRef(scrolled);
-    const lastScrollYRef = useRef(window.scrollY);
-
-    // Update ref when scrolled state changes
+    // Refresh points data when entering leaderboard page
     useEffect(() => {
-        scrolledRef.current = scrolled;
-    }, [scrolled]);
-
-    useEffect(() => {
-        const handleScroll = () => {
-            const currentScrollY = window.scrollY;
-
-            // Only update navbar state if scroll position has changed significantly
-            if (Math.abs(currentScrollY - lastScrollYRef.current) < 5) return;
-
-            lastScrollYRef.current = currentScrollY;
-
-            // Hysteresis logic to prevent oscillation
-            if (currentScrollY > FOLD_THRESHOLD && !scrolledRef.current) {
-                // Fold navbar when scrolling down past threshold
-                setScrolled(true);
-            } else if (currentScrollY < UNFOLD_THRESHOLD && scrolledRef.current) {
-                // Unfold navbar when scrolling back up to lower threshold
-                setScrolled(false);
-            }
-        };
-
-        // Use passive listener for better performance
-        document.addEventListener('scroll', handleScroll, { passive: true });
-        return () => document.removeEventListener('scroll', handleScroll);
-    }, []); // Empty dependency array is safe now
-
+        if (pathname === '/leaderboard') {
+            setPointsRefreshTrigger(prev => prev + 1);
+        }
+    }, [pathname]);
 
     const handleLogoutConfirm = () => {
         logout();
         setIsLogoutModalOpen(false);
+    };
+
+    const renderPointsText = () => {
+        if (isPointsLoading) return "…";
+        const pts = `${points ?? 0} pts`;
+        if (rank && rank <= 10) {
+            return `#${rank} · ${pts}`;
+        }
+        return pts;
     };
 
     return (
@@ -107,71 +202,21 @@ export const Navbar = () => {
 
             <nav className="bg-gradient-to-br from-white to-slate-50/80 dark:from-slate-900 dark:to-slate-800/90 backdrop-blur-sm border-b border-slate-200/60 dark:border-slate-700/60 sticky top-0 z-50 transition-all duration-300 ease-in-out">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                    <div className={`flex items-center justify-between h-16 transition-[height] duration-300 ease-in-out ${scrolled ? 'h-[44px]' : ''}`}>
-                        <div className="flex items-center">
-                            <Link href="/dashboard" className="flex-shrink-0 text-gray-900 dark:text-white font-bold text-xl flex items-center">
-                                <Image src="/csway-logo.png" alt="CSway Logo" width={24} height={24} className="mr-2" />
-                                <span className={`transition-all duration-300 ease-in-out whitespace-nowrap overflow-hidden ${scrolled ? 'w-0 opacity-0' : ''}`}>Upskill</span>
-                            </Link>
-                            <div className="hidden md:block">
-                                <div className="ml-10 flex items-baseline space-x-4">
-                                    <DesktopDropdown title="Feedback" scrolled={scrolled} activePaths={['/feedback']}>
-                                        <DropdownItem href="/feedback">My Feedback</DropdownItem>
-                                        <DropdownItem href="/feedback/request/new">Request Feedback</DropdownItem>
-                                    </DesktopDropdown>
-                                    <NavLink href="/dashboard" scrolled={scrolled}>Weekly</NavLink>
-                                    <DesktopDropdown title="Community" scrolled={scrolled} activePaths={['/leaderboard', '/admin/users']}>
-                                        <DropdownItem href="/leaderboard">Leaderboard</DropdownItem>
-                                        <DropdownItem href="/admin/users">Members</DropdownItem>
-                                    </DesktopDropdown>
-                                    <NavLink href="/quests" scrolled={scrolled}>Quests</NavLink>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="flex items-center">
-                            {/* --- Desktop Controls (Dropdown) --- */}
-                            <div className="hidden md:flex items-center space-x-1">
-                                <UserDropdown user={user} onLogoutClick={() => setIsLogoutModalOpen(true)} />
-                                <button
-                                    onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-                                    className="p-2 rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none"
-                                >
-                                    {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-                                </button>
-                            </div>
-
-                            {/* --- Mobile Controls (Contextual Icons) --- */}
-                            <div className="flex items-center md:hidden">
-                                {pathname === '/account' ? (
-                                    <button onClick={() => setIsLogoutModalOpen(true)} title="Sign Out" className="p-2 rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700">
-                                        <LogOut className="h-5 w-5" />
-                                    </button>
-                                ) : (
-                                    <Link href="/account" title="My Account" className="p-1 rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700">
-                                        <Avatar username={user?.username} className="w-7 h-7 text-xs" />
-                                    </Link>
-                                )}
-
-                                <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="p-2 rounded-md text-gray-500 dark:text-gray-400">
-                                    {isMenuOpen ? <X className="block h-6 w-6" /> : <Menu className="block h-6 w-6" />}
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                    <NavbarContent
+                        scrolled={scrolled}
+                        user={user}
+                        rank={rank}
+                        renderPointsText={renderPointsText}
+                        getPointsBadgeClasses={getPointsBadgeClasses}
+                        setIsLogoutModalOpen={setIsLogoutModalOpen}
+                        theme={theme}
+                        setTheme={setTheme}
+                        pathname={pathname}
+                        isMenuOpen={isMenuOpen}
+                        setIsMenuOpen={setIsMenuOpen}
+                    />
                 </div>
-
-                {isMenuOpen && (
-                    <div className="md:hidden border-t border-gray-200 dark:border-gray-700">
-                        <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                            <MobileNavLink href="/feedback" closeMenu={() => setIsMenuOpen(false)}>My Feedback</MobileNavLink>
-                            <MobileNavLink href="/feedback/request/new" closeMenu={() => setIsMenuOpen(false)}>Request Feedback</MobileNavLink>
-                            <MobileNavLink href="/dashboard" closeMenu={() => setIsMenuOpen(false)}>Weekly</MobileNavLink>
-                            <MobileNavLink href="/quests" closeMenu={() => setIsMenuOpen(false)}>Quests</MobileNavLink>
-                            <MobileNavLink href="/leaderboard" closeMenu={() => setIsMenuOpen(false)}>Leaderboard</MobileNavLink>
-                            <MobileNavLink href="/admin/users" closeMenu={() => setIsMenuOpen(false)}>Members</MobileNavLink>
-                        </div>
-                    </div>
-                )}
+                <MobileMenu isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
             </nav>
         </>
     )
