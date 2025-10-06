@@ -5,6 +5,7 @@ import toast from 'react-hot-toast';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { clientFetch } from '@/lib/client-api';
+import { useAuth } from '@/context/AuthContext';
 
 import { Card } from "../../shared/helpers/Helper";
 
@@ -75,6 +76,7 @@ const NewFeedbackForm = ({ requestTag }) => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const router = useRouter();
     const isSubmittingRef = useRef(false); // Synchronous lock
+    const { refreshNavbarPoints } = useAuth();
 
     useEffect(() => {
         if (requestTag) {
@@ -120,6 +122,8 @@ const NewFeedbackForm = ({ requestTag }) => {
 
             if (response.success) {
                 toast.success('Feedback submitted successfully!', { id: toastId });
+                // Refresh navbar points since this action completes the 'give_feedback' quest
+                refreshNavbarPoints();
                 // We keep the button disabled during the redirect timeout
                 setTimeout(() => {
                     router.push(`/feedback/request/${requestTag}`);

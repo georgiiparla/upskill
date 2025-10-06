@@ -10,6 +10,7 @@ export const AuthProvider = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [isLoading, setIsLoading] = useState(true); // Single loading state
     const [error, setError] = useState(null);
+    const [navbarRefreshTrigger, setNavbarRefreshTrigger] = useState(0);
 
     const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/auth`;
     const friendlyError = "Could not connect to the server. Please check your connection and try again later.";
@@ -86,7 +87,11 @@ export const AuthProvider = ({ children }) => {
         }
     }, [API_URL]);
 
-    const value = { user, isAuthenticated, isLoading, logout, error, clearError, handleTokenLogin };
+    const refreshNavbarPoints = useCallback(() => {
+        setNavbarRefreshTrigger(prev => prev + 1);
+    }, []);
+
+    const value = { user, isAuthenticated, isLoading, logout, error, clearError, handleTokenLogin, refreshNavbarPoints, navbarRefreshTrigger };
 
     return (
         <AuthContext.Provider value={value}>

@@ -6,6 +6,7 @@ import {
     FileText, MessageSquare, Lightbulb, Link as LinkIcon
 } from 'lucide-react';
 import { clientFetch } from '@/lib/client-api';
+import { useAuth } from '@/context/AuthContext';
 import toast from 'react-hot-toast';
 import { formatRelativeTime } from '@/lib/helper-func';
 import { BlurOverlay } from '../../core/layout/BlurOverlay';
@@ -49,6 +50,7 @@ export const AgendaItem = ({ item, onUpdate, isEditing, setEditingItemId }) => {
     const [iconName, setIconName] = useState(item.icon_name);
     const [link, setLink] = useState(item.link || '');
     const [isLoading, setIsLoading] = useState(false);
+    const { refreshNavbarPoints } = useAuth();
 
     const MAX_CHARS = 94;
 
@@ -79,6 +81,8 @@ export const AgendaItem = ({ item, onUpdate, isEditing, setEditingItemId }) => {
             onUpdate(response.data);
             setEditingItemId(null);
             toast.success("Agenda item updated!");
+            // Refresh navbar points since this action completes the 'update_agenda' quest
+            refreshNavbarPoints();
         } else {
             toast.error(`Error: ${response.error}`);
         }

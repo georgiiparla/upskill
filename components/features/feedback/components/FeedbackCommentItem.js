@@ -6,6 +6,7 @@ import { formatRelativeTime } from "@/lib/helper-func";
 import { ThumbsUp, User, Trash2 } from "lucide-react";
 import { Modal } from "../../../core/ui/Modal";
 import { likeSubmission, unlikeSubmission, deleteSubmission } from "@/lib/client-api";
+import { useAuth } from "@/context/AuthContext";
 import toast from 'react-hot-toast';
 
 export const FeedbackCommentItem = ({ feedback, onDeleteSuccess }) => {
@@ -15,6 +16,7 @@ export const FeedbackCommentItem = ({ feedback, onDeleteSuccess }) => {
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
 
+    const { refreshNavbarPoints } = useAuth();
     const isOwner = feedback.isCommentOwner;
 
     const handleLikeToggle = async () => {
@@ -31,6 +33,9 @@ export const FeedbackCommentItem = ({ feedback, onDeleteSuccess }) => {
             toast.error("Failed to update like.");
             setIsLiked(originalLikedState);
             setLikeCount(originalLikeCount);
+        } else if (!originalLikedState) {
+            // Only refresh on like (not unlike) since liking completes the 'like_feedback' quest
+            refreshNavbarPoints();
         }
     };
 

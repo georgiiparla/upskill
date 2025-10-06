@@ -159,20 +159,19 @@ export const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
     const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
-    const { user, logout } = useAuth();
+    const { user, logout, navbarRefreshTrigger, refreshNavbarPoints } = useAuth();
     const pathname = usePathname();
-    const [pointsRefreshTrigger, setPointsRefreshTrigger] = useState(0);
 
     useScrollBehavior(scrolled, setScrolled);
-    const { points, rank, isPointsLoading } = usePointsData(user, pointsRefreshTrigger);
+    const { points, rank, isPointsLoading } = usePointsData(user, navbarRefreshTrigger);
     const { getPointsBadgeClasses } = usePointsBadge(rank);
 
     // Refresh points data when entering leaderboard page
     useEffect(() => {
         if (pathname === '/leaderboard') {
-            setPointsRefreshTrigger(prev => prev + 1);
+            refreshNavbarPoints();
         }
-    }, [pathname]);
+    }, [pathname, refreshNavbarPoints]);
 
     const handleLogoutConfirm = () => {
         logout();

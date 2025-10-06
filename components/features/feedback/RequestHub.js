@@ -7,6 +7,7 @@ import toast from 'react-hot-toast';
 import { Loader2, RefreshCw } from 'lucide-react';
 
 import { clientFetch } from '@/lib/client-api';
+import { useAuth } from '@/context/AuthContext';
 import { Card } from '../../shared/helpers/Helper';
 import { generateRandomTag } from '@/lib/helper-func';
 import SimpleToggleSwitch from '../../core/ui/SimpleToggleSwitch';
@@ -37,6 +38,7 @@ const formItemVariants = {
 
 const CreateRequestForm = () => {
     const router = useRouter();
+    const { refreshNavbarPoints } = useAuth();
     const [topic, setTopic] = useState('');
     const [description, setDescription] = useState('');
     const [generatedTag, setGeneratedTag] = useState('');
@@ -78,6 +80,8 @@ const CreateRequestForm = () => {
 
         if (response.success) {
             toast.success('Feedback request created!', { id: toastId });
+            // Refresh navbar points since this action completes the 'create_feedback_request' quest
+            refreshNavbarPoints();
             const newRequestTag = response.data.tag;
             setTimeout(() => router.push(`/feedback/request/${newRequestTag}`), 1000);
 
