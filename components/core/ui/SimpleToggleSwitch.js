@@ -2,7 +2,7 @@
 
 const SimpleToggleSwitch = ({ options, activeOption, setActiveOption, className }) => {
     return (
-        <div className={`flex space-x-1 md:space-x-1 rounded-lg bg-slate-200/60 dark:bg-slate-700/60 p-1 md:p-1 ${className}`}>
+        <div className={`flex space-x-1 md:space-x-1 rounded-lg bg-slate-100/20 dark:bg-slate-800/20 p-1 md:p-1 ${className}`}>
             {options.map(option => (
                 <button
                     type="button"
