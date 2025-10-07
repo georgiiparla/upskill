@@ -100,6 +100,7 @@ export const Feedback = ({
                             content={view === 'submissions' ? null : requestContent}
                             color={view === 'submissions' ? getSentimentColor(item.sentiment_text) : getRequestStatusColor(item.status)}
                             subjectBold={view !== 'submissions'}
+                            subjectFont={view === 'submissions' ? 'font-mono' : ''}
                         />
                     );
                 })}

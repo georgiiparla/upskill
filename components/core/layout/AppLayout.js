@@ -45,7 +45,7 @@ export default function AppLayout({ children }) {
     return (
         <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
             {isAuthenticated && <Navbar />}
-            <main className={isAuthenticated ? "mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8" : ""}>
+            <main className={isAuthenticated ? "mx-auto max-w-7xl px-4 py-5 sm:px-6 lg:px-8" : ""}>
                 {children}
             </main>
         </div>

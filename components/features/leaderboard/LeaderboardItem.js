@@ -1,8 +1,6 @@
 "use client";
 import React from 'react';
-import { motion } from 'framer-motion';
 import { getRankColors } from './utils';
-import { leaderboardItemVariantsFadeUp } from './animations';
 import { Avatar } from '@/components/core/ui/Avatar';
 
 export const LeaderboardItem = ({ user, maxPoints, isDesktop = true }) => {
@@ -10,10 +8,9 @@ export const LeaderboardItem = ({ user, maxPoints, isDesktop = true }) => {
 
     if (isDesktop) {
         return (
-            <motion.div
+            <div
                 key={user.id}
                 className="group bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-200/50 dark:border-gray-700/50 p-6 transition-all duration-300 hover:shadow-lg hover:bg-white/70 dark:hover:bg-gray-800/70"
-                variants={leaderboardItemVariantsFadeUp}
             >
                 <div className="flex items-center">
                     {/* Left Side: Rank, Avatar, Name - Fixed Width */}
@@ -40,8 +37,8 @@ export const LeaderboardItem = ({ user, maxPoints, isDesktop = true }) => {
                                     className={`h-full rounded-full transition-all duration-700 ease-out`}
                                     style={{
                                         width: barWidth,
-                                        background: `linear-gradient(90deg, ${user.rank === 1 ? 'rgba(0, 255, 255, 0.6)' : user.rank === 2 ? 'rgba(255, 0, 255, 0.6)' : user.rank === 3 ? 'rgba(255, 255, 0, 0.6)' : 'rgba(0, 255, 150, 0.6)'}, ${user.rank === 1 ? 'rgba(0, 150, 255, 0.6)' : user.rank === 2 ? 'rgba(150, 0, 255, 0.6)' : user.rank === 3 ? 'rgba(255, 150, 0, 0.6)' : 'rgba(0, 255, 100, 0.6)'})`,
-                                        boxShadow: `0 0 8px ${user.rank === 1 ? 'rgba(0, 255, 255, 0.4)' : user.rank === 2 ? 'rgba(255, 0, 255, 0.4)' : user.rank === 3 ? 'rgba(255, 255, 0, 0.4)' : 'rgba(0, 255, 150, 0.4)'}`
+                                        background: `linear-gradient(90deg, ${user.rank === 1 ? 'rgba(255, 20, 147, 0.7)' : user.rank === 2 ? 'rgba(34, 165, 94, 0.6)' : user.rank === 3 ? 'rgba(243, 183, 90, 0.6)' : user.rank === 4 ? 'rgba(147, 51, 234, 0.6)' : user.rank === 5 ? 'rgba(59, 130, 246, 0.6)' : 'rgba(0, 255, 150, 0.6)'}, ${user.rank === 1 ? 'rgba(255, 0, 100, 0.7)' : user.rank === 2 ? 'rgba(20, 140, 80, 0.6)' : user.rank === 3 ? 'rgba(220, 160, 70, 0.6)' : user.rank === 4 ? 'rgba(168, 85, 247, 0.6)' : user.rank === 5 ? 'rgba(96, 165, 250, 0.6)' : 'rgba(0, 255, 100, 0.6)'})`,
+                                        boxShadow: `0 0 8px ${user.rank === 1 ? 'rgba(255, 20, 147, 0.5)' : user.rank === 2 ? 'rgba(34, 165, 94, 0.4)' : user.rank === 3 ? 'rgba(243, 183, 90, 0.4)' : user.rank === 4 ? 'rgba(147, 51, 234, 0.4)' : user.rank === 5 ? 'rgba(59, 130, 246, 0.4)' : 'rgba(0, 255, 150, 0.4)'}`
                                     }}
                                 />
                             </div>
@@ -65,16 +62,15 @@ export const LeaderboardItem = ({ user, maxPoints, isDesktop = true }) => {
                         </div>
                     </div>
                 </div>
-            </motion.div>
+            </div>
         );
     }
 
     // Mobile version
     return (
-        <motion.div
+        <div
             key={user.id}
             className="group bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-200/50 dark:border-gray-700/50 p-4 transition-all duration-200 hover:shadow-lg hover:bg-white/70 dark:hover:bg-gray-800/70"
-            variants={leaderboardItemVariantsFadeUp}
         >
             <div className="flex items-center justify-between">
                 {/* Left Side: Rank Badge, Avatar, and Name */}
@@ -100,6 +96,6 @@ export const LeaderboardItem = ({ user, maxPoints, isDesktop = true }) => {
                     </div>
                 </div>
             </div>
-        </motion.div>
+        </div>
     );
 };

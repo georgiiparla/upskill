@@ -14,7 +14,7 @@ export const DropdownItem = ({ href, children, onClick }) => {
             <Link
                 href={href}
                 onClick={onClick}
-                className="block px-4 py-2.5 text-sm font-normal font-mono tracking-tight text-gray-700 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700/50 dark:hover:text-white transition-all duration-200 rounded-lg mx-1"
+                className="block px-4 py-2.5 text-sm lg:text-base font-normal font-mono tracking-tight text-gray-700 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700/50 dark:hover:text-white transition-all duration-200 rounded-lg mx-1"
             >
                 {children}
             </Link>
@@ -86,10 +86,10 @@ export const UserDropdown = ({ user, onLogoutClick }) => {
                 className="flex items-center space-x-2 p-1 pr-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none transition-colors"
             >
                 <Avatar username={user?.username} className="w-7 h-7 text-xs" />
-                <span className="hidden md:inline text-sm font-normal font-mono tracking-tight text-gray-700 dark:text-gray-300">
+                <span className="hidden xl:inline text-sm lg:text-base font-normal font-mono tracking-tight text-gray-700 dark:text-gray-300">
                     {user?.username}
                 </span>
-                <ChevronDown className={`h-3.5 w-3.5 text-gray-400 dark:text-gray-500 transition-all duration-200 hover:text-gray-600 dark:hover:text-gray-300 hidden md:inline ${isOpen ? 'rotate-180' : ''}`} />
+                <ChevronDown className={`h-3.5 w-3.5 text-gray-400 dark:text-gray-500 transition-all duration-200 hover:text-gray-600 dark:hover:text-gray-300 hidden xl:inline ${isOpen ? 'rotate-180' : ''}`} />
             </button>
             {isOpen && (
                 <div className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-xl bg-white/95 dark:bg-slate-900/95 shadow-xl ring-1 ring-black/5 dark:ring-white/10 focus:outline-none border border-slate-200/60 dark:border-slate-700/60">

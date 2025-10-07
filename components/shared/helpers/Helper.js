@@ -63,6 +63,7 @@ export const HistoryListItem = ({
     variant = 'border',
     color = 'gray',
     subjectBold = true,
+    subjectFont = '',
 }) => {
 
     const borderColorMap = {
@@ -97,7 +98,7 @@ export const HistoryListItem = ({
     const itemContent = (
         <>
             <div className="flex justify-between items-center mb-1">
-                <h4 className={`truncate text-sm md:text-base ${subjectBold ? 'font-semibold' : 'font-normal'} text-gray-800 dark:text-gray-200 transition-colors`}>{subject}</h4>
+                <h4 className={`truncate text-sm md:text-base ${subjectBold ? 'font-semibold' : 'font-normal'} ${subjectFont} text-gray-800 dark:text-gray-200 transition-colors`}>{subject}</h4>
                 <span className="text-xs text-gray-500 dark:text-gray-400 flex-shrink-0 ml-2">{formatRelativeTime(createdAt)}</span>
             </div>
             <p className="text-xs md:text-sm text-gray-600 dark:text-gray-300 truncate">

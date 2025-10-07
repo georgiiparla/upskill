@@ -14,9 +14,9 @@ export const PointsBadge = ({
         const baseStyles = "inline-flex items-center gap-3 rounded-lg font-bold shadow-lg";
 
         const sizeStyles = {
-            small: "px-4 py-2 text-sm sm:px-4 sm:py-2 sm:text-sm",
-            default: "px-6 py-3 text-sm sm:px-6 sm:py-3 sm:text-base",
-            large: "px-8 py-4 text-base sm:px-8 sm:py-4 sm:text-lg"
+            small: "px-3 py-1.5 text-xs sm:px-4 sm:py-2 sm:text-sm",
+            default: "px-4 py-2 text-xs sm:px-6 sm:py-3 sm:text-base",
+            large: "px-6 py-3 text-sm sm:px-8 sm:py-4 sm:text-lg"
         };
 
         const statusStyles = {
@@ -32,7 +32,7 @@ export const PointsBadge = ({
     const renderIcon = () => {
         if (!showIcon) return null;
 
-        const iconSize = size === "small" ? "h-4 w-4 sm:h-4 sm:w-4" : size === "large" ? "h-6 w-6 sm:h-7 sm:w-7" : "h-5 w-5 sm:h-5 sm:w-5";
+        const iconSize = size === "small" ? "h-3 w-3 sm:h-4 sm:w-4" : size === "large" ? "h-5 w-5 sm:h-6 sm:w-6" : "h-4 w-4 sm:h-5 sm:w-5";
 
         if (status === "completed") {
             return <CheckCircle2 className={iconSize} />;
@@ -66,7 +66,7 @@ export const PointsBadge = ({
         >
             <div className={getBadgeStyles()}>
                 {renderIcon()}
-                <span className={`font-mono ${size === "small" ? "text-sm sm:text-sm" : size === "large" ? "text-base sm:text-lg" : "text-sm sm:text-base"}`}>
+                <span className={`font-mono ${size === "small" ? "text-xs sm:text-sm" : size === "large" ? "text-sm sm:text-lg" : "text-xs sm:text-base"}`}>
                     {status === "completed" ? "" : "+"}{points} Points
                 </span>
             </div>

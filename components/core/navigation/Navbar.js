@@ -47,7 +47,7 @@ const MobileNavLink = ({ href, children, closeMenu }) => {
 };
 
 const DesktopNavLinks = ({ scrolled }) => (
-    <div className="hidden md:block">
+    <div className="hidden lg:block">
         <div className="ml-10 flex items-baseline space-x-4">
             <DesktopDropdown title="Feedback" scrolled={scrolled} activePaths={["/feedback"]}>
                 <DropdownItem href="/feedback" className="font-mono tracking-tight">My Feedback</DropdownItem>
@@ -64,7 +64,7 @@ const DesktopNavLinks = ({ scrolled }) => (
 );
 
 const DesktopControls = ({ user, rank, renderPointsText, getPointsBadgeClasses, setIsLogoutModalOpen, theme, setTheme }) => (
-    <div className="hidden md:flex items-center space-x-1">
+    <div className="hidden lg:flex items-center space-x-1">
         {user && (
             <div className={`mr-3 px-3 py-1 rounded-full text-sm font-normal font-mono tracking-tight backdrop-blur-sm ${getPointsBadgeClasses()}`} title={rank ? `Current rank: #${rank}` : undefined}>
                 <Link href="/leaderboard" className="focus:outline-none">{renderPointsText()}</Link>
@@ -81,7 +81,7 @@ const DesktopControls = ({ user, rank, renderPointsText, getPointsBadgeClasses, 
 );
 
 const MobileControls = ({ user, rank, renderPointsText, getPointsBadgeClasses, pathname, setIsLogoutModalOpen, isMenuOpen, setIsMenuOpen }) => (
-    <div className="flex items-center md:hidden">
+    <div className="flex lg:hidden items-center">
         {user && (
             <span className={`mr-3 px-2.5 py-1 rounded-full text-xs font-normal font-mono tracking-tight backdrop-blur-sm ${getPointsBadgeClasses()}`} title={rank ? `Current rank: #${rank}` : undefined}>
                 <Link href="/leaderboard" className="focus:outline-none">{renderPointsText()}</Link>
@@ -104,7 +104,7 @@ const MobileControls = ({ user, rank, renderPointsText, getPointsBadgeClasses, p
 
 const MobileMenu = ({ isMenuOpen, setIsMenuOpen }) => (
     isMenuOpen && (
-        <div className="md:hidden border-t border-gray-200 dark:border-gray-700">
+        <div className="lg:hidden border-t border-gray-200 dark:border-gray-700">
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
                 <MobileNavLink href="/feedback" closeMenu={() => setIsMenuOpen(false)}>My Feedback</MobileNavLink>
                 <MobileNavLink href="/feedback/request/new" closeMenu={() => setIsMenuOpen(false)}>Request Feedback</MobileNavLink>

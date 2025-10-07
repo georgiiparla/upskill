@@ -107,17 +107,17 @@ export const AgendaItem = ({ item, onUpdate, isEditing, setEditingItemId }) => {
                 <div className={`p-5 bg-gradient-to-br from-slate-50/60 to-slate-100/40 dark:from-slate-800/60 dark:to-slate-700/40 rounded-lg border border-slate-200/40 dark:border-slate-700/40 relative group hover:shadow-md transition-all duration-200 ${isEditing ? 'shadow-2xl shadow-black/20' : ''}`}>
                     {isEditing ? (
                         <div className="space-y-3">
-                                <div className="flex items-center space-x-2 mt-1">
-                                    {Object.keys(ICON_MAP).map(name => (
-                                        <button
-                                            key={name}
-                                            onClick={() => setIconName(name)}
-                                            className={`p-2 rounded-full transition-all ${ICON_MAP[name].colors} ${iconName === name ? `ring-2 ${ICON_MAP[name].ring}` : 'ring-0'}`}
-                                        >
-                                            <IconDisplay name={name} className="h-4" />
-                                        </button>
-                                    ))}
-                                </div>
+                            <div className="flex items-center space-x-2 mt-1">
+                                {Object.keys(ICON_MAP).map(name => (
+                                    <button
+                                        key={name}
+                                        onClick={() => setIconName(name)}
+                                        className={`p-2 rounded-full transition-all ${ICON_MAP[name].colors} ${iconName === name ? `ring-2 ${ICON_MAP[name].ring}` : 'ring-0'}`}
+                                    >
+                                        <IconDisplay name={name} className="h-4" />
+                                    </button>
+                                ))}
+                            </div>
                             <div className="relative">
                                 <input
                                     type="text"
@@ -168,7 +168,7 @@ export const AgendaItem = ({ item, onUpdate, isEditing, setEditingItemId }) => {
                             </p>
                             {/* Title and link icon displayed inline as part of the same element */}
                             <p className="flex items-center space-x-2 min-w-0 pr-1">
-                                <span className="text-base font-semibold text-gray-900 dark:text-white">
+                                <span className="text-base lg:text-lg font-semibold text-gray-900 dark:text-white">
                                     {item.title}
                                     {item.link && (
                                         <>

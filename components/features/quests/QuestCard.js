@@ -83,12 +83,12 @@ export const QuestCard = ({
             }}
             onDragEnd={onDragEnd}
         >
-            <Card variant="custom" className={`group transition-all duration-300 relative min-h-[400px] max-h-[500px] flex flex-col mx-auto max-w-5xl overflow-hidden ${getCardStyles()}`}>
+            <Card variant="custom" className={`group transition-all duration-300 relative min-h-[320px] md:min-h-[400px] max-h-[400px] md:max-h-[500px] flex flex-col mx-auto max-w-5xl overflow-hidden ${getCardStyles()}`}>
                 {/* Confetti overlay for completed quests */}
                 <Confetti isActive={showConfetti} />
 
                 {/* Quest Position Indicator - Top Right Corner */}
-                <div className="absolute top-4 right-4 z-20">
+                <div className="absolute top-2 right-2 md:top-4 md:right-4 z-20">
                     <QuestIndicators
                         quests={quests}
                         currentIndex={currentIndex}
@@ -96,11 +96,11 @@ export const QuestCard = ({
                     />
                 </div>
 
-                <div className="flex-1 flex flex-col items-center justify-center text-center px-8 py-6 relative z-10">
-                    <div className="space-y-6 max-w-3xl w-full">
+                <div className="flex-1 flex flex-col items-center justify-center text-center px-4 md:px-8 py-4 md:py-6 relative z-10">
+                    <div className="space-y-4 md:space-y-6 max-w-3xl w-full">
                         {/* Quest title with playful animation */}
                         <motion.h2
-                            className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white leading-tight font-mono"
+                            className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white leading-tight font-mono"
                             initial={{ y: 20, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
                             transition={{ delay: 0.2 }}
@@ -110,7 +110,7 @@ export const QuestCard = ({
 
                         {/* Quest description */}
                         <motion.p
-                            className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 leading-relaxed font-mono"
+                            className="text-base md:text-lg lg:text-xl text-gray-600 dark:text-gray-300 leading-relaxed font-mono"
                             initial={{ y: 20, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
                             transition={{ delay: 0.4 }}
