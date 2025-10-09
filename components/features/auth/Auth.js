@@ -57,31 +57,31 @@ const LogoAnimation = () => {
             {orbConfigs.map(({ key, radius, size, duration, delay }, index) => {
                 const paletteEntry = orbPalette[index % orbPalette.length];
                 return (
-                <motion.span
-                    key={key}
-                    className="absolute rounded-full"
-                    style={{
-                        width: `${size * 4}px`,
-                        height: `${size * 4}px`,
-                        backgroundColor: paletteEntry.fill,
-                        boxShadow: paletteEntry.shadow,
-                    }}
-                    animate={{
-                        x: [
-                            Math.cos(index * 1.2) * radius,
-                            Math.cos(index * 1.2 + Math.PI / 3) * (radius + 10),
-                            Math.cos(index * 1.2 + Math.PI) * radius,
-                        ],
-                        y: [
-                            Math.sin(index * 1.2) * radius,
-                            Math.sin(index * 1.2 + Math.PI / 3) * (radius + 10),
-                            Math.sin(index * 1.2 + Math.PI) * radius,
-                        ],
-                        opacity: [0.35, 0.85, 0.35],
-                        scale: [1, 1.2, 1],
-                    }}
-                    transition={{ duration, repeat: Infinity, ease: 'easeInOut', delay }}
-                />
+                    <motion.span
+                        key={key}
+                        className="absolute rounded-full"
+                        style={{
+                            width: `${size * 4}px`,
+                            height: `${size * 4}px`,
+                            backgroundColor: paletteEntry.fill,
+                            boxShadow: paletteEntry.shadow,
+                        }}
+                        animate={{
+                            x: [
+                                Math.cos(index * 1.2) * radius,
+                                Math.cos(index * 1.2 + Math.PI / 3) * (radius + 10),
+                                Math.cos(index * 1.2 + Math.PI) * radius,
+                            ],
+                            y: [
+                                Math.sin(index * 1.2) * radius,
+                                Math.sin(index * 1.2 + Math.PI / 3) * (radius + 10),
+                                Math.sin(index * 1.2 + Math.PI) * radius,
+                            ],
+                            opacity: [0.35, 0.85, 0.35],
+                            scale: [1, 1.2, 1],
+                        }}
+                        transition={{ duration, repeat: Infinity, ease: 'easeInOut', delay }}
+                    />
                 );
             })}
 
@@ -90,7 +90,7 @@ const LogoAnimation = () => {
                 animate={{ rotate: [0, 360], scale: [1, 1.05, 1] }}
                 transition={{ duration: 10, repeat: Infinity, ease: 'linear' }}
             >
-                    <Image
+                <Image
                     src="/csway-logo.png"
                     alt="Skillrise Logo"
                     width={60}
@@ -170,4 +170,5 @@ export const Auth = () => {
                 </a>
             </Card>
         </div>
-);}
+    );
+}
