@@ -21,9 +21,9 @@ export default function DashboardSkeleton() {
                 <div className="md:col-span-1">
                     <CardSkeleton className='h-full flex flex-col justify-between'>
 
-                        <div className="flex space-x-1 rounded-lg bg-slate-200/60 dark:bg-slate-700/60 p-1 h-10">
-                            <div className="w-full rounded-md bg-white dark:bg-slate-900"></div>
-                            <div className="w-full rounded-md"></div>
+                        <div className="flex space-x-1 rounded-lg p-1 h-10">
+                            {/* low-fidelity single dark block representing the toggle */}
+                            <div className="w-full rounded-md bg-slate-200/60 dark:bg-slate-700/60"></div>
                         </div>
 
                         <div className="space-y-4 w-full mt-4">

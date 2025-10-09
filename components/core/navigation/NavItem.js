@@ -17,7 +17,7 @@ export const NavItem = ({
     const pathname = usePathname();
     const isActive = isActiveProp !== undefined ? isActiveProp : pathname === href;
 
-    const baseClasses = "relative text-sm lg:text-base font-normal font-mono tracking-tight transition-colors duration-300 group";
+    const baseClasses = "relative text-sm lg:text-base font-normal tracking-tight transition-colors duration-300 group";
     const colorClasses = isActive
         ? 'text-gray-900 dark:text-gray-100'
         : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300';
@@ -30,8 +30,8 @@ export const NavItem = ({
             )}
             <span
                 className={`absolute left-1/2 -bottom-0.5 h-[2px] bg-csway-green transition-all duration-300 transform -translate-x-1/2 ${isActive && !scrolled
-                        ? isDropdown ? 'w-4/5' : 'w-3/5'
-                        : `w-0 group-hover:${isDropdown ? 'w-4/5' : 'w-3/5'}`
+                    ? isDropdown ? 'w-4/5' : 'w-3/5'
+                    : `w-0 group-hover:${isDropdown ? 'w-4/5' : 'w-3/5'}`
                     }`}
             />
         </>

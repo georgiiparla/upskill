@@ -1,7 +1,7 @@
 "use client";
 
 const MetricItem = ({ icon, label, allTime, thisWeek }) => (
-    <div className="group bg-slate-100/20 dark:bg-slate-800/20 p-3 md:p-5 rounded-xl border border-slate-200 dark:border-slate-700">
+    <div className="group bg-slate-100/20 dark:bg-slate-800/20 p-5 md:p-5 rounded-xl border border-slate-200 dark:border-slate-700">
         <div className="flex items-start space-x-3 md:space-x-4">
             <div className="flex-shrink-0 mt-1 p-1.5 bg-slate-100/20 dark:bg-slate-800/20 rounded-lg shadow-sm">{icon}</div>
             <div className="flex flex-col flex-1 min-w-0">

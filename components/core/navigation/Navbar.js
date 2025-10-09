@@ -22,7 +22,7 @@ const NavLink = ({ href, children, scrolled }) => (
     <NavItem
         href={href}
         scrolled={scrolled}
-        className={`${scrolled ? 'px-4 py-2' : 'px-4 pt-1'} font-mono tracking-tight`}
+        className={`${scrolled ? 'px-4 py-2' : 'px-4 pt-1'} tracking-tight`}
     >
         {children}
     </NavItem>
@@ -39,7 +39,7 @@ const MobileNavLink = ({ href, children, closeMenu }) => {
         <Link
             href={href}
             onClick={closeMenu}
-            className={`block w-full text-left px-4 py-2 text-base font-medium rounded-md font-mono tracking-tight ${activeClass}`}
+            className={`block w-full text-left px-4 py-2 text-base font-medium rounded-md tracking-tight ${activeClass}`}
         >
             {children}
         </Link>
@@ -50,13 +50,13 @@ const DesktopNavLinks = ({ scrolled }) => (
     <div className="hidden lg:block">
         <div className="ml-10 flex items-baseline space-x-4">
             <DesktopDropdown title="Feedback" scrolled={scrolled} activePaths={["/feedback"]}>
-                <DropdownItem href="/feedback" className="font-mono tracking-tight">My Feedback</DropdownItem>
-                <DropdownItem href="/feedback/request/new" className="font-mono tracking-tight">Request Feedback</DropdownItem>
+                <DropdownItem href="/feedback">My Feedback</DropdownItem>
+                <DropdownItem href="/feedback/request/new">Request Feedback</DropdownItem>
             </DesktopDropdown>
             <NavLink href="/dashboard" scrolled={scrolled}>Weekly</NavLink>
             <DesktopDropdown title="Community" scrolled={scrolled} activePaths={["/leaderboard", "/admin/users"]}>
-                <DropdownItem href="/leaderboard" className="font-mono tracking-tight">Leaderboard</DropdownItem>
-                <DropdownItem href="/admin/users" className="font-mono tracking-tight">Members</DropdownItem>
+                <DropdownItem href="/leaderboard">Leaderboard</DropdownItem>
+                <DropdownItem href="/admin/users">Members</DropdownItem>
             </DesktopDropdown>
             <NavLink href="/quests" scrolled={scrolled}>Quests</NavLink>
         </div>
@@ -66,7 +66,7 @@ const DesktopNavLinks = ({ scrolled }) => (
 const DesktopControls = ({ user, rank, renderPointsText, getPointsBadgeClasses, setIsLogoutModalOpen, theme, setTheme }) => (
     <div className="hidden lg:flex items-center space-x-1">
         {user && (
-            <div className={`mr-3 px-3 py-1 rounded-full text-sm font-normal font-mono tracking-tight backdrop-blur-sm ${getPointsBadgeClasses()}`} title={rank ? `Current rank: #${rank}` : undefined}>
+            <div className={`mr-3 px-3 py-1 rounded-full text-sm font-normal tracking-tight backdrop-blur-sm ${getPointsBadgeClasses()}`} title={rank ? `Current rank: #${rank}` : undefined}>
                 <Link href="/leaderboard" className="focus:outline-none">{renderPointsText()}</Link>
             </div>
         )}
@@ -83,7 +83,7 @@ const DesktopControls = ({ user, rank, renderPointsText, getPointsBadgeClasses, 
 const MobileControls = ({ user, rank, renderPointsText, getPointsBadgeClasses, pathname, setIsLogoutModalOpen, isMenuOpen, setIsMenuOpen }) => (
     <div className="flex lg:hidden items-center">
         {user && (
-            <span className={`mr-3 px-2.5 py-1 rounded-full text-xs font-normal font-mono tracking-tight backdrop-blur-sm ${getPointsBadgeClasses()}`} title={rank ? `Current rank: #${rank}` : undefined}>
+            <span className={`mr-3 px-2.5 py-1 rounded-full text-xs font-normal tracking-tight backdrop-blur-sm ${getPointsBadgeClasses()}`} title={rank ? `Current rank: #${rank}` : undefined}>
                 <Link href="/leaderboard" className="focus:outline-none">{renderPointsText()}</Link>
             </span>
         )}
@@ -118,9 +118,9 @@ const MobileMenu = ({ isMenuOpen, setIsMenuOpen }) => (
 );
 
 const LogoAndBrand = ({ scrolled }) => (
-    <Link href="/dashboard" className="flex-shrink-0 text-gray-900 dark:text-white font-bold text-xl flex items-center">
+    <Link href="/dashboard" className={`flex-shrink-0 text-gray-900 dark:text-white font-bold text-xl flex items-center ${inter.className}`}>
         <Image src="/csway-logo.png" alt="CSway Logo" width={24} height={24} className="mr-2" />
-        <span className={`transition-all duration-300 ease-in-out whitespace-nowrap overflow-hidden font-sans ${inter.className} ${scrolled ? 'w-0 opacity-0' : ''}`}>Upskill</span>
+        <span className={`transition-all duration-300 ease-in-out whitespace-nowrap overflow-hidden ${scrolled ? 'w-0 opacity-0' : ''}`}>Upskill</span>
     </Link>
 );
 
@@ -199,7 +199,7 @@ export const Navbar = () => {
                 Are you sure you want to sign out of your account?
             </Modal>
 
-            <nav className="bg-gradient-to-br from-white to-slate-50/80 dark:from-slate-900 dark:to-slate-800/90 backdrop-blur-sm border-b border-slate-200/60 dark:border-slate-700/60 sticky top-0 z-50 transition-all duration-300 ease-in-out">
+            <nav className={`bg-gradient-to-br from-white to-slate-50/80 dark:from-slate-900 dark:to-slate-800/90 backdrop-blur-sm border-b border-slate-200/60 dark:border-slate-700/60 sticky top-0 z-50 transition-all duration-300 ease-in-out ${inter.className}`}>
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <NavbarContent
                         scrolled={scrolled}

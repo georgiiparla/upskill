@@ -95,12 +95,11 @@ export const Feedback = ({
                             variant={view === 'submissions' ? 'background' : 'dot'}
                             key={view === 'submissions' ? `sub-${item.id}` : `req-${item.id}`}
                             href={href}
-                            subject={view === 'submissions' ? item.subject : item.topic}
+                            subject={view === 'submissions' ? `re: ${item.subject}` : item.topic}
                             createdAt={item.created_at}
                             content={view === 'submissions' ? null : requestContent}
                             color={view === 'submissions' ? getSentimentColor(item.sentiment_text) : getRequestStatusColor(item.status)}
-                            subjectBold={view !== 'submissions'}
-                            subjectFont={view === 'submissions' ? 'font-mono' : ''}
+                        //subjectBold={view !== 'submissions'}
                         />
                     );
                 })}
