@@ -90,9 +90,9 @@ const LogoAnimation = () => {
                 animate={{ rotate: [0, 360], scale: [1, 1.05, 1] }}
                 transition={{ duration: 10, repeat: Infinity, ease: 'linear' }}
             >
-                <Image
+                    <Image
                     src="/csway-logo.png"
-                    alt="Upskill Logo"
+                    alt="Skillrise Logo"
                     width={60}
                     height={60}
                     className="opacity-90"
@@ -147,7 +147,7 @@ export const Auth = () => {
             <Card className="w-full max-w-sm min-h-[450px] !p-8 !rounded-2xl flex flex-col justify-between">
                 <div className="text-center">
                     <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-200">
-                        Welcome to Upskill
+                        Welcome to Skillrise
                     </h1>
                     <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
                         Sign in with Google to continue

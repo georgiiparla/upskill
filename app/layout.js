@@ -12,8 +12,8 @@ import { ThemeToggleButton } from "@/components/shared/theme/ThemeToggleButton";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-    title: "Upskill",
-    description: "Upskill platform",
+    title: "Skillrise",
+    description: "Skillrise platform",
 };
 
 export const viewport = {

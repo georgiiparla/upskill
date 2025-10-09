@@ -119,8 +119,8 @@ const MobileMenu = ({ isMenuOpen, setIsMenuOpen }) => (
 
 const LogoAndBrand = ({ scrolled }) => (
     <Link href="/dashboard" className={`flex-shrink-0 text-gray-900 dark:text-white font-bold text-xl flex items-center ${inter.className}`}>
-        <Image src="/csway-logo.png" alt="CSway Logo" width={24} height={24} className="mr-2" />
-        <span className={`transition-all duration-300 ease-in-out whitespace-nowrap overflow-hidden ${scrolled ? 'w-0 opacity-0' : ''}`}>Upskill</span>
+        <Image src="/csway-logo.png" alt="Skillrise Logo" width={24} height={24} className="mr-2" />
+        <span className={`transition-all duration-300 ease-in-out whitespace-nowrap overflow-hidden ${scrolled ? 'w-0 opacity-0' : ''}`}>Skillrise</span>
     </Link>
 );
 
