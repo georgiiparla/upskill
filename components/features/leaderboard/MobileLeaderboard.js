@@ -10,6 +10,6 @@ export const MobileLeaderboard = ({ rankedUsers, maxPoints }) => (
         {rankedUsers.map((user) => (
             <LeaderboardItem key={user.id} user={user} maxPoints={maxPoints} isDesktop={false} />
         ))}
-        <ContinuationIndicators isDesktop={false} />
+        {/* <ContinuationIndicators isDesktop={false} /> */}
     </div>
 );

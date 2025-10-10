@@ -35,18 +35,23 @@ export const getRankColors = (rank) => {
 };
 
 // Process leaderboard data
-export const processLeaderboardData = (initialData) => {
-    // We only need the top 5 users for this component
-    const topFive = initialData.slice(0, 5);
+export const processLeaderboardData = (initialData = []) => {
+    // Return all users sorted by points (descending) and annotate with rank
+    if (!Array.isArray(initialData) || initialData.length === 0) {
+        return { rankedUsers: [], maxPoints: 0 };
+    }
 
-    // Add a rank property to each user object
-    const rankedUsers = topFive.map((user, index) => ({
+    // Make a shallow copy and sort so we don't mutate the original input
+    const sorted = [...initialData].sort((a, b) => (b.points || 0) - (a.points || 0));
+
+    // Add a rank property to each user object (1-based)
+    const rankedUsers = sorted.map((user, index) => ({
         ...user,
         rank: index + 1
     }));
 
-    // Get max points for bar scaling
-    const maxPoints = Math.max(...rankedUsers.map(user => user.points));
+    // Get max points for bar scaling (default to 0)
+    const maxPoints = rankedUsers.length > 0 ? Math.max(...rankedUsers.map(user => user.points || 0)) : 0;
 
     return { rankedUsers, maxPoints };
 };

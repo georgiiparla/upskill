@@ -67,7 +67,7 @@ export const PointsBadge = ({
             <div className={getBadgeStyles()}>
                 {renderIcon()}
                 <span className={`font-mono ${size === "small" ? "text-xs sm:text-sm" : size === "large" ? "text-sm sm:text-lg" : "text-xs sm:text-base"}`}>
-                    {status === "completed" ? "" : "+"}{points} Points
+                    {status === "completed" ? "" : "+"}{points} pts
                 </span>
             </div>
         </motion.div>

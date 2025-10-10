@@ -4,7 +4,14 @@ import { getRankColors } from './utils';
 import { Avatar } from '@/components/core/ui/Avatar';
 
 export const LeaderboardItem = ({ user, maxPoints, isDesktop = true }) => {
-    const barWidth = `${Math.max((user.points / maxPoints) * 100, 8)}%`;
+    // Safe bar width calculation: avoid division by zero when maxPoints is 0
+    const barWidth = (() => {
+        if (!maxPoints || maxPoints <= 0) return '8%';
+        const width = Math.max((user.points / maxPoints) * 100, 8);
+        return `${width}%`;
+    })();
+
+    const isGhost = user.rank > 5; // ranks 6 and below should be grayish
 
     if (isDesktop) {
         return (
@@ -37,11 +44,17 @@ export const LeaderboardItem = ({ user, maxPoints, isDesktop = true }) => {
                                     className={`h-full rounded-full transition-all duration-700 ease-out`}
                                     style={{
                                         width: barWidth,
-                                        background: `linear-gradient(90deg, ${user.rank === 1 ? 'rgba(255, 20, 147, 0.7)' : user.rank === 2 ? 'rgba(34, 165, 94, 0.6)' : user.rank === 3 ? 'rgba(243, 183, 90, 0.6)' : user.rank === 4 ? 'rgba(147, 51, 234, 0.6)' : user.rank === 5 ? 'rgba(59, 130, 246, 0.6)' : 'rgba(0, 255, 150, 0.6)'}, ${user.rank === 1 ? 'rgba(255, 0, 100, 0.7)' : user.rank === 2 ? 'rgba(20, 140, 80, 0.6)' : user.rank === 3 ? 'rgba(220, 160, 70, 0.6)' : user.rank === 4 ? 'rgba(168, 85, 247, 0.6)' : user.rank === 5 ? 'rgba(96, 165, 250, 0.6)' : 'rgba(0, 255, 100, 0.6)'})`,
-                                        boxShadow: `0 0 8px ${user.rank === 1 ? 'rgba(255, 20, 147, 0.5)' : user.rank === 2 ? 'rgba(34, 165, 94, 0.4)' : user.rank === 3 ? 'rgba(243, 183, 90, 0.4)' : user.rank === 4 ? 'rgba(147, 51, 234, 0.4)' : user.rank === 5 ? 'rgba(59, 130, 246, 0.4)' : 'rgba(0, 255, 150, 0.4)'}`
+                                        background: isGhost
+                                            ? 'linear-gradient(90deg, rgba(203,213,225,0.7), rgba(148,163,184,0.7))'
+                                            : `linear-gradient(90deg, ${user.rank === 1 ? 'rgba(255, 20, 147, 0.7)' : user.rank === 2 ? 'rgba(34, 165, 94, 0.6)' : user.rank === 3 ? 'rgba(243, 183, 90, 0.6)' : user.rank === 4 ? 'rgba(147, 51, 234, 0.6)' : user.rank === 5 ? 'rgba(59, 130, 246, 0.6)' : 'rgba(0, 255, 150, 0.6)'}, ${user.rank === 1 ? 'rgba(255, 0, 100, 0.7)' : user.rank === 2 ? 'rgba(20, 140, 80, 0.6)' : user.rank === 3 ? 'rgba(220, 160, 70, 0.6)' : user.rank === 4 ? 'rgba(168, 85, 247, 0.6)' : user.rank === 5 ? 'rgba(96, 165, 250, 0.6)' : 'rgba(0, 255, 100, 0.6)'})`,
+                                        boxShadow: isGhost
+                                            ? '0 0 6px rgba(148,163,184,0.35)'
+                                            : `0 0 8px ${user.rank === 1 ? 'rgba(255, 20, 147, 0.5)' : user.rank === 2 ? 'rgba(34, 165, 94, 0.4)' : user.rank === 3 ? 'rgba(243, 183, 90, 0.4)' : user.rank === 4 ? 'rgba(147, 51, 234, 0.4)' : user.rank === 5 ? 'rgba(59, 130, 246, 0.4)' : 'rgba(0, 255, 150, 0.4)'}`
                                     }}
                                 />
                             </div>
+
+
 
                             {/* Trophy icons for top 3 */}
                             {user.rank <= 3 && (

@@ -10,6 +10,6 @@ export const DesktopLeaderboard = ({ rankedUsers, maxPoints }) => (
         {rankedUsers.map((user) => (
             <LeaderboardItem key={user.id} user={user} maxPoints={maxPoints} isDesktop={true} />
         ))}
-        <ContinuationIndicators isDesktop={true} />
+        {/* <ContinuationIndicators isDesktop={true} /> */}
     </div>
 );
