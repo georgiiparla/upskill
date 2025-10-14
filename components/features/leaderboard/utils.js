@@ -41,8 +41,14 @@ export const processLeaderboardData = (initialData = []) => {
         return { rankedUsers: [], maxPoints: 0 };
     }
 
+    // Filter out mock users (users whose name starts with "Mock User")
+    const filteredData = initialData.filter(user => {
+        const name = user.name || user.full_name || '';
+        return !name.startsWith('Mock User');
+    });
+
     // Make a shallow copy and sort so we don't mutate the original input
-    const sorted = [...initialData].sort((a, b) => (b.points || 0) - (a.points || 0));
+    const sorted = [...filteredData].sort((a, b) => (b.points || 0) - (a.points || 0));
 
     // Add a rank property to each user object (1-based)
     const rankedUsers = sorted.map((user, index) => ({
