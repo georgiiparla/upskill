@@ -1,4 +1,4 @@
-import { CardSkeleton, TextSkeleton, SectionTitleSkeleton } from "@/components/shared/skeletons/Skeletons";
+import { CardSkeleton, TextSkeleton, SectionTitleSkeleton } from "@/components/shared/loading/Skeletons";
 
 const AliasItemSkeleton = () => (
     <div className="h-12 bg-gray-200 dark:bg-gray-700/50 rounded-lg" />
