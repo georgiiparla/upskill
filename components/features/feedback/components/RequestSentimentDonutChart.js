@@ -6,9 +6,9 @@ import { Card, SectionTitle } from "../../../shared/helpers/Helper";
 import { BarChart2 } from 'lucide-react';
 
 const SENTIMENT_COLOR_MAP = {
-    'Far Exceeds Expectations': '#14b8a6',
-    'Exceeds Expectations': '#22a55e',
-    'Meets Expectations': '#f59e0b',
+    'Exceeds Expectations': '#14b8a6',
+    'Meets Expectations': '#22a55e',
+    'Approaching Expectations': '#eab308',
     'Below Expectations': '#e37a7b',
 };
 

@@ -96,9 +96,9 @@ export default function FeedbackRequestDetail() {
     }, {});
 
     const sentimentChartData = [
-        { name: 'Far Exceeds Expectations', count: sentimentBreakdown['Far Exceeds Expectations'] || 0 },
         { name: 'Exceeds Expectations', count: sentimentBreakdown['Exceeds Expectations'] || 0 },
         { name: 'Meets Expectations', count: sentimentBreakdown['Meets Expectations'] || 0 },
+        { name: 'Approaching Expectations', count: sentimentBreakdown['Approaching Expectations'] || 0 },
         { name: 'Below Expectations', count: sentimentBreakdown['Below Expectations'] || 0 }
     ];
 

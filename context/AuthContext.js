@@ -19,11 +19,13 @@ export const AuthProvider = ({ children }) => {
 
     const clearError = () => setError(null);
 
-    const checkSession = useCallback(async () => {
+    // Allow checkSession to accept an explicit token, falling back to the cookie if none is provided.
+    const checkSession = useCallback(async (token = null) => {
         setIsLoading(true);
-        const token = getTokenFromCookie();
+        // Prioritize the passed token, otherwise check the cookie. This is the core of the fix.
+        const sessionToken = token || getTokenFromCookie();
 
-        if (!token) {
+        if (!sessionToken) {
             setIsAuthenticated(false);
             setUser(null);
             setIsLoading(false);
@@ -32,7 +34,7 @@ export const AuthProvider = ({ children }) => {
 
         try {
             const response = await fetch(`${API_URL}/profile`, {
-                headers: { 'Authorization': `Bearer ${token}` }
+                headers: { 'Authorization': `Bearer ${sessionToken}` }
             });
 
             if (response.ok) {
@@ -67,9 +69,11 @@ export const AuthProvider = ({ children }) => {
         }
     }, [checkSession]);
 
+
+    // Pass the token from the URL directly into our updated checkSession function.
     const handleTokenLogin = useCallback(async (token) => {
         setTokenCookie(token);
-        await checkSession(); // Let checkSession handle the loading state
+        await checkSession(token);
     }, [checkSession]);
 
     const logout = useCallback(async () => {
@@ -82,7 +86,7 @@ export const AuthProvider = ({ children }) => {
         } finally {
             setUser(null);
             setIsAuthenticated(false);
-            removeTokenCookie();
+            removeTokenCookie(); //
             setIsLoading(false);
         }
     }, [API_URL]);

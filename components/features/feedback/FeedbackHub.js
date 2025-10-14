@@ -36,9 +36,9 @@ const formItemVariants = {
 const SentimentPicker = ({ selected, onSelect }) => {
     const sentiments = [
         { name: 'Below Expectations', value: 1, color: 'text-red-500', bgColor: 'hover:bg-red-500/10' },
-        { name: 'Meets Expectations', value: 2, color: 'text-amber-500', bgColor: 'hover:bg-amber-500/10' },
-        { name: 'Exceeds Expectations', value: 3, color: 'text-green-500', bgColor: 'hover:bg-green-500/10' },
-        { name: 'Far Exceeds Expectations', value: 4, color: 'text-teal-500', bgColor: 'hover:bg-teal-500/10' },
+        { name: 'Approaching Expectations', value: 2, color: 'text-yellow-500', bgColor: 'hover:bg-yellow-500/10' },
+        { name: 'Meets Expectations', value: 3, color: 'text-green-500', bgColor: 'hover:bg-green-500/10' },
+        { name: 'Exceeds Expectations', value: 4, color: 'text-teal-500', bgColor: 'hover:bg-teal-500/10' },
     ];
 
     return (
@@ -71,7 +71,7 @@ const SentimentPicker = ({ selected, onSelect }) => {
 
 const NewFeedbackForm = ({ requestTag }) => {
     const [requestTopic, setRequestTopic] = useState('');
-    const [sentiment, setSentiment] = useState(2);
+    const [sentiment, setSentiment] = useState(3);
     const [content, setContent] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const router = useRouter();

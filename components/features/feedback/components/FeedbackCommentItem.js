@@ -56,10 +56,10 @@ export const FeedbackCommentItem = ({ feedback, onDeleteSuccess }) => {
     };
 
     const sentimentColors = {
-        'Far Exceeds Expectations': "border-teal-500 bg-teal-50 dark:bg-teal-900/20 text-teal-700 dark:text-teal-400",
-        'Exceeds Expectations': "border-green-500 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400",
+        'Exceeds Expectations': "border-teal-500 bg-teal-50 dark:bg-teal-900/20 text-teal-700 dark:text-teal-400",
+        'Meets Expectations': "border-green-500 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400",
+        'Approaching Expectations': "border-yellow-500 bg-yellow-50 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-400",
         'Below Expectations': "border-red-500 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400",
-        'Meets Expectations': "border-amber-500 bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400",
     };
 
     const colorClass = sentimentColors[feedback.sentiment_text] || sentimentColors['Meets Expectations'];

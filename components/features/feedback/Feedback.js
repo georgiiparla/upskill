@@ -15,11 +15,11 @@ export const Feedback = ({
 
     const getSentimentColor = (sentimentText) => {
         switch (sentimentText) {
-            case 'Far Exceeds Expectations': return 'teal';
-            case 'Exceeds Expectations': return 'green';
+            case 'Exceeds Expectations': return 'teal';
+            case 'Meets Expectations': return 'green';
+            case 'Approaching Expectations': return 'yellow';
             case 'Below Expectations': return 'red';
-            case 'Meets Expectations':
-            default: return 'amber';
+            default: return 'green';
         }
     };
 
