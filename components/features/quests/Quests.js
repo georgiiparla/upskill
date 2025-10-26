@@ -5,7 +5,9 @@ import { HeroHeader } from "../../shared/helpers/HeroHeader";
 import { QuestCarousel } from "./QuestCarousel";
 
 export const Quests = ({ initialQuests }) => {
-    if (!initialQuests || initialQuests.length === 0) {
+    const explicitQuests = (initialQuests || []).filter((quest) => quest.explicit !== false);
+
+    if (explicitQuests.length === 0) {
         return (
             <div className="space-y-6">
                 <HeroHeader
@@ -40,7 +42,7 @@ export const Quests = ({ initialQuests }) => {
             />
 
             {/* Quest Carousel */}
-            <QuestCarousel quests={initialQuests} />
+            <QuestCarousel quests={explicitQuests} />
         </div>
     );
 };

@@ -49,16 +49,19 @@ const MobileNavLink = ({ href, children, closeMenu }) => {
 const DesktopNavLinks = ({ scrolled }) => (
     <div className="hidden lg:block">
         <div className="ml-10 flex items-baseline space-x-4">
-            <DesktopDropdown title="Feedback" scrolled={scrolled} activePaths={["/feedback"]}>
+            <NavLink href="/dashboard" scrolled={scrolled}>Weekly</NavLink>
+            <DesktopDropdown title="Feedback" scrolled={scrolled} activePaths={["/feedback", "/feedback/request"]}>
                 <DropdownItem href="/feedback">My Feedback</DropdownItem>
                 <DropdownItem href="/feedback/request/new">Request Feedback</DropdownItem>
             </DesktopDropdown>
-            <NavLink href="/dashboard" scrolled={scrolled}>Weekly</NavLink>
-            <DesktopDropdown title="Community" scrolled={scrolled} activePaths={["/leaderboard", "/admin/users"]}>
+            <DesktopDropdown title="Community" scrolled={scrolled} activePaths={["/leaderboard", "/quests"]}>
                 <DropdownItem href="/leaderboard">Leaderboard</DropdownItem>
+                <DropdownItem href="/quests">Quests</DropdownItem>
+            </DesktopDropdown>
+            <DesktopDropdown title="Admin" scrolled={scrolled} activePaths={["/admin/quests", "/admin/users"]}>
+                <DropdownItem href="/admin/quests">Quest Management</DropdownItem>
                 <DropdownItem href="/admin/users">Members</DropdownItem>
             </DesktopDropdown>
-            <NavLink href="/quests" scrolled={scrolled}>Quests</NavLink>
         </div>
     </div>
 );
@@ -102,20 +105,63 @@ const MobileControls = ({ user, rank, renderPointsText, getPointsBadgeClasses, p
     </div>
 );
 
-const MobileMenu = ({ isMenuOpen, setIsMenuOpen }) => (
-    isMenuOpen && (
-        <div className="lg:hidden border-t border-gray-200 dark:border-gray-700">
-            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                <MobileNavLink href="/feedback" closeMenu={() => setIsMenuOpen(false)}>My Feedback</MobileNavLink>
-                <MobileNavLink href="/feedback/request/new" closeMenu={() => setIsMenuOpen(false)}>Request Feedback</MobileNavLink>
-                <MobileNavLink href="/dashboard" closeMenu={() => setIsMenuOpen(false)}>Weekly</MobileNavLink>
-                <MobileNavLink href="/quests" closeMenu={() => setIsMenuOpen(false)}>Quests</MobileNavLink>
-                <MobileNavLink href="/leaderboard" closeMenu={() => setIsMenuOpen(false)}>Leaderboard</MobileNavLink>
-                <MobileNavLink href="/admin/users" closeMenu={() => setIsMenuOpen(false)}>Members</MobileNavLink>
-            </div>
-        </div>
-    )
+const MobileMenuSectionLabel = ({ children }) => (
+    <p className="px-4 pt-4 text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">
+        {children}
+    </p>
 );
+
+const MobileMenu = ({ isMenuOpen, setIsMenuOpen }) => {
+    if (!isMenuOpen) return null;
+
+    const closeMenu = () => setIsMenuOpen(false);
+
+    const sections = [
+        {
+            title: 'Feedback',
+            links: [
+                { href: '/feedback', label: 'My Feedback' },
+                { href: '/feedback/request/new', label: 'Request Feedback' },
+            ],
+        },
+        {
+            title: 'Explore',
+            links: [
+                { href: '/dashboard', label: 'Weekly' },
+                { href: '/leaderboard', label: 'Leaderboard' },
+                { href: '/quests', label: 'Quests' },
+            ],
+        },
+        {
+            title: 'Admin',
+            links: [
+                { href: '/admin/quests', label: 'Quest Management' },
+                { href: '/admin/users', label: 'Members' },
+            ],
+        },
+    ];
+
+    return (
+        <div className="lg:hidden border-t border-gray-200 dark:border-gray-700">
+            {sections.map((section) => (
+                <div key={section.title} className="pb-3">
+                    <MobileMenuSectionLabel>{section.title}</MobileMenuSectionLabel>
+                    <div className="mt-1 px-2 space-y-1 sm:px-3">
+                        {section.links.map((link) => (
+                            <MobileNavLink
+                                key={link.href}
+                                href={link.href}
+                                closeMenu={closeMenu}
+                            >
+                                {link.label}
+                            </MobileNavLink>
+                        ))}
+                    </div>
+                </div>
+            ))}
+        </div>
+    );
+};
 
 const LogoAndBrand = ({ scrolled }) => (
     <Link href="/dashboard" className={`flex-shrink-0 text-gray-900 dark:text-white font-bold text-xl flex items-center ${inter.className}`}>

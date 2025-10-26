@@ -4,7 +4,7 @@ import { sleep } from "@/lib/delay";
 
 async function getQuestsData() {
     await sleep(2000);
-    return serverFetch('/quests');
+    return serverFetch('/quests?explicit_only=true');
 }
 
 export default async function QuestsPage() {

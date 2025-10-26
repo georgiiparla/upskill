@@ -12,6 +12,7 @@ const initialFormState = {
     title: '',
     description: '',
     points: '50',
+    explicit: true,
 };
 
 export const AddQuestForm = ({ onCreated }) => {
@@ -20,8 +21,8 @@ export const AddQuestForm = ({ onCreated }) => {
     const [error, setError] = useState(null);
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
-        setForm((prev) => ({ ...prev, [name]: value }));
+        const { name, value, type, checked } = e.target;
+        setForm((prev) => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
     };
 
     const submit = async (e) => {
@@ -53,6 +54,7 @@ export const AddQuestForm = ({ onCreated }) => {
             title: trimmedTitle,
             description: trimmedDescription,
             points: pointsValue,
+            explicit: Boolean(form.explicit),
         };
 
         const response = await clientFetch('/quests', { method: 'POST', body: payload });
@@ -146,10 +148,24 @@ export const AddQuestForm = ({ onCreated }) => {
                     />
                 </div>
 
+
+
                 {error && <p className="text-sm text-red-500 dark:text-red-400">{error}</p>}
 
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                    <p className="text-xs text-gray-500 dark:text-gray-400">Admins can update or remove quests later via the database if needed.</p>
+                    <div className="flex items-start gap-3">
+                        <input
+                            id="explicit"
+                            name="explicit"
+                            type="checkbox"
+                            checked={form.explicit}
+                            onChange={handleChange}
+                            className="mt-1 h-4 w-4 rounded border-slate-300 text-csway-green focus:ring-csway-green"
+                        />
+                        <div className="space-y-1">
+                            <label htmlFor="explicit" className="text-sm font-medium text-gray-700 dark:text-gray-300">Show in quests carousel</label>
+                        </div>
+                    </div>
                     <button
                         type="submit"
                         disabled={loading}
