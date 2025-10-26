@@ -26,13 +26,13 @@ const AgendaSection = ({ agendaItems, handleUpdateAgendaItem, editingItemId, set
 );
 
 const ActivitySection = ({ activityData }) => (
-    <div className="lg:col-span-1">
+    <div className="lg:col-span-4">
         <ActivityCard activityData={activityData} />
     </div>
 );
 
 const ActivityStreamSection = ({ activityStream }) => (
-    <div className="lg:col-span-2">
+    <div className="lg:col-span-8">
         <Card className="h-full">
             <div className="h-full flex flex-col">
                 <SectionTitle
@@ -81,7 +81,7 @@ export default function Dashboard({ initialData }) {
                 editingItemId={editingItemId}
                 setEditingItemId={setEditingItemId}
             />
-            <div className={`grid grid-cols-1 lg:grid-cols-3 gap-8 transition-opacity duration-300 ${editingItemId ? 'opacity-20 pointer-events-none' : 'opacity-100'}`}>
+            <div className={`grid grid-cols-1 lg:grid-cols-12 gap-8 transition-opacity duration-300 ${editingItemId ? 'opacity-20 pointer-events-none' : 'opacity-100'}`}>
                 <ActivitySection activityData={initialData.activityData} />
                 <ActivityStreamSection activityStream={initialData.activityStream} />
             </div>

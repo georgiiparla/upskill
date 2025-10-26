@@ -8,7 +8,7 @@ const SimpleToggleSwitch = ({ options, activeOption, setActiveOption, className 
                     type="button"
                     key={option.id}
                     onClick={() => setActiveOption(option.id)}
-                    className={`w-full rounded-md py-1.5 md:py-1.5 text-sm md:text-base font-semibold transition-colors duration-200
+                    className={`w-full rounded-md py-1.5 md:py-1.5 text-sm transition-colors duration-200
                         ${activeOption === option.id
                             ? 'bg-transparent text-slate-800 dark:text-slate-100'
                             : 'bg-transparent text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white'

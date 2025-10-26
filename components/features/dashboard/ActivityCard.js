@@ -31,13 +31,13 @@ const ActivityCard = ({ activityData }) => {
             <div className="grid grid-cols-1 gap-3 md:gap-5 flex-1">
                 <MetricItem
                     icon={<MessageSquarePlus className="h-4 w-4 md:h-5 md:w-5 text-emerald-600 dark:text-emerald-400" />}
-                    label="Requests Created"
+                    label="Requests"
                     allTime={currentData.requests.allTime}
                     thisWeek={currentData.requests.thisWeek}
                 />
                 <MetricItem
                     icon={<ThumbsUp className="h-4 w-4 md:h-5 md:w-5 text-blue-600 dark:text-blue-400" />}
-                    label="Feedback Given"
+                    label="Feedback"
                     allTime={currentData.feedback.allTime}
                     thisWeek={currentData.feedback.thisWeek}
                 />
