@@ -3,6 +3,7 @@ import { Tag, MessageSquarePlus, Trash2, Archive, Eye, EyeOff } from "lucide-rea
 import Link from 'next/link';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/context/AuthContext';
 import toast from 'react-hot-toast';
 import { Modal } from '../../../core/ui/Modal';
 import { clientFetch } from '@/lib/client-api';
@@ -15,6 +16,7 @@ export const RequestDetailsCard = ({ requestData, onUpdate }) => {
     const [isClosing, setIsClosing] = useState(false);
     const [isTogglingVisibility, setIsTogglingVisibility] = useState(false);
     const router = useRouter();
+    const { refreshNavbarPoints } = useAuth();
 
     const handleClose = async () => {
         setIsClosing(true);
@@ -49,6 +51,8 @@ export const RequestDetailsCard = ({ requestData, onUpdate }) => {
 
         if (response.success) {
             toast.success('Request deleted successfully!', { id: toastId });
+            // Refresh navbar points since deleting the request should remove awarded points
+            try { refreshNavbarPoints(); } catch (e) { /* ignore */ }
             router.push('/feedback');
             router.refresh();
         } else {

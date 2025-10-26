@@ -11,7 +11,7 @@ export const Leaderboard = ({ initialData }) => {
     const { rankedUsers, maxPoints } = processLeaderboardData(initialData);
 
     return (
-        <div className="mx-auto w-full max-w-6xl space-y-8">
+        <div className="mx-auto w-full space-y-8">
             {/* Hero Section Header */}
             <HeroHeader
                 icon={Trophy}
