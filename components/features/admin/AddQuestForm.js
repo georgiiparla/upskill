@@ -77,7 +77,7 @@ export const AddQuestForm = ({ onCreated }) => {
     };
 
     return (
-        <Card className="h-full" innerClassName="space-y-6">
+        <Card glass={false} className="h-full" innerClassName="space-y-6">
             <div className="space-y-3">
                 <SectionTitle
                     icon={<Sparkles className="h-6 w-6 text-csway-green" />}

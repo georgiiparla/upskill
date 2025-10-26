@@ -64,7 +64,7 @@ const QuestList = ({ quests, onUpdatePoints, onDeleteQuest, onToggleExplicit, up
     }
 
     return (
-        <Card className="h-full" innerClassName="space-y-6">
+        <Card glass={false} className="h-full" innerClassName="space-y-6">
             <SectionTitle icon={<ListChecks className="h-6 w-6 text-csway-green" />} title="Existing quests" />
 
             <ul className="space-y-3">
@@ -79,7 +79,7 @@ const QuestList = ({ quests, onUpdatePoints, onDeleteQuest, onToggleExplicit, up
                     return (
                         <li
                             key={quest.id || `${quest.code}-${quest.title}`}
-                            className="group rounded-xl border border-slate-200/70 bg-white/70 p-4 transition-all duration-200 hover:border-csway-green/80 hover:bg-white dark:border-slate-700/70 dark:bg-slate-900/50 dark:hover:border-csway-green/60 dark:hover:bg-slate-900"
+                            className="group rounded-xl border border-slate-200/70 bg-white p-4 transition-all duration-200 hover:border-csway-green/80 hover:bg-slate-50 dark:border-slate-700/70 dark:bg-slate-900 dark:hover:border-csway-green/60 dark:hover:bg-slate-800"
                         >
                             <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
                                 <div className="space-y-2">
