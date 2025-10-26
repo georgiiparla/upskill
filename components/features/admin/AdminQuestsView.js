@@ -9,7 +9,7 @@ export const AdminQuestsView = ({ initialQuests = [] }) => {
     const activeQuestLabel = `${initialQuests.length} active ${initialQuests.length === 1 ? 'quest' : 'quests'}`;
 
     return (
-        <div className="space-y-10">
+        <div>
             <div className="lg:hidden">
                 <Card className="h-full" innerClassName="flex flex-col items-center justify-center space-y-4 py-10 text-center">
                     <Monitor className="h-9 w-9 text-csway-green" />
