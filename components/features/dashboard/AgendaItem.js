@@ -8,34 +8,33 @@ import {
 import { clientFetch } from '@/lib/client-api';
 import { useAuth } from '@/context/AuthContext';
 import toast from 'react-hot-toast';
-import { formatRelativeTime } from '@/lib/helper-func';
 import { BlurOverlay } from '../../core/layout/BlurOverlay';
 import { DetailActionButton } from '../../core/buttons/Buttons';
 
 const ICON_MAP = {
     ClipboardList: {
         component: ClipboardList,
-        colors: "bg-blue-100 text-blue-600 dark:bg-blue-900 dark:text-blue-400",
+        colors: "bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 border-blue-200/50 dark:border-blue-700/30",
         ring: "ring-blue-500",
     },
     BookOpen: {
         component: BookOpen,
-        colors: "bg-purple-100 text-purple-600 dark:bg-purple-900 dark:text-purple-400",
+        colors: "bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 border-purple-200/50 dark:border-purple-700/30",
         ring: "ring-purple-500",
     },
     FileText: {
         component: FileText,
-        colors: "bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400",
-        ring: "ring-gray-500",
+        colors: "bg-slate-50 dark:bg-slate-700/20 text-slate-600 dark:text-slate-400 border-slate-200/50 dark:border-slate-600/30",
+        ring: "ring-slate-500",
     },
     MessageSquare: {
         component: MessageSquare,
-        colors: "bg-teal-100 text-teal-600 dark:bg-teal-900 dark:text-teal-400",
+        colors: "bg-teal-50 dark:bg-teal-900/20 text-teal-600 dark:text-teal-400 border-teal-200/50 dark:border-teal-700/30",
         ring: "ring-teal-500",
     },
     Lightbulb: {
         component: Lightbulb,
-        colors: "bg-amber-100 text-amber-600 dark:bg-amber-900 dark:text-amber-400",
+        colors: "bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 border-amber-200/50 dark:border-amber-700/30",
         ring: "ring-amber-500",
     },
 };
@@ -80,8 +79,7 @@ export const AgendaItem = ({ item, onUpdate, isEditing, setEditingItemId }) => {
         if (response.success) {
             onUpdate(response.data);
             setEditingItemId(null);
-            toast.success("Agenda item updated!");
-            // Refresh navbar points since this action completes the 'update_agenda' quest
+            toast.success("Focus item updated!");
             refreshNavbarPoints();
         } else {
             toast.error(`Error: ${response.error}`);
@@ -100,104 +98,115 @@ export const AgendaItem = ({ item, onUpdate, isEditing, setEditingItemId }) => {
     return (
         <>
             {isEditing && <BlurOverlay />}
-            <li className={`mb-8 ml-6 transition-all duration-300 ease-in-out ${isEditing ? 'relative z-50 scale-[1.02]' : ''}`}>
-                <span className={`absolute flex items-center justify-center w-7 h-7 rounded-full -left-3.5 transition-opacity ${currentIcon.colors} ${isEditing ? 'opacity-0 duration-0' : 'opacity-100 duration-300 delay-300'}`}>
-                    <IconDisplay name={item.icon_name} className="w-4 h-4" />
-                </span>
-                <div className={`p-5 bg-gradient-to-br from-slate-50/60 to-slate-100/40 dark:from-slate-800/60 dark:to-slate-700/40 rounded-lg border border-slate-200/40 dark:border-slate-700/40 relative group hover:shadow-md transition-all duration-200 ${isEditing ? 'shadow-2xl shadow-black/20' : ''}`}>
-                    {isEditing ? (
-                        <div className="space-y-3">
-                            <div className="flex items-center space-x-2 mt-1">
-                                {Object.keys(ICON_MAP).map(name => (
-                                    <button
-                                        key={name}
-                                        onClick={() => setIconName(name)}
-                                        className={`p-2 rounded-full transition-all ${ICON_MAP[name].colors} ${iconName === name ? `ring-2 ${ICON_MAP[name].ring}` : 'ring-0'}`}
-                                    >
-                                        <IconDisplay name={name} className="h-4" />
-                                    </button>
-                                ))}
-                            </div>
-                            <div className="relative">
-                                <input
-                                    type="text"
-                                    value={title}
-                                    onChange={(e) => setTitle(e.target.value)}
-                                    maxLength={MAX_CHARS}
-                                    className="w-full px-2 py-1 pr-16 border rounded-md bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 outline-none"
-                                    autoFocus
-                                />
-                                <div className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-gray-400 pointer-events-none">
-                                    {title.length} / {MAX_CHARS}
+            <div className={`group relative transition-all duration-300 ${isEditing ? 'z-50 scale-[1.02]' : ''}`}>
+                <div className={`relative overflow-hidden rounded-xl bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border transition-all duration-300 ${
+                    isEditing 
+                        ? 'border-csway-green shadow-2xl shadow-csway-green/20' 
+                        : 'border-slate-200/50 dark:border-slate-700/50 hover:border-slate-300/80 dark:hover:border-slate-600/80 hover:shadow-lg'
+                }`}>
+                    {/* Icon badge */}
+                    <div className={`absolute left-4 top-4 flex items-center justify-center h-8 w-8 rounded-lg border ${currentIcon.colors} transition-all duration-300 ${isEditing ? 'opacity-0 scale-0' : 'opacity-100 scale-100'}`}>
+                        <IconDisplay name={item.icon_name} className="h-4 w-4" />
+                    </div>
+
+                    <div className="p-6 pl-16">
+                        {isEditing ? (
+                            <div className="space-y-4">
+                                {/* Icon selector */}
+                                <div className="flex items-center gap-2">
+                                    {Object.keys(ICON_MAP).map(name => (
+                                        <button
+                                            key={name}
+                                            onClick={() => setIconName(name)}
+                                            className={`p-2.5 rounded-lg transition-all border ${ICON_MAP[name].colors} ${
+                                                iconName === name ? `ring-2 ${ICON_MAP[name].ring} scale-110` : 'scale-100 hover:scale-105'
+                                            }`}
+                                        >
+                                            <IconDisplay name={name} className="h-4 w-4" />
+                                        </button>
+                                    ))}
+                                </div>
+
+                                {/* Title input */}
+                                <div className="relative">
+                                    <input
+                                        type="text"
+                                        value={title}
+                                        onChange={(e) => setTitle(e.target.value)}
+                                        maxLength={MAX_CHARS}
+                                        className="w-full px-4 py-3 pr-20 text-lg font-semibold border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:ring-2 focus:ring-csway-green focus:border-csway-green outline-none transition-all"
+                                        autoFocus
+                                        placeholder="Enter focus item..."
+                                    />
+                                    <div className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-400 dark:text-slate-500 font-medium pointer-events-none">
+                                        {title.length}/{MAX_CHARS}
+                                    </div>
+                                </div>
+
+                                {/* Link input */}
+                                <div className="relative">
+                                    <LinkIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 dark:text-slate-500" />
+                                    <input
+                                        type="url"
+                                        value={link}
+                                        onChange={(e) => setLink(e.target.value)}
+                                        placeholder="Add a link (optional)"
+                                        className="w-full pl-10 pr-4 py-2.5 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-csway-green focus:border-csway-green outline-none transition-all placeholder:text-slate-400 dark:placeholder:text-slate-500"
+                                    />
+                                </div>
+
+                                {/* Action buttons */}
+                                <div className="flex justify-end gap-2 pt-2">
+                                    <DetailActionButton
+                                        icon={X}
+                                        text="Cancel"
+                                        colorScheme="gray"
+                                        onClick={handleCancel}
+                                        disabled={isLoading}
+                                    />
+                                    <DetailActionButton
+                                        icon={Check}
+                                        text="Save Changes"
+                                        colorScheme="blue"
+                                        onClick={handleSave}
+                                        isLoading={isLoading}
+                                    />
                                 </div>
                             </div>
-                            <div className="relative">
-                                <LinkIcon className="absolute left-2 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                                <input
-                                    type="text"
-                                    value={link}
-                                    onChange={(e) => setLink(e.target.value)}
-                                    placeholder="Add a URL..."
-                                    className="w-full pl-8 pr-2 py-1 border rounded-md bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 outline-none text-sm placeholder:text-gray-400"
-                                />
-                            </div>
-                            <div className="flex justify-end space-x-2 pt-2">
-                                <DetailActionButton
-                                    icon={X}
-                                    text="Cancel"
-                                    colorScheme="gray"
-                                    onClick={handleCancel}
-                                    disabled={isLoading}
-                                />
-                                <DetailActionButton
-                                    icon={Check}
-                                    text="Save"
-                                    colorScheme="blue"
-                                    onClick={handleSave}
-                                    isLoading={isLoading}
-                                />
-                            </div>
-                        </div>
-                    ) : (
-                        <>
-                            <p className="text-xs font-normal text-gray-500 dark:text-gray-400 mb-1 w-[90%] truncate">
-                                {item.editor_username
-                                    ? `Edited by ${item.editor_username} ${formatRelativeTime(item.updated_at)}`
-                                    : `Last updated ${formatRelativeTime(item.updated_at)}`
-                                }
-                            </p>
-                            {/* Title and link icon displayed inline as part of the same element */}
-                            <p className="flex items-center space-x-2 min-w-0 pr-1">
-                                <span className="text-base lg:text-lg font-semibold text-gray-900 dark:text-white">
-                                    {item.title}
-                                    {item.link && (
-                                        <>
-                                            {' '}
-                                            <a
-                                                href={item.link}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                title="Open link"
-                                                onClick={(e) => e.stopPropagation()}
-                                                className="inline-flex items-center text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 align-middle"
-                                            >
-                                                <LinkIcon className="h-4 w-4" />
-                                            </a>
-                                        </>
-                                    )}
-                                </span>
-                            </p>
-                            <button
-                                onClick={() => setEditingItemId(item.id)}
-                                title="Edit item"
-                                className="absolute top-2 right-2 p-1.5 rounded-full text-gray-500 dark:text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-gray-200 dark:hover:bg-gray-600"
-                            >
-                                <Pencil className="h-4 w-4" />
-                            </button>
-                        </>
-                    )}
+                        ) : (
+                            <>
+                                <div className="flex items-start justify-between gap-4">
+                                    <div className="flex-1 min-w-0">
+                                        <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-1 flex items-center gap-2">
+                                            <span className="truncate">{item.title}</span>
+                                            {item.link && (
+                                                <a
+                                                    href={item.link}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    title="Open link"
+                                                    onClick={(e) => e.stopPropagation()}
+                                                    className="flex-shrink-0 inline-flex items-center justify-center h-7 w-7 rounded-lg text-slate-400 hover:text-csway-green hover:bg-slate-100 dark:hover:bg-slate-700 transition-all"
+                                                >
+                                                    <LinkIcon className="h-4 w-4" />
+                                                </a>
+                                            )}
+                                        </h3>
+                                    </div>
+
+                                    <button
+                                        onClick={() => setEditingItemId(item.id)}
+                                        title="Edit item"
+                                        className="flex-shrink-0 p-2 rounded-lg text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-700 opacity-0 group-hover:opacity-100 transition-all"
+                                    >
+                                        <Pencil className="h-4 w-4" />
+                                    </button>
+                                </div>
+                            </>
+                        )}
+                    </div>
                 </div>
-            </li>
+            </div>
         </>
     );
 };

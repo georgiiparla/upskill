@@ -1,6 +1,6 @@
 "use client"
 
-import { React, useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useTheme } from 'next-themes';
 import { usePathname } from 'next/navigation';
 import { Menu, X, Sun, Moon, LogOut } from 'lucide-react';
@@ -55,8 +55,8 @@ const DesktopNavLinks = ({ scrolled }) => (
                 <DropdownItem href="/feedback/request/new">Request Feedback</DropdownItem>
             </DesktopDropdown>
             <DesktopDropdown title="Community" scrolled={scrolled} activePaths={["/leaderboard", "/quests"]}>
-                <DropdownItem href="/leaderboard">Leaderboard</DropdownItem>
                 <DropdownItem href="/quests">Quests</DropdownItem>
+                <DropdownItem href="/leaderboard">Leaderboard</DropdownItem>
             </DesktopDropdown>
             <DesktopDropdown title="Admin" scrolled={scrolled} activePaths={["/admin/quests", "/admin/users"]}>
                 <DropdownItem href="/admin/quests">Quest Management</DropdownItem>

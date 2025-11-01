@@ -1,12 +1,15 @@
 "use client";
 
+import { useState } from 'react';
 import { Monitor, ShieldCheck, Sparkles } from 'lucide-react';
 
 import { Card } from '@/components/shared/helpers/Helper';
+import { MissingQuestsWarning } from './MissingQuestsWarning';
 import { QuestsManager } from './QuestsManager';
 
 export const AdminQuestsView = ({ initialQuests = [] }) => {
-    const activeQuestLabel = `${initialQuests.length} active ${initialQuests.length === 1 ? 'quest' : 'quests'}`;
+    const [quests, setQuests] = useState(initialQuests);
+    const activeQuestLabel = `${quests.length} active ${quests.length === 1 ? 'quest' : 'quests'}`;
 
     return (
         <div>
@@ -23,6 +26,8 @@ export const AdminQuestsView = ({ initialQuests = [] }) => {
             </div>
 
             <div className="hidden space-y-10 lg:block">
+                <MissingQuestsWarning existingQuests={initialQuests} />
+                
                 <Card variant="custom" className="relative overflow-hidden">
                     <div className="pointer-events-none absolute -left-16 top-0 h-40 w-40 rounded-full bg-csway-green/15 blur-3xl" />
                     <div className="pointer-events-none absolute -right-10 -bottom-10 h-48 w-48 rounded-full bg-emerald-400/15 blur-3xl" />
@@ -49,7 +54,7 @@ export const AdminQuestsView = ({ initialQuests = [] }) => {
                     </div>
                 </Card>
 
-                <QuestsManager initialQuests={initialQuests} />
+                <QuestsManager initialQuests={initialQuests} onQuestsChange={setQuests} />
             </div>
         </div>
     );

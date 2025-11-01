@@ -2,10 +2,10 @@
 
 import { useState } from 'react';
 import toast from 'react-hot-toast';
-import { Sparkles, Loader2, PlusCircle } from 'lucide-react';
+import { Sparkles, Loader2 } from 'lucide-react';
 
 import { clientFetch } from '@/lib/client-api';
-import { Card, SectionTitle } from '../../shared/helpers/Helper';
+import { Card, SectionTitle } from '../../../shared/helpers/Helper';
 
 const initialFormState = {
     code: '',
@@ -77,7 +77,7 @@ export const AddQuestForm = ({ onCreated }) => {
     };
 
     return (
-        <Card glass={false} className="h-full" innerClassName="space-y-6">
+        <Card glass={false} className="h-fit max-h-[calc(100vh-200px)] overflow-y-auto" innerClassName="space-y-6">
             <div className="space-y-3">
                 <SectionTitle
                     icon={<Sparkles className="h-6 w-6 text-csway-green" />}

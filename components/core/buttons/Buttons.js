@@ -79,3 +79,50 @@ export const DetailActionButton = ({
         </button>
     );
 };
+
+export const IconButton = ({
+    icon: Icon,
+    onClick,
+    disabled = false,
+    isLoading = false,
+    colorScheme = 'slate',
+    type = 'button',
+    title = '',
+}) => {
+    const colorClasses = {
+        emerald: {
+            text: 'text-emerald-600 dark:text-emerald-300',
+            hover: 'hover:border-emerald-200 hover:bg-emerald-50 dark:hover:border-emerald-400/60 dark:hover:bg-emerald-500/10',
+            ring: 'focus:ring-emerald-200',
+        },
+        red: {
+            text: 'text-red-600 dark:text-red-300',
+            hover: 'hover:border-red-200 hover:bg-red-50 dark:hover:border-red-400/70 dark:hover:bg-red-500/10',
+            ring: 'focus:ring-red-200',
+        },
+        amber: {
+            text: 'text-amber-600 dark:text-amber-300',
+            hover: 'hover:border-amber-200 hover:bg-amber-50 dark:hover:border-amber-400/60 dark:hover:bg-amber-500/10',
+            ring: 'focus:ring-amber-200',
+        },
+        slate: {
+            text: 'text-slate-600 dark:text-slate-300',
+            hover: 'hover:border-slate-200 hover:bg-slate-100 dark:hover:border-slate-600 dark:hover:bg-slate-800/60',
+            ring: 'focus:ring-slate-300',
+        },
+    };
+
+    const colors = colorClasses[colorScheme] || colorClasses.slate;
+
+    return (
+        <button
+            type={type}
+            onClick={onClick}
+            disabled={disabled || isLoading}
+            title={title}
+            className={`inline-flex items-center gap-1 rounded-md border border-transparent px-3 py-2 text-xs font-semibold transition focus:outline-none focus:ring-2 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-60 ${colors.text} ${colors.hover} ${colors.ring}`}
+        >
+            {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Icon className="h-4 w-4" />}
+        </button>
+    );
+};

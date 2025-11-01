@@ -1,5 +1,5 @@
 import { serverFetch } from "@/lib/server-api";
-import { UsersList } from "@/components/features/admin/UsersList";
+import { UsersList } from "@/components/features/admin/users/UsersList";
 
 async function getDirectoryData() {
     const users = await serverFetch('/admin/users');
