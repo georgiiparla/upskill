@@ -1,40 +1,51 @@
 "use client";
 
-import { useState } from 'react';
-import { Pencil, Check, X, Trash2, ToggleLeft, ToggleRight, Loader2 } from 'lucide-react';
+import { Pencil, Check, X, ToggleLeft, ToggleRight, Loader2, Clock } from 'lucide-react';
 import { IconButton } from '@/components/core/buttons/Buttons';
-import { Modal } from '@/components/core/ui/Modal';
 
 export const QuestListItem = ({
     quest,
     isEditing,
     draftValue,
     setDraftValue,
+    draftResetUnits,
+    setDraftResetUnits,
     inlineError,
     updatingId,
-    deletingId,
     togglingId,
     onStartEditing,
     onCancelEditing,
     onSave,
-    onDelete,
     onToggleExplicit,
 }) => {
-    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-
     const isUpdating = updatingId === quest.id;
-    const isDeleting = deletingId === quest.id;
     const isToggling = togglingId === quest.id;
-    const isBusy = isUpdating || isDeleting || isToggling;
+    const isBusy = isUpdating || isToggling;
     const isExplicit = quest.explicit !== false;
+    const isRepeatable = quest.quest_type === 'repeatable';
 
-    const handleDeleteClick = () => {
-        setIsDeleteModalOpen(true);
+    // Format reset interval for display
+    const formatResetInterval = (seconds) => {
+        if (!seconds) return 'N/A';
+        const day = 86400;
+        const week = 604800;
+        const year = 31536000;
+        
+        const yearVal = Math.round(seconds / year);
+        const weekVal = Math.round(seconds / week);
+        const dayVal = Math.round(seconds / day);
+        
+        if (yearVal >= 1 && seconds >= year * 0.5) return `${yearVal}y`;
+        if (weekVal >= 1 && seconds >= week * 0.5) return `${weekVal}w`;
+        if (dayVal >= 1 && seconds >= day * 0.5) return `${dayVal}d`;
+        return `${seconds}s`;
     };
 
-    const handleDeleteConfirm = async () => {
-        setIsDeleteModalOpen(false);
-        await onDelete?.(quest);
+    const handleUnitChange = (unit, value) => {
+        setDraftResetUnits((prev) => ({
+            ...prev,
+            [unit]: Math.max(0, parseInt(value) || 0),
+        }));
     };
 
     return (
@@ -64,7 +75,16 @@ export const QuestListItem = ({
                                     : 'bg-slate-200/70 text-slate-600 dark:bg-slate-800/60 dark:text-slate-300'
                             }`}
                         >
-                            {isExplicit ? 'Explicit quest' : 'Implicit quest'}
+                            {isExplicit ? 'Explicit' : 'Implicit'}
+                        </span>
+                        <span
+                            className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${
+                                isRepeatable
+                                    ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300'
+                                    : 'bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300'
+                            }`}
+                        >
+                            {isRepeatable ? 'Repeatable' : 'Always'}
                         </span>
                     </div>
                 </div>
@@ -73,28 +93,56 @@ export const QuestListItem = ({
                 <div className="space-y-2 md:text-right">
                     {isEditing ? (
                         // Editing Mode
-                        <div className="flex flex-wrap items-center gap-2 md:justify-end">
-                            <input
-                                type="number"
-                                min="0"
-                                step="1"
-                                value={draftValue}
-                                onChange={(e) => setDraftValue(e.target.value)}
-                                className="w-24 rounded-lg border border-slate-200/70 bg-white/90 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-csway-green focus:outline-none focus:ring-2 focus:ring-csway-green/30 dark:border-slate-700/70 dark:bg-slate-900/70 dark:text-slate-100"
-                            />
-                            <IconButton
-                                icon={Check}
-                                onClick={() => onSave(quest.id)}
-                                disabled={isBusy}
-                                isLoading={isBusy}
-                                colorScheme="emerald"
-                            />
-                            <IconButton
-                                icon={X}
-                                onClick={onCancelEditing}
-                                disabled={isBusy}
-                                colorScheme="slate"
-                            />
+                        <div className="flex flex-col gap-2">
+                            <div className="flex flex-wrap items-center gap-2 md:justify-end">
+                                <span className="text-xs font-medium text-slate-600 dark:text-slate-400">Points:</span>
+                                <input
+                                    type="number"
+                                    min="0"
+                                    step="1"
+                                    value={draftValue}
+                                    onChange={(e) => setDraftValue(e.target.value)}
+                                    className="w-20 rounded-lg border border-slate-200/70 bg-white/90 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-csway-green focus:outline-none focus:ring-2 focus:ring-csway-green/30 dark:border-slate-700/70 dark:bg-slate-900/70 dark:text-slate-100"
+                                />
+                            </div>
+                            
+                            {isRepeatable && (
+                                <div className="space-y-2">
+                                    <span className="text-xs font-medium text-slate-600 dark:text-slate-400">Reset Interval:</span>
+                                    <div className="grid grid-cols-4 gap-2 md:grid-cols-7">
+                                        {['years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'].map((unit) => (
+                                            <div key={unit} className="flex flex-col items-center gap-1">
+                                                <input
+                                                    type="number"
+                                                    min="0"
+                                                    value={draftResetUnits[unit]}
+                                                    onChange={(e) => handleUnitChange(unit, e.target.value)}
+                                                    className="w-12 rounded-lg border border-slate-200/70 bg-white/90 px-2 py-1 text-center text-xs text-slate-900 shadow-sm focus:border-csway-green focus:outline-none focus:ring-2 focus:ring-csway-green/30 dark:border-slate-700/70 dark:bg-slate-900/70 dark:text-slate-100"
+                                                />
+                                                <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
+                                                    {unit.charAt(0).toUpperCase()}
+                                                </span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            <div className="flex flex-wrap items-center gap-2 md:justify-end">
+                                <IconButton
+                                    icon={Check}
+                                    onClick={() => onSave(quest.id)}
+                                    disabled={isBusy}
+                                    isLoading={isBusy}
+                                    colorScheme="emerald"
+                                />
+                                <IconButton
+                                    icon={X}
+                                    onClick={onCancelEditing}
+                                    disabled={isBusy}
+                                    colorScheme="slate"
+                                />
+                            </div>
                         </div>
                     ) : (
                         // View Mode
@@ -103,6 +151,12 @@ export const QuestListItem = ({
                                 {quest.points}
                                 <span className="text-xs font-medium">pts</span>
                             </span>
+                            {isRepeatable && (
+                                <span className="flex items-center gap-1 rounded-lg bg-blue-500/10 px-3 py-1 text-sm font-semibold text-blue-600 dark:bg-blue-500/10 dark:text-blue-300">
+                                    <Clock className="h-3 w-3" />
+                                    <span className="text-xs font-medium">{formatResetInterval(quest.reset_interval_seconds)}</span>
+                                </span>
+                            )}
                             <div className="flex items-center gap-2">
                                 <IconButton
                                     icon={Pencil}
@@ -128,13 +182,6 @@ export const QuestListItem = ({
                                         <ToggleLeft className="h-4 w-4" />
                                     )}
                                 </button>
-                                <IconButton
-                                    icon={Trash2}
-                                    onClick={handleDeleteClick}
-                                    disabled={isBusy}
-                                    isLoading={isDeleting}
-                                    colorScheme="red"
-                                />
                             </div>
                         </div>
                     )}
@@ -144,21 +191,6 @@ export const QuestListItem = ({
                     )}
                 </div>
             </div>
-
-            <Modal
-                isOpen={isDeleteModalOpen}
-                onClose={() => setIsDeleteModalOpen(false)}
-                onConfirm={handleDeleteConfirm}
-                title="Delete Quest"
-                confirmText="Delete"
-                cancelText="Cancel"
-                confirmButtonClass="bg-red-600 hover:bg-red-700"
-                isConfirming={isDeleting}
-            >
-                <p>
-                    Are you sure you want to delete <strong>{quest.title}</strong>? This action cannot be undone.
-                </p>
-            </Modal>
         </li>
     );
 };

@@ -2,14 +2,12 @@
 
 import { useState } from 'react';
 import toast from 'react-hot-toast';
-import { clientFetch, deleteQuest } from '@/lib/client-api';
-import { AddQuestForm } from './AddQuestForm';
+import { clientFetch } from '@/lib/client-api';
 import { QuestList } from './QuestList';
 
 export const QuestsManager = ({ initialQuests = [], onQuestsChange }) => {
     const [quests, setQuests] = useState(initialQuests);
     const [updatingId, setUpdatingId] = useState(null);
-    const [deletingId, setDeletingId] = useState(null);
     const [togglingId, setTogglingId] = useState(null);
 
     const updateQuests = (newQuests) => {
@@ -17,57 +15,33 @@ export const QuestsManager = ({ initialQuests = [], onQuestsChange }) => {
         onQuestsChange?.(newQuests);
     };
 
-    const handleQuestCreated = (quest) => {
-        updateQuests((prev) => {
-            const filtered = prev.filter((existing) => existing.id !== quest.id && existing.code !== quest.code);
-            return [quest, ...filtered];
-        });
-    };
-
-    const handlePointsUpdate = async (questId, points) => {
+    const handlePointsUpdate = async (questId, points, resetInterval) => {
         setUpdatingId(questId);
-        const toastId = toast.loading('Updating quest points...');
+        const toastId = toast.loading('Updating quest...');
+
+        const body = { points };
+        if (resetInterval !== null && resetInterval !== undefined) {
+            body.reset_interval_seconds = resetInterval;
+        }
 
         const response = await clientFetch(`/quests/${questId}`, {
             method: 'PATCH',
-            body: { points },
+            body,
         });
 
         setUpdatingId(null);
 
         if (!response.success) {
-            toast.error(response.error || 'Failed to update quest points.', { id: toastId });
+            toast.error(response.error || 'Failed to update quest.', { id: toastId });
             return false;
         }
 
-        toast.success('Quest points updated.', { id: toastId });
+        toast.success('Quest updated.', { id: toastId });
 
         const updatedQuest = response.data;
         updateQuests((prev) => prev.map((quest) => (quest.id === updatedQuest.id ? updatedQuest : quest)));
 
         return true;
-    };
-
-    const handleDeleteQuest = async (quest) => {
-        if (!quest || !quest.id) {
-            toast.error('Unable to determine which quest to delete.');
-            return;
-        }
-
-        setDeletingId(quest.id);
-        const toastId = toast.loading('Deleting quest...');
-
-        const response = await deleteQuest(quest.id);
-
-        setDeletingId(null);
-
-        if (!response.success) {
-            toast.error(response.error || 'Failed to delete quest.', { id: toastId });
-            return;
-        }
-
-        toast.success('Quest deleted.', { id: toastId });
-        updateQuests((prev) => prev.filter((existing) => existing.id !== quest.id));
     };
 
     const handleToggleExplicit = async (quest) => {
@@ -98,19 +72,14 @@ export const QuestsManager = ({ initialQuests = [], onQuestsChange }) => {
     };
 
     return (
-        <div className="space-y-6">
-            <div className="grid gap-6 lg:grid-cols-[minmax(0,4fr)_minmax(0,5fr)] xl:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
-                <AddQuestForm onCreated={handleQuestCreated} />
-                <QuestList
-                    quests={quests}
-                    onUpdatePoints={handlePointsUpdate}
-                    onDeleteQuest={handleDeleteQuest}
-                    onToggleExplicit={handleToggleExplicit}
-                    updatingId={updatingId}
-                    deletingId={deletingId}
-                    togglingId={togglingId}
-                />
-            </div>
+        <div>
+            <QuestList
+                quests={quests}
+                onUpdatePoints={handlePointsUpdate}
+                onToggleExplicit={handleToggleExplicit}
+                updatingId={updatingId}
+                togglingId={togglingId}
+            />
         </div>
     );
 };

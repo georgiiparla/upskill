@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { Monitor, ShieldCheck, Sparkles } from 'lucide-react';
 
 import { Card } from '@/components/shared/helpers/Helper';
-import { MissingQuestsWarning } from './MissingQuestsWarning';
 import { QuestsManager } from './QuestsManager';
 
 export const AdminQuestsView = ({ initialQuests = [] }) => {
@@ -26,8 +25,6 @@ export const AdminQuestsView = ({ initialQuests = [] }) => {
             </div>
 
             <div className="hidden space-y-10 lg:block">
-                <MissingQuestsWarning existingQuests={initialQuests} />
-                
                 <Card variant="custom" className="relative overflow-hidden">
                     <div className="pointer-events-none absolute -left-16 top-0 h-40 w-40 rounded-full bg-csway-green/15 blur-3xl" />
                     <div className="pointer-events-none absolute -right-10 -bottom-10 h-48 w-48 rounded-full bg-emerald-400/15 blur-3xl" />
@@ -41,7 +38,7 @@ export const AdminQuestsView = ({ initialQuests = [] }) => {
                         <div className="space-y-3">
                             <h1 className="text-3xl font-semibold text-slate-900 dark:text-white">Quest management</h1>
                             <p className="max-w-2xl text-sm text-slate-600 dark:text-slate-400">
-                                Launch new quests, adjust rewards, and monitor the incentive catalog that keeps your team moving forward.
+                                Adjust rewards and manage the quest catalog for your team.
                             </p>
                         </div>
 

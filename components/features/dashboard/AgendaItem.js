@@ -10,6 +10,10 @@ import { useAuth } from '@/context/AuthContext';
 import toast from 'react-hot-toast';
 import { BlurOverlay } from '../../core/layout/BlurOverlay';
 import { DetailActionButton } from '../../core/buttons/Buttons';
+import '@fontsource/jetbrains-mono/400.css';
+import '@fontsource/jetbrains-mono/700.css';
+import '@fontsource/jetbrains-mono/400.css';
+import '@fontsource/jetbrains-mono/700.css';
 
 const ICON_MAP = {
     ClipboardList: {
@@ -99,17 +103,17 @@ export const AgendaItem = ({ item, onUpdate, isEditing, setEditingItemId }) => {
         <>
             {isEditing && <BlurOverlay />}
             <div className={`group relative transition-all duration-300 ${isEditing ? 'z-50 scale-[1.02]' : ''}`}>
-                <div className={`relative overflow-hidden rounded-xl bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border transition-all duration-300 ${
+                <div className={`relative overflow-hidden rounded-lg bg-white/80 dark:bg-slate-800/60 border transition-all duration-300 ${
                     isEditing 
                         ? 'border-csway-green shadow-2xl shadow-csway-green/20' 
-                        : 'border-slate-200/50 dark:border-slate-700/50 hover:border-slate-300/80 dark:hover:border-slate-600/80 hover:shadow-lg'
-                }`}>
+                        : 'border-slate-200 dark:border-slate-700'
+                }`} style={{ fontFamily: "'JetBrains Mono', monospace" }}>
                     {/* Icon badge */}
-                    <div className={`absolute left-4 top-4 flex items-center justify-center h-8 w-8 rounded-lg border ${currentIcon.colors} transition-all duration-300 ${isEditing ? 'opacity-0 scale-0' : 'opacity-100 scale-100'}`}>
+                    <div className={`absolute left-4 top-1/2 -translate-y-1/2 flex items-center justify-center h-8 w-8 rounded-lg border ${currentIcon.colors} transition-all duration-300 ${isEditing ? 'opacity-0 scale-0' : 'opacity-100 scale-100'}`}>
                         <IconDisplay name={item.icon_name} className="h-4 w-4" />
                     </div>
 
-                    <div className="p-6 pl-16">
+                    <div className="p-8 pl-16">
                         {isEditing ? (
                             <div className="space-y-4">
                                 {/* Icon selector */}
@@ -177,7 +181,7 @@ export const AgendaItem = ({ item, onUpdate, isEditing, setEditingItemId }) => {
                             <>
                                 <div className="flex items-start justify-between gap-4">
                                     <div className="flex-1 min-w-0">
-                                        <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-1 flex items-center gap-2">
+                                        <h3 className="text-base md:text-xl font-semibold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
                                             <span className="truncate">{item.title}</span>
                                             {item.link && (
                                                 <a
@@ -192,6 +196,11 @@ export const AgendaItem = ({ item, onUpdate, isEditing, setEditingItemId }) => {
                                                 </a>
                                             )}
                                         </h3>
+                                        {item.editor_username && (
+                                            <p className="text-xs text-slate-500 dark:text-slate-400">
+                                                Last updated by <span className="font-medium text-slate-700 dark:text-slate-300">{item.editor_username}</span>
+                                            </p>
+                                        )}
                                     </div>
 
                                     <button
