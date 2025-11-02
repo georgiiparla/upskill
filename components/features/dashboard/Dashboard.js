@@ -145,7 +145,7 @@ export default function Dashboard({ initialData }) {
                     <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Live Activity Stream</h2>
                 </div>
 
-                <div className="bg-white/80 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-lg p-4 font-mono text-xs h-[250px] overflow-y-auto no-scrollbar">
+                <div className="bg-white/80 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-lg p-4 font-mono text-xs h-[500px] lg:h-[250px] overflow-y-auto no-scrollbar">
                     <div className="space-y-1">
                         {/* Pinned metrics section */}
                         <div className="mb-3 pb-3 border-b border-slate-300 dark:border-slate-700">
