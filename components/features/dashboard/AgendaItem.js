@@ -99,7 +99,7 @@ export const AgendaItem = ({ item, onUpdate, isEditing, setEditingItemId }) => {
         <>
             {isEditing && <BlurOverlay />}
             <div className={`group relative transition-all duration-300 ${isEditing ? 'z-50 scale-[1.02]' : ''}`}>
-                <div className={`relative overflow-hidden rounded-xl bg-white/60 dark:bg-slate-800/20 border border-slate-300/60 dark:border-slate-600/60 transition-all duration-300 ${
+                <div className={`relative overflow-hidden rounded-xl bg-white/80 dark:bg-slate-800/60 border transition-all duration-300 ${
                     isEditing 
                         ? 'border-csway-green shadow-2xl shadow-csway-green/20' 
                         : 'border-slate-200 dark:border-slate-700'
