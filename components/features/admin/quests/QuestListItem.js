@@ -58,9 +58,6 @@ export const QuestListItem = ({
                 <div className="space-y-2">
                     <div className="flex items-center gap-2">
                         <span className="text-sm font-semibold text-slate-900 dark:text-white">{quest.title}</span>
-                        <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-slate-500 dark:bg-slate-800/80 dark:text-slate-300">
-                            {quest.code}
-                        </span>
                     </div>
                     {quest.description && (
                         <p className="text-xs text-slate-600 dark:text-slate-400">
