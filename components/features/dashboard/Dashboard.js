@@ -86,7 +86,7 @@ export default function Dashboard({ initialData }) {
                 </button>
 
                 {isConsoleOpen && (
-                    <div className="mt-6 bg-white/80 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-lg p-8 text-sm max-h-[800px] overflow-y-auto no-scrollbar" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+                    <div className="mt-6 bg-white/80 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-lg p-8 text-sm" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
                         <div className="space-y-3">
                             {/* Mantra Section with ASCII styling */}
                             <div className="mb-4 pb-4 border-b border-slate-300 dark:border-slate-700">
@@ -198,12 +198,12 @@ export default function Dashboard({ initialData }) {
                                                 {getTargetLink(activity.target_info, activity.event_type) ? (
                                                     <a 
                                                         href={getTargetLink(activity.target_info, activity.event_type)} 
-                                                        className="text-blue-400 hover:text-blue-300 hover:underline truncate transition-colors"
+                                                        className="text-blue-400 hover:text-blue-300 hover:underline transition-colors"
                                                     >
                                                         {getTargetText(activity.target_info)}
                                                     </a>
                                                 ) : (
-                                                    <span className="text-white truncate">{getTargetText(activity.target_info)}</span>
+                                                    <span className="text-white">{getTargetText(activity.target_info)}</span>
                                                 )}
                                             </>
                                         )}
