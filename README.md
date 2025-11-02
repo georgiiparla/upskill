@@ -1,4 +1,4 @@
-# Upskill: A Gamified Platform for Professional Growth
+# Upskill
 
 **Upskill** is a dynamic and interactive platform designed to foster continuous learning and professional development within a collaborative environment. By integrating gamified elements with a robust feedback system, Upskill transforms the journey of skill enhancement into an engaging and rewarding experience.
 
@@ -41,7 +41,7 @@ To get a local copy up and running, follow these simple steps.
 1. Clone the repo
 
 ```bash
-git clone https://your-repo-link.com
+git clone
 ```
 
 2. Install NPM packages
