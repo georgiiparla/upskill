@@ -10,10 +10,6 @@ import { useAuth } from '@/context/AuthContext';
 import toast from 'react-hot-toast';
 import { BlurOverlay } from '../../core/layout/BlurOverlay';
 import { DetailActionButton } from '../../core/buttons/Buttons';
-import '@fontsource/jetbrains-mono/400.css';
-import '@fontsource/jetbrains-mono/700.css';
-import '@fontsource/jetbrains-mono/400.css';
-import '@fontsource/jetbrains-mono/700.css';
 
 const ICON_MAP = {
     ClipboardList: {
@@ -103,11 +99,11 @@ export const AgendaItem = ({ item, onUpdate, isEditing, setEditingItemId }) => {
         <>
             {isEditing && <BlurOverlay />}
             <div className={`group relative transition-all duration-300 ${isEditing ? 'z-50 scale-[1.02]' : ''}`}>
-                <div className={`relative overflow-hidden rounded-lg bg-white/80 dark:bg-slate-800/60 border transition-all duration-300 ${
+                <div className={`relative overflow-hidden rounded-xl bg-white/80 dark:bg-slate-800/60 border transition-all duration-300 ${
                     isEditing 
                         ? 'border-csway-green shadow-2xl shadow-csway-green/20' 
                         : 'border-slate-200 dark:border-slate-700'
-                }`} style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+                }`}>
                     {/* Icon badge */}
                     <div className={`absolute left-4 top-1/2 -translate-y-1/2 flex items-center justify-center h-8 w-8 rounded-lg border ${currentIcon.colors} transition-all duration-300 ${isEditing ? 'opacity-0 scale-0' : 'opacity-100 scale-100'}`}>
                         <IconDisplay name={item.icon_name} className="h-4 w-4" />
@@ -206,7 +202,7 @@ export const AgendaItem = ({ item, onUpdate, isEditing, setEditingItemId }) => {
                                     <button
                                         onClick={() => setEditingItemId(item.id)}
                                         title="Edit item"
-                                        className="flex-shrink-0 p-2 rounded-lg text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-700 opacity-0 group-hover:opacity-100 transition-all"
+                                        className="flex-shrink-0 p-2 rounded-lg text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-700 transition-all"
                                     >
                                         <Pencil className="h-4 w-4" />
                                     </button>

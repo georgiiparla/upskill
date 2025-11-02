@@ -49,7 +49,7 @@ const MobileNavLink = ({ href, children, closeMenu }) => {
 const DesktopNavLinks = ({ scrolled }) => (
     <div className="hidden lg:block">
         <div className="ml-10 flex items-baseline space-x-4">
-            <NavLink href="/dashboard" scrolled={scrolled}>Weekly</NavLink>
+            <NavLink href="/dashboard" scrolled={scrolled}>Dashboard</NavLink>
             <DesktopDropdown title="Feedback" scrolled={scrolled} activePaths={["/feedback", "/feedback/request"]}>
                 <DropdownItem href="/feedback">My Feedback</DropdownItem>
                 <DropdownItem href="/feedback/request/new">Request Feedback</DropdownItem>
@@ -127,7 +127,7 @@ const MobileMenu = ({ isMenuOpen, setIsMenuOpen }) => {
         {
             title: 'Explore',
             links: [
-                { href: '/dashboard', label: 'Weekly' },
+                { href: '/dashboard', label: 'Dashboard' },
                 { href: '/leaderboard', label: 'Leaderboard' },
                 { href: '/quests', label: 'Quests' },
             ],
