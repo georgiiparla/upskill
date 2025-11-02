@@ -1,6 +1,5 @@
 "use client";
 import React from 'react';
-import { getRankColors } from './utils';
 import { Avatar } from '@/components/core/ui/Avatar';
 
 export const LeaderboardItem = ({ user, maxPoints, isDesktop = true }) => {

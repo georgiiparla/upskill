@@ -1,5 +1,3 @@
-import { Card } from "@/components/shared/helpers/Helper";
-
 const HeroHeaderSkeleton = () => (
     <div className="flex items-center gap-6 animate-pulse py-6">
         <div className="flex-shrink-0">

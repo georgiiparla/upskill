@@ -99,7 +99,7 @@ export const AgendaItem = ({ item, onUpdate, isEditing, setEditingItemId }) => {
         <>
             {isEditing && <BlurOverlay />}
             <div className={`group relative transition-all duration-300 ${isEditing ? 'z-50 scale-[1.02]' : ''}`}>
-                <div className={`relative overflow-hidden rounded-xl bg-white/80 dark:bg-slate-800/60 border transition-all duration-300 ${
+                <div className={`relative overflow-hidden rounded-xl bg-white/60 dark:bg-slate-800/20 border border-slate-300/60 dark:border-slate-600/60 transition-all duration-300 ${
                     isEditing 
                         ? 'border-csway-green shadow-2xl shadow-csway-green/20' 
                         : 'border-slate-200 dark:border-slate-700'
@@ -109,7 +109,7 @@ export const AgendaItem = ({ item, onUpdate, isEditing, setEditingItemId }) => {
                         <IconDisplay name={item.icon_name} className="h-4 w-4" />
                     </div>
 
-                    <div className="p-8 pl-16">
+                    <div className="p-6 pl-16">
                         {isEditing ? (
                             <div className="space-y-4">
                                 {/* Icon selector */}
@@ -177,7 +177,7 @@ export const AgendaItem = ({ item, onUpdate, isEditing, setEditingItemId }) => {
                             <>
                                 <div className="flex items-start justify-between gap-4">
                                     <div className="flex-1 min-w-0">
-                                        <h3 className="text-base md:text-xl font-semibold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
+                                        <h3 className="text-sm sm:text-base font-semibold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
                                             <span className="truncate">{item.title}</span>
                                             {item.link && (
                                                 <a
