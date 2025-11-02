@@ -7,8 +7,6 @@ export const HeroHeader = ({
     subtitle,
     iconSize = "w-14 h-14",
     iconBg = "from-blue-500 to-blue-600",
-    titleSize = "text-3xl",
-    subtitleSize = "text-lg",
     alignment = "left",
     className = ""
 }) => {
