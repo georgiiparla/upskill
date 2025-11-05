@@ -120,7 +120,7 @@ export const QuestList = ({ quests, onUpdatePoints, onToggleExplicit, updatingId
             <ul className="space-y-3">
                 {quests.map((quest) => (
                     <QuestListItem
-                        key={quest.id || `${quest.code}-${quest.title}`}
+                        key={`${quest.id}-${quest.explicit}`}
                         quest={quest}
                         isEditing={editingId === quest.id}
                         editingId={editingId}
