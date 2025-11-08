@@ -52,6 +52,7 @@ export const ActivityStream = ({ activityStream }) => {
                     {' '}
                     <span className="text-slate-400 dark:text-slate-500">›</span>
                     {' '}
+                    <br className="md:hidden" />
                     <span className="font-semibold text-slate-900 dark:text-white">{activity.user_name}</span>
                     {' '}
                     <span className={`${getActionColor(activity.event_type)} font-medium`}>

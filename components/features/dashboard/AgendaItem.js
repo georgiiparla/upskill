@@ -119,7 +119,7 @@ export const AgendaItem = ({ item, onUpdate, isEditing, setEditingItemId, isFirs
         <>
             {isEditing && <BlurOverlay />}
             <div className={`group relative transition-all duration-300 h-full ${isEditing ? 'z-50 scale-[1.02]' : ''}`}>
-                <div className={`relative rounded-xl bg-gradient-to-br ${currentIcon.subtleBg} border border-slate-200/60 dark:border-slate-700/60 transition-all duration-300 h-full flex flex-col ${
+                <div className={`relative rounded-lg bg-gradient-to-br ${currentIcon.subtleBg}  transition-all duration-300 h-full flex flex-col ${
                     isEditing 
                         ? `ring-2 ${currentIcon.ring} shadow-2xl shadow-csway-green/20` 
                         : ''
@@ -129,9 +129,9 @@ export const AgendaItem = ({ item, onUpdate, isEditing, setEditingItemId, isFirs
                         <IconDisplay name={item.icon_name} className="h-4 w-4" />
                     </div>
 
-                    <div className="py-8 px-6 pl-16 flex-1 flex flex-col justify-center">
+                    <div className="py-8 px-4 pl-16 flex-1 flex flex-col justify-center">
                         {isEditing ? (
-                            <div className="space-y-4">
+                                <div className="space-y-4">
                                 {/* Icon selector */}
                                 <div className="flex items-center gap-2">
                                     {Object.keys(ICON_MAP).map(name => (
@@ -197,7 +197,7 @@ export const AgendaItem = ({ item, onUpdate, isEditing, setEditingItemId, isFirs
                             <>
                                 <div className="flex items-start justify-between gap-4">
                                     <div className="flex-1 min-w-0">
-                                        <h3 className={`text-base sm:text-lg text-slate-900 dark:text-white mb-2 break-words ${isFirst ? 'font-bold' : ''}`}>
+                                        <h3 className={`text-sm sm:text-base text-slate-900 dark:text-white mb-2 break-words ${isFirst ? 'font-bold' : ''}`}>
                                             {item.title}
                                         </h3>
                                         {item.editor_username && (
