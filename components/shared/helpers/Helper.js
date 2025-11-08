@@ -25,7 +25,7 @@ export const Card = ({ children, className = '', innerClassName = '', glass = tr
     const defaultPadding = 'p-6';
 
     return (
-        <div className={`rounded-xl ${getVariantClasses()} ${defaultPadding} ${className}`}>
+        <div className={`rounded-xl ${getVariantClasses()} ${className} ${defaultPadding}`}>
             {innerClassName ? (
                 <div className={innerClassName}>{children}</div>
             ) : (

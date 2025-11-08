@@ -18,6 +18,7 @@ export const Leaderboard = ({ initialData }) => {
                 title="Leaderboard"
                 subtitle="See who's leading the pack this week"
                 iconBg="from-amber-500 to-yellow-600"
+                iconAccentColor="text-amber-600 dark:text-amber-400"
             />
 
             {/* Desktop Layout */}

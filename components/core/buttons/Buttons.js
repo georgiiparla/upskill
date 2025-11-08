@@ -126,3 +126,50 @@ export const IconButton = ({
         </button>
     );
 };
+
+export const QuickActionButton = ({
+    icon: Icon,
+    text,
+    onClick,
+    colorScheme = 'gray',
+}) => {
+    const colorClasses = {
+        orange: {
+            text: 'text-csway-orange dark:text-csway-orange',
+            hover: 'hover:bg-csway-orange/5 dark:hover:bg-csway-orange/10',
+            icon: 'text-csway-orange/70 dark:text-csway-orange/80',
+        },
+        blue: {
+            text: 'text-blue-600 dark:text-blue-400',
+            hover: 'hover:bg-blue-500/5 dark:hover:bg-blue-500/10',
+            icon: 'text-blue-500/70 dark:text-blue-400/80',
+        },
+        gray: {
+            text: 'text-slate-700 dark:text-slate-300',
+            hover: 'hover:bg-slate-100/50 dark:hover:bg-slate-800/50',
+            icon: 'text-slate-500 dark:text-slate-400',
+        },
+    };
+
+    const colors = colorClasses[colorScheme] || colorClasses.gray;
+
+    return (
+        <button
+            onClick={onClick}
+            className={`
+                group flex items-center gap-3 px-5 py-5 rounded-md transition-all duration-200
+                bg-transparent border border-dashed border-slate-300/40 dark:border-slate-600/40
+                ${colors.text} ${colors.hover}
+                hover:border-slate-300/60 dark:hover:border-slate-600/60
+                hover:shadow-sm
+                focus:outline-none focus:ring-2 focus:ring-slate-300/50 dark:focus:ring-slate-600/50
+                flex-1 min-w-0
+            `}
+        >
+            <div className={`flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-lg bg-slate-50/50 dark:bg-slate-800/50 group-hover:bg-slate-100/70 dark:group-hover:bg-slate-700/70 transition-colors`}>
+                <Icon className={`h-4 w-4 ${colors.icon}`} />
+            </div>
+            <span className="font-medium text-sm truncate">{text}</span>
+        </button>
+    );
+};

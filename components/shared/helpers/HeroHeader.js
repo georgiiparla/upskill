@@ -6,7 +6,8 @@ export const HeroHeader = ({
     title,
     subtitle,
     iconSize = "w-14 h-14",
-    iconBg = "from-blue-500 to-blue-600",
+    iconBg = "from-blue-500 to-blue-600", // This will now be used for the icon's text color
+    iconAccentColor = "text-blue-600 dark:text-blue-400", // New prop for icon color
     alignment = "left",
     className = ""
 }) => {
@@ -24,8 +25,8 @@ export const HeroHeader = ({
         return (
             <div className={containerClasses}>
                 <div className="space-y-4">
-                    <div className={`inline-flex items-center justify-center ${iconSize} bg-gradient-to-br ${iconBg} rounded-xl shadow-lg mb-6`}>
-                        <Icon className="h-7 w-7 text-white" />
+                    <div className={`inline-flex items-center justify-center ${iconSize} bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm border border-slate-200/60 dark:border-slate-700/60 rounded-xl shadow-lg mb-6`}>
+                        <Icon className={`h-7 w-7 ${iconAccentColor}`} />
                     </div>
 
                     <div className="space-y-3">
@@ -47,8 +48,8 @@ export const HeroHeader = ({
     return (
         <div className={containerClasses}>
             <div className="flex-shrink-0">
-                <div className={`${iconSize} bg-gradient-to-br ${iconBg} rounded-xl shadow-lg flex items-center justify-center`}>
-                    <Icon className="h-7 w-7 text-white" />
+                <div className={`${iconSize} bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm border border-slate-200/60 dark:border-slate-700/60 rounded-xl shadow-lg flex items-center justify-center`}>
+                    <Icon className={`h-7 w-7 ${iconAccentColor}`} />
                 </div>
             </div>
 

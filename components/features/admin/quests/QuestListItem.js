@@ -50,7 +50,6 @@ export const QuestListItem = ({
 
     return (
         <li
-            key={quest.id || `${quest.code}-${quest.title}`}
             className="group rounded-xl border border-slate-200/70 bg-white p-4 transition-all duration-200 dark:border-slate-700/70 dark:bg-slate-900"
         >
             <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
@@ -83,7 +82,28 @@ export const QuestListItem = ({
                         >
                             {isRepeatable ? 'Repeatable' : 'Always'}
                         </span>
+                        {quest.completed_users_count !== undefined && (
+                            <span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide bg-gray-100 text-gray-700 dark:bg-gray-800/60 dark:text-gray-300">
+                                {quest.completed_users_count}/{quest.total_users_count} completed
+                            </span>
+                        )}
                     </div>
+                    
+                    {/* Reset Status Information */}
+                    {quest.time_until_reset && (
+                        <div className="flex flex-wrap items-center gap-2 text-xs">
+                            <span className="text-slate-600 dark:text-slate-400">Reset status:</span>
+                            <span className="flex items-center gap-1 text-slate-700 dark:text-slate-300">
+                                <Clock className="h-3 w-3" />
+                                {quest.time_until_reset}
+                            </span>
+                            {quest.will_reset_on_next_trigger && (
+                                <span className="inline-flex items-center gap-1 rounded-md px-2 py-1 bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300 font-medium">
+                                    ⚠️ Will reset on next action
+                                </span>
+                            )}
+                        </div>
+                    )}
                 </div>
 
                 {/* Quest Actions */}
