@@ -15,7 +15,7 @@ Upskill is packed with features designed to promote interaction, recognition, an
 
 ## 🚀 Live Demo
 
-[Link to your live demo]
+[Demo](https://demoplatform.app/)
 
 ## 💻 Tech Stack
 
