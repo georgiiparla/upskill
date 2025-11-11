@@ -144,6 +144,11 @@ export const QuickActionButton = ({
             hover: 'hover:bg-blue-500/5 dark:hover:bg-blue-500/10',
             icon: 'text-blue-500/70 dark:text-blue-400/80',
         },
+        green: {
+            text: 'text-csway-green dark:text-csway-green',
+            hover: 'hover:bg-csway-green/5 dark:hover:bg-csway-green/10',
+            icon: 'text-csway-green/70 dark:text-csway-green/80',
+        },
         gray: {
             text: 'text-slate-700 dark:text-slate-300',
             hover: 'hover:bg-slate-100/50 dark:hover:bg-slate-800/50',
@@ -157,7 +162,7 @@ export const QuickActionButton = ({
         <button
             onClick={onClick}
             className={`
-                group flex items-center gap-3 px-5 py-5 rounded-md transition-all duration-200
+                group flex items-center justify-center md:justify-start gap-3 px-3 md:px-5 py-3 md:py-5 rounded-md transition-all duration-200
                 bg-transparent border border-dashed border-slate-300/40 dark:border-slate-600/40
                 ${colors.text} ${colors.hover}
                 hover:border-slate-300/60 dark:hover:border-slate-600/60
@@ -169,7 +174,7 @@ export const QuickActionButton = ({
             <div className={`flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-lg bg-slate-50/50 dark:bg-slate-800/50 group-hover:bg-slate-100/70 dark:group-hover:bg-slate-700/70 transition-colors`}>
                 <Icon className={`h-4 w-4 ${colors.icon}`} />
             </div>
-            <span className="font-medium text-sm truncate">{text}</span>
+            <span className="hidden md:inline font-medium text-sm truncate">{text}</span>
         </button>
     );
 };

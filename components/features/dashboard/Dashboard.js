@@ -11,7 +11,7 @@ import { SectionHeader } from "../../shared/helpers/SectionHeader";
 import { BarChart2, ClipboardList, Zap, MessageSquarePlus, ThumbsUp, Target, Trophy } from 'lucide-react';
 import { QuickActionButton } from "../../core/buttons/Buttons";
 import { useRouter } from 'next/navigation';
-import {Card} from "@/components/shared/helpers/Helper";
+import { Card } from "@/components/shared/helpers/Helper";
 
 export default function Dashboard({ initialData }) {
     const [agendaItems, setAgendaItems] = useState(initialData.agendaItems);
@@ -35,9 +35,9 @@ export default function Dashboard({ initialData }) {
                     iconAccentColor="text-blue-600 dark:text-blue-400"
                     className="mb-8"
                 />
-                <div className="grid grid-cols-1 gap-5 auto-rows-fr">
+                <div className={`grid grid-cols-1 gap-5 ${editingItemId ? 'auto-rows-auto' : 'auto-rows-fr'}`}>
                     {agendaItems.map((item, index) => (
-                        <div key={item.id} className="h-full">
+                        <div key={item.id} className={editingItemId && item.id !== editingItemId ? 'h-full' : ''}>
                             <AgendaItem
                                 key={item.id}
                                 item={item}
@@ -64,13 +64,13 @@ export default function Dashboard({ initialData }) {
                     <div className="flex gap-4">
                         <QuickActionButton
                             icon={MessageSquarePlus}
-                            text="Request Feedback"
-                            colorScheme="orange"
+                            text="Submit New Feedback Request"
+                            colorScheme="green"
                             onClick={() => router.push('/feedback/request/new')}
                         />
                         <QuickActionButton
                             icon={ThumbsUp}
-                            text="Submit Feedback"
+                            text="Find Pending Feedback Requests"
                             colorScheme="blue"
                             onClick={() => router.push('/feedback')}
                         />
