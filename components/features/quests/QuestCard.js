@@ -118,19 +118,6 @@ export const QuestCard = ({
                             {quest.description}
                         </motion.p>
 
-                        {quest.quest_type === 'always' && (
-                            <motion.div
-                                className="flex items-center justify-center gap-2 text-sm"
-                                initial={{ y: 20, opacity: 0 }}
-                                animate={{ y: 0, opacity: 1 }}
-                                transition={{ delay: 0.5 }}
-                            >
-                                <span className="inline-flex items-center gap-1 rounded-md px-2 py-1 bg-purple-200/60 text-purple-800 dark:bg-purple-900/40 dark:text-purple-200 font-medium">
-                                    🔄 Always active - earn points every time!
-                                </span>
-                            </motion.div>
-                        )}
-
                         {/* Points Display - Enhanced */}
                         <PointsBadge
                             points={quest.points}

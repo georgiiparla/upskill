@@ -16,30 +16,35 @@ const ICON_MAP = {
         component: ClipboardList,
         colors: "bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400",
         ring: "ring-blue-500",
+        border: "border-blue-200",
         subtleBg: "from-blue-50/60 to-slate-50/40 dark:from-blue-900/20 dark:to-slate-800/30"
     },
     BookOpen: {
         component: BookOpen,
         colors: "bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400",
         ring: "ring-purple-500",
+        border: "border-purple-200",
         subtleBg: "from-purple-50/60 to-slate-50/40 dark:from-purple-900/20 dark:to-slate-800/30"
     },
     FileText: {
         component: FileText,
         colors: "bg-slate-50 dark:bg-slate-700/20 text-slate-600 dark:text-slate-400",
         ring: "ring-slate-500",
+        border: "border-slate-200",
         subtleBg: "from-slate-50/60 to-slate-50/40 dark:from-slate-800/20 dark:to-slate-800/30"
     },
     MessageSquare: {
         component: MessageSquare,
         colors: "bg-teal-50 dark:bg-teal-900/20 text-teal-600 dark:text-teal-400",
         ring: "ring-teal-500",
+        border: "border-teal-200",
         subtleBg: "from-teal-50/60 to-slate-50/40 dark:from-teal-900/20 dark:to-slate-800/30"
     },
     Star: {
         component: Star,
         colors: "bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400",
         ring: "ring-red-500",
+        border: "border-red-200",
         subtleBg: "from-red-50/60 to-slate-50/40 dark:from-red-900/20 dark:to-slate-800/30"
     },
 };
@@ -119,11 +124,10 @@ export const AgendaItem = ({ item, onUpdate, isEditing, setEditingItemId, isFirs
         <>
             {isEditing && <BlurOverlay />}
             <div className={`group relative transition-all duration-300 h-full ${isEditing ? 'z-50 scale-[1.02]' : ''}`}>
-                <div className={`relative rounded-lg bg-gradient-to-br ${currentIcon.subtleBg}  transition-all duration-300 h-full flex flex-col ${
-                    isEditing 
-                        ? `ring-2 ${currentIcon.ring} shadow-2xl shadow-csway-green/20` 
-                        : ''
-                }`}>
+                <div className={`relative rounded-lg bg-gradient-to-br ${currentIcon.subtleBg}  transition-all duration-300 h-full flex flex-col border ${currentIcon.border} dark:border-transparent ${isEditing
+                    ? `ring-2 ${currentIcon.ring} shadow-2xl shadow-csway-green/20`
+                    : ''
+                    }`}>
                     {/* Icon badge */}
                     <div className={`absolute left-4 top-1/2 -translate-y-1/2 flex items-center justify-center h-8 w-8 rounded-lg ${currentIcon.colors} transition-all duration-300 ${isEditing ? 'opacity-0 scale-0' : 'opacity-100 scale-100'}`}>
                         <IconDisplay name={item.icon_name} className="h-4 w-4" />
@@ -131,16 +135,15 @@ export const AgendaItem = ({ item, onUpdate, isEditing, setEditingItemId, isFirs
 
                     <div className={`py-8 px-4 ${isEditing ? 'pl-6' : 'pl-16'} flex-1 flex flex-col justify-center`}>
                         {isEditing ? (
-                                <div className="space-y-4">
+                            <div className="space-y-4">
                                 {/* Icon selector */}
                                 <div className="flex items-center gap-2">
                                     {Object.keys(ICON_MAP).map(name => (
                                         <button
                                             key={name}
                                             onClick={() => setIconName(name)}
-                                            className={`p-2.5 rounded-lg transition-all ${ICON_MAP[name].colors} ${
-                                                iconName === name ? `ring-2 ${ICON_MAP[name].ring} scale-110` : 'scale-100 hover:scale-105'
-                                            }`}
+                                            className={`p-2.5 rounded-lg transition-all ${ICON_MAP[name].colors} ${iconName === name ? `ring-2 ${ICON_MAP[name].ring} scale-110` : 'scale-100 hover:scale-105'
+                                                }`}
                                         >
                                             <IconDisplay name={name} className="h-4 w-4" />
                                         </button>
@@ -154,7 +157,7 @@ export const AgendaItem = ({ item, onUpdate, isEditing, setEditingItemId, isFirs
                                         value={title}
                                         onChange={(e) => setTitle(e.target.value)}
                                         maxLength={MAX_CHARS}
-                                        className="w-full px-4 py-3 pr-16 text-base sm:text-lg font-semibold border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:ring-2 focus:ring-csway-green focus:border-csway-green outline-none transition-all"
+                                        className="w-full px-4 py-3 pr-16 text-base sm:text-lg border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:ring-2 focus:ring-slate-300 dark:focus:ring-slate-600 focus:border-slate-300 dark:focus:border-slate-600 outline-none transition-all"
                                         autoFocus
                                         placeholder="Enter focus item..."
                                     />
@@ -171,7 +174,7 @@ export const AgendaItem = ({ item, onUpdate, isEditing, setEditingItemId, isFirs
                                         value={link}
                                         onChange={(e) => setLink(e.target.value)}
                                         placeholder="Add a link (optional)"
-                                        className="w-full pl-10 pr-4 py-2.5 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-csway-green focus:border-csway-green outline-none transition-all placeholder:text-slate-400 dark:placeholder:text-slate-500"
+                                        className="w-full pl-10 pr-4 py-2.5 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-slate-300 dark:focus:ring-slate-600 focus:border-slate-300 dark:focus:border-slate-600 outline-none transition-all placeholder:text-slate-400 dark:placeholder:text-slate-500"
                                     />
                                 </div>
 
@@ -197,12 +200,12 @@ export const AgendaItem = ({ item, onUpdate, isEditing, setEditingItemId, isFirs
                             <>
                                 <div className="flex items-start justify-between gap-4">
                                     <div className="flex-1 min-w-0">
-                                        <h3 className={`text-sm sm:text-base text-slate-900 dark:text-white mb-2 break-words ${isFirst ? 'font-semibold' : ''}`}>
+                                        <h3 className={`text-sm sm:text-base md:text-lg text-slate-900 dark:text-white mb-2 break-words ${isFirst ? '' : ''}`}>
                                             {item.title}
                                         </h3>
                                         {item.editor_username && (
                                             <p className="text-xs text-slate-500 dark:text-slate-400">
-                                                Last updated by <span className="font-medium text-slate-700 dark:text-slate-300">{item.editor_username}</span>
+                                                Updated by <span className="font-medium text-slate-700 dark:text-slate-300">{item.editor_username}</span>
                                             </p>
                                         )}
                                     </div>
