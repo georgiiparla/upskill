@@ -129,7 +129,7 @@ export const AgendaItem = ({ item, onUpdate, isEditing, setEditingItemId, isFirs
                         <IconDisplay name={item.icon_name} className="h-4 w-4" />
                     </div>
 
-                    <div className="py-8 px-4 pl-16 flex-1 flex flex-col justify-center">
+                    <div className={`py-8 px-4 ${isEditing ? 'pl-6' : 'pl-16'} flex-1 flex flex-col justify-center`}>
                         {isEditing ? (
                                 <div className="space-y-4">
                                 {/* Icon selector */}
@@ -197,7 +197,7 @@ export const AgendaItem = ({ item, onUpdate, isEditing, setEditingItemId, isFirs
                             <>
                                 <div className="flex items-start justify-between gap-4">
                                     <div className="flex-1 min-w-0">
-                                        <h3 className={`text-sm sm:text-base text-slate-900 dark:text-white mb-2 break-words ${isFirst ? 'font-bold' : ''}`}>
+                                        <h3 className={`text-sm sm:text-base text-slate-900 dark:text-white mb-2 break-words ${isFirst ? 'font-semibold' : ''}`}>
                                             {item.title}
                                         </h3>
                                         {item.editor_username && (

@@ -44,7 +44,7 @@ export default function Dashboard({ initialData }) {
                                 onUpdate={handleUpdateAgendaItem}
                                 isEditing={item.id === editingItemId}
                                 setEditingItemId={setEditingItemId}
-                                isFirst={index === undefined}
+                                isFirst={index === index}
                             />
                         </div>
                     ))}
