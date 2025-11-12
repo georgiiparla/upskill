@@ -62,6 +62,7 @@ export const AgendaItem = ({ item, onUpdate, isEditing, setEditingItemId, isFirs
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const menuRef = useRef(null);
     const { refreshNavbarPoints } = useAuth();
+    const isSystemMantra = item.is_system_mantra;
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -203,48 +204,54 @@ export const AgendaItem = ({ item, onUpdate, isEditing, setEditingItemId, isFirs
                                         <h3 className={`text-sm sm:text-base md:text-lg text-slate-900 dark:text-white mb-2 break-words ${isFirst ? '' : ''}`}>
                                             {item.title}
                                         </h3>
-                                        {item.editor_username && (
+                                        {item.editor_username ? (
                                             <p className="text-xs text-slate-500 dark:text-slate-400">
                                                 Updated by <span className="font-medium text-slate-700 dark:text-slate-300">{item.editor_username}</span>
                                             </p>
-                                        )}
+                                        ) : isSystemMantra ? (
+                                            <p className="text-xs text-slate-500 dark:text-slate-400">
+                                                Updated by <span className="font-medium text-slate-700 dark:text-slate-300">System</span>
+                                            </p>
+                                        ) : null}
                                     </div>
 
-                                    <div className="relative" ref={menuRef}>
-                                        <button
-                                            onClick={() => setIsMenuOpen(!isMenuOpen)}
-                                            title="More options"
-                                            className="flex-shrink-0 p-2 rounded-lg text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-700 transition-all"
-                                        >
-                                            <MoreHorizontal className="h-4 w-4" />
-                                        </button>
-                                        {isMenuOpen && (
-                                            <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-slate-800 rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 py-1 z-50">
-                                                <button
-                                                    onClick={() => {
-                                                        setEditingItemId(item.id);
-                                                        setIsMenuOpen(false);
-                                                    }}
-                                                    className="w-full text-left flex items-center gap-2 px-4 py-2 text-sm text-slate-700 dark:text-slate-200"
-                                                >
-                                                    <Pencil className="h-4 w-4" />
-                                                    <span>Edit item</span>
-                                                </button>
-                                                {item.link && (
-                                                    <a
-                                                        href={item.link}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        onClick={() => setIsMenuOpen(false)}
+                                    {!isSystemMantra && (
+                                        <div className="relative" ref={menuRef}>
+                                            <button
+                                                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                                                title="More options"
+                                                className="flex-shrink-0 p-2 rounded-lg text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-700 transition-all"
+                                            >
+                                                <MoreHorizontal className="h-4 w-4" />
+                                            </button>
+                                            {isMenuOpen && (
+                                                <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-slate-800 rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 py-1 z-50">
+                                                    <button
+                                                        onClick={() => {
+                                                            setEditingItemId(item.id);
+                                                            setIsMenuOpen(false);
+                                                        }}
                                                         className="w-full text-left flex items-center gap-2 px-4 py-2 text-sm text-slate-700 dark:text-slate-200"
                                                     >
-                                                        <LinkIcon className="h-4 w-4" />
-                                                        <span>Open link</span>
-                                                    </a>
-                                                )}
-                                            </div>
-                                        )}
-                                    </div>
+                                                        <Pencil className="h-4 w-4" />
+                                                        <span>Edit item</span>
+                                                    </button>
+                                                    {item.link && (
+                                                        <a
+                                                            href={item.link}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            onClick={() => setIsMenuOpen(false)}
+                                                            className="w-full text-left flex items-center gap-2 px-4 py-2 text-sm text-slate-700 dark:text-slate-200"
+                                                        >
+                                                            <LinkIcon className="h-4 w-4" />
+                                                            <span>Open link</span>
+                                                        </a>
+                                                    )}
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
                                 </div>
                             </>
                         )}
