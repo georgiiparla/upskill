@@ -2,6 +2,42 @@
 
 import { Pencil, Check, X, ToggleLeft, ToggleRight, Loader2, Clock } from 'lucide-react';
 import { IconButton } from '@/components/core/buttons/Buttons';
+import { formatDurationCompact, formatTimeUntilReset } from '@/lib/time-formatter';
+
+// Time unit conversions aligned with Rails ActiveSupport
+const TIME_UNITS = {
+    seconds: 1,
+    minutes: 60,
+    hours: 3600,
+    days: 86400,
+    weeks: 604800,
+    months: 2592000,  // 30 days
+    years: 31556952,  // 365.2425 days (Rails standard)
+};
+
+// Format with cascading like the input boxes (e.g., "1Y 2M 3W 4D 5h 6m 7s")
+const formatDurationCascading = (seconds) => {
+    if (!seconds || seconds <= 0) return 'N/A';
+
+    const UNIT_ORDER = ['years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'];
+    const units = { years: 0, months: 0, weeks: 0, days: 0, hours: 0, minutes: 0, seconds: 0 };
+
+    let remaining = seconds;
+    for (const unit of UNIT_ORDER) {
+        if (unit === 'seconds') {
+            units[unit] = remaining;
+        } else {
+            units[unit] = Math.floor(remaining / TIME_UNITS[unit]);
+            remaining = remaining % TIME_UNITS[unit];
+        }
+    }
+
+    // Return only non-zero units formatted like: "1Y 2M 3W"
+    return UNIT_ORDER
+        .filter(unit => units[unit] > 0)
+        .map(unit => `${units[unit]}${unit.charAt(0).toUpperCase()}`)
+        .join(' ') || 'None';
+};
 
 export const QuestListItem = ({
     quest,
@@ -24,28 +60,45 @@ export const QuestListItem = ({
     const isExplicit = quest.explicit !== false;
     const isRepeatable = quest.quest_type === 'repeatable';
 
-    // Format reset interval for display
-    const formatResetInterval = (seconds) => {
-        if (!seconds) return 'N/A';
-        const day = 86400;
-        const week = 604800;
-        const year = 31536000;
-        
-        const yearVal = Math.round(seconds / year);
-        const weekVal = Math.round(seconds / week);
-        const dayVal = Math.round(seconds / day);
-        
-        if (yearVal >= 1 && seconds >= year * 0.5) return `${yearVal}y`;
-        if (weekVal >= 1 && seconds >= week * 0.5) return `${weekVal}w`;
-        if (dayVal >= 1 && seconds >= day * 0.5) return `${dayVal}d`;
-        return `${seconds}s`;
-    };
-
+    // Cascading unit conversion with caps
     const handleUnitChange = (unit, value) => {
-        setDraftResetUnits((prev) => ({
-            ...prev,
-            [unit]: Math.max(0, parseInt(value) || 0),
-        }));
+        const numValue = Math.max(0, parseInt(value) || 0);
+        
+        // Define unit caps (when to cascade to next unit)
+        const UNIT_CAPS = {
+            seconds: 60,
+            minutes: 60,
+            hours: 24,
+            days: 7,
+            weeks: 4,      // ~4 weeks per month
+            months: 12,
+            years: Infinity // No cap for years
+        };
+
+        // Unit hierarchy (order from largest to smallest)
+        const UNIT_ORDER = ['years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'];
+
+        setDraftResetUnits((prev) => {
+            const updated = { ...prev, [unit]: numValue };
+            
+            // Find which unit was changed
+            const unitIndex = UNIT_ORDER.indexOf(unit);
+
+            // Cascade upwards (from smaller units to larger units)
+            for (let i = unitIndex; i > 0; i--) {
+                const currentUnit = UNIT_ORDER[i];
+                const nextUnit = UNIT_ORDER[i - 1];
+                const cap = UNIT_CAPS[currentUnit];
+
+                if (updated[currentUnit] >= cap) {
+                    const overflow = Math.floor(updated[currentUnit] / cap);
+                    updated[nextUnit] = (updated[nextUnit] || 0) + overflow;
+                    updated[currentUnit] = updated[currentUnit] % cap;
+                }
+            }
+
+            return updated;
+        });
     };
 
     return (
@@ -90,12 +143,12 @@ export const QuestListItem = ({
                     </div>
                     
                     {/* Reset Status Information */}
-                    {quest.time_until_reset && (
+                    {isRepeatable && quest.next_reset_at && (
                         <div className="flex flex-wrap items-center gap-2 text-xs">
                             <span className="text-slate-600 dark:text-slate-400">Reset status:</span>
                             <span className="flex items-center gap-1 text-slate-700 dark:text-slate-300">
                                 <Clock className="h-3 w-3" />
-                                {quest.time_until_reset}
+                                {formatTimeUntilReset(quest.next_reset_at)}
                             </span>
                             {quest.will_reset_on_next_trigger && (
                                 <span className="inline-flex items-center gap-1 rounded-md px-2 py-1 bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300 font-medium">
@@ -127,20 +180,33 @@ export const QuestListItem = ({
                                 <div className="space-y-2">
                                     <span className="text-xs font-medium text-slate-600 dark:text-slate-400">Reset Interval:</span>
                                     <div className="grid grid-cols-4 gap-2 md:grid-cols-7">
-                                        {['years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'].map((unit) => (
-                                            <div key={unit} className="flex flex-col items-center gap-1">
-                                                <input
-                                                    type="number"
-                                                    min="0"
-                                                    value={draftResetUnits[unit]}
-                                                    onChange={(e) => handleUnitChange(unit, e.target.value)}
-                                                    className="w-12 rounded-lg border border-slate-200/70 bg-white/90 px-2 py-1 text-center text-xs text-slate-900 shadow-sm focus:border-csway-green focus:outline-none focus:ring-2 focus:ring-csway-green/30 dark:border-slate-700/70 dark:bg-slate-900/70 dark:text-slate-100"
-                                                />
-                                                <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
-                                                    {unit.charAt(0).toUpperCase()}
-                                                </span>
-                                            </div>
-                                        ))}
+                                        {['years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'].map((unit) => {
+                                            const maxValues = {
+                                                seconds: 59,
+                                                minutes: 59,
+                                                hours: 23,
+                                                days: 6,
+                                                weeks: 3,
+                                                months: 11,
+                                                years: 999
+                                            };
+                                            
+                                            return (
+                                                <div key={unit} className="flex flex-col items-center gap-1">
+                                                    <input
+                                                        type="number"
+                                                        min="0"
+                                                        max={maxValues[unit]}
+                                                        value={draftResetUnits[unit]}
+                                                        onChange={(e) => handleUnitChange(unit, e.target.value)}
+                                                        className="w-12 rounded-lg border border-slate-200/70 bg-white/90 px-2 py-1 text-center text-xs text-slate-900 shadow-sm focus:border-csway-green focus:outline-none focus:ring-2 focus:ring-csway-green/30 dark:border-slate-700/70 dark:bg-slate-900/70 dark:text-slate-100"
+                                                    />
+                                                    <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
+                                                        {unit.charAt(0).toUpperCase()}
+                                                    </span>
+                                                </div>
+                                            );
+                                        })}
                                     </div>
                                 </div>
                             )}
@@ -171,7 +237,7 @@ export const QuestListItem = ({
                             {isRepeatable && (
                                 <span className="flex items-center gap-1 rounded-lg bg-blue-500/10 px-3 py-1 text-sm font-semibold text-blue-600 dark:bg-blue-500/10 dark:text-blue-300">
                                     <Clock className="h-3 w-3" />
-                                    <span className="text-xs font-medium">{formatResetInterval(quest.reset_interval_seconds)}</span>
+                                    <span className="text-xs font-medium">{formatDurationCascading(quest.reset_interval_seconds)}</span>
                                 </span>
                             )}
                             <div className="flex items-center gap-2">
