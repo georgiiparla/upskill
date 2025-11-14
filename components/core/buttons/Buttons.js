@@ -174,7 +174,7 @@ export const QuickActionButton = ({
             <div className={`flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-lg bg-slate-50/50 dark:bg-slate-800/50 group-hover:bg-slate-100/70 dark:group-hover:bg-slate-700/70 transition-colors`}>
                 <Icon className={`h-4 w-4 ${colors.icon}`} />
             </div>
-            <span className="hidden md:inline font-medium text-sm truncate">{text}</span>
+            <span className="hidden md:inline text-sm md:text-base font-medium truncate">{text}</span>
         </button>
     );
 };

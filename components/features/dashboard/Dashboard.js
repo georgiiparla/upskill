@@ -12,16 +12,29 @@ import { BarChart2, ClipboardList, Zap, MessageSquarePlus, ThumbsUp, Target, Tro
 import { QuickActionButton } from "../../core/buttons/Buttons";
 import { useRouter } from 'next/navigation';
 import { Card } from "@/components/shared/helpers/Helper";
+import { clientFetch } from "@/lib/client-api";
 
 export default function Dashboard({ initialData }) {
     const [agendaItems, setAgendaItems] = useState(initialData.agendaItems);
     const [editingItemId, setEditingItemId] = useState(null);
+    const [hasUnviewedEvents, setHasUnviewedEvents] = useState(initialData.hasUnviewedEvents || false);
     const router = useRouter();
 
     const handleUpdateAgendaItem = (updatedItem) => {
         setAgendaItems(currentItems =>
             currentItems.map(item => item.id === updatedItem.id ? updatedItem : item)
         );
+    };
+
+    const handleActivityStreamViewed = async () => {
+        try {
+            const result = await clientFetch('/dashboard/mark-activity-viewed', { method: 'POST' });
+            if (result.success) {
+                setHasUnviewedEvents(false);
+            }
+        } catch (error) {
+            console.error('Failed to mark activity stream as viewed:', error);
+        }
     };
 
     return (
@@ -64,25 +77,25 @@ export default function Dashboard({ initialData }) {
                     <div className="flex gap-4">
                         <QuickActionButton
                             icon={MessageSquarePlus}
-                            text="Submit New Feedback Request"
+                            text="Request Feedback"
                             colorScheme="green"
                             onClick={() => router.push('/feedback/request/new')}
                         />
                         <QuickActionButton
                             icon={ThumbsUp}
-                            text="Find Pending Feedback Requests"
+                            text="Provide Feedback"
                             colorScheme="blue"
                             onClick={() => router.push('/feedback')}
                         />
                     </div>
+                    <ConsoleDropdown title="Activity Stream Log" hasUnviewedEvents={hasUnviewedEvents} onOpen={handleActivityStreamViewed}>
+                        <ConsoleLog>
+                            <ActivityStream activityStream={initialData.activityStream} />
+                        </ConsoleLog>
+                    </ConsoleDropdown>
                     <ConsoleDropdown title="Weekly Summary" >
                         <ConsoleLog>
                             <Metrics metricsData={initialData.activityData} />
-                        </ConsoleLog>
-                    </ConsoleDropdown>
-                    <ConsoleDropdown title="Activity Stream Log">
-                        <ConsoleLog>
-                            <ActivityStream activityStream={initialData.activityStream} />
                         </ConsoleLog>
                     </ConsoleDropdown>
                 </div>
