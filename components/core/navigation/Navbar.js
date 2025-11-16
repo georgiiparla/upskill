@@ -46,7 +46,7 @@ const MobileNavLink = ({ href, children, closeMenu }) => {
     );
 };
 
-const DesktopNavLinks = ({ scrolled }) => (
+const DesktopNavLinks = ({ scrolled, isAdmin }) => (
     <div className="hidden lg:block">
         <div className="ml-10 flex items-baseline space-x-4">
             <NavLink href="/dashboard" scrolled={scrolled}>Dashboard</NavLink>
@@ -58,10 +58,12 @@ const DesktopNavLinks = ({ scrolled }) => (
                 <DropdownItem href="/quests">Quests</DropdownItem>
                 <DropdownItem href="/leaderboard">Leaderboard</DropdownItem>
             </DesktopDropdown>
-            <DesktopDropdown title="Admin" scrolled={scrolled} activePaths={["/admin/quests", "/admin/users"]}>
-                <DropdownItem href="/admin/quests">Quest Management</DropdownItem>
-                <DropdownItem href="/admin/users">Members</DropdownItem>
-            </DesktopDropdown>
+            {isAdmin && (
+                <DesktopDropdown title="Admin" scrolled={scrolled} activePaths={["/admin/quests", "/admin/users"]}>
+                    <DropdownItem href="/admin/quests">Quest Management</DropdownItem>
+                    <DropdownItem href="/admin/users">Members</DropdownItem>
+                </DesktopDropdown>
+            )}
         </div>
     </div>
 );
@@ -111,7 +113,7 @@ const MobileMenuSectionLabel = ({ children }) => (
     </p>
 );
 
-const MobileMenu = ({ isMenuOpen, setIsMenuOpen }) => {
+const MobileMenu = ({ isMenuOpen, setIsMenuOpen, isAdmin }) => {
     if (!isMenuOpen) return null;
 
     const closeMenu = () => setIsMenuOpen(false);
@@ -132,13 +134,13 @@ const MobileMenu = ({ isMenuOpen, setIsMenuOpen }) => {
                 { href: '/quests', label: 'Quests' },
             ],
         },
-        {
+        ...(isAdmin ? [{
             title: 'Admin',
             links: [
                 { href: '/admin/quests', label: 'Quest Management' },
                 { href: '/admin/users', label: 'Members' },
             ],
-        },
+        }] : []),
     ];
 
     return (
@@ -170,11 +172,11 @@ const LogoAndBrand = ({ scrolled }) => (
     </Link>
 );
 
-const NavbarContent = ({ scrolled, user, rank, renderPointsText, getPointsBadgeClasses, setIsLogoutModalOpen, theme, setTheme, pathname, isMenuOpen, setIsMenuOpen }) => (
+const NavbarContent = ({ scrolled, user, rank, renderPointsText, getPointsBadgeClasses, setIsLogoutModalOpen, theme, setTheme, pathname, isMenuOpen, setIsMenuOpen, isAdmin }) => (
     <div className={`flex items-center justify-between h-16 transition-[height] duration-300 ease-in-out ${scrolled ? 'h-[44px]' : ''}`}>
         <div className="flex items-center">
             <LogoAndBrand scrolled={scrolled} />
-            <DesktopNavLinks scrolled={scrolled} />
+            <DesktopNavLinks scrolled={scrolled} isAdmin={isAdmin} />
         </div>
         <div className="flex items-center">
             <DesktopControls
@@ -205,7 +207,7 @@ export const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
     const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
-    const { user, logout, navbarRefreshTrigger, refreshNavbarPoints } = useAuth();
+    const { user, logout, navbarRefreshTrigger, refreshNavbarPoints, isAdmin } = useAuth();
     const pathname = usePathname();
 
     useScrollBehavior(scrolled, setScrolled);
@@ -259,9 +261,10 @@ export const Navbar = () => {
                         pathname={pathname}
                         isMenuOpen={isMenuOpen}
                         setIsMenuOpen={setIsMenuOpen}
+                        isAdmin={isAdmin}
                     />
                 </div>
-                <MobileMenu isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
+                <MobileMenu isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} isAdmin={isAdmin} />
             </nav>
         </>
     )

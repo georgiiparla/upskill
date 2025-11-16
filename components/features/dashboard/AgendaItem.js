@@ -201,7 +201,7 @@ export const AgendaItem = ({ item, onUpdate, isEditing, setEditingItemId, isFirs
                             <>
                                 <div className="flex items-start justify-between gap-4">
                                     <div className="flex-1 min-w-0">
-                                        <h3 className={`text-sm sm:text-base md:text-lg text-slate-900 dark:text-white mb-2 break-words ${isFirst ? '' : ''}`}>
+                                        <h3 className={`font-semibold text-sm sm:text-base md:text-lg text-slate-900 dark:text-white mb-2 break-words ${isFirst ? '' : ''}`}>
                                             {item.title}
                                         </h3>
                                         {item.editor_username ? (
