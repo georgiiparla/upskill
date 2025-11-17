@@ -7,10 +7,13 @@ export const QuestIndicators = ({ quests, currentIndex, onIndicatorClick }) => {
     const currentQuest = quests[currentIndex];
     const isCompleted = currentQuest?.user_completed ?? currentQuest?.completed;
     const isInProgress = !isCompleted && ((currentQuest?.user_progress ?? 0) > 0 || currentQuest?.in_progress);
+    const isAlwaysType = currentQuest?.quest_type === 'always';
 
     // Determine outline styling based on quest status
     const getIndicatorStyle = () => {
-        if (isCompleted) {
+        if (isAlwaysType) {
+            return "bg-violet-50/50 dark:bg-violet-900/20 text-violet-700 dark:text-violet-300";
+        } else if (isCompleted) {
             return "bg-emerald-50/50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300";
         } else if (isInProgress) {
             return "bg-sky-50/50 dark:bg-sky-900/20 text-sky-700 dark:text-sky-300";
@@ -20,7 +23,12 @@ export const QuestIndicators = ({ quests, currentIndex, onIndicatorClick }) => {
     };
 
     const getHoverStyle = () => {
-        if (isCompleted) {
+        if (isAlwaysType) {
+            return {
+                scale: 1.05,
+                backgroundColor: "rgba(139,92,246,0.15)"
+            };
+        } else if (isCompleted) {
             return {
                 scale: 1.05,
                 backgroundColor: "rgba(16,185,129,0.15)"

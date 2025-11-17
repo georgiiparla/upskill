@@ -103,7 +103,11 @@ export const QuestList = ({ quests, onUpdatePoints, onToggleExplicit, updatingId
             <SectionTitle icon={<ListChecks className="h-6 w-6 text-csway-green" />} title="Existing quests" />
 
             <ul className="space-y-3">
-                {quests.map((quest) => (
+                {quests.sort((a, b) => {
+                    if (a.quest_type === 'interval-based' && b.quest_type !== 'interval-based') return -1;
+                    if (a.quest_type !== 'interval-based' && b.quest_type === 'interval-based') return 1;
+                    return 0;
+                }).map((quest) => (
                     <QuestListItem
                         key={`${quest.id}-${quest.explicit}`}
                         quest={quest}

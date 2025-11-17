@@ -58,7 +58,7 @@ export const QuestListItem = ({
     const isToggling = togglingId === quest.id;
     const isBusy = isUpdating || isToggling;
     const isExplicit = quest.explicit !== false;
-    const isRepeatable = quest.quest_type === 'repeatable';
+    const isIntervalBased = quest.quest_type === 'interval-based';
 
     // Cascading unit conversion with caps
     const handleUnitChange = (unit, value) => {
@@ -128,12 +128,12 @@ export const QuestListItem = ({
                         </span>
                         <span
                             className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${
-                                isRepeatable
+                                isIntervalBased
                                     ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300'
                                     : 'bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300'
                             }`}
                         >
-                            {isRepeatable ? 'Repeatable' : 'Always'}
+                            {isIntervalBased ? 'Interval-Based' : 'Always'}
                         </span>
                         {quest.completed_users_count !== undefined && (
                             <span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide bg-gray-100 text-gray-700 dark:bg-gray-800/60 dark:text-gray-300">
@@ -143,7 +143,7 @@ export const QuestListItem = ({
                     </div>
                     
                     {/* Reset Status Information */}
-                    {isRepeatable && quest.next_reset_at && (
+                    {isIntervalBased && quest.next_reset_at && (
                         <div className="flex flex-wrap items-center gap-2 text-xs">
                             <span className="text-slate-600 dark:text-slate-400">Reset status:</span>
                             <span className="flex items-center gap-1 text-slate-700 dark:text-slate-300">
@@ -176,7 +176,7 @@ export const QuestListItem = ({
                                 />
                             </div>
                             
-                            {isRepeatable && (
+                            {isIntervalBased && (
                                 <div className="space-y-2">
                                     <span className="text-xs font-medium text-slate-600 dark:text-slate-400">Reset Interval:</span>
                                     <div className="grid grid-cols-4 gap-2 md:grid-cols-7">
@@ -234,7 +234,7 @@ export const QuestListItem = ({
                                 {quest.points}
                                 <span className="text-xs font-medium">pts</span>
                             </span>
-                            {isRepeatable && (
+                            {isIntervalBased && (
                                 <span className="flex items-center gap-1 rounded-lg bg-blue-500/10 px-3 py-1 text-sm font-semibold text-blue-600 dark:bg-blue-500/10 dark:text-blue-300">
                                     <Clock className="h-3 w-3" />
                                     <span className="text-xs font-medium">{formatDurationCascading(quest.reset_interval_seconds)}</span>

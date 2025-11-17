@@ -2,13 +2,13 @@
 import { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 
-export const ConsoleDropdown = ({ title, children, hasUnviewedEvents = false, onOpen }) => {
+export const ConsoleDropdown = ({ title, children, hasUnviewedEvents = false, onOpen, onClose }) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const handleToggle = () => {
         const newState = !isOpen;
         setIsOpen(newState);
-        if (newState && onOpen) onOpen();
+        if (!newState && onClose) onClose();
     };
 
     return (

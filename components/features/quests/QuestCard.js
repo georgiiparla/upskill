@@ -1,4 +1,5 @@
 "use client";
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Card } from "../../shared/helpers/Helper";
 import { Confetti } from "./Confetti";
@@ -16,6 +17,29 @@ export const QuestCard = ({
     isCompleted,
     isInProgress
 }) => {
+    const [showConfettiOnTrigger, setShowConfettiOnTrigger] = useState(false);
+
+    const isAlwaysType = quest?.quest_type === 'always';
+
+    useEffect(() => {
+        // For always-type quests, show confetti only if the quest was just triggered
+        // (last_triggered_at is very recent, indicating user just completed an action)
+        if (isAlwaysType && quest?.last_triggered_at) {
+            const lastTriggeredTime = new Date(quest.last_triggered_at).getTime();
+            const currentTime = Date.now();
+            const timeDiffMs = currentTime - lastTriggeredTime;
+            
+            // Show confetti only if triggered within the last 5 seconds (and not a future timestamp)
+            if (timeDiffMs >= 0 && timeDiffMs < 5000) {
+                setShowConfettiOnTrigger(true);
+                
+                // Auto-hide confetti after animation
+                const timer = setTimeout(() => setShowConfettiOnTrigger(false), 2000);
+                return () => clearTimeout(timer);
+            }
+        }
+    }, [quest?.last_triggered_at, isAlwaysType]);
+
     // Animation variants for quest card transitions
     const questVariants = {
         enter: (enterDirection) => ({
@@ -41,11 +65,17 @@ export const QuestCard = ({
         })
     };
 
-    // Determine card styling based on quest status
+    // Determine card styling based on quest status and type
     const completed = isCompleted ?? quest?.completed;
     const inProgress = isInProgress ?? quest?.in_progress;
 
     const getCardStyles = () => {
+        // Always-type quests: always purple
+        if (isAlwaysType) {
+            return 'bg-gradient-to-br from-violet-50/60 via-purple-50/40 to-indigo-50/80 dark:from-violet-900/20 dark:via-purple-900/10 dark:to-indigo-900/30 border-violet-300/60 dark:border-violet-700/60 shadow-lg shadow-violet-500/20';
+        }
+        
+        // Interval-based quests original styling
         if (completed) {
             return 'bg-gradient-to-br from-emerald-50/60 via-yellow-50/40 to-green-50/80 dark:from-emerald-900/20 dark:via-yellow-900/10 dark:to-green-900/30 border-emerald-300/60 dark:border-emerald-700/60 shadow-lg shadow-emerald-500/20';
         } else if (inProgress) {
@@ -84,8 +114,8 @@ export const QuestCard = ({
             onDragEnd={onDragEnd}
         >
             <Card variant="custom" className={`group transition-all duration-300 relative min-h-[320px] md:min-h-[400px] max-h-[400px] md:max-h-[500px] flex flex-col mx-auto max-w-5xl overflow-hidden ${getCardStyles()}`}>
-                {/* Confetti overlay for completed quests */}
-                <Confetti isActive={showConfetti} />
+                {/* Confetti overlay for completed quests and triggered always-quests */}
+                <Confetti isActive={showConfetti || showConfettiOnTrigger} color={isAlwaysType ? 'purple' : undefined} />
 
                 {/* Quest Position Indicator - Top Right Corner */}
                 <div className="absolute top-2 right-2 md:top-4 md:right-4 z-20">
@@ -121,7 +151,8 @@ export const QuestCard = ({
                         {/* Points Display - Enhanced */}
                         <PointsBadge
                             points={quest.points}
-                            status={completed ? "completed" : inProgress ? "in_progress" : "default"}
+                            status={completed ? "completed" : isAlwaysType ? "always" : inProgress ? "in_progress" : "default"}
+                            isAlwaysType={isAlwaysType}
                         />
                     </div>
                 </div>

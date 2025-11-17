@@ -50,7 +50,7 @@ export const ActivityStream = ({ activityStream }) => {
                     className="text-slate-700 dark:text-slate-300 flex items-start gap-2"
                 >
                     <div className="flex-shrink-0 min-w-[45px]">
-                        {index === 0 ? (
+                        {activity.isNew ? (
                             <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold text-white bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700">
                                 NEW
                             </span>
