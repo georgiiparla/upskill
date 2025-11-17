@@ -85,6 +85,38 @@ export const QuestCard = ({
         }
     };
 
+    const getTextColors = () => {
+        // Always-type quests: violet text
+        if (isAlwaysType) {
+            return {
+                title: 'text-violet-900 dark:text-violet-100',
+                description: 'text-violet-700 dark:text-violet-300'
+            };
+        }
+        
+        // Completed quests: emerald text
+        if (completed) {
+            return {
+                title: 'text-emerald-900 dark:text-emerald-100',
+                description: 'text-emerald-700 dark:text-emerald-300'
+            };
+        }
+        
+        // In-progress quests: sky text
+        if (inProgress) {
+            return {
+                title: 'text-sky-900 dark:text-sky-100',
+                description: 'text-sky-700 dark:text-sky-300'
+            };
+        }
+        
+        // Default: slate text
+        return {
+            title: 'text-slate-900 dark:text-slate-100',
+            description: 'text-slate-700 dark:text-slate-300'
+        };
+    };
+
     return (
         <motion.div
             variants={questVariants}
@@ -113,7 +145,7 @@ export const QuestCard = ({
             }}
             onDragEnd={onDragEnd}
         >
-            <Card variant="custom" className={`group transition-all duration-300 relative min-h-[320px] md:min-h-[400px] max-h-[400px] md:max-h-[500px] flex flex-col mx-auto max-w-5xl overflow-hidden ${getCardStyles()}`}>
+            <Card variant="custom" className={`group transition-all duration-300 relative min-h-[320px] md:min-h-[400px] max-h-[400px] md:max-h-[500px] flex flex-col w-full overflow-hidden ${getCardStyles()}`}>
                 {/* Confetti overlay for completed quests and triggered always-quests */}
                 <Confetti isActive={showConfetti || showConfettiOnTrigger} color={isAlwaysType ? 'purple' : undefined} />
 
@@ -128,9 +160,9 @@ export const QuestCard = ({
 
                 <div className="flex-1 flex flex-col items-center justify-center text-center px-4 md:px-8 py-4 md:py-6 relative z-10">
                     <div className="space-y-4 md:space-y-6 max-w-3xl w-full">
-                        {/* Quest title with playful animation */}
+                    {/* Quest title with playful animation */}
                         <motion.h2
-                            className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white leading-tight font-mono"
+                            className={`text-2xl md:text-3xl lg:text-4xl font-bold leading-tight font-mono ${getTextColors().title}`}
                             initial={{ y: 20, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
                             transition={{ delay: 0.2 }}
@@ -140,7 +172,7 @@ export const QuestCard = ({
 
                         {/* Quest description */}
                         <motion.p
-                            className="text-base md:text-lg lg:text-xl text-gray-600 dark:text-gray-300 leading-relaxed font-mono"
+                            className={`text-base md:text-lg lg:text-xl leading-relaxed font-mono ${getTextColors().description}`}
                             initial={{ y: 20, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
                             transition={{ delay: 0.4 }}

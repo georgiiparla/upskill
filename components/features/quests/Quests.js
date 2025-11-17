@@ -6,8 +6,21 @@ import { QuestCarousel } from "./QuestCarousel";
 
 export const Quests = ({ initialQuests }) => {
     const explicitQuests = (initialQuests || []).filter((quest) => quest.explicit !== false);
+    
+    // Sort quests: interval-based first, then always-type
+    const sortedQuests = explicitQuests.sort((a, b) => {
+        const aIsAlways = a.quest_type === 'always';
+        const bIsAlways = b.quest_type === 'always';
+        
+        // If different types, interval-based (not always) comes first
+        if (aIsAlways !== bIsAlways) {
+            return aIsAlways ? 1 : -1;
+        }
+        // If same type, maintain original order
+        return 0;
+    });
 
-    if (explicitQuests.length === 0) {
+    if (sortedQuests.length === 0) {
         return (
             <div className="space-y-6">
                 <HeroHeader
@@ -44,7 +57,7 @@ export const Quests = ({ initialQuests }) => {
             />
 
             {/* Quest Carousel */}
-            <QuestCarousel quests={explicitQuests} />
+            <QuestCarousel quests={sortedQuests} />
         </div>
     );
 };

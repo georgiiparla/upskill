@@ -1,6 +1,6 @@
 "use client";
 import { motion } from 'framer-motion';
-import { CheckCircle2, Clock, Infinity } from 'lucide-react';
+import { CheckCircle2, Clock, Repeat } from 'lucide-react';
 
 export const PointsBadge = ({
     points,
@@ -12,8 +12,6 @@ export const PointsBadge = ({
 }) => {
     // Determine styling based on quest status
     const getBadgeStyles = () => {
-        const baseStyles = "inline-flex items-center gap-3 rounded-lg font-bold shadow-lg text-black dark:text-white";
-
         const sizeStyles = {
             small: "px-3 py-1.5 text-xs sm:px-4 sm:py-2 sm:text-sm",
             default: "px-4 py-2 text-xs sm:px-6 sm:py-3 sm:text-base",
@@ -22,16 +20,16 @@ export const PointsBadge = ({
 
         // For always-type quests, always use purple regardless of completion state
         if (isAlwaysType) {
-            return `${baseStyles} ${sizeStyles[size] || sizeStyles.default} bg-violet-50/70 dark:bg-violet-900/30 border border-violet-200/50 dark:border-violet-700/50 shadow-violet-600/20 backdrop-blur-sm`;
+            return `inline-flex items-center gap-3 rounded-lg font-bold shadow-lg text-violet-700 dark:text-violet-200 ${sizeStyles[size] || sizeStyles.default} bg-violet-50/70 dark:bg-violet-900/30 border border-violet-200/50 dark:border-violet-700/50 shadow-violet-600/20 backdrop-blur-sm`;
         }
 
         const statusStyles = {
-            completed: "bg-emerald-50/70 dark:bg-emerald-900/30 border border-emerald-200/50 dark:border-emerald-700/50 shadow-emerald-600/20 backdrop-blur-sm",
-            in_progress: "bg-sky-50/70 dark:bg-sky-900/30 border border-sky-200/50 dark:border-sky-700/50 shadow-sky-500/20 backdrop-blur-sm",
-            default: "bg-slate-50/70 dark:bg-slate-900/30 border border-slate-200/50 dark:border-slate-700/50 shadow-slate-500/20 backdrop-blur-sm"
+            completed: "bg-emerald-50/70 dark:bg-emerald-900/30 border border-emerald-200/50 dark:border-emerald-700/50 shadow-emerald-600/20 text-emerald-700 dark:text-emerald-200 backdrop-blur-sm",
+            in_progress: "bg-sky-50/70 dark:bg-sky-900/30 border border-sky-200/50 dark:border-sky-700/50 shadow-sky-500/20 text-sky-700 dark:text-sky-200 backdrop-blur-sm",
+            default: "bg-slate-50/70 dark:bg-slate-900/30 border border-slate-200/50 dark:border-slate-700/50 shadow-slate-500/20 text-slate-700 dark:text-slate-200 backdrop-blur-sm"
         };
 
-        return `${baseStyles} ${sizeStyles[size] || sizeStyles.default} ${statusStyles[status] || statusStyles.default}`;
+        return `inline-flex items-center gap-3 rounded-lg font-bold shadow-lg ${sizeStyles[size] || sizeStyles.default} ${statusStyles[status] || statusStyles.default}`;
     };
 
     // Determine icon based on quest status
@@ -47,7 +45,7 @@ export const PointsBadge = ({
                     animate={{ rotate: [0, 10, -10, 0] }}
                     transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                 >
-                    <Infinity className={iconSize} />
+                    <Repeat className={iconSize} />
                 </motion.div>
             );
         }
