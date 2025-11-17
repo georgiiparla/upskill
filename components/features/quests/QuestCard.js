@@ -70,27 +70,27 @@ export const QuestCard = ({
     const inProgress = isInProgress ?? quest?.in_progress;
 
     const getCardStyles = () => {
-        // Always-type quests: always purple
+        // Always-type quests: gray/slate palette
         if (isAlwaysType) {
-            return 'bg-gradient-to-br from-violet-50/60 via-purple-50/40 to-indigo-50/80 dark:from-violet-900/20 dark:via-purple-900/10 dark:to-indigo-900/30 border-violet-300/60 dark:border-violet-700/60 shadow-lg shadow-violet-500/20';
+            return 'bg-gradient-to-br from-slate-50/60 via-pink-50/40 to-gray-50/80 dark:from-slate-900/20 dark:via-pink-900/10 dark:to-gray-900/30 border-slate-300/60 dark:border-slate-700/60 shadow-lg shadow-pink-500/20';
         }
         
         // Interval-based quests original styling
         if (completed) {
-            return 'bg-gradient-to-br from-emerald-50/60 via-yellow-50/40 to-green-50/80 dark:from-emerald-900/20 dark:via-yellow-900/10 dark:to-green-900/30 border-emerald-300/60 dark:border-emerald-700/60 shadow-lg shadow-emerald-500/20';
+            return 'bg-gradient-to-br from-emerald-50/60 via-teal-50/40 to-cyan-50/80 dark:from-emerald-900/20 dark:via-teal-900/10 dark:to-cyan-900/30 border-emerald-300/60 dark:border-emerald-700/60 shadow-lg shadow-emerald-500/20';
         } else if (inProgress) {
             return 'bg-gradient-to-br from-sky-50/60 via-purple-50/40 to-blue-50/80 dark:from-sky-900/20 dark:via-purple-900/10 dark:to-blue-900/30 border-sky-300/60 dark:border-sky-700/60 shadow-lg shadow-purple-500/20';
         } else {
-            return 'bg-gradient-to-br from-slate-50/60 via-pink-50/40 to-gray-50/80 dark:from-slate-900/20 dark:via-pink-900/10 dark:to-gray-900/30 border-slate-300/60 dark:border-slate-700/60 shadow-lg shadow-pink-500/20';
+            return 'bg-gradient-to-br from-sky-50/60 via-blue-50/40 to-indigo-50/80 dark:from-sky-900/20 dark:via-blue-900/10 dark:to-indigo-900/30 border-sky-300/60 dark:border-sky-700/60 shadow-lg shadow-sky-500/20';
         }
     };
 
     const getTextColors = () => {
-        // Always-type quests: violet text
+        // Always-type quests: slate text
         if (isAlwaysType) {
             return {
-                title: 'text-violet-900 dark:text-violet-100',
-                description: 'text-violet-700 dark:text-violet-300'
+                title: 'text-slate-900 dark:text-slate-100',
+                description: 'text-slate-700 dark:text-slate-300'
             };
         }
         
@@ -110,10 +110,10 @@ export const QuestCard = ({
             };
         }
         
-        // Default: slate text
+        // Default: light blue text
         return {
-            title: 'text-slate-900 dark:text-slate-100',
-            description: 'text-slate-700 dark:text-slate-300'
+            title: 'text-sky-900 dark:text-sky-100',
+            description: 'text-sky-700 dark:text-sky-300'
         };
     };
 
@@ -147,7 +147,7 @@ export const QuestCard = ({
         >
             <Card variant="custom" className={`group transition-all duration-300 relative min-h-[320px] md:min-h-[400px] max-h-[400px] md:max-h-[500px] flex flex-col w-full overflow-hidden ${getCardStyles()}`}>
                 {/* Confetti overlay for completed quests and triggered always-quests */}
-                <Confetti isActive={showConfetti || showConfettiOnTrigger} color={isAlwaysType ? 'purple' : undefined} />
+                <Confetti isActive={showConfetti || showConfettiOnTrigger} color={isAlwaysType ? 'default' : undefined} />
 
                 {/* Quest Position Indicator - Top Right Corner */}
                 <div className="absolute top-2 right-2 md:top-4 md:right-4 z-20">

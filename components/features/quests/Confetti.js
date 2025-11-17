@@ -7,7 +7,7 @@ export const Confetti = ({ isActive, color = 'default' }) => {
 
     const colorPalettes = {
         default: ['#FFD700', '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7'],
-        purple: ['#A78BFA', '#C084FC', '#D8B4FE', '#E9D5FF', '#B794F6', '#9F7AEA']
+        rose: ['#FCA5A5', '#FDA4AF', '#FBB6CE', '#F9A8D4', '#F0ABFC', '#FBBF24']
     };
 
     const palette = colorPalettes[color] || colorPalettes.default;

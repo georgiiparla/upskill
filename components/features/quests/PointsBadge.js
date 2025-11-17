@@ -18,15 +18,15 @@ export const PointsBadge = ({
             large: "px-6 py-3 text-sm sm:px-8 sm:py-4 sm:text-lg"
         };
 
-        // For always-type quests, always use purple regardless of completion state
+        // For always-type quests, always use slate/gray regardless of completion state
         if (isAlwaysType) {
-            return `inline-flex items-center gap-3 rounded-lg font-bold shadow-lg text-violet-700 dark:text-violet-200 ${sizeStyles[size] || sizeStyles.default} bg-violet-50/70 dark:bg-violet-900/30 border border-violet-200/50 dark:border-violet-700/50 shadow-violet-600/20 backdrop-blur-sm`;
+            return `inline-flex items-center gap-3 rounded-lg font-bold shadow-lg text-slate-700 dark:text-slate-200 ${sizeStyles[size] || sizeStyles.default} bg-slate-50/70 dark:bg-slate-900/30 border border-slate-200/50 dark:border-slate-700/50 shadow-slate-600/20 backdrop-blur-sm`;
         }
 
         const statusStyles = {
             completed: "bg-emerald-50/70 dark:bg-emerald-900/30 border border-emerald-200/50 dark:border-emerald-700/50 shadow-emerald-600/20 text-emerald-700 dark:text-emerald-200 backdrop-blur-sm",
             in_progress: "bg-sky-50/70 dark:bg-sky-900/30 border border-sky-200/50 dark:border-sky-700/50 shadow-sky-500/20 text-sky-700 dark:text-sky-200 backdrop-blur-sm",
-            default: "bg-slate-50/70 dark:bg-slate-900/30 border border-slate-200/50 dark:border-slate-700/50 shadow-slate-500/20 text-slate-700 dark:text-slate-200 backdrop-blur-sm"
+            default: "bg-sky-50/70 dark:bg-sky-900/30 border border-sky-200/50 dark:border-sky-700/50 shadow-sky-600/20 text-sky-700 dark:text-sky-200 backdrop-blur-sm"
         };
 
         return `inline-flex items-center gap-3 rounded-lg font-bold shadow-lg ${sizeStyles[size] || sizeStyles.default} ${statusStyles[status] || statusStyles.default}`;

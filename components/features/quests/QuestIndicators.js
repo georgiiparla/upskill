@@ -12,13 +12,13 @@ export const QuestIndicators = ({ quests, currentIndex, onIndicatorClick }) => {
     // Determine outline styling based on quest status
     const getIndicatorStyle = () => {
         if (isAlwaysType) {
-            return "bg-violet-50/50 dark:bg-violet-900/20 text-violet-700 dark:text-violet-300";
+            return "bg-slate-50/50 dark:bg-slate-900/20 text-slate-700 dark:text-slate-300";
         } else if (isCompleted) {
             return "bg-emerald-50/50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300";
         } else if (isInProgress) {
             return "bg-sky-50/50 dark:bg-sky-900/20 text-sky-700 dark:text-sky-300";
         } else {
-            return "bg-slate-50/50 dark:bg-slate-900/20 text-slate-700 dark:text-slate-300";
+            return "bg-sky-50/50 dark:bg-sky-900/20 text-sky-700 dark:text-sky-300";
         }
     };
 
@@ -26,7 +26,7 @@ export const QuestIndicators = ({ quests, currentIndex, onIndicatorClick }) => {
         if (isAlwaysType) {
             return {
                 scale: 1.05,
-                backgroundColor: "rgba(139,92,246,0.15)"
+                backgroundColor: "rgba(100,116,139,0.15)"
             };
         } else if (isCompleted) {
             return {
@@ -41,7 +41,7 @@ export const QuestIndicators = ({ quests, currentIndex, onIndicatorClick }) => {
         } else {
             return {
                 scale: 1.05,
-                backgroundColor: "rgba(100,116,139,0.15)"
+                backgroundColor: "rgba(14,165,233,0.15)"
             };
         }
     };
