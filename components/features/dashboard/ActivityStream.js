@@ -3,7 +3,7 @@
 export const ActivityStream = ({ activityStream }) => {
 
     const getActionColor = (type) => {
-        switch(type) {
+        switch (type) {
             case 'feedback_submitted': return 'text-csway-green';
             case 'feedback_request_created': return 'text-blue-400';
             case 'feedback_liked': return 'text-purple-400';
@@ -12,7 +12,7 @@ export const ActivityStream = ({ activityStream }) => {
     };
 
     const getActionText = (type) => {
-        switch(type) {
+        switch (type) {
             case 'feedback_submitted': return 'submitted feedback';
             case 'feedback_request_created': return 'created a request';
             case 'feedback_liked': return 'liked feedback';
@@ -23,7 +23,7 @@ export const ActivityStream = ({ activityStream }) => {
 
     const getTargetLink = (targetInfo, eventType) => {
         if (!targetInfo) return null;
-        
+
         if (targetInfo.type === 'feedback_request' && targetInfo.tag) {
             return `/feedback/request/${targetInfo.tag}`;
         }
@@ -45,36 +45,48 @@ export const ActivityStream = ({ activityStream }) => {
     return (
         <>
             {activityStream.map((activity, index) => (
-                <div key={activity.id} className="text-slate-700 dark:text-slate-300">
-                    <span className="text-slate-500 dark:text-slate-600">[{String(index + 1).padStart(3, '0')}]</span>
-                    {' '}
-                    <span className="text-slate-500 dark:text-slate-400">{new Date(activity.created_at).toLocaleTimeString()}</span>
-                    {' '}
-                    <span className="text-slate-400 dark:text-slate-500">›</span>
-                    {' '}
-                    <br className="md:hidden" />
-                    <span className="font-semibold text-slate-900 dark:text-white">{activity.user_name}</span>
-                    {' '}
-                    <span className={`${getActionColor(activity.event_type)} font-medium`}>
-                        {getActionText(activity.event_type)}
-                    </span>
-                    {getTargetText(activity.target_info) && (
-                        <>
-                            {' '}
-                            <span className="text-slate-400 dark:text-slate-500">›</span>
-                            {' '}
-                            {getTargetLink(activity.target_info, activity.event_type) ? (
-                                <a 
-                                    href={getTargetLink(activity.target_info, activity.event_type)} 
-                                    className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 hover:underline transition-colors"
-                                >
-                                    {getTargetText(activity.target_info)}
-                                </a>
-                            ) : (
-                                <span className="text-slate-900 dark:text-white">{getTargetText(activity.target_info)}</span>
-                            )}
-                        </>
-                    )}
+                <div
+                    key={activity.id}
+                    className="text-slate-700 dark:text-slate-300 flex items-start gap-2"
+                >
+                    <div className="flex-shrink-0 min-w-[45px]">
+                        {activity.isNew ? (
+                            <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold text-white bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700">
+                                NEW
+                            </span>
+                        ) : (
+                            <span className="text-slate-500 dark:text-slate-600">[{String(index + 1).padStart(3, '0')}]</span>
+                        )}
+                    </div>
+                    <div className="flex-1">
+                        <span className="text-slate-500 dark:text-slate-400">{new Date(activity.created_at).toLocaleTimeString()}</span>
+                        {' '}
+                        <span className="text-slate-400 dark:text-slate-500">›</span>
+                        {' '}
+                        <br className="md:hidden" />
+                        <span className=" text-slate-500 dark:text-slate-400">{activity.user_name}</span>
+                        {' '}
+                        <span className={`${getActionColor(activity.event_type)} font-medium`}>
+                            {getActionText(activity.event_type)}
+                        </span>
+                        {getTargetText(activity.target_info) && (
+                            <>
+                                {' '}
+                                <span className="text-slate-400 dark:text-slate-500">›</span>
+                                {' '}
+                                {getTargetLink(activity.target_info, activity.event_type) ? (
+                                    <a
+                                        href={getTargetLink(activity.target_info, activity.event_type)}
+                                        className="font-bold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 hover:underline transition-colors"
+                                    >
+                                        {getTargetText(activity.target_info)}
+                                    </a>
+                                ) : (
+                                    <span className="font-semibold text-slate-900 dark:text-white">{getTargetText(activity.target_info)}</span>
+                                )}
+                            </>
+                        )}
+                    </div>
                 </div>
             ))}
         </>

@@ -13,7 +13,7 @@ export default function DashboardSkeleton() {
 
                 {/* Agenda Items Grid */}
                 <div className="grid grid-cols-1 gap-4 auto-rows-fr">
-                    {[...Array(4)].map((_, i) => (
+                    {[...Array(3)].map((_, i) => (
                         <div key={i} className="relative bg-gradient-to-br from-slate-50 to-slate-50/40 dark:from-slate-900/40 dark:to-slate-900/20 border border-slate-200/60 dark:border-slate-700/60 rounded-xl p-8 pl-16">
                             {/* Icon badge */}
                             <div className="absolute left-4 top-1/2 -translate-y-1/2 h-8 w-8 bg-slate-200/60 dark:bg-slate-700/60 rounded-lg"></div>

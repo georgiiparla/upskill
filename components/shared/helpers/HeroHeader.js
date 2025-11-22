@@ -25,7 +25,7 @@ export const HeroHeader = ({
         return (
             <div className={containerClasses}>
                 <div className="space-y-4">
-                    <div className={`inline-flex items-center justify-center ${iconSize} bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm border border-slate-200/60 dark:border-slate-700/60 rounded-xl shadow-lg mb-6`}>
+                    <div className={`inline-flex items-center justify-center ${iconSize} bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm border border-slate-200/60 dark:border-slate-700/60 rounded-xl  mb-6`}>
                         <Icon className={`h-7 w-7 ${iconAccentColor}`} />
                     </div>
 
@@ -48,7 +48,7 @@ export const HeroHeader = ({
     return (
         <div className={containerClasses}>
             <div className="flex-shrink-0">
-                <div className={`${iconSize} bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm border border-slate-200/60 dark:border-slate-700/60 rounded-xl shadow-lg flex items-center justify-center`}>
+                <div className={`${iconSize} bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm border border-slate-200/60 dark:border-slate-700/60 rounded-xl  flex items-center justify-center`}>
                     <Icon className={`h-7 w-7 ${iconAccentColor}`} />
                 </div>
             </div>

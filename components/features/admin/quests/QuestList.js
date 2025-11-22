@@ -5,29 +5,22 @@ import { ListChecks } from 'lucide-react';
 import { Card, SectionTitle } from '@/components/shared/helpers/Helper';
 import { QuestListItem } from './QuestListItem';
 
-// Time unit conversions
+// Time unit conversions aligned with Rails ActiveSupport
+// Rails uses 365.2425 days per year (leap year adjusted)
 const TIME_UNITS = {
     seconds: 1,
     minutes: 60,
     hours: 3600,
     days: 86400,
     weeks: 604800,
-    months: 2592000, // 30 days
-    years: 31536000, // 365 days
+    months: 2592000,  // 30 days
+    years: 31556952,  // 365.2425 days (Rails standard)
 };
 
 export const QuestList = ({ quests, onUpdatePoints, onToggleExplicit, updatingId, togglingId }) => {
     const [editingId, setEditingId] = useState(null);
     const [draftValue, setDraftValue] = useState('');
-    const [draftResetUnits, setDraftResetUnits] = useState({
-        years: 0,
-        months: 0,
-        weeks: 0,
-        days: 0,
-        hours: 0,
-        minutes: 0,
-        seconds: 0,
-    });
+    const [draftResetUnits, setDraftResetUnits] = useState(null);
     const [inlineError, setInlineError] = useState('');
 
     // Calculate total seconds from all units
@@ -60,15 +53,7 @@ export const QuestList = ({ quests, onUpdatePoints, onToggleExplicit, updatingId
     const cancelEditing = () => {
         setEditingId(null);
         setDraftValue('');
-        setDraftResetUnits({
-            years: 0,
-            months: 0,
-            weeks: 0,
-            days: 0,
-            hours: 0,
-            minutes: 0,
-            seconds: 0,
-        });
+        setDraftResetUnits(null);
         setInlineError('');
     };
 
@@ -118,7 +103,11 @@ export const QuestList = ({ quests, onUpdatePoints, onToggleExplicit, updatingId
             <SectionTitle icon={<ListChecks className="h-6 w-6 text-csway-green" />} title="Existing quests" />
 
             <ul className="space-y-3">
-                {quests.map((quest) => (
+                {quests.sort((a, b) => {
+                    if (a.quest_type === 'interval-based' && b.quest_type !== 'interval-based') return -1;
+                    if (a.quest_type !== 'interval-based' && b.quest_type === 'interval-based') return 1;
+                    return 0;
+                }).map((quest) => (
                     <QuestListItem
                         key={`${quest.id}-${quest.explicit}`}
                         quest={quest}

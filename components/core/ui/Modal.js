@@ -35,7 +35,7 @@ export const Modal = ({
                 onClick={(e) => e.stopPropagation()}
             >
                 <div className="flex items-center justify-between pb-4 border-b border-gray-200 dark:border-gray-700">
-                    <h3 className="text-lg font-normal font-mono tracking-tight text-gray-900 dark:text-white">{title}</h3>
+                    <h3 className="text-lg font-normal tracking-tight text-gray-900 dark:text-white">{title}</h3>
                     <button
                         onClick={onClose}
                         className="p-1 rounded-full text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
@@ -44,7 +44,7 @@ export const Modal = ({
                     </button>
                 </div>
 
-                <div className="py-6 text-sm font-normal font-mono tracking-tight text-gray-600 dark:text-gray-300 mb-3">
+                <div className="py-6 text-sm font-normal tracking-tight text-gray-600 dark:text-gray-300 mb-3">
                     {children}
                 </div>
 
@@ -52,7 +52,7 @@ export const Modal = ({
                     <button
                         onClick={onClose}
                         disabled={isConfirming}
-                        className="px-4 py-2 text-sm font-normal font-mono tracking-tight text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600 focus:outline-none disabled:opacity-50"
+                        className="px-4 py-2 text-sm font-normal tracking-tight text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600 focus:outline-none disabled:opacity-50"
                     >
                         {cancelText}
                     </button>
@@ -60,7 +60,7 @@ export const Modal = ({
                     <button
                         onClick={onConfirm}
                         disabled={isConfirming}
-                        className={`px-4 py-2 text-sm font-normal font-mono tracking-tight text-white rounded-md focus:outline-none flex items-center justify-center ${confirmButtonClass} disabled:opacity-50`}
+                        className={`px-4 py-2 text-sm font-normal tracking-tight text-white rounded-md focus:outline-none flex items-center justify-center ${confirmButtonClass} disabled:opacity-50`}
                     >
                         {isConfirming && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                         {confirmText}

@@ -11,12 +11,24 @@ export const QuestCarousel = ({ quests }) => {
 
     const swipeThreshold = 80;
 
-    // Trigger confetti when quest is completed
+    // Trigger confetti based on has_new_progress flag from backend
     useEffect(() => {
         const currentQuest = quests[currentIndex];
-        const isCompleted = currentQuest?.user_completed ?? currentQuest?.completed;
+        if (!currentQuest) return;
 
-        if (isCompleted) {
+        const isAlwaysType = currentQuest?.quest_type === 'always';
+        const isCompleted = currentQuest?.user_completed ?? currentQuest?.completed;
+        const hasNewProgress = currentQuest?.has_new_progress;
+
+        // For "always" type quests: show confetti only if there's new progress since last view
+        if (isAlwaysType && hasNewProgress) {
+            setShowConfetti(true);
+            const timer = setTimeout(() => setShowConfetti(false), 3000);
+            return () => clearTimeout(timer);
+        }
+
+        // For interval-based quests: show confetti when completed
+        if (!isAlwaysType && isCompleted) {
             setShowConfetti(true);
             const timer = setTimeout(() => setShowConfetti(false), 3000);
             return () => clearTimeout(timer);
@@ -76,7 +88,7 @@ export const QuestCarousel = ({ quests }) => {
                 <QuestCard
                     key={currentIndex}
                     quest={currentQuest}
-                    showConfetti={showConfetti && isCompleted}
+                    showConfetti={showConfetti}
                     direction={direction}
                     onDragEnd={handleDragEnd}
                     quests={quests}

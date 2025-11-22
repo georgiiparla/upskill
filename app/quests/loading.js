@@ -15,13 +15,13 @@ const HeroHeaderSkeleton = () => (
 
 const QuestCardSkeleton = () => {
     return (
-        <div className="animate-pulse relative">
+        <div className="animate-pulse relative w-full">
             {/* Card container with gradient background */}
-            <div className="bg-gradient-to-br from-slate-50/60 via-pink-50/40 to-gray-50/80 dark:from-slate-900/20 dark:via-pink-900/10 dark:to-gray-900/30 border border-slate-300/60 dark:border-slate-700/60 shadow-lg shadow-pink-500/20 rounded-xl min-h-[400px] max-h-[500px] flex flex-col mx-auto max-w-5xl overflow-hidden relative">
+            <div className="bg-gradient-to-br from-slate-50/60 via-pink-50/40 to-gray-50/80 dark:from-slate-900/20 dark:via-pink-900/10 dark:to-gray-900/30 border border-slate-300/60 dark:border-slate-700/60 shadow-lg shadow-pink-500/20 rounded-xl min-h-[320px] md:min-h-[400px] max-h-[400px] md:max-h-[500px] flex flex-col w-full overflow-hidden relative">
 
                 {/* Content area */}
-                <div className="flex-1 flex flex-col items-center justify-center text-center px-8 py-6 relative">
-                    <div className="space-y-6 max-w-3xl w-full">
+                <div className="flex-1 flex flex-col items-center justify-center text-center px-4 md:px-8 py-4 md:py-6 relative">
+                    <div className="space-y-4 md:space-y-6 max-w-3xl w-full">
                         {/* Title skeleton */}
                         <div className="space-y-2">
                             <div className="h-8 bg-gray-300 dark:bg-gray-700 rounded w-3/4 mx-auto"></div>

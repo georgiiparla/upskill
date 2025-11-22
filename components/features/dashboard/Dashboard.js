@@ -12,10 +12,12 @@ import { BarChart2, ClipboardList, Zap, MessageSquarePlus, ThumbsUp, Target, Tro
 import { QuickActionButton } from "../../core/buttons/Buttons";
 import { useRouter } from 'next/navigation';
 import { Card } from "@/components/shared/helpers/Helper";
+import { clientFetch } from "@/lib/client-api";
 
 export default function Dashboard({ initialData }) {
     const [agendaItems, setAgendaItems] = useState(initialData.agendaItems);
     const [editingItemId, setEditingItemId] = useState(null);
+    const [hasUnviewedEvents, setHasUnviewedEvents] = useState(initialData.hasUnviewedEvents || false);
     const router = useRouter();
 
     const handleUpdateAgendaItem = (updatedItem) => {
@@ -24,10 +26,21 @@ export default function Dashboard({ initialData }) {
         );
     };
 
+    const handleActivityStreamViewed = async () => {
+        try {
+            const result = await clientFetch('/dashboard/mark-activity-viewed', { method: 'POST' });
+            if (result.success) {
+                setHasUnviewedEvents(false);
+            }
+        } catch (error) {
+            console.error('Failed to mark activity stream as viewed:', error);
+        }
+    };
+
     return (
         <div className="space-y-8 pb-16 pt-3">
             {/* This Week's Agenda Section */}
-            <Card innerClassName="p-3">
+            <Card innerClassName="pt-3 px-3 pb-8">
                 <SectionHeader
                     icon={ClipboardList}
                     title="This Week's Agenda"
@@ -52,7 +65,7 @@ export default function Dashboard({ initialData }) {
             </Card>
 
             {/* Dashboard Section */}
-            <Card innerClassName="p-3">
+            <Card innerClassName="pt-3 px-3 pb-8">
                 <div className="space-y-6">
                     <SectionHeader
                         icon={BarChart2}
@@ -64,25 +77,25 @@ export default function Dashboard({ initialData }) {
                     <div className="flex gap-4">
                         <QuickActionButton
                             icon={MessageSquarePlus}
-                            text="Submit New Feedback Request"
+                            text="Request Feedback"
                             colorScheme="green"
                             onClick={() => router.push('/feedback/request/new')}
                         />
                         <QuickActionButton
                             icon={ThumbsUp}
-                            text="Find Pending Feedback Requests"
+                            text="Provide Feedback"
                             colorScheme="blue"
                             onClick={() => router.push('/feedback')}
                         />
                     </div>
+                    <ConsoleDropdown title="Activity Stream Log" hasUnviewedEvents={hasUnviewedEvents} onClose={handleActivityStreamViewed}>
+                        <ConsoleLog>
+                            <ActivityStream activityStream={initialData.activityStream} />
+                        </ConsoleLog>
+                    </ConsoleDropdown>
                     <ConsoleDropdown title="Weekly Summary" >
                         <ConsoleLog>
                             <Metrics metricsData={initialData.activityData} />
-                        </ConsoleLog>
-                    </ConsoleDropdown>
-                    <ConsoleDropdown title="Activity Stream Log">
-                        <ConsoleLog>
-                            <ActivityStream activityStream={initialData.activityStream} />
                         </ConsoleLog>
                     </ConsoleDropdown>
                 </div>

@@ -8,6 +8,7 @@ const AuthContext = createContext(null);
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [isAdmin, setIsAdmin] = useState(false);
     const [isLoading, setIsLoading] = useState(true); // Single loading state
     const [error, setError] = useState(null);
     const [navbarRefreshTrigger, setNavbarRefreshTrigger] = useState(0);
@@ -42,21 +43,25 @@ export const AuthProvider = ({ children }) => {
                 if (data.logged_in) {
                     setUser(data.user);
                     setIsAuthenticated(true);
+                    setIsAdmin(data.is_admin || false);
                 } else {
                     removeTokenCookie();
                     setIsAuthenticated(false);
                     setUser(null);
+                    setIsAdmin(false);
                 }
             } else {
                 removeTokenCookie();
                 setIsAuthenticated(false);
                 setUser(null);
+                setIsAdmin(false);
             }
         } catch (err) {
             console.error("Session check failed:", err);
             setError(friendlyError);
             setIsAuthenticated(false);
             setUser(null);
+            setIsAdmin(false);
         } finally {
             setIsLoading(false);
         }
@@ -86,6 +91,7 @@ export const AuthProvider = ({ children }) => {
         } finally {
             setUser(null);
             setIsAuthenticated(false);
+            setIsAdmin(false);
             removeTokenCookie(); //
             setIsLoading(false);
         }
@@ -95,7 +101,7 @@ export const AuthProvider = ({ children }) => {
         setNavbarRefreshTrigger(prev => prev + 1);
     }, []);
 
-    const value = { user, isAuthenticated, isLoading, logout, error, clearError, handleTokenLogin, refreshNavbarPoints, navbarRefreshTrigger };
+    const value = { user, isAuthenticated, isAdmin, isLoading, logout, error, clearError, handleTokenLogin, refreshNavbarPoints, navbarRefreshTrigger };
 
     return (
         <AuthContext.Provider value={value}>
