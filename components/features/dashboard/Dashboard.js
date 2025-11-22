@@ -40,7 +40,7 @@ export default function Dashboard({ initialData }) {
     return (
         <div className="space-y-8 pb-16 pt-3">
             {/* This Week's Agenda Section */}
-            <Card innerClassName="p-3">
+            <Card innerClassName="pt-3 px-3 pb-8">
                 <SectionHeader
                     icon={ClipboardList}
                     title="This Week's Agenda"
@@ -65,7 +65,7 @@ export default function Dashboard({ initialData }) {
             </Card>
 
             {/* Dashboard Section */}
-            <Card innerClassName="p-3">
+            <Card innerClassName="pt-3 px-3 pb-8">
                 <div className="space-y-6">
                     <SectionHeader
                         icon={BarChart2}

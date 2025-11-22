@@ -28,11 +28,11 @@ export const QuestCard = ({
             const lastTriggeredTime = new Date(quest.last_triggered_at).getTime();
             const currentTime = Date.now();
             const timeDiffMs = currentTime - lastTriggeredTime;
-            
+
             // Show confetti only if triggered within the last 5 seconds (and not a future timestamp)
             if (timeDiffMs >= 0 && timeDiffMs < 5000) {
                 setShowConfettiOnTrigger(true);
-                
+
                 // Auto-hide confetti after animation
                 const timer = setTimeout(() => setShowConfettiOnTrigger(false), 2000);
                 return () => clearTimeout(timer);
@@ -74,14 +74,14 @@ export const QuestCard = ({
         if (isAlwaysType) {
             return 'bg-gradient-to-br from-slate-50/60 via-pink-50/40 to-gray-50/80 dark:from-slate-900/20 dark:via-pink-900/10 dark:to-gray-900/30 border-slate-300/60 dark:border-slate-700/60 shadow-lg shadow-pink-500/20';
         }
-        
+
         // Interval-based quests original styling
         if (completed) {
             return 'bg-gradient-to-br from-emerald-50/60 via-teal-50/40 to-cyan-50/80 dark:from-emerald-900/20 dark:via-teal-900/10 dark:to-cyan-900/30 border-emerald-300/60 dark:border-emerald-700/60 shadow-lg shadow-emerald-500/20';
         } else if (inProgress) {
             return 'bg-gradient-to-br from-sky-50/60 via-purple-50/40 to-blue-50/80 dark:from-sky-900/20 dark:via-purple-900/10 dark:to-blue-900/30 border-sky-300/60 dark:border-sky-700/60 shadow-lg shadow-purple-500/20';
         } else {
-            return 'bg-gradient-to-br from-sky-50/60 via-blue-50/40 to-indigo-50/80 dark:from-sky-900/20 dark:via-blue-900/10 dark:to-indigo-900/30 border-sky-300/60 dark:border-sky-700/60 shadow-lg shadow-sky-500/20';
+            return 'bg-gradient-to-br from-indigo-50/60 via-slate-50/40 to-indigo-50/80 dark:from-indigo-950/40 dark:via-sky-950/20 dark:to-indigo-950/40 border-slate-200 dark:border-slate-800 shadow-lg shadow-indigo-500/20';
         }
     };
 
@@ -93,7 +93,7 @@ export const QuestCard = ({
                 description: 'text-slate-700 dark:text-slate-300'
             };
         }
-        
+
         // Completed quests: emerald text
         if (completed) {
             return {
@@ -101,7 +101,7 @@ export const QuestCard = ({
                 description: 'text-emerald-700 dark:text-emerald-300'
             };
         }
-        
+
         // In-progress quests: sky text
         if (inProgress) {
             return {
@@ -109,11 +109,11 @@ export const QuestCard = ({
                 description: 'text-sky-700 dark:text-sky-300'
             };
         }
-        
-        // Default: light blue text
+
+        // Default: indigo text
         return {
-            title: 'text-sky-900 dark:text-sky-100',
-            description: 'text-sky-700 dark:text-sky-300'
+            title: 'text-indigo-900 dark:text-indigo-100',
+            description: 'text-indigo-700 dark:text-indigo-300'
         };
     };
 
@@ -160,7 +160,7 @@ export const QuestCard = ({
 
                 <div className="flex-1 flex flex-col items-center justify-center text-center px-4 md:px-8 py-4 md:py-6 relative z-10">
                     <div className="space-y-4 md:space-y-6 max-w-3xl w-full">
-                    {/* Quest title with playful animation */}
+                        {/* Quest title with playful animation */}
                         <motion.h2
                             className={`text-2xl md:text-3xl lg:text-4xl font-bold leading-tight font-mono ${getTextColors().title}`}
                             initial={{ y: 20, opacity: 0 }}

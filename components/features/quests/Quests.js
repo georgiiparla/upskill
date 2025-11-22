@@ -6,16 +6,31 @@ import { QuestCarousel } from "./QuestCarousel";
 
 export const Quests = ({ initialQuests }) => {
     const explicitQuests = (initialQuests || []).filter((quest) => quest.explicit !== false);
-    
-    // Sort quests: interval-based first, then always-type
+
+    // Sort quests: 
+    // 1. Completed interval-based quests (green background)
+    // 2. Other interval-based quests
+    // 3. Always-type quests
     const sortedQuests = explicitQuests.sort((a, b) => {
         const aIsAlways = a.quest_type === 'always';
         const bIsAlways = b.quest_type === 'always';
-        
-        // If different types, interval-based (not always) comes first
+
+        const aCompleted = a.user_completed ?? a.completed;
+        const bCompleted = b.user_completed ?? b.completed;
+
+        const aIsCompletedInterval = !aIsAlways && aCompleted;
+        const bIsCompletedInterval = !bIsAlways && bCompleted;
+
+        // Priority 1: Completed interval quests come first
+        if (aIsCompletedInterval !== bIsCompletedInterval) {
+            return aIsCompletedInterval ? -1 : 1;
+        }
+
+        // Priority 2: Interval-based (not always) comes before always
         if (aIsAlways !== bIsAlways) {
             return aIsAlways ? 1 : -1;
         }
+
         // If same type, maintain original order
         return 0;
     });
