@@ -55,7 +55,7 @@ export const ActivityStream = ({ activityStream }) => {
                                 NEW
                             </span>
                         ) : (
-                            <span className="text-slate-500 dark:text-slate-600">[{String(index + 1).padStart(3, '0')}]</span>
+                            <span className="text-slate-500 dark:text-slate-600 text-xs font-mono">{activity.formatted_date}</span>
                         )}
                     </div>
                     <div className="flex-1">
