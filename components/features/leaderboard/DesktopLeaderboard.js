@@ -1,7 +1,7 @@
 "use client";
 import React from 'react';
 import { LeaderboardItem } from './LeaderboardItem';
-import { ContinuationIndicators } from './ContinuationIndicators';
+// import { ContinuationIndicators } from './ContinuationIndicators';
 
 export const DesktopLeaderboard = ({ rankedUsers, maxPoints }) => (
     <div

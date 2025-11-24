@@ -33,9 +33,9 @@ export const FeedbackCommentItem = ({ feedback, onDeleteSuccess }) => {
             toast.error("Failed to update like.");
             setIsLiked(originalLikedState);
             setLikeCount(originalLikeCount);
-        } else if (!originalLikedState) {
-            // Only refresh on like (not unlike) since liking completes the 'like_feedback' quest
-            refreshNavbarPoints();
+        } else {
+            // Refresh points on both like and unlike so the navbar stays accurate
+            try { refreshNavbarPoints(); } catch (e) { /* ignore */ }
         }
     };
 
@@ -50,6 +50,7 @@ export const FeedbackCommentItem = ({ feedback, onDeleteSuccess }) => {
         if (response.success) {
             toast.success('Comment deleted!', { id: toastId });
             onDeleteSuccess(feedback.id);
+            try { refreshNavbarPoints(); } catch (e) { /* ignore */ }
         } else {
             toast.error(`Error: ${response.error}`, { id: toastId });
         }

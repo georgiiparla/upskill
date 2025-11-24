@@ -1,4 +1,5 @@
 "use client";
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Card } from "../../shared/helpers/Helper";
 import { Confetti } from "./Confetti";
@@ -16,6 +17,29 @@ export const QuestCard = ({
     isCompleted,
     isInProgress
 }) => {
+    const [showConfettiOnTrigger, setShowConfettiOnTrigger] = useState(false);
+
+    const isAlwaysType = quest?.quest_type === 'always';
+
+    useEffect(() => {
+        // For always-type quests, show confetti only if the quest was just triggered
+        // (last_triggered_at is very recent, indicating user just completed an action)
+        if (isAlwaysType && quest?.last_triggered_at) {
+            const lastTriggeredTime = new Date(quest.last_triggered_at).getTime();
+            const currentTime = Date.now();
+            const timeDiffMs = currentTime - lastTriggeredTime;
+
+            // Show confetti only if triggered within the last 5 seconds (and not a future timestamp)
+            if (timeDiffMs >= 0 && timeDiffMs < 5000) {
+                setShowConfettiOnTrigger(true);
+
+                // Auto-hide confetti after animation
+                const timer = setTimeout(() => setShowConfettiOnTrigger(false), 2000);
+                return () => clearTimeout(timer);
+            }
+        }
+    }, [quest?.last_triggered_at, isAlwaysType]);
+
     // Animation variants for quest card transitions
     const questVariants = {
         enter: (enterDirection) => ({
@@ -41,18 +65,56 @@ export const QuestCard = ({
         })
     };
 
-    // Determine card styling based on quest status
+    // Determine card styling based on quest status and type
     const completed = isCompleted ?? quest?.completed;
     const inProgress = isInProgress ?? quest?.in_progress;
 
     const getCardStyles = () => {
+        // Always-type quests: gray/slate palette
+        if (isAlwaysType) {
+            return 'bg-gradient-to-br from-slate-50/60 via-pink-50/40 to-gray-50/80 dark:from-slate-900/20 dark:via-pink-900/10 dark:to-gray-900/30 border-slate-300/60 dark:border-slate-700/60 shadow-lg shadow-pink-500/20';
+        }
+
+        // Interval-based quests original styling
         if (completed) {
-            return 'bg-gradient-to-br from-emerald-50/60 via-yellow-50/40 to-green-50/80 dark:from-emerald-900/20 dark:via-yellow-900/10 dark:to-green-900/30 border-emerald-300/60 dark:border-emerald-700/60 shadow-lg shadow-emerald-500/20';
+            return 'bg-gradient-to-br from-emerald-50/60 via-teal-50/40 to-cyan-50/80 dark:from-emerald-900/20 dark:via-teal-900/10 dark:to-cyan-900/30 border-emerald-300/60 dark:border-emerald-700/60 shadow-lg shadow-emerald-500/20';
         } else if (inProgress) {
             return 'bg-gradient-to-br from-sky-50/60 via-purple-50/40 to-blue-50/80 dark:from-sky-900/20 dark:via-purple-900/10 dark:to-blue-900/30 border-sky-300/60 dark:border-sky-700/60 shadow-lg shadow-purple-500/20';
         } else {
-            return 'bg-gradient-to-br from-slate-50/60 via-pink-50/40 to-gray-50/80 dark:from-slate-900/20 dark:via-pink-900/10 dark:to-gray-900/30 border-slate-300/60 dark:border-slate-700/60 shadow-lg shadow-pink-500/20';
+            return 'bg-gradient-to-br from-indigo-50/60 via-slate-50/40 to-indigo-50/80 dark:from-indigo-950/40 dark:via-sky-950/20 dark:to-indigo-950/40 border-slate-200 dark:border-slate-800 shadow-lg shadow-indigo-500/20';
         }
+    };
+
+    const getTextColors = () => {
+        // Always-type quests: slate text
+        if (isAlwaysType) {
+            return {
+                title: 'text-slate-900 dark:text-slate-100',
+                description: 'text-slate-700 dark:text-slate-300'
+            };
+        }
+
+        // Completed quests: emerald text
+        if (completed) {
+            return {
+                title: 'text-emerald-900 dark:text-emerald-100',
+                description: 'text-emerald-700 dark:text-emerald-300'
+            };
+        }
+
+        // In-progress quests: sky text
+        if (inProgress) {
+            return {
+                title: 'text-sky-900 dark:text-sky-100',
+                description: 'text-sky-700 dark:text-sky-300'
+            };
+        }
+
+        // Default: indigo text
+        return {
+            title: 'text-indigo-900 dark:text-indigo-100',
+            description: 'text-indigo-700 dark:text-indigo-300'
+        };
     };
 
     return (
@@ -83,9 +145,9 @@ export const QuestCard = ({
             }}
             onDragEnd={onDragEnd}
         >
-            <Card variant="custom" className={`group transition-all duration-300 relative min-h-[320px] md:min-h-[400px] max-h-[400px] md:max-h-[500px] flex flex-col mx-auto max-w-5xl overflow-hidden ${getCardStyles()}`}>
-                {/* Confetti overlay for completed quests */}
-                <Confetti isActive={showConfetti} />
+            <Card variant="custom" className={`group transition-all duration-300 relative min-h-[320px] md:min-h-[400px] max-h-[400px] md:max-h-[500px] flex flex-col w-full overflow-hidden ${getCardStyles()}`}>
+                {/* Confetti overlay for completed quests and triggered always-quests */}
+                <Confetti isActive={showConfetti || showConfettiOnTrigger} color={isAlwaysType ? 'default' : undefined} />
 
                 {/* Quest Position Indicator - Top Right Corner */}
                 <div className="absolute top-2 right-2 md:top-4 md:right-4 z-20">
@@ -100,7 +162,7 @@ export const QuestCard = ({
                     <div className="space-y-4 md:space-y-6 max-w-3xl w-full">
                         {/* Quest title with playful animation */}
                         <motion.h2
-                            className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white leading-tight font-mono"
+                            className={`text-2xl md:text-3xl lg:text-4xl font-bold leading-tight font-mono ${getTextColors().title}`}
                             initial={{ y: 20, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
                             transition={{ delay: 0.2 }}
@@ -110,7 +172,7 @@ export const QuestCard = ({
 
                         {/* Quest description */}
                         <motion.p
-                            className="text-base md:text-lg lg:text-xl text-gray-600 dark:text-gray-300 leading-relaxed font-mono"
+                            className={`text-base md:text-lg lg:text-xl leading-relaxed font-mono ${getTextColors().description}`}
                             initial={{ y: 20, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
                             transition={{ delay: 0.4 }}
@@ -121,7 +183,8 @@ export const QuestCard = ({
                         {/* Points Display - Enhanced */}
                         <PointsBadge
                             points={quest.points}
-                            status={completed ? "completed" : inProgress ? "in_progress" : "default"}
+                            status={completed ? "completed" : isAlwaysType ? "always" : inProgress ? "in_progress" : "default"}
+                            isAlwaysType={isAlwaysType}
                         />
                     </div>
                 </div>

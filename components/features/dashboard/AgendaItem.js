@@ -1,42 +1,51 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import {
     ClipboardList, Pencil, X, Check, BookOpen,
-    FileText, MessageSquare, Lightbulb, Link as LinkIcon
+    FileText, MessageSquare, Star, Link as LinkIcon, MoreHorizontal
 } from 'lucide-react';
 import { clientFetch } from '@/lib/client-api';
 import { useAuth } from '@/context/AuthContext';
 import toast from 'react-hot-toast';
-import { formatRelativeTime } from '@/lib/helper-func';
 import { BlurOverlay } from '../../core/layout/BlurOverlay';
 import { DetailActionButton } from '../../core/buttons/Buttons';
 
 const ICON_MAP = {
     ClipboardList: {
         component: ClipboardList,
-        colors: "bg-blue-100 text-blue-600 dark:bg-blue-900 dark:text-blue-400",
+        colors: "bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400",
         ring: "ring-blue-500",
+        border: "border-blue-200",
+        subtleBg: "from-blue-50/60 to-slate-50/40 dark:from-blue-900/20 dark:to-slate-800/30"
     },
     BookOpen: {
         component: BookOpen,
-        colors: "bg-purple-100 text-purple-600 dark:bg-purple-900 dark:text-purple-400",
+        colors: "bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400",
         ring: "ring-purple-500",
+        border: "border-purple-200",
+        subtleBg: "from-purple-50/60 to-slate-50/40 dark:from-purple-900/20 dark:to-slate-800/30"
     },
     FileText: {
         component: FileText,
-        colors: "bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400",
-        ring: "ring-gray-500",
+        colors: "bg-slate-50 dark:bg-slate-700/20 text-slate-600 dark:text-slate-400",
+        ring: "ring-slate-500",
+        border: "border-slate-200",
+        subtleBg: "from-slate-50/60 to-slate-50/40 dark:from-slate-800/20 dark:to-slate-800/30"
     },
     MessageSquare: {
         component: MessageSquare,
-        colors: "bg-teal-100 text-teal-600 dark:bg-teal-900 dark:text-teal-400",
+        colors: "bg-teal-50 dark:bg-teal-900/20 text-teal-600 dark:text-teal-400",
         ring: "ring-teal-500",
+        border: "border-teal-200",
+        subtleBg: "from-teal-50/60 to-slate-50/40 dark:from-teal-900/20 dark:to-slate-800/30"
     },
-    Lightbulb: {
-        component: Lightbulb,
-        colors: "bg-amber-100 text-amber-600 dark:bg-amber-900 dark:text-amber-400",
-        ring: "ring-amber-500",
+    Star: {
+        component: Star,
+        colors: "bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400",
+        ring: "ring-red-500",
+        border: "border-red-200",
+        subtleBg: "from-red-50/60 to-slate-50/40 dark:from-red-900/20 dark:to-slate-800/30"
     },
 };
 
@@ -45,12 +54,27 @@ const IconDisplay = ({ name, ...props }) => {
     return <Icon {...props} />;
 };
 
-export const AgendaItem = ({ item, onUpdate, isEditing, setEditingItemId }) => {
+export const AgendaItem = ({ item, onUpdate, isEditing, setEditingItemId, isFirst }) => {
     const [title, setTitle] = useState(item.title);
     const [iconName, setIconName] = useState(item.icon_name);
     const [link, setLink] = useState(item.link || '');
     const [isLoading, setIsLoading] = useState(false);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const menuRef = useRef(null);
     const { refreshNavbarPoints } = useAuth();
+    const isSystemMantra = item.is_system_mantra;
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (menuRef.current && !menuRef.current.contains(event.target)) {
+                setIsMenuOpen(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
 
     const MAX_CHARS = 94;
 
@@ -80,8 +104,7 @@ export const AgendaItem = ({ item, onUpdate, isEditing, setEditingItemId }) => {
         if (response.success) {
             onUpdate(response.data);
             setEditingItemId(null);
-            toast.success("Agenda item updated!");
-            // Refresh navbar points since this action completes the 'update_agenda' quest
+            toast.success("Focus item updated!");
             refreshNavbarPoints();
         } else {
             toast.error(`Error: ${response.error}`);
@@ -95,109 +118,146 @@ export const AgendaItem = ({ item, onUpdate, isEditing, setEditingItemId }) => {
         setEditingItemId(null);
     };
 
-    const currentIcon = ICON_MAP[item.icon_name] || ICON_MAP.ClipboardList;
+    const activeIconName = isEditing ? iconName : item.icon_name;
+    const currentIcon = ICON_MAP[activeIconName] || ICON_MAP.ClipboardList;
 
     return (
         <>
             {isEditing && <BlurOverlay />}
-            <li className={`mb-8 ml-6 transition-all duration-300 ease-in-out ${isEditing ? 'relative z-50 scale-[1.02]' : ''}`}>
-                <span className={`absolute flex items-center justify-center w-7 h-7 rounded-full -left-3.5 transition-opacity ${currentIcon.colors} ${isEditing ? 'opacity-0 duration-0' : 'opacity-100 duration-300 delay-300'}`}>
-                    <IconDisplay name={item.icon_name} className="w-4 h-4" />
-                </span>
-                <div className={`p-5 bg-gradient-to-br from-slate-50/60 to-slate-100/40 dark:from-slate-800/60 dark:to-slate-700/40 rounded-lg border border-slate-200/40 dark:border-slate-700/40 relative group hover:shadow-md transition-all duration-200 ${isEditing ? 'shadow-2xl shadow-black/20' : ''}`}>
-                    {isEditing ? (
-                        <div className="space-y-3">
-                            <div className="flex items-center space-x-2 mt-1">
-                                {Object.keys(ICON_MAP).map(name => (
-                                    <button
-                                        key={name}
-                                        onClick={() => setIconName(name)}
-                                        className={`p-2 rounded-full transition-all ${ICON_MAP[name].colors} ${iconName === name ? `ring-2 ${ICON_MAP[name].ring}` : 'ring-0'}`}
-                                    >
-                                        <IconDisplay name={name} className="h-4" />
-                                    </button>
-                                ))}
-                            </div>
-                            <div className="relative">
-                                <input
-                                    type="text"
-                                    value={title}
-                                    onChange={(e) => setTitle(e.target.value)}
-                                    maxLength={MAX_CHARS}
-                                    className="w-full px-2 py-1 pr-16 border rounded-md bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 outline-none"
-                                    autoFocus
-                                />
-                                <div className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-gray-400 pointer-events-none">
-                                    {title.length} / {MAX_CHARS}
+            <div className={`group relative transition-all duration-300 h-full ${isEditing ? 'z-50 scale-[1.02]' : ''}`}>
+                <div className={`relative rounded-lg bg-gradient-to-br ${currentIcon.subtleBg}  transition-all duration-300 h-full flex flex-col border ${currentIcon.border} dark:border-transparent ${isEditing
+                    ? `ring-2 ${currentIcon.ring} shadow-2xl shadow-csway-green/20`
+                    : ''
+                    }`}>
+                    {/* Icon badge */}
+                    <div className={`absolute left-4 top-1/2 -translate-y-1/2 flex items-center justify-center h-8 w-8 rounded-lg ${currentIcon.colors} transition-all duration-300 ${isEditing ? 'opacity-0 scale-0' : 'opacity-100 scale-100'}`}>
+                        <IconDisplay name={item.icon_name} className="h-4 w-4" />
+                    </div>
+
+                    <div className={`py-8 px-4 ${isEditing ? 'pl-6' : 'pl-16'} flex-1 flex flex-col justify-center`}>
+                        {isEditing ? (
+                            <div className="space-y-4">
+                                {/* Icon selector */}
+                                <div className="flex items-center gap-2">
+                                    {Object.keys(ICON_MAP).map(name => (
+                                        <button
+                                            key={name}
+                                            onClick={() => setIconName(name)}
+                                            className={`p-2.5 rounded-lg transition-all ${ICON_MAP[name].colors} ${iconName === name ? `ring-2 ${ICON_MAP[name].ring} scale-110` : 'scale-100 hover:scale-105'
+                                                }`}
+                                        >
+                                            <IconDisplay name={name} className="h-4 w-4" />
+                                        </button>
+                                    ))}
+                                </div>
+
+                                {/* Title input */}
+                                <div className="relative">
+                                    <input
+                                        type="text"
+                                        value={title}
+                                        onChange={(e) => setTitle(e.target.value)}
+                                        maxLength={MAX_CHARS}
+                                        className="w-full px-4 py-3 pr-16 text-base sm:text-lg border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:ring-2 focus:ring-slate-300 dark:focus:ring-slate-600 focus:border-slate-300 dark:focus:border-slate-600 outline-none transition-all"
+                                        autoFocus
+                                        placeholder="Enter focus item..."
+                                    />
+                                    <div className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-400 dark:text-slate-500 font-medium pointer-events-none">
+                                        {title.length}/{MAX_CHARS}
+                                    </div>
+                                </div>
+
+                                {/* Link input */}
+                                <div className="relative">
+                                    <LinkIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 dark:text-slate-500" />
+                                    <input
+                                        type="url"
+                                        value={link}
+                                        onChange={(e) => setLink(e.target.value)}
+                                        placeholder="Add a link (optional)"
+                                        className="w-full pl-10 pr-4 py-2.5 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-slate-300 dark:focus:ring-slate-600 focus:border-slate-300 dark:focus:border-slate-600 outline-none transition-all placeholder:text-slate-400 dark:placeholder:text-slate-500"
+                                    />
+                                </div>
+
+                                {/* Action buttons */}
+                                <div className="flex justify-end gap-2 pt-2">
+                                    <DetailActionButton
+                                        icon={X}
+                                        text="Cancel"
+                                        colorScheme="gray"
+                                        onClick={handleCancel}
+                                        disabled={isLoading}
+                                    />
+                                    <DetailActionButton
+                                        icon={Check}
+                                        text="Save"
+                                        colorScheme="blue"
+                                        onClick={handleSave}
+                                        isLoading={isLoading}
+                                    />
                                 </div>
                             </div>
-                            <div className="relative">
-                                <LinkIcon className="absolute left-2 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                                <input
-                                    type="text"
-                                    value={link}
-                                    onChange={(e) => setLink(e.target.value)}
-                                    placeholder="Add a URL..."
-                                    className="w-full pl-8 pr-2 py-1 border rounded-md bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 outline-none text-sm placeholder:text-gray-400"
-                                />
-                            </div>
-                            <div className="flex justify-end space-x-2 pt-2">
-                                <DetailActionButton
-                                    icon={X}
-                                    text="Cancel"
-                                    colorScheme="gray"
-                                    onClick={handleCancel}
-                                    disabled={isLoading}
-                                />
-                                <DetailActionButton
-                                    icon={Check}
-                                    text="Save"
-                                    colorScheme="blue"
-                                    onClick={handleSave}
-                                    isLoading={isLoading}
-                                />
-                            </div>
-                        </div>
-                    ) : (
-                        <>
-                            <p className="text-xs font-normal text-gray-500 dark:text-gray-400 mb-1 w-[90%] truncate">
-                                {item.editor_username
-                                    ? `Edited by ${item.editor_username} ${formatRelativeTime(item.updated_at)}`
-                                    : `Last updated ${formatRelativeTime(item.updated_at)}`
-                                }
-                            </p>
-                            {/* Title and link icon displayed inline as part of the same element */}
-                            <p className="flex items-center space-x-2 min-w-0 pr-1">
-                                <span className="text-base lg:text-lg font-semibold text-gray-900 dark:text-white">
-                                    {item.title}
-                                    {item.link && (
-                                        <>
-                                            {' '}
-                                            <a
-                                                href={item.link}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                title="Open link"
-                                                onClick={(e) => e.stopPropagation()}
-                                                className="inline-flex items-center text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 align-middle"
+                        ) : (
+                            <>
+                                <div className="flex items-start justify-between gap-4">
+                                    <div className="flex-1 min-w-0">
+                                        <h3 className={`font-medium text-sm sm:text-base md:text-lg text-slate-900 dark:text-white mb-2 break-words ${isFirst ? '' : ''}`}>
+                                            {item.title}
+                                        </h3>
+                                        {item.editor_username ? (
+                                            <p className="text-xs text-slate-500 dark:text-slate-400">
+                                                Updated by <span className="font-medium text-slate-700 dark:text-slate-300">{item.editor_username}</span>
+                                            </p>
+                                        ) : isSystemMantra ? (
+                                            <p className="text-xs text-slate-500 dark:text-slate-400">
+                                                Updated by <span className="font-medium text-slate-700 dark:text-slate-300">System</span>
+                                            </p>
+                                        ) : null}
+                                    </div>
+
+                                    {!isSystemMantra && (
+                                        <div className="relative" ref={menuRef}>
+                                            <button
+                                                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                                                title="More options"
+                                                className="flex-shrink-0 p-2 rounded-lg text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-700 transition-all"
                                             >
-                                                <LinkIcon className="h-4 w-4" />
-                                            </a>
-                                        </>
+                                                <MoreHorizontal className="h-4 w-4" />
+                                            </button>
+                                            {isMenuOpen && (
+                                                <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-slate-800 rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 py-1 z-50">
+                                                    <button
+                                                        onClick={() => {
+                                                            setEditingItemId(item.id);
+                                                            setIsMenuOpen(false);
+                                                        }}
+                                                        className="w-full text-left flex items-center gap-2 px-4 py-2 text-sm text-slate-700 dark:text-slate-200"
+                                                    >
+                                                        <Pencil className="h-4 w-4" />
+                                                        <span>Edit item</span>
+                                                    </button>
+                                                    {item.link && (
+                                                        <a
+                                                            href={item.link}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            onClick={() => setIsMenuOpen(false)}
+                                                            className="w-full text-left flex items-center gap-2 px-4 py-2 text-sm text-slate-700 dark:text-slate-200"
+                                                        >
+                                                            <LinkIcon className="h-4 w-4" />
+                                                            <span>Open link</span>
+                                                        </a>
+                                                    )}
+                                                </div>
+                                            )}
+                                        </div>
                                     )}
-                                </span>
-                            </p>
-                            <button
-                                onClick={() => setEditingItemId(item.id)}
-                                title="Edit item"
-                                className="absolute top-2 right-2 p-1.5 rounded-full text-gray-500 dark:text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-gray-200 dark:hover:bg-gray-600"
-                            >
-                                <Pencil className="h-4 w-4" />
-                            </button>
-                        </>
-                    )}
+                                </div>
+                            </>
+                        )}
+                    </div>
                 </div>
-            </li>
+            </div>
         </>
     );
 };

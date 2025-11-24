@@ -3,7 +3,7 @@ import "./globals.css";
 
 import { Toaster } from 'react-hot-toast';
 
-import { ThemeProvider } from '../components/shared/theme/ThemeProvider';
+import { ThemeProvider } from '@/components/shared/theme/ThemeProvider';
 import { AuthProvider } from "@/context/AuthContext";
 import { GlobalErrorNotifier } from "@/components/core/feedback/GlobalErrorNotifier";
 import AppLayout from "@/components/core/layout/AppLayout";

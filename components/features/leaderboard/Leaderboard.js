@@ -11,13 +11,14 @@ export const Leaderboard = ({ initialData }) => {
     const { rankedUsers, maxPoints } = processLeaderboardData(initialData);
 
     return (
-        <div className="mx-auto w-full max-w-6xl space-y-8">
+        <div className="mx-auto w-full space-y-8">
             {/* Hero Section Header */}
             <HeroHeader
                 icon={Trophy}
                 title="Leaderboard"
                 subtitle="See who's leading the pack this week"
                 iconBg="from-amber-500 to-yellow-600"
+                iconAccentColor="text-amber-600 dark:text-amber-400"
             />
 
             {/* Desktop Layout */}
