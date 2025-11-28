@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import toast from 'react-hot-toast';
-import { clientFetch } from '@/lib/client-api';
-import { QuestList } from './QuestList';
+import { clientFetch } from '@/lib/client-api'; //
+import { QuestList } from './QuestList'; //
 
 export const QuestsManager = ({ initialQuests = [], onQuestsChange }) => {
     const [quests, setQuests] = useState(initialQuests);
@@ -19,6 +19,7 @@ export const QuestsManager = ({ initialQuests = [], onQuestsChange }) => {
         setUpdatingId(questId);
         const toastId = toast.loading('Updating quest...');
 
+        // Logic preserved from original
         const body = { points };
         if (resetInterval !== null && resetInterval !== undefined) {
             body.reset_interval_seconds = resetInterval;
@@ -37,7 +38,6 @@ export const QuestsManager = ({ initialQuests = [], onQuestsChange }) => {
         }
 
         toast.success('Quest updated.', { id: toastId });
-
         const updatedQuest = response.data;
         updateQuests((prev) => prev.map((quest) => (quest.id === updatedQuest.id ? updatedQuest : quest)));
 
@@ -52,7 +52,7 @@ export const QuestsManager = ({ initialQuests = [], onQuestsChange }) => {
 
         const currentExplicit = quest.explicit !== false;
         setTogglingId(quest.id);
-        const toastId = toast.loading(currentExplicit ? 'Hiding quest from carousel...' : 'Showing quest on carousel...');
+        const toastId = toast.loading(currentExplicit ? 'Hiding quest...' : 'Publishing quest...');
 
         const response = await clientFetch(`/quests/${quest.id}`, {
             method: 'PATCH',
@@ -62,17 +62,17 @@ export const QuestsManager = ({ initialQuests = [], onQuestsChange }) => {
         setTogglingId(null);
 
         if (!response.success) {
-            toast.error(response.error || 'Failed to update quest visibility.', { id: toastId });
+            toast.error(response.error || 'Failed to update visibility.', { id: toastId });
             return;
         }
 
         const updated = response.data;
-        toast.success(updated.explicit ? 'Quest will appear on the carousel.' : 'Quest hidden from carousel.', { id: toastId });
+        toast.success(updated.explicit ? 'Quest is now visible.' : 'Quest is now hidden.', { id: toastId });
         updateQuests((prev) => prev.map((q) => (q.id === updated.id ? updated : q)));
     };
 
     return (
-        <div>
+        <div className="w-full">
             <QuestList
                 quests={quests}
                 onUpdatePoints={handlePointsUpdate}

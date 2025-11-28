@@ -68,7 +68,7 @@ export const Quests = ({ initialQuests }) => {
                 title="Weekly Challenges"
                 subtitle="Complete mini-challenges automatically as you use the platform"
                 iconBg="from-yellow-400 to-orange-500"
-                iconAccentColor="text-orange-600 dark:text-orange-400"
+                iconAccentColor="text-green-600 dark:text-green-400"
             />
 
             {/* Quest Carousel */}

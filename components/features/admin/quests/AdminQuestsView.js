@@ -1,55 +1,49 @@
 "use client";
 
 import { useState } from 'react';
-import { Monitor, ShieldCheck, Sparkles } from 'lucide-react';
+import { Monitor, ShieldCheck } from 'lucide-react';
 
-import { Card } from '@/components/shared/helpers/Helper';
-import { QuestsManager } from './QuestsManager';
+import { Card } from '@/components/shared/helpers/Helper'; //
+import { QuestsManager } from './QuestsManager'; //
 
 export const AdminQuestsView = ({ initialQuests = [] }) => {
     const [quests, setQuests] = useState(initialQuests);
     const activeQuestLabel = `${quests.length} active ${quests.length === 1 ? 'quest' : 'quests'}`;
 
     return (
-        <div>
+        <div className="h-full">
+            {/* Mobile Guard */}
             <div className="lg:hidden">
                 <Card className="h-full" innerClassName="flex flex-col items-center justify-center space-y-4 py-10 text-center">
                     <Monitor className="h-9 w-9 text-csway-green" />
                     <div className="space-y-2">
                         <p className="text-lg font-semibold text-slate-900 dark:text-white">Desktop only feature</p>
                         <p className="text-sm text-slate-600 dark:text-slate-400">
-                            The quest management dashboard is optimized for laptop and desktop screens. Please switch to a larger display to continue.
+                            The quest management dashboard is optimized for laptop and desktop screens.
                         </p>
                     </div>
                 </Card>
             </div>
 
-            <div className="hidden space-y-10 lg:block">
-                <Card variant="custom" className="relative overflow-hidden">
-                    <div className="pointer-events-none absolute -left-16 top-0 h-40 w-40 rounded-full bg-csway-green/15 blur-3xl" />
-                    <div className="pointer-events-none absolute -right-10 -bottom-10 h-48 w-48 rounded-full bg-emerald-400/15 blur-3xl" />
-
-                    <div className="relative flex flex-col gap-5">
-                        <span className="inline-flex items-center gap-2 self-start rounded-full bg-csway-green/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.25em] text-csway-green">
-                            <ShieldCheck className="h-4 w-4" />
-                            Admin panel
-                        </span>
-
-                        <div className="space-y-3">
-                            <h1 className="text-3xl font-semibold text-slate-900 dark:text-white">Quest management</h1>
-                            <p className="max-w-2xl text-sm text-slate-600 dark:text-slate-400">
-                                Adjust rewards and manage the quest catalog for your team.
-                            </p>
-                        </div>
-
-                        <div className="flex flex-wrap gap-3">
-                            <span className="inline-flex items-center gap-2 rounded-full bg-white/80 px-3 py-1 text-xs font-medium text-slate-600 shadow-sm ring-1 ring-slate-100 backdrop-blur-sm dark:bg-slate-900/60 dark:text-slate-300 dark:ring-slate-800">
-                                <Sparkles className="h-4 w-4 text-csway-green" />
-                                {activeQuestLabel}
+            {/* Desktop View - Geometric & Clean */}
+            <div className="hidden lg:block space-y-6">
+                <div className="flex items-end justify-between border-b border-slate-200 dark:border-slate-700 pb-6">
+                    <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                            <span className="inline-flex items-center gap-1.5 rounded-full bg-csway-green/10 px-2.5 py-0.5 text-xs font-bold uppercase tracking-wider text-csway-green">
+                                <ShieldCheck className="h-3.5 w-3.5" />
+                                Admin Access
                             </span>
                         </div>
+                        <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Quest Management</h1>
+                        <p className="text-sm text-slate-500 dark:text-slate-400">
+                            Configure rewards, intervals, and visibility for team quests.
+                        </p>
                     </div>
-                </Card>
+                    <div className="text-sm font-medium text-slate-500 dark:text-slate-400">
+                        {activeQuestLabel}
+                    </div>
+                </div>
 
                 <QuestsManager initialQuests={initialQuests} onQuestsChange={setQuests} />
             </div>

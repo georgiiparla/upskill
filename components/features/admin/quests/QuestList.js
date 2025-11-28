@@ -1,21 +1,8 @@
 "use client";
 
 import { useState } from 'react';
-import { ListChecks } from 'lucide-react';
-import { Card, SectionTitle } from '@/components/shared/helpers/Helper';
+import { Inbox } from 'lucide-react';
 import { QuestListItem } from './QuestListItem';
-
-// Time unit conversions aligned with Rails ActiveSupport
-// Rails uses 365.2425 days per year (leap year adjusted)
-const TIME_UNITS = {
-    seconds: 1,
-    minutes: 60,
-    hours: 3600,
-    days: 86400,
-    weeks: 604800,
-    months: 2592000,  // 30 days
-    years: 31556952,  // 365.2425 days (Rails standard)
-};
 
 export const QuestList = ({ quests, onUpdatePoints, onToggleExplicit, updatingId, togglingId }) => {
     const [editingId, setEditingId] = useState(null);
@@ -23,29 +10,36 @@ export const QuestList = ({ quests, onUpdatePoints, onToggleExplicit, updatingId
     const [draftResetUnits, setDraftResetUnits] = useState(null);
     const [inlineError, setInlineError] = useState('');
 
-    // Calculate total seconds from all units
+    // --- LOGIC: Explicit Summation ---
+    // Only sums the inputs we allow (Days, Hours, Minutes)
     const calculateTotalSeconds = (units) => {
-        return Object.entries(units).reduce((total, [unit, value]) => {
-            return total + (parseInt(value) || 0) * TIME_UNITS[unit];
-        }, 0);
+        let total = 0;
+        total += (parseInt(units.days) || 0) * 86400;    // Days to seconds
+        total += (parseInt(units.hours) || 0) * 3600;    // Hours to seconds
+        total += (parseInt(units.minutes) || 0) * 60;    // Minutes to seconds
+        return total;
     };
 
+    // --- LOGIC: Flattening to Days ---
+    // Converts any existing duration (even years) into total Days
     const startEditing = (quest) => {
         setEditingId(quest.id);
         setDraftValue(String(quest.points ?? 0));
-        
-        // Parse existing interval into units
+
         const totalSeconds = quest.reset_interval_seconds || 0;
-        const units = { years: 0, months: 0, weeks: 0, days: 0, hours: 0, minutes: 0, seconds: 0 };
-        
+
+        const units = { days: 0, hours: 0, minutes: 0 };
         let remaining = totalSeconds;
-        for (const [unit, factor] of Object.entries(TIME_UNITS).reverse()) {
-            if (unit === 'seconds') continue;
-            units[unit] = Math.floor(remaining / factor);
-            remaining = remaining % factor;
-        }
-        units.seconds = remaining;
-        
+
+        // Calculate total days (e.g., 1 week becomes 7 days)
+        units.days = Math.floor(remaining / 86400);
+        remaining %= 86400;
+
+        units.hours = Math.floor(remaining / 3600);
+        remaining %= 3600;
+
+        units.minutes = Math.floor(remaining / 60);
+
         setDraftResetUnits(units);
         setInlineError('');
     };
@@ -59,25 +53,21 @@ export const QuestList = ({ quests, onUpdatePoints, onToggleExplicit, updatingId
 
     const handleSave = async (questId) => {
         const trimmed = draftValue.trim();
-
         if (trimmed === '') {
             setInlineError('Points are required.');
             return;
         }
-
         const parsed = Number(trimmed);
-
         if (!Number.isInteger(parsed) || parsed < 0) {
             setInlineError('Enter a non-negative whole number.');
             return;
         }
-
         setInlineError('');
 
         const totalSeconds = calculateTotalSeconds(draftResetUnits);
 
-        const success = await (onUpdatePoints 
-            ? onUpdatePoints(questId, parsed, totalSeconds > 0 ? totalSeconds : null) 
+        const success = await (onUpdatePoints
+            ? onUpdatePoints(questId, parsed, totalSeconds > 0 ? totalSeconds : null)
             : Promise.resolve(false));
 
         if (success) {
@@ -89,20 +79,22 @@ export const QuestList = ({ quests, onUpdatePoints, onToggleExplicit, updatingId
 
     if (!quests.length) {
         return (
-            <Card className="h-full" innerClassName="space-y-6">
-                <SectionTitle icon={<ListChecks className="h-6 w-6 text-csway-green" />} title="Existing quests" />
-                <div className="flex h-full min-h-[180px] flex-col items-center justify-center rounded-lg border border-dashed border-slate-300/60 bg-white/40 text-center text-sm text-slate-500 dark:border-slate-700/70 dark:bg-slate-900/40 dark:text-slate-400">
-                    <p>No quests found yet.</p>
-                </div>
-            </Card>
+            <div className="flex flex-col items-center justify-center rounded-lg border border-dashed border-slate-300 bg-slate-50 py-16 dark:border-slate-700 dark:bg-slate-800/30">
+                <Inbox className="h-10 w-10 text-slate-400 mb-3" />
+                <p className="text-sm font-medium text-slate-900 dark:text-white">No quests found</p>
+            </div>
         );
     }
 
     return (
-        <Card glass={false} className="h-full" innerClassName="space-y-6">
-            <SectionTitle icon={<ListChecks className="h-6 w-6 text-csway-green" />} title="Existing quests" />
+        <div className="w-full">
+            <div className="hidden md:grid md:grid-cols-[3fr_1fr_1fr] border-b border-slate-200 bg-slate-50/50 py-3 px-4 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:border-slate-700 dark:bg-slate-800/50 dark:text-slate-400 rounded-t-lg">
+                <div>Quest Details</div>
+                <div className="text-center">Reward</div>
+                <div className="text-right">Actions</div>
+            </div>
 
-            <ul className="space-y-3">
+            <ul className="divide-y divide-slate-100 border border-t-0 border-slate-200 rounded-b-lg bg-white dark:divide-slate-700 dark:border-slate-700 dark:bg-slate-900">
                 {quests.sort((a, b) => {
                     if (a.quest_type === 'interval-based' && b.quest_type !== 'interval-based') return -1;
                     if (a.quest_type !== 'interval-based' && b.quest_type === 'interval-based') return 1;
@@ -112,7 +104,6 @@ export const QuestList = ({ quests, onUpdatePoints, onToggleExplicit, updatingId
                         key={`${quest.id}-${quest.explicit}`}
                         quest={quest}
                         isEditing={editingId === quest.id}
-                        editingId={editingId}
                         draftValue={draftValue}
                         setDraftValue={setDraftValue}
                         draftResetUnits={draftResetUnits}
@@ -127,6 +118,6 @@ export const QuestList = ({ quests, onUpdatePoints, onToggleExplicit, updatingId
                     />
                 ))}
             </ul>
-        </Card>
+        </div>
     );
 };

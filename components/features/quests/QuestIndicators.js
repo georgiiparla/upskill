@@ -2,63 +2,77 @@
 import { motion } from 'framer-motion';
 
 export const QuestIndicators = ({ quests, currentIndex, onIndicatorClick }) => {
-    if (quests.length <= 1) return null;
+    if (!quests || quests.length <= 1) return null;
 
-    const currentQuest = quests[currentIndex];
-    const isCompleted = currentQuest?.user_completed ?? currentQuest?.completed;
-    const isInProgress = !isCompleted && ((currentQuest?.user_progress ?? 0) > 0 || currentQuest?.in_progress);
-    const isAlwaysType = currentQuest?.quest_type === 'always';
+    // Helper to determine the color based on Card Type + The "New Progress" Trick
+    const getIndicatorColor = (quest) => {
+        if (!quest) return '#64748b'; // Default Slate-500
 
-    // Determine outline styling based on quest status
-    const getIndicatorStyle = () => {
+        const isAlwaysType = quest.quest_type === 'always';
+        const isCompleted = quest.user_completed ?? quest.completed;
+
+        // The "Trick": Check for new progress (Confetti state)
+        // This matches the logic in QuestCard.js and QuestCarousel.js
+        // 1. Check backend flag 'has_new_progress'
+        // 2. Check client-side timestamp 'last_triggered_at' (within 5 seconds)
+        const isNewProgress = quest.has_new_progress || (
+            quest.last_triggered_at &&
+            (Date.now() - new Date(quest.last_triggered_at).getTime() < 5000)
+        );
+
+        // Logic for "Always" (Active/Blue-edged) Cards
         if (isAlwaysType) {
-            return "bg-slate-50/50 dark:bg-slate-900/20 text-slate-700 dark:text-slate-300";
-        } else if (isCompleted) {
-            return "bg-emerald-50/50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300";
-        } else if (isInProgress) {
-            return "bg-sky-50/50 dark:bg-sky-900/20 text-sky-700 dark:text-sky-300";
-        } else {
-            return "bg-sky-50/50 dark:bg-sky-900/20 text-sky-700 dark:text-sky-300";
+            // If the confetti/reward is active (The Trick), show Green
+            if (isNewProgress) {
+                return '#10b981'; // Emerald-500
+            }
+            // Otherwise, Always cards are "Active" (Blue) by default, ready to be done again.
+            // They typically ignore the persistent 'isCompleted' status for styling.
+            return '#3b82f6'; // Blue-500
         }
-    };
 
-    const getHoverStyle = () => {
-        if (isAlwaysType) {
-            return {
-                scale: 1.05,
-                backgroundColor: "rgba(100,116,139,0.15)"
-            };
-        } else if (isCompleted) {
-            return {
-                scale: 1.05,
-                backgroundColor: "rgba(16,185,129,0.15)"
-            };
-        } else if (isInProgress) {
-            return {
-                scale: 1.05,
-                backgroundColor: "rgba(14,165,233,0.15)"
-            };
-        } else {
-            return {
-                scale: 1.05,
-                backgroundColor: "rgba(14,165,233,0.15)"
-            };
+        // Logic for Standard (Interval-based) Cards
+        // These use the standard Completion = Green, Incomplete = Gray pattern
+        if (isCompleted) {
+            return '#10b981'; // Emerald-500
         }
+
+        return '#64748b'; // Slate-500 (Gray)
     };
 
     return (
-        <div className="flex justify-center">
-            <motion.div
-                className={`cursor-pointer px-2 py-0.5 md:px-3 md:py-1 backdrop-blur-sm rounded-full font-mono transition-all shadow-sm ${getIndicatorStyle()}`}
-                onClick={() => onIndicatorClick(currentIndex)}
-                whileHover={getHoverStyle()}
-                whileTap={{ scale: 0.95 }}
-                aria-label={`Quest ${currentIndex + 1} of ${quests.length}: ${currentQuest?.title}`}
-            >
-                <span className="text-xs md:text-sm font-medium">
-                    {currentIndex + 1}/{quests.length}
-                </span>
-            </motion.div>
+        <div className="flex items-center gap-1.5 p-1.5 rounded-full transition-all duration-300 ">
+            {quests.map((quest, index) => {
+                const isActive = index === currentIndex;
+                const indicatorColor = getIndicatorColor(quest);
+
+                return (
+                    <button
+                        key={quest.id || index}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            onIndicatorClick(index);
+                        }}
+                        className="relative group focus:outline-none p-1"
+                        aria-label={`Go to quest ${index + 1}`}
+                    >
+                        <motion.div
+                            initial={false}
+                            animate={{
+                                width: isActive ? 24 : 6,
+                                backgroundColor: isActive
+                                    ? 'var(--indicator-active)'
+                                    : 'var(--indicator-inactive)',
+                            }}
+                            style={{
+                                '--indicator-active': indicatorColor,
+                                '--indicator-inactive': 'rgba(148, 163, 184, 0.4)',
+                            }}
+                            className="h-1.5 rounded-full transition-colors duration-300"
+                        />
+                    </button>
+                );
+            })}
         </div>
     );
 };

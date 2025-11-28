@@ -1,41 +1,38 @@
 "use client";
 
-import { Pencil, Check, X, ToggleLeft, ToggleRight, Loader2, Clock } from 'lucide-react';
+import { Pencil, Check, X, ToggleLeft, ToggleRight, Loader2, Trophy, AlertTriangle } from 'lucide-react';
 import { IconButton } from '@/components/core/buttons/Buttons';
-import { formatDurationCompact, formatTimeUntilReset } from '@/lib/time-formatter';
+import { formatTimeUntilReset } from '@/lib/time-formatter';
 
-// Time unit conversions aligned with Rails ActiveSupport
-const TIME_UNITS = {
-    seconds: 1,
-    minutes: 60,
-    hours: 3600,
-    days: 86400,
-    weeks: 604800,
-    months: 2592000,  // 30 days
-    years: 31556952,  // 365.2425 days (Rails standard)
-};
+// --- VIEW FORMATTER: Days Only ---
+// Caps at "Days". E.g., 1 Year -> 365 Days.
+const formatDurationDaysOnly = (seconds) => {
+    if (!seconds || seconds <= 0) return 'None';
 
-// Format with cascading like the input boxes (e.g., "1Y 2M 3W 4D 5h 6m 7s")
-const formatDurationCascading = (seconds) => {
-    if (!seconds || seconds <= 0) return 'N/A';
-
-    const UNIT_ORDER = ['years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'];
-    const units = { years: 0, months: 0, weeks: 0, days: 0, hours: 0, minutes: 0, seconds: 0 };
-
+    const units = { days: 0, hours: 0, minutes: 0, seconds: 0 };
     let remaining = seconds;
-    for (const unit of UNIT_ORDER) {
-        if (unit === 'seconds') {
-            units[unit] = remaining;
-        } else {
-            units[unit] = Math.floor(remaining / TIME_UNITS[unit]);
-            remaining = remaining % TIME_UNITS[unit];
-        }
-    }
 
-    // Return only non-zero units formatted like: "1Y 2M 3W"
+    // 1. Calculate Days (everything 86400+)
+    units.days = Math.floor(remaining / 86400);
+    remaining %= 86400;
+
+    // 2. Calculate Hours
+    units.hours = Math.floor(remaining / 3600);
+    remaining %= 3600;
+
+    // 3. Calculate Minutes
+    units.minutes = Math.floor(remaining / 60);
+    remaining %= 60;
+
+    // 4. Seconds (optional, usually hidden for clean UI but good to handle)
+    units.seconds = remaining;
+
+    const UNIT_ORDER = ['days', 'hours', 'minutes', 'seconds'];
+
+    // Filter out zero values and format string
     return UNIT_ORDER
         .filter(unit => units[unit] > 0)
-        .map(unit => `${units[unit]}${unit.charAt(0).toUpperCase()}`)
+        .map(unit => `${units[unit]} ${unit.charAt(0).toUpperCase() + unit.slice(1)}`) // e.g. "30 Days"
         .join(' ') || 'None';
 };
 
@@ -60,220 +57,142 @@ export const QuestListItem = ({
     const isExplicit = quest.explicit !== false;
     const isIntervalBased = quest.quest_type === 'interval-based';
 
-    // Cascading unit conversion with caps
+    // Update state directly without capping logic
     const handleUnitChange = (unit, value) => {
         const numValue = Math.max(0, parseInt(value) || 0);
-        
-        // Define unit caps (when to cascade to next unit)
-        const UNIT_CAPS = {
-            seconds: 60,
-            minutes: 60,
-            hours: 24,
-            days: 7,
-            weeks: 4,      // ~4 weeks per month
-            months: 12,
-            years: Infinity // No cap for years
-        };
-
-        // Unit hierarchy (order from largest to smallest)
-        const UNIT_ORDER = ['years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'];
-
-        setDraftResetUnits((prev) => {
-            const updated = { ...prev, [unit]: numValue };
-            
-            // Find which unit was changed
-            const unitIndex = UNIT_ORDER.indexOf(unit);
-
-            // Cascade upwards (from smaller units to larger units)
-            for (let i = unitIndex; i > 0; i--) {
-                const currentUnit = UNIT_ORDER[i];
-                const nextUnit = UNIT_ORDER[i - 1];
-                const cap = UNIT_CAPS[currentUnit];
-
-                if (updated[currentUnit] >= cap) {
-                    const overflow = Math.floor(updated[currentUnit] / cap);
-                    updated[nextUnit] = (updated[nextUnit] || 0) + overflow;
-                    updated[currentUnit] = updated[currentUnit] % cap;
-                }
-            }
-
-            return updated;
-        });
+        setDraftResetUnits((prev) => ({
+            ...prev,
+            [unit]: numValue
+        }));
     };
 
     return (
-        <li
-            className="group rounded-xl border border-slate-200/70 bg-white p-4 transition-all duration-200 dark:border-slate-700/70 dark:bg-slate-900"
-        >
-            <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-                {/* Quest Info */}
-                <div className="space-y-2">
+        <li className={`group relative transition-colors ${isEditing ? 'bg-slate-50/80 dark:bg-slate-800/50' : 'bg-white hover:bg-slate-50/50 dark:bg-slate-900 dark:hover:bg-slate-800/30'}`}>
+
+            {/* Main Content Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-[3fr_1fr_1fr] items-center gap-4 p-4 md:py-5">
+
+                {/* Column 1: Info & Metadata */}
+                <div className={`space-y-1.5 ${!isExplicit && !isEditing ? 'opacity-60' : ''}`}>
                     <div className="flex items-center gap-2">
-                        <span className="text-sm font-semibold text-slate-900 dark:text-white">{quest.title}</span>
-                    </div>
-                    {quest.description && (
-                        <p className="text-xs text-slate-600 dark:text-slate-400">
-                            {quest.description}
-                        </p>
-                    )}
-                    <div className="flex flex-wrap items-center gap-2">
-                        <span
-                            className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${
-                                isExplicit
-                                    ? 'bg-csway-green/10 text-csway-green'
-                                    : 'bg-slate-200/70 text-slate-600 dark:bg-slate-800/60 dark:text-slate-300'
-                            }`}
-                        >
-                            {isExplicit ? 'Explicit' : 'Implicit'}
+                        <span className={`text-sm font-semibold ${!isExplicit ? 'text-slate-500' : 'text-slate-900 dark:text-white'}`}>
+                            {quest.title}
                         </span>
-                        <span
-                            className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${
-                                isIntervalBased
-                                    ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300'
-                                    : 'bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300'
-                            }`}
-                        >
-                            {isIntervalBased ? 'Interval-Based' : 'Always'}
-                        </span>
-                        {quest.completed_users_count !== undefined && (
-                            <span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide bg-gray-100 text-gray-700 dark:bg-gray-800/60 dark:text-gray-300">
-                                {quest.completed_users_count}/{quest.total_users_count} completed
+                        {!isExplicit && (
+                            <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400">
+                                Hidden
                             </span>
                         )}
                     </div>
-                    
-                    {/* Reset Status Information */}
-                    {isIntervalBased && quest.next_reset_at && (
-                        <div className="flex flex-wrap items-center gap-2 text-xs">
-                            <span className="text-slate-600 dark:text-slate-400">Reset status:</span>
-                            <span className="flex items-center gap-1 text-slate-700 dark:text-slate-300">
-                                <Clock className="h-3 w-3" />
-                                {formatTimeUntilReset(quest.next_reset_at)}
-                            </span>
-                            {quest.will_reset_on_next_trigger && (
-                                <span className="inline-flex items-center gap-1 rounded-md px-2 py-1 bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300 font-medium">
-                                    ⚠️ Will reset on next action
+
+                    {/* Meta Row */}
+                    <div className="flex flex-wrap items-center gap-x-2 text-xs text-slate-500 dark:text-slate-400">
+                        <span className="capitalize">{isIntervalBased ? 'Interval' : 'Always'}</span>
+                        <span>&bull;</span>
+                        <span>{isExplicit ? 'Public' : 'Private'}</span>
+
+                        {/* VIEW MODE: Uses Days-Only Formatter */}
+                        {!isEditing && isIntervalBased && (
+                            <>
+                                <span>&bull;</span>
+                                <span className="font-medium text-slate-600 dark:text-slate-300">
+                                    {formatDurationDaysOnly(quest.reset_interval_seconds)}
                                 </span>
-                            )}
+                                {quest.next_reset_at && (
+                                    <span className="text-slate-400 dark:text-slate-500 ml-1">
+                                        (Next: {formatTimeUntilReset(quest.next_reset_at)})
+                                    </span>
+                                )}
+                            </>
+                        )}
+
+                        {quest.will_reset_on_next_trigger && (
+                            <>
+                                <span>&bull;</span>
+                                <span className="flex items-center gap-1 text-amber-600 dark:text-amber-500">
+                                    <AlertTriangle className="h-3 w-3" /> Reset Pending
+                                </span>
+                            </>
+                        )}
+                    </div>
+                </div>
+
+                {/* Column 2: Points / Inputs */}
+                <div className="flex justify-start md:justify-center">
+                    {isEditing ? (
+                        <div className="w-full max-w-[120px]">
+                            <label className="sr-only">Points</label>
+                            <input
+                                type="number"
+                                min="0"
+                                value={draftValue}
+                                onChange={(e) => setDraftValue(e.target.value)}
+                                className="w-full rounded border border-slate-300 px-2 py-1 text-sm font-medium focus:border-csway-green focus:ring-1 focus:ring-csway-green dark:border-slate-600 dark:bg-slate-800"
+                                placeholder="Points"
+                            />
+                        </div>
+                    ) : (
+                        <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-sm font-bold text-slate-700 dark:text-slate-200">
+                            <Trophy className="h-3.5 w-3.5 text-csway-orange" />
+                            {quest.points}
                         </div>
                     )}
                 </div>
 
-                {/* Quest Actions */}
-                <div className="space-y-2 md:text-right">
+                {/* Column 3: Actions */}
+                <div className="flex items-center justify-end gap-2">
                     {isEditing ? (
-                        // Editing Mode
-                        <div className="flex flex-col gap-2">
-                            <div className="flex flex-wrap items-center gap-2 md:justify-end">
-                                <span className="text-xs font-medium text-slate-600 dark:text-slate-400">Points:</span>
-                                <input
-                                    type="number"
-                                    min="0"
-                                    step="1"
-                                    value={draftValue}
-                                    onChange={(e) => setDraftValue(e.target.value)}
-                                    className="w-20 rounded-lg border border-slate-200/70 bg-white/90 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-csway-green focus:outline-none focus:ring-2 focus:ring-csway-green/30 dark:border-slate-700/70 dark:bg-slate-900/70 dark:text-slate-100"
-                                />
-                            </div>
-                            
-                            {isIntervalBased && (
-                                <div className="space-y-2">
-                                    <span className="text-xs font-medium text-slate-600 dark:text-slate-400">Reset Interval:</span>
-                                    <div className="grid grid-cols-4 gap-2 md:grid-cols-7">
-                                        {['years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds'].map((unit) => {
-                                            const maxValues = {
-                                                seconds: 59,
-                                                minutes: 59,
-                                                hours: 23,
-                                                days: 6,
-                                                weeks: 3,
-                                                months: 11,
-                                                years: 999
-                                            };
-                                            
-                                            return (
-                                                <div key={unit} className="flex flex-col items-center gap-1">
-                                                    <input
-                                                        type="number"
-                                                        min="0"
-                                                        max={maxValues[unit]}
-                                                        value={draftResetUnits[unit]}
-                                                        onChange={(e) => handleUnitChange(unit, e.target.value)}
-                                                        className="w-12 rounded-lg border border-slate-200/70 bg-white/90 px-2 py-1 text-center text-xs text-slate-900 shadow-sm focus:border-csway-green focus:outline-none focus:ring-2 focus:ring-csway-green/30 dark:border-slate-700/70 dark:bg-slate-900/70 dark:text-slate-100"
-                                                    />
-                                                    <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
-                                                        {unit.charAt(0).toUpperCase()}
-                                                    </span>
-                                                </div>
-                                            );
-                                        })}
-                                    </div>
-                                </div>
-                            )}
-
-                            <div className="flex flex-wrap items-center gap-2 md:justify-end">
-                                <IconButton
-                                    icon={Check}
-                                    onClick={() => onSave(quest.id)}
-                                    disabled={isBusy}
-                                    isLoading={isBusy}
-                                    colorScheme="emerald"
-                                />
-                                <IconButton
-                                    icon={X}
-                                    onClick={onCancelEditing}
-                                    disabled={isBusy}
-                                    colorScheme="slate"
-                                />
-                            </div>
-                        </div>
+                        <>
+                            <IconButton icon={X} onClick={onCancelEditing} disabled={isBusy} colorScheme="slate" title="Cancel" />
+                            <IconButton icon={Check} onClick={() => onSave(quest.id)} disabled={isBusy} isLoading={isBusy} colorScheme="emerald" title="Save" />
+                        </>
                     ) : (
-                        // View Mode
-                        <div className="flex flex-wrap items-center gap-2 md:justify-end">
-                            <span className="flex items-center gap-1 rounded-lg bg-emerald-500/10 px-3 py-1 text-sm font-semibold text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-300">
-                                {quest.points}
-                                <span className="text-xs font-medium">pts</span>
-                            </span>
-                            {isIntervalBased && (
-                                <span className="flex items-center gap-1 rounded-lg bg-blue-500/10 px-3 py-1 text-sm font-semibold text-blue-600 dark:bg-blue-500/10 dark:text-blue-300">
-                                    <Clock className="h-3 w-3" />
-                                    <span className="text-xs font-medium">{formatDurationCascading(quest.reset_interval_seconds)}</span>
-                                </span>
-                            )}
-                            <div className="flex items-center gap-2">
-                                <IconButton
-                                    icon={Pencil}
-                                    onClick={() => onStartEditing(quest)}
-                                    disabled={isBusy}
-                                    colorScheme="slate"
-                                />
-                                <button
-                                    type="button"
-                                    onClick={() => onToggleExplicit?.(quest)}
-                                    disabled={isBusy}
-                                    className={`inline-flex items-center gap-1 rounded-md border border-transparent px-3 py-2 text-xs font-semibold transition focus:outline-none focus:ring-2 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-60 ${
-                                        isExplicit
-                                            ? 'text-amber-600 hover:border-amber-200 hover:bg-amber-50 focus:ring-amber-200 dark:text-amber-300 dark:hover:border-amber-400/60 dark:hover:bg-amber-500/10'
-                                            : 'text-slate-500 hover:border-slate-200 hover:bg-slate-100 focus:ring-slate-200 dark:text-slate-300 dark:hover:border-slate-600 dark:hover:bg-slate-800/60'
-                                    }`}
-                                >
-                                    {isToggling ? (
-                                        <Loader2 className="h-4 w-4 animate-spin" />
-                                    ) : isExplicit ? (
-                                        <ToggleRight className="h-4 w-4" />
-                                    ) : (
-                                        <ToggleLeft className="h-4 w-4" />
-                                    )}
-                                </button>
-                            </div>
-                        </div>
-                    )}
-
-                    {isEditing && inlineError && (
-                        <p className="text-xs text-red-500 md:text-right">{inlineError}</p>
+                        <>
+                            <button
+                                onClick={() => onToggleExplicit?.(quest)}
+                                disabled={isBusy}
+                                className="p-2 text-slate-400 hover:text-csway-green transition-colors"
+                                title={isExplicit ? "Hide Quest" : "Show Quest"}
+                            >
+                                {isToggling ? <Loader2 className="h-4 w-4 animate-spin" /> : (
+                                    isExplicit ? <ToggleRight className="h-5 w-5 text-csway-green" /> : <ToggleLeft className="h-5 w-5" />
+                                )}
+                            </button>
+                            <div className="w-px h-4 bg-slate-200 dark:bg-slate-700 mx-1" />
+                            <IconButton icon={Pencil} onClick={() => onStartEditing(quest)} disabled={isBusy} colorScheme="slate" title="Edit" />
+                        </>
                     )}
                 </div>
             </div>
+
+            {/* EDIT MODE: Extended Interval Options (Simplified Units) */}
+            {isEditing && isIntervalBased && (
+                <div className="border-t border-slate-200 dark:border-slate-700 p-4 bg-slate-50 dark:bg-slate-800/30">
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">
+                        Reset Frequency
+                    </label>
+                    <div className="flex flex-wrap gap-2">
+                        {['days', 'hours', 'minutes'].map((unit) => {
+                            const val = draftResetUnits[unit];
+                            return (
+                                <div key={unit} className="flex items-center bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-md overflow-hidden">
+                                    <input
+                                        type="number"
+                                        min="0"
+                                        value={val}
+                                        onChange={(e) => handleUnitChange(unit, e.target.value)}
+                                        className="w-16 px-2 py-1 text-sm text-center border-none focus:ring-0 bg-transparent"
+                                    />
+                                    <span className="bg-slate-50 dark:bg-slate-800 px-2 py-1 text-xs text-slate-500 border-l border-slate-200 dark:border-slate-700 capitalize">
+                                        {unit}
+                                    </span>
+                                </div>
+                            );
+                        })}
+                    </div>
+                    {inlineError && <p className="mt-2 text-xs text-red-500">{inlineError}</p>}
+                </div>
+            )}
         </li>
     );
 };
