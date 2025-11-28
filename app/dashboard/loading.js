@@ -1,62 +1,80 @@
+import { CardSkeleton, TextSkeleton } from "@/components/shared/loading/Skeletons";
+
+const SectionHeaderSkeleton = () => (
+    <div className="flex items-center gap-4 mb-8">
+        <div className="flex-shrink-0">
+            <div className="w-10 h-10 flex items-center justify-center rounded-lg bg-gray-100 dark:bg-gray-800 shadow-sm">
+                <div className="h-5 w-5 bg-slate-200/60 dark:bg-slate-700/60 rounded"></div>
+            </div>
+        </div>
+        <div className="flex-1 min-w-0 space-y-2">
+            <div className="h-6 w-48 bg-slate-200/60 dark:bg-slate-700/60 rounded"></div>
+            <div className="h-4 w-64 bg-slate-200/60 dark:bg-slate-700/60 rounded"></div>
+        </div>
+    </div>
+);
+
 export default function DashboardSkeleton() {
     return (
         <div className="space-y-8 animate-pulse pb-16 pt-3">
             {/* This Week's Agenda Card */}
-            <section className="bg-slate-100/20 dark:bg-slate-800/20 border border-slate-200 dark:border-slate-700 rounded-xl p-8">
-                <div className="flex items-center gap-4 mb-8">
-                    <div className="w-10 h-10 rounded-lg bg-slate-200/60 dark:bg-slate-700/60"></div>
-                    <div className="flex-1 space-y-2">
-                        <div className="h-6 w-1/3 bg-slate-200/60 dark:bg-slate-700/60 rounded"></div>
-                        <div className="h-4 w-2/3 bg-slate-200/60 dark:bg-slate-700/60 rounded"></div>
-                    </div>
-                </div>
+            {/* innerClassName matches Dashboard.js exactly */}
+            <CardSkeleton innerClassName="pt-3 px-3 pb-8">
+                <SectionHeaderSkeleton />
 
-                {/* Agenda Items Grid */}
-                <div className="grid grid-cols-1 gap-4 auto-rows-fr">
+                {/* Agenda Items Grid - Matches Dashboard.js grid-cols-1 gap-5 */}
+                <div className="grid grid-cols-1 gap-5 auto-rows-fr">
                     {[...Array(3)].map((_, i) => (
-                        <div key={i} className="relative bg-gradient-to-br from-slate-50 to-slate-50/40 dark:from-slate-900/40 dark:to-slate-900/20 border border-slate-200/60 dark:border-slate-700/60 rounded-xl p-8 pl-16">
-                            {/* Icon badge */}
-                            <div className="absolute left-4 top-1/2 -translate-y-1/2 h-8 w-8 bg-slate-200/60 dark:bg-slate-700/60 rounded-lg"></div>
-                            <div className="flex-1 space-y-2">
-                                <div className="h-5 w-2/3 bg-slate-200/60 dark:bg-slate-700/60 rounded"></div>
-                                <div className="h-3 w-1/4 bg-slate-200/60 dark:bg-slate-700/60 rounded"></div>
+                        <div key={i} className="h-full">
+                            {/* Matches AgendaItem.js structure & classes */}
+                            <div className="relative rounded-lg bg-slate-100/40 dark:bg-slate-800/20 border border-slate-200/60 dark:border-slate-700/60 h-full flex flex-col">
+                                {/* Icon badge - Positioned exactly as in AgendaItem */}
+                                <div className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center justify-center h-8 w-8 rounded-lg bg-slate-200/60 dark:bg-slate-700/60"></div>
+
+                                {/* Padding matches AgendaItem: py-8 px-4 pl-16 */}
+                                <div className="py-8 px-4 pl-16 flex-1 flex flex-col justify-center">
+                                    <div className="space-y-2">
+                                        <div className="h-5 w-3/4 bg-slate-200/60 dark:bg-slate-700/60 rounded"></div>
+                                        <div className="h-3 w-1/4 bg-slate-200/60 dark:bg-slate-700/60 rounded"></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     ))}
                 </div>
-            </section>
+            </CardSkeleton>
 
-            {/* Dashboard Card */}
-            <section className="bg-slate-100/20 dark:bg-slate-800/20 border border-slate-200 dark:border-slate-700 rounded-xl p-8">
+            {/* Dashboard Section Card */}
+            <CardSkeleton innerClassName="pt-3 px-3 pb-8">
                 <div className="space-y-6">
-                    <div className="flex items-center gap-4 mb-8">
-                        <div className="w-10 h-10 rounded-lg bg-slate-200/60 dark:bg-slate-700/60"></div>
-                        <div className="flex-1 space-y-2">
-                            <div className="h-6 w-1/3 bg-slate-200/60 dark:bg-slate-700/60 rounded"></div>
-                            <div className="h-4 w-2/3 bg-slate-200/60 dark:bg-slate-700/60 rounded"></div>
-                        </div>
-                    </div>
+                    <SectionHeaderSkeleton />
 
-                    {/* Quick Action Buttons */}
+                    {/* Quick Action Buttons - Matches Dashboard.js flex gap-4 */}
                     <div className="flex gap-4">
                         {[...Array(2)].map((_, i) => (
-                            <div key={i} className="flex-1 flex items-center gap-3 px-4 py-3 rounded-xl border border-dashed border-slate-300/40 dark:border-slate-600/40 bg-transparent">
+                            // Matches QuickActionButton structure: px-3 md:px-5 py-3 md:py-5
+                            <div key={i} className="flex-1 flex items-center justify-center md:justify-start gap-3 px-3 md:px-5 py-3 md:py-5 rounded-md border border-dashed border-slate-300/40 dark:border-slate-600/40 bg-transparent min-w-0">
                                 <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-slate-200/60 dark:bg-slate-700/60"></div>
-                                <div className="flex-1 h-4 w-24 bg-slate-200/60 dark:bg-slate-700/60 rounded"></div>
+                                <div className="hidden md:block h-4 w-24 bg-slate-200/60 dark:bg-slate-700/60 rounded"></div>
                             </div>
                         ))}
                     </div>
 
-                    {/* Console Dropdowns */}
+                    {/* Console Dropdowns - Matches ConsoleDropdown structure */}
                     <div className="space-y-4">
                         {[...Array(2)].map((_, i) => (
-                            <div key={i} className="bg-transparent border border-dashed border-slate-300/60 dark:border-slate-600/60 rounded-xl p-6">
-                                <div className="h-6 w-1/3 bg-slate-200/60 dark:bg-slate-700/60 rounded"></div>
+                            <div key={i} className="bg-transparent border border-dashed border-slate-300/60 dark:border-slate-600/60 rounded-md p-6">
+                                <div className="flex items-center justify-between gap-3">
+                                    <div className="flex items-center gap-3">
+                                        <div className="h-5 w-40 bg-slate-200/60 dark:bg-slate-700/60 rounded"></div>
+                                    </div>
+                                    <div className="h-5 w-5 bg-slate-200/60 dark:bg-slate-700/60 rounded"></div>
+                                </div>
                             </div>
                         ))}
                     </div>
                 </div>
-            </section>
+            </CardSkeleton>
         </div>
     );
 }
