@@ -1,10 +1,10 @@
 "use client";
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { motion } from 'framer-motion';
-import { AlertTriangle } from 'lucide-react';
+import { motion, useSpring, useTransform } from 'framer-motion';
+import { AlertTriangle, Loader2 } from 'lucide-react';
 import { Card } from '../../shared/helpers/Helper';
 
 const GoogleIcon = () => (
@@ -16,7 +16,28 @@ const GoogleIcon = () => (
     </svg>
 );
 
-const LogoAnimation = () => {
+const LogoAnimation = ({ isRedirecting }) => {
+    // Parallax Effect Setup
+    const x = useSpring(0, { stiffness: 40, damping: 15 });
+    const y = useSpring(0, { stiffness: 40, damping: 15 });
+
+    // Track mouse for subtle 3D tilt
+    useEffect(() => {
+        const handleMouseMove = (e) => {
+            const { innerWidth, innerHeight } = window;
+            // Calculate percentage from center (-5 to 5 degrees)
+            const xPct = (e.clientX / innerWidth - 0.5) * 10;
+            const yPct = (e.clientY / innerHeight - 0.5) * 10;
+            x.set(xPct);
+            y.set(yPct);
+        };
+        window.addEventListener('mousemove', handleMouseMove);
+        return () => window.removeEventListener('mousemove', handleMouseMove);
+    }, [x, y]);
+
+    const rotateX = useTransform(y, (val) => -val); // Invert Y for natural tilt
+    const rotateY = useTransform(x, (val) => val);
+
     const orbPalette = [
         { fill: 'rgba(16, 185, 129, 0.82)', shadow: '0 0 12px rgba(16,185,129,0.5)' },
         { fill: 'rgba(59, 130, 246, 0.82)', shadow: '0 0 12px rgba(59,130,246,0.5)' },
@@ -37,58 +58,122 @@ const LogoAnimation = () => {
     ];
 
     return (
-        <div className="relative flex items-center justify-center w-48 h-48">
+        <motion.div
+            className="relative flex items-center justify-center w-48 h-48"
+            style={{
+                rotateX,
+                rotateY,
+                perspective: 1000,
+                transformStyle: "preserve-3d"
+            }}
+        >
+            {/* Ambient Background Glow */}
             <motion.div
                 className="absolute inset-0 rounded-full"
                 style={{
                     background: 'radial-gradient(circle at center, rgba(14,165,233,0.12) 0%, rgba(16,185,129,0.08) 55%, rgba(251,191,36,0.06) 85%, rgba(15,23,42,0) 100%)',
                     filter: 'blur(18px)',
+                    transform: 'translateZ(-20px)' // Push back in 3D space
                 }}
-                animate={{ opacity: [0.12, 0.2, 0.12], scale: [0.9, 1.05, 0.9] }}
-                transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
+                initial={{ opacity: 0, scale: 0.5 }}
+                animate={isRedirecting
+                    ? { opacity: 0, scale: 0 }
+                    : { opacity: [0.12, 0.2, 0.12], scale: [0.9, 1.05, 0.9] }
+                }
+                transition={{
+                    duration: isRedirecting ? 0.5 : 7,
+                    repeat: isRedirecting ? 0 : Infinity,
+                    ease: 'easeInOut'
+                }}
             />
 
+            {/* Inner Core Blur */}
             <motion.div
                 className="absolute z-0 w-24 h-24 rounded-full bg-emerald-300/15 blur-2xl"
-                animate={{ opacity: [0.18, 0.28, 0.18], scale: [0.9, 1.05, 0.9] }}
-                transition={{ duration: 6.5, repeat: Infinity, ease: 'easeInOut' }}
+                initial={{ opacity: 0 }}
+                animate={isRedirecting
+                    ? { opacity: 0, scale: 0 }
+                    : { opacity: [0.18, 0.28, 0.18], scale: [0.9, 1.05, 0.9] }
+                }
+                transition={{
+                    duration: isRedirecting ? 0.5 : 6.5,
+                    repeat: isRedirecting ? 0 : Infinity,
+                    ease: 'easeInOut',
+                    delay: 0.2 // Bloom delay
+                }}
             />
 
+            {/* Orbiting Particles */}
             {orbConfigs.map(({ key, radius, size, duration, delay }, index) => {
                 const paletteEntry = orbPalette[index % orbPalette.length];
+
                 return (
-                <motion.span
-                    key={key}
-                    className="absolute rounded-full"
-                    style={{
-                        width: `${size * 4}px`,
-                        height: `${size * 4}px`,
-                        backgroundColor: paletteEntry.fill,
-                        boxShadow: paletteEntry.shadow,
-                    }}
-                    animate={{
-                        x: [
-                            Math.cos(index * 1.2) * radius,
-                            Math.cos(index * 1.2 + Math.PI / 3) * (radius + 10),
-                            Math.cos(index * 1.2 + Math.PI) * radius,
-                        ],
-                        y: [
-                            Math.sin(index * 1.2) * radius,
-                            Math.sin(index * 1.2 + Math.PI / 3) * (radius + 10),
-                            Math.sin(index * 1.2 + Math.PI) * radius,
-                        ],
-                        opacity: [0.35, 0.85, 0.35],
-                        scale: [1, 1.2, 1],
-                    }}
-                    transition={{ duration, repeat: Infinity, ease: 'easeInOut', delay }}
-                />
+                    <motion.span
+                        key={key}
+                        className="absolute rounded-full"
+                        style={{
+                            width: `${size * 4}px`,
+                            height: `${size * 4}px`,
+                            backgroundColor: paletteEntry.fill,
+                            boxShadow: paletteEntry.shadow,
+                            transform: 'translateZ(10px)' // Pop forward in 3D space
+                        }}
+                        initial={{ opacity: 0, scale: 0, x: 0, y: 0 }}
+                        animate={isRedirecting ? {
+                            // CONVERGENCE STATE: Spiral into center
+                            x: 0,
+                            y: 0,
+                            opacity: 0,
+                            scale: 0,
+                            transition: { duration: 0.6, ease: "backIn" }
+                        } : {
+                            // LOOP STATE: Orbital motion
+                            x: [
+                                Math.cos(index * 1.2) * radius,
+                                Math.cos(index * 1.2 + Math.PI / 3) * (radius + 10),
+                                Math.cos(index * 1.2 + Math.PI) * radius,
+                            ],
+                            y: [
+                                Math.sin(index * 1.2) * radius,
+                                Math.sin(index * 1.2 + Math.PI / 3) * (radius + 10),
+                                Math.sin(index * 1.2 + Math.PI) * radius,
+                            ],
+                            opacity: [0.35, 0.85, 0.35],
+                            scale: [1, 1.2, 1],
+                            transition: {
+                                duration,
+                                repeat: Infinity,
+                                ease: 'easeInOut',
+                                delay: delay * 0.5 // Reduced delay for faster initial bloom
+                            }
+                        }}
+                    />
                 );
             })}
 
+            {/* Center Logo - Rotating */}
             <motion.div
                 className="relative z-10"
-                animate={{ rotate: [0, 360], scale: [1, 1.05, 1] }}
-                transition={{ duration: 10, repeat: Infinity, ease: 'linear' }}
+                initial={{ scale: 0, opacity: 0, rotate: 0 }}
+                animate={isRedirecting
+                    ? {
+                        scale: 0,
+                        opacity: 0,
+                        rotate: 360, // Spin fast on exit (like a closing lock)
+                        transition: { duration: 0.5, ease: "backIn" }
+                    }
+                    : {
+                        scale: 1,
+                        opacity: 1,
+                        rotate: 360, // Continuous rotation loop
+                        transition: {
+                            rotate: { duration: 10, repeat: Infinity, ease: "linear" },
+                            scale: { type: "spring", stiffness: 200, damping: 15 },
+                            opacity: { duration: 0.5 }
+                        }
+                    }
+                }
+                whileHover={{ scale: 1.1 }}
             >
                 <Image
                     src="/csway-logo.png"
@@ -96,9 +181,10 @@ const LogoAnimation = () => {
                     width={60}
                     height={60}
                     className="opacity-90"
+                    priority
                 />
             </motion.div>
-        </div>
+        </motion.div>
     );
 };
 
@@ -121,19 +207,21 @@ const ErrorMessage = () => {
     }
 
     return (
-        <div className="bg-red-50 dark:bg-red-900/20 border border-red-300 dark:border-red-700 text-red-700 dark:text-red-300 px-4 py-3 rounded-md text-sm flex items-center gap-3 mb-4">
+        <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-red-50 dark:bg-red-900/20 border border-red-300 dark:border-red-700 text-red-700 dark:text-red-300 px-4 py-3 rounded-md text-sm flex items-center gap-3 mb-4"
+        >
             <AlertTriangle className="h-5 w-5" />
             <span>{message}</span>
-        </div>
+        </motion.div>
     );
 };
-
 
 export const Auth = () => {
     const { isAuthenticated } = useAuth();
     const router = useRouter();
-    const searchParams = useSearchParams();
-    const error = searchParams.get('error');
+    const [isRedirecting, setIsRedirecting] = useState(false);
     const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:9292';
 
     useEffect(() => {
@@ -142,10 +230,22 @@ export const Auth = () => {
         }
     }, [isAuthenticated, router]);
 
+    const handleLogin = (e) => {
+        e.preventDefault();
+        if (isRedirecting) return;
+
+        setIsRedirecting(true);
+
+        // Delay redirection slightly to allow the "Success Convergence" animation to play
+        setTimeout(() => {
+            window.location.href = `${backendUrl}/auth/google/login`;
+        }, 800);
+    };
+
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-50 dark:bg-gray-900 p-4">
-            <Card className="w-full max-w-sm min-h-[450px] !p-8 !rounded-2xl flex flex-col justify-between">
-                <div className="text-center">
+            <Card className="w-full max-w-sm min-h-[450px] !p-8 !rounded-2xl flex flex-col justify-between overflow-hidden">
+                <div className="text-center relative z-20">
                     <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-200">
                         Welcome to Upskill
                     </h1>
@@ -154,20 +254,29 @@ export const Auth = () => {
                     </p>
                 </div>
 
-                <div className="my-4">
+                <div className="my-4 flex justify-center items-center relative z-10">
                     <ErrorMessage />
-                    <div className="flex justify-center items-center">
-                        <LogoAnimation />
-                    </div>
+                    <LogoAnimation isRedirecting={isRedirecting} />
                 </div>
 
                 <a
                     href={`${backendUrl}/auth/google/login`}
-                    className="inline-flex items-center justify-center px-4 py-2 font-medium text-gray-700 dark:text-gray-200 rounded-lg hover:bg-slate-50/80 dark:hover:bg-slate-700/30 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-csway-green/50 transition-all duration-200 bg-transparent"
+                    onClick={handleLogin}
+                    className={`
+                        relative z-20 inline-flex items-center justify-center px-4 py-2 font-medium text-gray-700 dark:text-gray-200 
+                        rounded-lg hover:bg-slate-50/80 dark:hover:bg-slate-700/30 focus:outline-none focus:ring-2 
+                        focus:ring-offset-2 focus:ring-csway-green/50 transition-all duration-200 bg-transparent
+                        ${isRedirecting ? 'opacity-75 cursor-wait scale-95' : ''}
+                    `}
                 >
-                    <GoogleIcon />
-                    Sign in
+                    {isRedirecting ? (
+                        <Loader2 className="w-5 h-5 mr-3 animate-spin text-csway-green" />
+                    ) : (
+                        <GoogleIcon />
+                    )}
+                    {isRedirecting ? 'Connecting...' : 'Sign in'}
                 </a>
             </Card>
         </div>
-);}
+    );
+};

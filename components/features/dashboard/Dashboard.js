@@ -1,71 +1,24 @@
 "use client";
 import React, { useState } from 'react';
-import { Activity as ActivityIcon, Timer, BookOpen } from 'lucide-react';
-import { Card, SectionTitle } from "../../shared/helpers/Helper";
-import { formatRelativeTime } from '@/lib/helper-func';
 import { AgendaItem } from './AgendaItem';
-import { ActivityCard } from './ActivityCard';
-import { ActivityText } from './ActivityText';
-
-
-const AgendaSection = ({ agendaItems, handleUpdateAgendaItem, editingItemId, setEditingItemId }) => (
-    <Card className="relative z-[45] px-6">
-        <SectionTitle icon={<BookOpen className="h-6 w-6 text-amber-600 dark:text-amber-400" />} title="This Week's Agenda" className={'mb-8'} />
-        <ol className="relative border-l border-slate-200 dark:border-slate-700 ml-3">
-            {agendaItems.map((item) => (
-                <AgendaItem
-                    key={item.id}
-                    item={item}
-                    onUpdate={handleUpdateAgendaItem}
-                    isEditing={item.id === editingItemId}
-                    setEditingItemId={setEditingItemId}
-                />
-            ))}
-        </ol>
-    </Card>
-);
-
-const ActivitySection = ({ activityData }) => (
-    <div className="lg:col-span-1">
-        <ActivityCard activityData={activityData} />
-    </div>
-);
-
-const ActivityStreamSection = ({ activityStream }) => (
-    <div className="lg:col-span-2">
-        <Card className="h-full">
-            <div className="h-full flex flex-col">
-                <SectionTitle
-                    icon={<Timer className="h-6 w-6 text-amber-600 dark:text-amber-400" />}
-                    title="Activity Stream"
-                    className="mb-6"
-                />
-
-                <div className="flex-1 space-y-4 overflow-y-auto max-h-[270px] sm:max-h-[250px] no-scrollbar">
-                    {activityStream.map((item) => (
-                        <div key={item.id} className="flex items-start p-3 rounded-lg transition-all duration-200 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:shadow-sm border border-transparent hover:border-slate-200 dark:hover:border-slate-700">
-                            <div className="flex-shrink-0 mt-1 p-1.5 bg-amber-100 dark:bg-amber-900/30 rounded-lg">
-                                <ActivityIcon className="h-4 w-4 text-amber-600 dark:text-amber-400" />
-                            </div>
-                            <div className="ml-4 flex-grow">
-                                <ActivityText
-                                    userName={item.user_name}
-                                    eventType={item.event_type}
-                                    targetInfo={item.target_info}
-                                />
-                                <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-1 font-medium">{formatRelativeTime(item.created_at)}</p>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </div>
-        </Card>
-    </div>
-);
+import '@fontsource/jetbrains-mono/400.css';
+import '@fontsource/jetbrains-mono/700.css';
+import { ConsoleDropdown } from "../../shared/helpers/ConsoleDropdown";
+import { ConsoleLog } from "../../shared/helpers/ConsoleLog";
+import { Metrics } from "./Metrics";
+import { ActivityStream } from "./ActivityStream";
+import { SectionHeader } from "../../shared/helpers/SectionHeader";
+import { BarChart2, ClipboardList, Zap, MessageSquarePlus, ThumbsUp, Target, Trophy } from 'lucide-react';
+import { QuickActionButton } from "../../core/buttons/Buttons";
+import { useRouter } from 'next/navigation';
+import { Card } from "@/components/shared/helpers/Helper";
+import { clientFetch } from "@/lib/client-api";
 
 export default function Dashboard({ initialData }) {
     const [agendaItems, setAgendaItems] = useState(initialData.agendaItems);
     const [editingItemId, setEditingItemId] = useState(null);
+    const [hasUnviewedEvents, setHasUnviewedEvents] = useState(initialData.hasUnviewedEvents || false);
+    const router = useRouter();
 
     const handleUpdateAgendaItem = (updatedItem) => {
         setAgendaItems(currentItems =>
@@ -73,18 +26,80 @@ export default function Dashboard({ initialData }) {
         );
     };
 
+    const handleActivityStreamViewed = async () => {
+        try {
+            const result = await clientFetch('/dashboard/mark-activity-viewed', { method: 'POST' });
+            if (result.success) {
+                setHasUnviewedEvents(false);
+            }
+        } catch (error) {
+            console.error('Failed to mark activity stream as viewed:', error);
+        }
+    };
+
     return (
-        <div className="space-y-4">
-            <AgendaSection
-                agendaItems={agendaItems}
-                handleUpdateAgendaItem={handleUpdateAgendaItem}
-                editingItemId={editingItemId}
-                setEditingItemId={setEditingItemId}
-            />
-            <div className={`grid grid-cols-1 lg:grid-cols-3 gap-8 transition-opacity duration-300 ${editingItemId ? 'opacity-20 pointer-events-none' : 'opacity-100'}`}>
-                <ActivitySection activityData={initialData.activityData} />
-                <ActivityStreamSection activityStream={initialData.activityStream} />
-            </div>
+        <div className="space-y-8 pb-16 pt-3">
+            {/* This Week's Agenda Section */}
+            <Card innerClassName="pt-3 px-3 pb-8">
+                <SectionHeader
+                    icon={ClipboardList}
+                    title="This Week's Agenda"
+                    subtitle="Your key discussion points"
+                    iconAccentColor="text-blue-600 dark:text-blue-400"
+                    className="mb-8"
+                />
+                <div className={`grid grid-cols-1 gap-5 ${editingItemId ? 'auto-rows-auto' : 'auto-rows-fr'}`}>
+                    {agendaItems.map((item, index) => (
+                        <div key={item.id} className={editingItemId && item.id !== editingItemId ? 'h-full' : ''}>
+                            <AgendaItem
+                                key={item.id}
+                                item={item}
+                                onUpdate={handleUpdateAgendaItem}
+                                isEditing={item.id === editingItemId}
+                                setEditingItemId={setEditingItemId}
+                                isFirst={index === index}
+                            />
+                        </div>
+                    ))}
+                </div>
+            </Card>
+
+            {/* Dashboard Section */}
+            <Card innerClassName="pt-3 px-3 pb-8">
+                <div className="space-y-6">
+                    <SectionHeader
+                        icon={BarChart2}
+                        title="Dashboard Section"
+                        subtitle="Quick Actions and Summary"
+                        iconAccentColor="text-purple-600 dark:text-purple-400"
+                        className="mb-8"
+                    />
+                    <div className="flex gap-4">
+                        <QuickActionButton
+                            icon={MessageSquarePlus}
+                            text="Request Feedback"
+                            colorScheme="green"
+                            onClick={() => router.push('/feedback/request/new')}
+                        />
+                        <QuickActionButton
+                            icon={ThumbsUp}
+                            text="Provide Feedback"
+                            colorScheme="blue"
+                            onClick={() => router.push('/feedback')}
+                        />
+                    </div>
+                    <ConsoleDropdown title="Activity Stream" hasUnviewedEvents={hasUnviewedEvents} onClose={handleActivityStreamViewed}>
+                        <ConsoleLog>
+                            <ActivityStream activityStream={initialData.activityStream} />
+                        </ConsoleLog>
+                    </ConsoleDropdown>
+                    <ConsoleDropdown title="Weekly Summary" >
+                        <ConsoleLog>
+                            <Metrics metricsData={initialData.activityData} />
+                        </ConsoleLog>
+                    </ConsoleDropdown>
+                </div>
+            </Card>
         </div>
     );
 }

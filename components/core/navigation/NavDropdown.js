@@ -27,6 +27,11 @@ export const DesktopDropdown = ({ title, children, scrolled, activePaths = [] })
     const dropdownRef = useRef(null);
     const pathname = usePathname();
 
+    const isActive = activePaths.some((path) => {
+        if (path === '/') return pathname === '/';
+        return pathname.startsWith(path);
+    });
+
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -45,6 +50,7 @@ export const DesktopDropdown = ({ title, children, scrolled, activePaths = [] })
                 as="button"
                 onClick={() => setIsOpen(!isOpen)}
                 scrolled={scrolled}
+                isActive={isActive}
                 isDropdown={true}
                 className={`flex items-center ${scrolled ? 'px-4 py-2' : 'px-4 pt-1'}`}
             >

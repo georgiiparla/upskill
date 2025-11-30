@@ -3,7 +3,7 @@ import "./globals.css";
 
 import { Toaster } from 'react-hot-toast';
 
-import { ThemeProvider } from '../components/shared/theme/ThemeProvider';
+import { ThemeProvider } from '@/components/shared/theme/ThemeProvider';
 import { AuthProvider } from "@/context/AuthContext";
 import { GlobalErrorNotifier } from "@/components/core/feedback/GlobalErrorNotifier";
 import AppLayout from "@/components/core/layout/AppLayout";
@@ -14,6 +14,24 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata = {
     title: "Upskill",
     description: "Upskill platform",
+    // ADD THE SECTIONS BELOW
+    manifest: '/manifest.json', // Explicitly link the manifest
+    icons: {
+        icon: [
+            { url: '/icons/icon-192x192.png', sizes: '192x192', type: 'image/png' },
+            { url: '/icons/icon-512x512.png', sizes: '512x512', type: 'image/png' },
+        ],
+        // Critical for iOS - uses the high-res 192px icon instead of pixelated favicon
+        apple: [
+            { url: '/icons/icon-192x192.png?v=2', sizes: '180x180', type: 'image/png' },
+        ],
+    },
+    // Recommended for full PWA status
+    appleWebApp: {
+        capable: true,
+        statusBarStyle: 'default',
+        title: 'Upskill',
+    },
 };
 
 export const viewport = {

@@ -1,75 +1,68 @@
 "use client";
 import { motion } from 'framer-motion';
-import { CheckCircle2, Clock } from 'lucide-react';
+import { Repeat, Check, Flame, Sparkles, Clock } from 'lucide-react';
 
 export const PointsBadge = ({
     points,
     status,
-    size = "default",
-    showIcon = true,
-    className = ""
+    isAlwaysType = false,
+    isNewProgress = false
 }) => {
-    // Determine styling based on quest status
-    const getBadgeStyles = () => {
-        const baseStyles = "inline-flex items-center gap-3 rounded-lg font-bold shadow-lg";
 
-        const sizeStyles = {
-            small: "px-3 py-1.5 text-xs sm:px-4 sm:py-2 sm:text-sm",
-            default: "px-4 py-2 text-xs sm:px-6 sm:py-3 sm:text-base",
-            large: "px-6 py-3 text-sm sm:px-8 sm:py-4 sm:text-lg"
-        };
-
-        const statusStyles = {
-            completed: "bg-emerald-50/70 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-200 border border-emerald-200/50 dark:border-emerald-700/50 shadow-emerald-600/20 backdrop-blur-sm",
-            in_progress: "bg-sky-50/70 dark:bg-sky-900/30 text-sky-800 dark:text-sky-200 border border-sky-200/50 dark:border-sky-700/50 shadow-sky-500/20 backdrop-blur-sm",
-            default: "bg-slate-50/70 dark:bg-slate-900/30 text-slate-800 dark:text-slate-200 border border-slate-200/50 dark:border-slate-700/50 shadow-slate-500/20 backdrop-blur-sm"
-        };
-
-        return `${baseStyles} ${sizeStyles[size] || sizeStyles.default} ${statusStyles[status] || statusStyles.default}`;
-    };
-
-    // Determine icon based on quest status
-    const renderIcon = () => {
-        if (!showIcon) return null;
-
-        const iconSize = size === "small" ? "h-3 w-3 sm:h-4 sm:w-4" : size === "large" ? "h-5 w-5 sm:h-6 sm:w-6" : "h-4 w-4 sm:h-5 sm:w-5";
-
-        if (status === "completed") {
-            return <CheckCircle2 className={iconSize} />;
-        } else if (status === "in_progress") {
-            return (
-                <motion.div
-                    animate={{ rotate: 360 }}
-                    transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                >
-                    <Clock className={iconSize} />
-                </motion.div>
-            );
-        } else {
-            return (
-                <motion.div
-                    animate={{ rotate: [0, -20, 20, 0] }}
-                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                >
-                    <Clock className={iconSize} />
-                </motion.div>
-            );
+    // Determine configuration based on State + Type
+    const getConfig = () => {
+        // CASE 1: Always Type Quests (Pending/Recurring)
+        if (isAlwaysType) {
+            // STATE: Just Completed / New Progress (Mirrors Confetti)
+            // Shows Green Tick only momentarily or on first view of completion
+            if (isNewProgress) {
+                return {
+                    icon: <Check className="w-3.5 h-3.5" />,
+                    style: 'text-emerald-600 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800/50 bg-emerald-50/50 dark:bg-emerald-900/20',
+                    text: `${points} PTS`
+                };
+            }
+            // STATE: Pending / Refresh (Default for Always)
+            // Reverts to Gray to indicate it can be done again
+            return {
+                icon: <Repeat className="w-3.5 h-3.5" />,
+                style: 'text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-800/50 bg-blue-50/50 dark:bg-blue-900/20',
+                text: `${points} PTS`
+            };
         }
+
+        // CASE 2: Standard Interval Quests
+        if (status === 'completed') {
+            return {
+                icon: <Check className="w-3.5 h-3.5" />,
+                style: 'text-emerald-600 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800/50 bg-emerald-50/50 dark:bg-emerald-900/20',
+                text: 'COMPLETED'
+            };
+        }
+
+        // Default / Implicit
+        return {
+            icon: <Clock className="w-3.5 h-3.5" />,
+            style: 'text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/30',
+            text: `${points} PTS`
+        };
     };
+
+    const config = getConfig();
 
     return (
         <motion.div
-            className={`pt-4 ${className}`}
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.6 }}
+            key={`${isAlwaysType}-${isNewProgress}-${status}`} // Key triggers re-animation on state change
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className={`
+                inline-flex items-center gap-2 px-4 py-1.5 rounded-full border backdrop-blur-sm
+                text-xs font-semibold tracking-wider transition-colors duration-500
+                ${config.style}
+            `}
         >
-            <div className={getBadgeStyles()}>
-                {renderIcon()}
-                <span className={`font-mono ${size === "small" ? "text-xs sm:text-sm" : size === "large" ? "text-sm sm:text-lg" : "text-xs sm:text-base"}`}>
-                    {status === "completed" ? "" : "+"}{points} pts
-                </span>
-            </div>
+            {config.icon}
+            <span>{config.text}</span>
         </motion.div>
     );
 };
