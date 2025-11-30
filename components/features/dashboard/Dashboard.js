@@ -88,7 +88,7 @@ export default function Dashboard({ initialData }) {
                             onClick={() => router.push('/feedback')}
                         />
                     </div>
-                    <ConsoleDropdown title="Activity Stream Log" hasUnviewedEvents={hasUnviewedEvents} onClose={handleActivityStreamViewed}>
+                    <ConsoleDropdown title="Activity Stream" hasUnviewedEvents={hasUnviewedEvents} onClose={handleActivityStreamViewed}>
                         <ConsoleLog>
                             <ActivityStream activityStream={initialData.activityStream} />
                         </ConsoleLog>

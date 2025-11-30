@@ -13,13 +13,14 @@
 
 /* Fade In Animation */
 @keyframes fadeIn {
-    from { 
-        opacity: 0; 
-        transform: translateY(10px); 
+    from {
+        opacity: 0;
+        transform: translateY(10px);
     }
-    to { 
-        opacity: 1; 
-        transform: translateY(0); 
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
 
@@ -27,10 +28,51 @@
     animation: fadeIn 0.5s ease-out forwards;
 }
 
-.animate-fade-in:nth-child(1) { 
-    animation-delay: 0.1s; 
+.animate-fade-in:nth-child(1) {
+    animation-delay: 0.1s;
 }
 
-.animate-fade-in:nth-child(2) { 
-    animation-delay: 0.2s; 
+.animate-fade-in:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+/* In globals.css */
+@layer utilities {
+    .scrollbar-thin::-webkit-scrollbar {
+        width: 4px;
+        /* Thinner for cleaner look */
+    }
+
+    .scrollbar-thin::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .scrollbar-thin::-webkit-scrollbar-thumb {
+        background-color: #cbd5e1;
+        border-radius: 20px;
+    }
+
+    .dark .scrollbar-thin::-webkit-scrollbar-thumb {
+        background-color: #334155;
+    }
+}
+
+@layer utilities {
+
+    /* Mechanical Ease: Starts fast, snaps into place. 
+     Ideal for console/terminal interfaces where user expects precision.
+  */
+    .ease-mechanical {
+        transition-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+    }
+}
+
+/* Accessibility: Disable animation for users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+
+    .transition-transform,
+    .transition-\[grid-template-rows\,opacity\] {
+        transition: none !important;
+        animation: none !important;
+    }
 }
