@@ -10,10 +10,32 @@ async function proxyRequest(request) {
         const cookieStore = await cookies();
         const token = cookieStore.get('token')?.value;
 
-        // 2. Construct Target URL
-        // Incoming: /api/proxy/dashboard -> Outgoing: http://localhost:9292/dashboard
+        // 2. Construct Target URL components
         const url = new URL(request.url);
+        // Remove the Next.js prefix to get the raw backend path
         const proxyPath = url.pathname.replace(/^\/api\/proxy/, '');
+
+        // --- SECURITY FIX: Strict Pattern Matching ---
+        // This regex allows standard API paths but blocks SSRF attack characters.
+        // Allowed:
+        //   /  (Forward slashes for path separation)
+        //   a-z, A-Z (Letters)
+        //   0-9 (Numbers for IDs)
+        //   -   (Hyphens for slugs)
+        //   _   (Underscores)
+        //
+        // Blocked:
+        //   .   (Dots -> Prevents IP addresses like 1.2.3.4 or domains like google.com)
+        //   @   (At sign -> Prevents auth redirection user@evil.com)
+        //   :   (Colon -> Prevents protocol injection like file: or gopher:)
+        const SAFE_PATH_PATTERN = /^\/[a-zA-Z0-9_\-\/]+$/;
+
+        if (!SAFE_PATH_PATTERN.test(proxyPath)) {
+            console.error(`Blocked potentially malicious proxy path: ${proxyPath}`);
+            return NextResponse.json({ error: 'Forbidden Endpoint Structure' }, { status: 403 });
+        }
+        // ---------------------------------------------
+
         const queryString = url.search;
         const targetUrl = `${API_URL}${proxyPath}${queryString}`;
 
