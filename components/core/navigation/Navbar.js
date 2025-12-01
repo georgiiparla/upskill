@@ -214,7 +214,6 @@ export const Navbar = () => {
     const { points, rank, isPointsLoading } = usePointsData(user, navbarRefreshTrigger);
     const { getPointsBadgeClasses } = usePointsBadge(rank);
 
-    // Refresh points data when entering leaderboard page
     useEffect(() => {
         if (pathname === '/leaderboard') {
             refreshNavbarPoints();
@@ -226,13 +225,10 @@ export const Navbar = () => {
         setIsLogoutModalOpen(false);
     };
 
+    // UPDATED: Simply returns points without rank text
     const renderPointsText = () => {
         if (isPointsLoading) return "…";
-        const pts = `${points ?? 0} pts`;
-        if (rank && rank <= 10) {
-            return `#${rank} · ${pts}`;
-        }
-        return pts;
+        return `${points ?? 0} pts`;
     };
 
     return (

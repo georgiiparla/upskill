@@ -59,7 +59,7 @@ export const HeroHeader = ({
                         {title}
                     </h1>
                     {subtitle && (
-                        <p className="text-base sm:text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
+                        <p className="text-base sm:text-base text-gray-600 dark:text-gray-300 leading-relaxed">
                             {subtitle}
                         </p>
                     )}

@@ -92,7 +92,7 @@ export const ActivityStream = ({ activityStream }) => {
                     >
                         {/* New Indicator (Absolute positioned to stay out of flow) */}
                         {activity.isNew && (
-                            <div className="absolute left-0 top-3 md:top-1/2 md:-translate-y-1/2 w-0.5 h-6 md:h-4 bg-blue-500 rounded-r-full shadow-[0_0_8px_rgba(59,130,246,0.5)]"></div>
+                            <div className="absolute left-0 top-3 md:top-1/2 md:-translate-y-1/2 w-0.5 h-2 md:h-4 bg-blue-500 rounded-r-full shadow-[0_0_8px_rgba(59,130,246,0.5)]"></div>
                         )}
 
                         {/* Meta Column: Date & Universal Icon */}
@@ -129,14 +129,13 @@ export const ActivityStream = ({ activityStream }) => {
                                             className="
                                                 font-medium text-slate-600 dark:text-slate-300 
                                                 hover:text-blue-600 dark:hover:text-blue-400 
-                                                hover:underline decoration-blue-500/30 underline-offset-2
-                                                truncate max-w-[150px] md:max-w-[300px]
+                                                hover:underline decoration-blue-500/30 underline-offset-2 truncate
                                             "
                                         >
                                             {getTargetText(activity.target_info)}
                                         </Link>
                                     ) : (
-                                        <span className="font-medium text-slate-500 dark:text-slate-400 truncate max-w-[150px] md:max-w-[300px]">
+                                        <span className="font-medium text-slate-500 dark:text-slate-400 truncate">
                                             {getTargetText(activity.target_info)}
                                         </span>
                                     )}

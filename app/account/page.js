@@ -6,7 +6,24 @@ async function getAliases() {
     return aliases;
 }
 
+// NEW: Fetch user stats
+async function getStats() {
+    try {
+        const stats = await serverFetch('/auth/stats');
+        return stats;
+    } catch (e) {
+        console.error("Failed to fetch stats", e);
+        // Fallback stats
+        return { likes_given: 0, likes_received: 0 };
+    }
+}
+
 export default async function AccountPage() {
-    const aliases = await getAliases();
-    return <AccountView initialAliases={aliases} />;
+    // Parallel data fetching
+    const [aliases, stats] = await Promise.all([
+        getAliases(),
+        getStats()
+    ]);
+
+    return <AccountView initialAliases={aliases} stats={stats} />;
 }

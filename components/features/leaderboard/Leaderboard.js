@@ -8,7 +8,12 @@ import { processLeaderboardData } from './utils';
 
 export const Leaderboard = ({ initialData }) => {
     // Process data using utility function
-    const { rankedUsers, maxPoints } = processLeaderboardData(initialData);
+    const { rankedUsers, maxPoints, lastUpdated } = processLeaderboardData(initialData);
+
+    // Format the subtitle string
+    const subtitle = lastUpdated
+        ? `Last points update: ${new Date(lastUpdated).toLocaleString()}`
+        : "See who's leading the pack this week";
 
     return (
         <div className="mx-auto w-full space-y-8">
@@ -16,7 +21,7 @@ export const Leaderboard = ({ initialData }) => {
             <HeroHeader
                 icon={Trophy}
                 title="Leaderboard"
-                subtitle="See who's leading the pack this week"
+                subtitle={subtitle}
                 iconBg="from-amber-500 to-yellow-600"
                 iconAccentColor="text-amber-600 dark:text-amber-400"
             />

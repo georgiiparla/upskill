@@ -1,8 +1,14 @@
 "use client";
 import React from 'react';
 import { Avatar } from '@/components/core/ui/Avatar';
+import { useAuth } from '@/context/AuthContext';
 
 export const LeaderboardItem = ({ user, maxPoints, isDesktop = true }) => {
+    const { user: currentUser } = useAuth();
+
+    // Check if this leaderboard entry belongs to the logged-in user
+    const isMe = currentUser?.id === user.user_id;
+
     // Safe bar width calculation: avoid division by zero when maxPoints is 0
     const barWidth = (() => {
         if (!maxPoints || maxPoints <= 0) return '8%';
@@ -16,19 +22,24 @@ export const LeaderboardItem = ({ user, maxPoints, isDesktop = true }) => {
         return (
             <div
                 key={user.id}
-                className="group bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-200/50 dark:border-gray-700/50 p-6 transition-all duration-300 hover:shadow-lg hover:bg-white/70 dark:hover:bg-gray-800/70"
+                className={`group bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-200/50 dark:border-gray-700/50 p-6 transition-all duration-300 hover:shadow-lg hover:bg-white/70 dark:hover:bg-gray-800/70 ${isMe ? 'border-blue-200 dark:border-blue-800/50 bg-blue-50/30 dark:bg-blue-900/10' : ''}`}
             >
                 <div className="flex items-center">
                     {/* Left Side: Rank, Avatar, Name - Fixed Width */}
                     <div className="flex items-center gap-4 w-80 flex-shrink-0">
-                        {/* Avatar */}
+                        {/* Rank Number */}
+                        <div className="w-8 text-center font-bold text-slate-400 dark:text-slate-500 text-lg">
+                            #{user.rank}
+                        </div>
+
+                        {/* Avatar - With "Me" Highlight */}
                         <Avatar
                             username={user.name}
-                            className="w-12 h-12 text-lg shadow-md"
+                            className={`w-12 h-12 text-lg shadow-md ${isMe ? 'ring-2 ring-blue-500 ring-offset-2 ring-offset-white dark:ring-offset-slate-900' : ''}`}
                         />
 
                         {/* Name */}
-                        <span className="font-semibold text-gray-900 dark:text-white min-w-[100px]">
+                        <span className={`font-semibold min-w-[100px] ${isMe ? 'text-blue-700 dark:text-blue-300' : 'text-gray-900 dark:text-white'}`}>
                             {user.name}
                         </span>
                     </div>
@@ -38,7 +49,7 @@ export const LeaderboardItem = ({ user, maxPoints, isDesktop = true }) => {
                         <div className="relative">
                             {/* Background bar */}
                             <div className="w-full h-3 bg-gray-200 dark:bg-gray-700 rounded-full">
-                                {/* Progress bar - all start from left, different lengths */}
+                                {/* Progress bar */}
                                 <div
                                     className={`h-full rounded-full transition-all duration-700 ease-out`}
                                     style={{
@@ -52,8 +63,6 @@ export const LeaderboardItem = ({ user, maxPoints, isDesktop = true }) => {
                                     }}
                                 />
                             </div>
-
-
 
                             {/* Trophy icons for top 3 */}
                             {user.rank <= 3 && (
@@ -82,29 +91,32 @@ export const LeaderboardItem = ({ user, maxPoints, isDesktop = true }) => {
     return (
         <div
             key={user.id}
-            className="group bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-200/50 dark:border-gray-700/50 p-4 transition-all duration-200 hover:shadow-lg hover:bg-white/70 dark:hover:bg-gray-800/70"
+            className={`group bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-200/50 dark:border-gray-700/50 p-4 transition-all duration-200 hover:shadow-lg hover:bg-white/70 dark:hover:bg-gray-800/70 ${isMe ? 'border-blue-200 dark:border-blue-800/50 bg-blue-50/30 dark:bg-blue-900/10' : ''}`}
         >
             <div className="flex items-center justify-between">
                 {/* Left Side: Rank Badge, Avatar, and Name */}
                 <div className="flex items-center gap-3">
-                    {/* Avatar */}
+                    {/* Small Rank Number */}
+                    <span className="font-bold text-slate-400 dark:text-slate-500 text-xs min-w-[20px]">
+                        #{user.rank}
+                    </span>
+
+                    {/* Avatar with Highlight */}
                     <Avatar
                         username={user.name}
-                        className="w-10 h-10 text-sm font-semibold"
+                        className={`w-10 h-10 text-sm font-semibold ${isMe ? 'ring-2 ring-blue-500 ring-offset-2 ring-offset-white dark:ring-offset-slate-900' : ''}`}
                     />
 
                     {/* Clean Name Display */}
-                    <span className="font-medium text-gray-900 dark:text-white transition-colors group-hover:text-blue-600 dark:group-hover:text-blue-400">
+                    <span className={`font-medium transition-colors group-hover:text-blue-600 dark:group-hover:text-blue-400 ${isMe ? 'text-blue-700 dark:text-blue-300' : 'text-gray-900 dark:text-white'}`}>
                         {user.name}
                     </span>
                 </div>
 
-                {/* Platform-style Points Display */}
+                {/* Points Display */}
                 <div className="text-right">
                     <div className="font-bold text-lg text-gray-900 dark:text-white">
                         {user.points.toLocaleString()}
-                    </div>
-                    <div className="text-xs text-gray-500 dark:text-gray-400 font-medium uppercase tracking-wide">
                     </div>
                 </div>
             </div>

@@ -4,8 +4,22 @@ import { useAuth } from '@/context/AuthContext';
 import { Card } from '../../shared/helpers/Helper';
 import { Avatar } from '../../core/ui/Avatar';
 import { AliasManager } from './AliasManager';
+import { ThumbsUp, Heart } from 'lucide-react';
 
-export const AccountView = ({ initialAliases }) => {
+// New Stats Component
+const StatCard = ({ label, value, icon: Icon, colorClass }) => (
+    <div className="flex items-center p-4 bg-white dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm">
+        <div className={`p-3 rounded-full mr-4 ${colorClass}`}>
+            <Icon className="w-5 h-5" />
+        </div>
+        <div>
+            <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">{label}</p>
+            <p className="text-2xl font-bold text-gray-900 dark:text-white">{value}</p>
+        </div>
+    </div>
+);
+
+export const AccountView = ({ initialAliases, stats }) => {
     const { user } = useAuth();
 
     if (!user) {
@@ -24,6 +38,22 @@ export const AccountView = ({ initialAliases }) => {
                     </div>
                 </div>
             </Card>
+
+            {/* --- NEW: Impact Stats Section --- */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <StatCard
+                    label="Likes Received"
+                    value={stats?.likes_received || 0}
+                    icon={Heart}
+                    colorClass="bg-rose-100 text-rose-600 dark:bg-rose-900/30 dark:text-rose-400"
+                />
+                <StatCard
+                    label="Likes Given"
+                    value={stats?.likes_given || 0}
+                    icon={ThumbsUp}
+                    colorClass="bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400"
+                />
+            </div>
 
             <AliasManager initialAliases={initialAliases} />
         </div>

@@ -76,7 +76,8 @@ export const AgendaItem = ({ item, onUpdate, isEditing, setEditingItemId, isFirs
         };
     }, []);
 
-    const MAX_CHARS = 94;
+    const MAX_CHARS = 94; // Existing limit for Title
+    const MAX_LINK_CHARS = 2048; // Limit for URL
 
     const handleSave = async () => {
         const hasTitleChanged = title.trim() !== item.title;
@@ -174,6 +175,7 @@ export const AgendaItem = ({ item, onUpdate, isEditing, setEditingItemId, isFirs
                                         type="url"
                                         value={link}
                                         onChange={(e) => setLink(e.target.value)}
+                                        maxLength={MAX_LINK_CHARS}
                                         placeholder="Add a link (optional)"
                                         className="w-full pl-10 pr-4 py-2.5 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-slate-300 dark:focus:ring-slate-600 focus:border-slate-300 dark:focus:border-slate-600 outline-none transition-all placeholder:text-slate-400 dark:placeholder:text-slate-500"
                                     />

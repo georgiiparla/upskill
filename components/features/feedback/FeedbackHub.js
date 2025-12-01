@@ -78,6 +78,9 @@ const NewFeedbackForm = ({ requestTag }) => {
     const isSubmittingRef = useRef(false); // Synchronous lock
     const { refreshNavbarPoints } = useAuth();
 
+    // Limit Constant
+    const MAX_CONTENT_LENGTH = 3000;
+
     useEffect(() => {
         if (requestTag) {
             const fetchRequestTopic = async () => {
@@ -170,13 +173,19 @@ const NewFeedbackForm = ({ requestTag }) => {
                                 </motion.div>
 
                                 <motion.div variants={formItemVariants}>
-                                    <label htmlFor="feedback-text" className="block mb-2 text-base font-medium text-gray-700 dark:text-gray-300">
-                                        What are your thoughts?
-                                    </label>
+                                    <div className="flex justify-between items-center mb-2">
+                                        <label htmlFor="feedback-text" className="block text-base font-medium text-gray-700 dark:text-gray-300">
+                                            What are your thoughts?
+                                        </label>
+                                        <span className="text-xs text-gray-500 dark:text-gray-400">
+                                            {content.length}/{MAX_CONTENT_LENGTH}
+                                        </span>
+                                    </div>
                                     <textarea
                                         id="feedback-text"
                                         value={content}
                                         onChange={(e) => setContent(e.target.value)}
+                                        maxLength={MAX_CONTENT_LENGTH}
                                         className="block w-full min-h-[200px] p-4 bg-gray-50 dark:bg-gray-800/60 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-csway-orange focus:border-csway-orange transition-colors resize-y"
                                         placeholder="Be specific and provide examples..."
                                     ></textarea>
@@ -216,4 +225,3 @@ export default function FeedbackHub({ requestTag }) {
         </div>
     );
 }
-

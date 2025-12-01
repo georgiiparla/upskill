@@ -35,14 +35,17 @@ export const getRankColors = (rank) => {
 };
 
 // Process leaderboard data
-export const processLeaderboardData = (initialData = []) => {
-    // Return all users sorted by points (descending) and annotate with rank
-    if (!Array.isArray(initialData) || initialData.length === 0) {
-        return { rankedUsers: [], maxPoints: 0 };
+export const processLeaderboardData = (initialData) => {
+    // Handle both direct array (legacy) and object wrapper (new)
+    const rawUsers = Array.isArray(initialData) ? initialData : (initialData?.users || []);
+    const lastUpdated = !Array.isArray(initialData) ? initialData?.last_updated_at : null;
+
+    if (!Array.isArray(rawUsers) || rawUsers.length === 0) {
+        return { rankedUsers: [], maxPoints: 0, lastUpdated };
     }
 
     // Filter out mock users (users whose name starts with "Mock User")
-    const filteredData = initialData.filter(user => {
+    const filteredData = rawUsers.filter(user => {
         const name = user.name || user.full_name || '';
         return !name.startsWith('Mock User');
     });
@@ -59,5 +62,5 @@ export const processLeaderboardData = (initialData = []) => {
     // Get max points for bar scaling (default to 0)
     const maxPoints = rankedUsers.length > 0 ? Math.max(...rankedUsers.map(user => user.points || 0)) : 0;
 
-    return { rankedUsers, maxPoints };
+    return { rankedUsers, maxPoints, lastUpdated };
 };

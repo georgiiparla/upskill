@@ -23,6 +23,7 @@ export const FeedbackCommentItem = ({ feedback, onDeleteSuccess }) => {
         const originalLikedState = isLiked;
         const originalLikeCount = likeCount;
 
+        // Optimistic UI Update
         setIsLiked(!originalLikedState);
         setLikeCount(originalLikedState ? originalLikeCount - 1 : originalLikeCount + 1);
 
@@ -30,7 +31,11 @@ export const FeedbackCommentItem = ({ feedback, onDeleteSuccess }) => {
         const response = await action(feedback.id);
 
         if (!response.success) {
-            toast.error("Failed to update like.");
+            // UPDATED: Show the actual error message from backend (e.g., "Daily limit reached")
+            // If no specific message is provided, fall back to generic error.
+            toast.error(response.error || "Failed to update like.");
+
+            // Revert UI state on failure
             setIsLiked(originalLikedState);
             setLikeCount(originalLikeCount);
         } else {
