@@ -9,12 +9,25 @@ import { useEffect } from 'react';
 const PUBLIC_ROUTES = ['/login', '/signup'];
 
 export default function AppLayout({ children }) {
-    const { isAuthenticated, isLoading } = useAuth();
+    const { isAuthenticated, isLoading, logout } = useAuth();
     const pathname = usePathname();
     const router = useRouter();
 
     const isPublicRoute = PUBLIC_ROUTES.includes(pathname);
     const isCallbackRoute = pathname.startsWith('/auth/callback');
+
+    // --- CRITICAL FIX: TIMEOUT GUARD ---
+    // If the app is stuck loading for > 5 seconds, it's likely a loop.
+    // Force a logout to clear state and return to login.
+    useEffect(() => {
+        if (isLoading) {
+            const timer = setTimeout(() => {
+                console.error("Authentication timeout detected - Forcing state reset.");
+                logout();
+            }, 5000);
+            return () => clearTimeout(timer);
+        }
+    }, [isLoading, logout]);
 
     useEffect(() => {
         if (isLoading) return;
