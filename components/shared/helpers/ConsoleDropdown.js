@@ -45,11 +45,9 @@ export const ConsoleDropdown = ({ title, children, hasUnviewedEvents = false, on
                                 {title}
                             </h2>
 
-                            {/* Blue Glowing Indicator (Preserved Design) */}
+                            {/* --- INDICATOR: Plain Static Blue Dot --- */}
                             {hasUnviewedEvents && (
-                                <div className="relative flex items-center justify-center">
-                                    <div className="w-2 h-2 bg-blue-500 rounded-full shadow-[0_0_8px_rgba(59,130,246,0.8)] animate-pulse"></div>
-                                </div>
+                                <div className="w-2 h-2 ml-2 rounded-full bg-blue-600 dark:bg-blue-500" />
                             )}
                         </div>
 

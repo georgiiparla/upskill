@@ -2,10 +2,9 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Activity } from 'lucide-react'; // ONE universal minimal icon
+import { Activity } from 'lucide-react';
 
 // Helper to map event types to colors and short verbs
-// Note: Icons have been removed from here to keep the stream minimal
 const getEventStyle = (type) => {
     switch (type) {
         case 'feedback_submitted':
@@ -90,7 +89,7 @@ export const ActivityStream = ({ activityStream }) => {
                             hover:bg-slate-100/50 dark:hover:bg-slate-800/50
                         "
                     >
-                        {/* New Indicator (Absolute positioned to stay out of flow) */}
+                        {/* --- RESTORED: The Vertical Blue Line Indicator --- */}
                         {activity.isNew && (
                             <div className="absolute left-0 top-3 md:top-1/2 md:-translate-y-1/2 w-0.5 h-2 md:h-4 bg-blue-500 rounded-r-full shadow-[0_0_8px_rgba(59,130,246,0.5)]"></div>
                         )}
@@ -101,10 +100,7 @@ export const ActivityStream = ({ activityStream }) => {
                                 {dateStr}
                             </span>
 
-                            {/* UNIVERSAL MINIMAL ICON: 
-                                - Uses 'Activity' (pulse) for everything
-                                - Neutral slate color to recede into background
-                            */}
+                            {/* UNIVERSAL MINIMAL ICON */}
                             <Activity className="w-3.5 h-3.5 text-slate-300 dark:text-slate-700" />
                         </div>
 
@@ -115,12 +111,12 @@ export const ActivityStream = ({ activityStream }) => {
                                 {activity.user_name}
                             </span>
 
-                            {/* Verb (The "Action") - Retained color for scanability, but simplified */}
+                            {/* Verb */}
                             <span className={`text-[10px] md:text-xs font-medium ${style.color} bg-slate-50 dark:bg-slate-800/50 px-1.5 py-0.5 rounded border border-slate-200 dark:border-slate-700/50`}>
                                 {style.verb}
                             </span>
 
-                            {/* Target (The "Object") */}
+                            {/* Target */}
                             {getTargetText(activity.target_info) && (
                                 <>
                                     {getTargetLink(activity.target_info, activity.event_type) ? (

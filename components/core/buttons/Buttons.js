@@ -167,7 +167,7 @@ export const QuickActionButton = ({
                 
                 /* Interactions */
                 hover:border-slate-300 dark:hover:border-slate-700
-                hover:shadow-md dark:hover:bg-slate-800/50
+                 dark:hover:bg-slate-800/50
                 
                 /* Text */
                 text-slate-900 dark:text-slate-100
