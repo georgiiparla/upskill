@@ -22,11 +22,16 @@ export const ConsoleDropdown = ({ title, children, hasUnviewedEvents = false, on
             >
                 <div
                     className={`
-                        bg-transparent 
-                        border border-dashed border-slate-300/60 dark:border-slate-600/60 
-                        rounded-lg p-4 
-                        transition-colors duration-200 
-                        hover:bg-slate-50/50 dark:hover:bg-slate-800/30
+                        /* SOLID STYLE (Matches AgendaItem Cards) */
+                        bg-white dark:bg-slate-900
+                        border border-slate-200 dark:border-slate-800
+                        
+                        rounded-xl p-6 
+                        transition-all duration-200 
+                        
+                        hover:border-slate-300 dark:hover:border-slate-700
+                        hover:shadow-sm dark:hover:bg-slate-900/80
+                        
                         focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900
                     `}
                 >
@@ -34,7 +39,7 @@ export const ConsoleDropdown = ({ title, children, hasUnviewedEvents = false, on
                         <div className="flex items-center gap-3">
                             {/* Header Text: JetBrains Mono */}
                             <h2
-                                className="text-sm md:text-base font-medium text-slate-700 dark:text-slate-200"
+                                className="text-sm md:text-base font-semibold text-slate-800 dark:text-slate-100"
                                 style={{ fontFamily: "'JetBrains Mono', monospace" }}
                             >
                                 {title}
@@ -48,7 +53,7 @@ export const ConsoleDropdown = ({ title, children, hasUnviewedEvents = false, on
                             )}
                         </div>
 
-                        {/* Animated Chevron: Snappy rotation */}
+                        {/* Animated Chevron */}
                         <ChevronDown
                             className={`
                                 h-4 w-4 text-slate-400 
@@ -61,11 +66,7 @@ export const ConsoleDropdown = ({ title, children, hasUnviewedEvents = false, on
                 </div>
             </button>
 
-            {/* Performance Animation Wrapper:
-               1. Uses CSS Grid (grid-template-rows) to animate height from 0 to auto without layout thrashing.
-               2. Keeps content in DOM (better for scroll state) but hides it visually.
-               3. Duration is tight (200ms) to feel "responsive" not "floaty".
-            */}
+            {/* Performance Animation Wrapper */}
             <div
                 id={`console-content-${title.replace(/\s+/g, '-').toLowerCase()}`}
                 className={`
@@ -75,7 +76,6 @@ export const ConsoleDropdown = ({ title, children, hasUnviewedEvents = false, on
                 aria-hidden={!isOpen}
             >
                 <div className="overflow-hidden min-h-0">
-                    {/* Add a tiny top margin that is only visible when open to separate content from header */}
                     <div className="pt-2">
                         {children}
                     </div>

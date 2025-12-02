@@ -55,7 +55,7 @@ export const DetailActionButton = ({
         orange: 'hover:bg-csway-orange/10 hover:text-csway-orange dark:hover:text-csway-orange',
         blue: 'hover:bg-blue-500/10 hover:text-blue-500 dark:hover:text-blue-500',
         red: 'hover:bg-red-500/10 hover:text-red-500 dark:hover:text-red-500',
-        green: 'hover:bg-csway-green/10 hover:text-csway-green dark:hover:text-csway-green', // Added green color scheme
+        green: 'hover:bg-csway-green/10 hover:text-csway-green dark:hover:text-csway-green',
         gray: 'hover:bg-gray-500/10 dark:hover:bg-gray-700',
     };
 
@@ -64,7 +64,7 @@ export const DetailActionButton = ({
     return (
         <button
             title={title}
-            type={type} // Use the new type prop here
+            type={type}
             className={`
                 flex items-center px-4 py-2 rounded-md transition-colors text-sm font-medium 
                 disabled:opacity-50 disabled:cursor-not-allowed 
@@ -133,26 +133,23 @@ export const QuickActionButton = ({
     onClick,
     colorScheme = 'gray',
 }) => {
+    // Defines the icon colors
     const colorClasses = {
         orange: {
-            text: 'text-csway-orange dark:text-csway-orange',
-            hover: 'hover:bg-csway-orange/5 dark:hover:bg-csway-orange/10',
-            icon: 'text-csway-orange/70 dark:text-csway-orange/80',
+            icon: 'text-csway-orange',
+            bg: 'bg-csway-orange/10 dark:bg-csway-orange/20',
         },
         blue: {
-            text: 'text-blue-600 dark:text-blue-400',
-            hover: 'hover:bg-blue-500/5 dark:hover:bg-blue-500/10',
-            icon: 'text-blue-500/70 dark:text-blue-400/80',
+            icon: 'text-blue-600 dark:text-blue-400',
+            bg: 'bg-blue-100 dark:bg-blue-900/30',
         },
         green: {
-            text: 'text-csway-green dark:text-csway-green',
-            hover: 'hover:bg-csway-green/5 dark:hover:bg-csway-green/10',
-            icon: 'text-csway-green/70 dark:text-csway-green/80',
+            icon: 'text-csway-green dark:text-csway-green',
+            bg: 'bg-csway-green/10 dark:bg-csway-green/20',
         },
         gray: {
-            text: 'text-slate-700 dark:text-slate-300',
-            hover: 'hover:bg-slate-100/50 dark:hover:bg-slate-800/50',
-            icon: 'text-slate-500 dark:text-slate-400',
+            icon: 'text-slate-600 dark:text-slate-400',
+            bg: 'bg-slate-100 dark:bg-slate-800',
         },
     };
 
@@ -162,19 +159,32 @@ export const QuickActionButton = ({
         <button
             onClick={onClick}
             className={`
-                group flex items-center justify-center md:justify-start gap-3 px-3 md:px-5 py-3 md:py-5 rounded-md transition-all duration-200
-                bg-transparent border border-dashed border-slate-300/40 dark:border-slate-600/40
-                ${colors.text} ${colors.hover}
-                hover:border-slate-300/60 dark:hover:border-slate-600/60
-                hover:shadow-sm
-                focus:outline-none focus:ring-2 focus:ring-slate-300/50 dark:focus:ring-slate-600/50
+                group flex items-center justify-center md:justify-start gap-3 px-3 md:px-5 py-3 md:py-5 rounded-xl transition-all duration-200
+                
+                /* SOLID BACKGROUNDS (No more transparent/dashed) */
+                bg-white dark:bg-slate-900
+                border border-slate-200 dark:border-slate-800
+                
+                /* Interactions */
+                hover:border-slate-300 dark:hover:border-slate-700
+                hover:shadow-md dark:hover:bg-slate-800/50
+                
+                /* Text */
+                text-slate-900 dark:text-slate-100
+                
+                /* Layout */
                 flex-1 min-w-0
+                focus:outline-none focus:ring-2 focus:ring-slate-300/50 dark:focus:ring-slate-600/50
             `}
         >
-            <div className={`flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-lg bg-slate-50/50 dark:bg-slate-800/50 group-hover:bg-slate-100/70 dark:group-hover:bg-slate-700/70 transition-colors`}>
-                <Icon className={`h-4 w-4 ${colors.icon}`} />
+            {/* Colored Icon Container */}
+            <div className={`flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-lg transition-colors ${colors.bg}`}>
+                <Icon className={`h-5 w-5 ${colors.icon}`} />
             </div>
-            <span className="hidden md:inline text-sm md:text-base truncate">{text}</span>
+
+            <span className="hidden md:inline text-sm md:text-base font-semibold truncate">
+                {text}
+            </span>
         </button>
     );
 };
