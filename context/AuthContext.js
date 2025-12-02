@@ -2,8 +2,8 @@
 
 import React, { createContext, useState, useContext, useEffect, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-// Import the helper to perform the cleanup
-import { setTokenCookie, removeTokenCookie, getTokenFromCookie } from '@/context/token_helpers';
+// We still import helpers for cleanup, but we rely on the server for setting the main cookie
+import { removeTokenCookie, getTokenFromCookie } from '@/context/token_helpers';
 
 const AuthContext = createContext(null);
 
@@ -17,31 +17,20 @@ export const AuthProvider = ({ children }) => {
 
     const router = useRouter();
     const hasCheckedSession = useRef(false);
-    const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/auth`;
+
+    // 1. Point Auth Checks to the Proxy
+    // This ensures we validate the HttpOnly cookie, not just the client state.
+    const AUTH_CHECK_URL = '/api/proxy/auth';
 
     const clearError = () => setError(null);
 
-    // 1. Check Session
-    const checkSession = useCallback(async (token = null) => {
+    // 2. Check Session (Via Proxy)
+    const checkSession = useCallback(async () => {
         setIsLoading(true);
-
-        // Check for client-side legacy token if no explicit token passed
-        const sessionToken = token || getTokenFromCookie();
-
         try {
-            // Note: We fetch from the PROXY or API. 
-            // If we have a sessionToken (Legacy), we send it in the header.
-            // If not, we rely on the HttpOnly cookie handled by the browser/proxy.
-            const headers = {};
-            if (sessionToken) {
-                headers['Authorization'] = `Bearer ${sessionToken}`;
-            }
-
-            // Using the direct API URL from your knowledge base, or proxy if configured
-            // Assuming direct auth check based on previous context:
-            const response = await fetch(`${API_URL}/profile`, {
-                headers: headers
-            });
+            // We do NOT attach headers manually. We let the Proxy handle it 
+            // via the HttpOnly cookie.
+            const response = await fetch(`${AUTH_CHECK_URL}/profile`);
 
             if (response.ok) {
                 const data = await response.json();
@@ -56,24 +45,16 @@ export const AuthProvider = ({ children }) => {
                 throw new Error("Session check failed");
             }
         } catch (err) {
-            console.warn("Session validation failed:", err);
-
-            // --- CRITICAL FIX: SELF-HEALING ---
-            // If the session check fails (401 or otherwise), we MUST clear 
-            // any potential legacy cookies that are confusing the client.
-            console.log("Cleaning up potential legacy authentication artifacts...");
+            // Silent fail for session check is normal (user just isn't logged in)
+            // But we clean up artifacts to be safe.
             removeTokenCookie();
-
-            // Optional: Call server logout to ensure HttpOnly cookie is also cleared
-            try { await fetch(`${API_URL}/logout`, { method: 'POST' }); } catch (e) { /* ignore */ }
-
             setIsAuthenticated(false);
             setUser(null);
             setIsAdmin(false);
         } finally {
             setIsLoading(false);
         }
-    }, [API_URL]);
+    }, []);
 
     useEffect(() => {
         if (!hasCheckedSession.current) {
@@ -82,29 +63,49 @@ export const AuthProvider = ({ children }) => {
         }
     }, [checkSession]);
 
-    // 2. Handle Login Token
+    // 3. Handle Login Token (THE CRITICAL FIX)
     const handleTokenLogin = useCallback(async (token) => {
-        // Set cookie just in case (legacy support), but rely on the HttpOnly flow primarily
-        setTokenCookie(token);
-        await checkSession(token);
+        setIsLoading(true);
+        try {
+            // Step A: Call the Next.js Server Route to set the HttpOnly Cookie
+            // This bridges the gap between the frontend and the Proxy
+            const setCookieResponse = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ token }),
+            });
+
+            if (!setCookieResponse.ok) {
+                throw new Error('Failed to set session cookie');
+            }
+
+            // Step B: Verify the session immediately using the new cookie
+            await checkSession();
+
+        } catch (err) {
+            console.error("Login failed:", err);
+            setError("Login failed. Please try again.");
+            setIsLoading(false);
+        }
     }, [checkSession]);
 
-    // 3. Logout
+    // 4. Logout
     const logout = useCallback(async () => {
         setIsLoading(true);
         try {
-            await fetch(`${API_URL}/logout`, { method: 'POST' });
+            // Call the Next.js route to delete the HttpOnly cookie
+            await fetch('/api/auth/logout', { method: 'POST' });
         } catch (err) {
             console.error("Logout failed:", err);
         } finally {
             setUser(null);
             setIsAuthenticated(false);
             setIsAdmin(false);
-            removeTokenCookie(); // Ensure client side is clean
+            removeTokenCookie(); // Clear any legacy client cookies too
             router.push('/login');
             setIsLoading(false);
         }
-    }, [API_URL, router]);
+    }, [router]);
 
     const refreshNavbarPoints = useCallback(() => {
         setNavbarRefreshTrigger(prev => prev + 1);
