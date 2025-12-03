@@ -4,40 +4,30 @@ import { motion } from 'framer-motion';
 export const QuestIndicators = ({ quests, currentIndex, onIndicatorClick }) => {
     if (!quests || quests.length <= 1) return null;
 
-    // Helper to determine the color based on Card Type + The "New Progress" Trick
     const getIndicatorColor = (quest) => {
-        if (!quest) return '#64748b'; // Default Slate-500
+        if (!quest) return '#64748b';
 
         const isAlwaysType = quest.quest_type === 'always';
         const isCompleted = quest.user_completed ?? quest.completed;
 
-        // The "Trick": Check for new progress (Confetti state)
-        // This matches the logic in QuestCard.js and QuestCarousel.js
-        // 1. Check backend flag 'has_new_progress'
-        // 2. Check client-side timestamp 'last_triggered_at' (within 5 seconds)
-        const isNewProgress = quest.has_new_progress || (
-            quest.last_triggered_at &&
-            (Date.now() - new Date(quest.last_triggered_at).getTime() < 5000)
-        );
+        // FIX: Use server-provided relative time check
+        // We consider it "New Progress" if the backend flag is set OR if it happened recently
+        const isRecentTrigger = quest.seconds_since_trigger !== null && quest.seconds_since_trigger < 10;
 
-        // Logic for "Always" (Active/Blue-edged) Cards
+        const isNewProgress = quest.has_new_progress || isRecentTrigger;
+
         if (isAlwaysType) {
-            // If the confetti/reward is active (The Trick), show Green
             if (isNewProgress) {
                 return '#10b981'; // Emerald-500
             }
-            // Otherwise, Always cards are "Active" (Blue) by default, ready to be done again.
-            // They typically ignore the persistent 'isCompleted' status for styling.
             return '#3b82f6'; // Blue-500
         }
 
-        // Logic for Standard (Interval-based) Cards
-        // These use the standard Completion = Green, Incomplete = Gray pattern
         if (isCompleted) {
-            return '#10b981'; // Emerald-500
+            return '#10b981';
         }
 
-        return '#64748b'; // Slate-500 (Gray)
+        return '#64748b'; // Slate-500
     };
 
     return (

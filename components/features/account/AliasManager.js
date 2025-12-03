@@ -14,6 +14,9 @@ export const AliasManager = ({ initialAliases = [] }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedAlias, setSelectedAlias] = useState(null);
 
+    // Limit Constant
+    const MAX_EMAIL_LENGTH = 254;
+
     const handleAddAlias = async (e) => {
         e.preventDefault();
         if (!newAlias.trim()) {
@@ -95,6 +98,7 @@ export const AliasManager = ({ initialAliases = [] }) => {
                             type="email"
                             value={newAlias}
                             onChange={(e) => setNewAlias(e.target.value)}
+                            maxLength={MAX_EMAIL_LENGTH}
                             placeholder="your-alias@example.com"
                             className="flex-grow px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-700"
                             required

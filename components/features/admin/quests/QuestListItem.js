@@ -172,7 +172,8 @@ export const QuestListItem = ({
                         Reset Frequency
                     </label>
                     <div className="flex flex-wrap gap-2">
-                        {['days', 'hours', 'minutes'].map((unit) => {
+                        {/* FIX: Added 'seconds' to the array to allow short intervals for dev */}
+                        {['days', 'hours', 'minutes', 'seconds'].map((unit) => {
                             const val = draftResetUnits[unit];
                             return (
                                 <div key={unit} className="flex items-center bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-md overflow-hidden">

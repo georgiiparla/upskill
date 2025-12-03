@@ -2,9 +2,9 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import Image from 'next/image';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { motion, useSpring, useTransform } from 'framer-motion';
-import { AlertTriangle, Loader2 } from 'lucide-react';
+import { useRouter, useSearchParams, usePathname } from 'next/navigation';
+import { motion, useSpring, useTransform, AnimatePresence } from 'framer-motion';
+import { AlertCircle, Loader2, X, ArrowRight } from 'lucide-react';
 import { Card } from '../../shared/helpers/Helper';
 
 const GoogleIcon = () => (
@@ -25,7 +25,6 @@ const LogoAnimation = ({ isRedirecting }) => {
     useEffect(() => {
         const handleMouseMove = (e) => {
             const { innerWidth, innerHeight } = window;
-            // Calculate percentage from center (-5 to 5 degrees)
             const xPct = (e.clientX / innerWidth - 0.5) * 10;
             const yPct = (e.clientY / innerHeight - 0.5) * 10;
             x.set(xPct);
@@ -35,7 +34,7 @@ const LogoAnimation = ({ isRedirecting }) => {
         return () => window.removeEventListener('mousemove', handleMouseMove);
     }, [x, y]);
 
-    const rotateX = useTransform(y, (val) => -val); // Invert Y for natural tilt
+    const rotateX = useTransform(y, (val) => -val);
     const rotateY = useTransform(x, (val) => val);
 
     const orbPalette = [
@@ -67,13 +66,12 @@ const LogoAnimation = ({ isRedirecting }) => {
                 transformStyle: "preserve-3d"
             }}
         >
-            {/* Ambient Background Glow */}
             <motion.div
                 className="absolute inset-0 rounded-full"
                 style={{
                     background: 'radial-gradient(circle at center, rgba(14,165,233,0.12) 0%, rgba(16,185,129,0.08) 55%, rgba(251,191,36,0.06) 85%, rgba(15,23,42,0) 100%)',
                     filter: 'blur(18px)',
-                    transform: 'translateZ(-20px)' // Push back in 3D space
+                    transform: 'translateZ(-20px)'
                 }}
                 initial={{ opacity: 0, scale: 0.5 }}
                 animate={isRedirecting
@@ -87,7 +85,6 @@ const LogoAnimation = ({ isRedirecting }) => {
                 }}
             />
 
-            {/* Inner Core Blur */}
             <motion.div
                 className="absolute z-0 w-24 h-24 rounded-full bg-emerald-300/15 blur-2xl"
                 initial={{ opacity: 0 }}
@@ -99,11 +96,10 @@ const LogoAnimation = ({ isRedirecting }) => {
                     duration: isRedirecting ? 0.5 : 6.5,
                     repeat: isRedirecting ? 0 : Infinity,
                     ease: 'easeInOut',
-                    delay: 0.2 // Bloom delay
+                    delay: 0.2
                 }}
             />
 
-            {/* Orbiting Particles */}
             {orbConfigs.map(({ key, radius, size, duration, delay }, index) => {
                 const paletteEntry = orbPalette[index % orbPalette.length];
 
@@ -116,18 +112,16 @@ const LogoAnimation = ({ isRedirecting }) => {
                             height: `${size * 4}px`,
                             backgroundColor: paletteEntry.fill,
                             boxShadow: paletteEntry.shadow,
-                            transform: 'translateZ(10px)' // Pop forward in 3D space
+                            transform: 'translateZ(10px)'
                         }}
                         initial={{ opacity: 0, scale: 0, x: 0, y: 0 }}
                         animate={isRedirecting ? {
-                            // CONVERGENCE STATE: Spiral into center
                             x: 0,
                             y: 0,
                             opacity: 0,
                             scale: 0,
                             transition: { duration: 0.6, ease: "backIn" }
                         } : {
-                            // LOOP STATE: Orbital motion
                             x: [
                                 Math.cos(index * 1.2) * radius,
                                 Math.cos(index * 1.2 + Math.PI / 3) * (radius + 10),
@@ -144,14 +138,13 @@ const LogoAnimation = ({ isRedirecting }) => {
                                 duration,
                                 repeat: Infinity,
                                 ease: 'easeInOut',
-                                delay: delay * 0.5 // Reduced delay for faster initial bloom
+                                delay: delay * 0.5
                             }
                         }}
                     />
                 );
             })}
 
-            {/* Center Logo - Rotating */}
             <motion.div
                 className="relative z-10"
                 initial={{ scale: 0, opacity: 0, rotate: 0 }}
@@ -159,13 +152,13 @@ const LogoAnimation = ({ isRedirecting }) => {
                     ? {
                         scale: 0,
                         opacity: 0,
-                        rotate: 360, // Spin fast on exit (like a closing lock)
+                        rotate: 360,
                         transition: { duration: 0.5, ease: "backIn" }
                     }
                     : {
                         scale: 1,
                         opacity: 1,
-                        rotate: 360, // Continuous rotation loop
+                        rotate: 360,
                         transition: {
                             rotate: { duration: 10, repeat: Infinity, ease: "linear" },
                             scale: { type: "spring", stiffness: 200, damping: 15 },
@@ -188,39 +181,68 @@ const LogoAnimation = ({ isRedirecting }) => {
     );
 };
 
-const ErrorMessage = () => {
-    const searchParams = useSearchParams();
-    const error = searchParams.get('error');
-
-    if (!error) return null;
-
-    let message;
-    switch (error) {
-        case 'unauthorized_email':
-            message = 'This account is not authorized to access the platform.';
-            break;
-        case 'account_creation_failed':
-            message = 'Failed to create an account. Please try again.';
-            break;
-        default:
-            message = 'An unknown error occurred.';
-    }
+// New Inline Error Button Component
+const InlineErrorButton = ({ errorCode, onRetry }) => {
+    let message = 'Authentication failed';
+    if (errorCode === 'unauthorized_email') message = 'Unauthorized';
+    else if (errorCode === 'account_creation_failed') message = 'Account creation failed';
 
     return (
-        <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="bg-red-50 dark:bg-red-900/20 border border-red-300 dark:border-red-700 text-red-700 dark:text-red-300 px-4 py-3 rounded-md text-sm flex items-center gap-3 mb-4"
+        <motion.button
+            onClick={onRetry}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.2 }}
+            className="mx-auto w-auto relative z-20 group flex items-center justify-between px-4 py-2 text-sm font-medium rounded-lg 
+            bg-red-50/80 dark:bg-red-900/10 
+            border border-red-200 dark:border-red-800 
+            text-red-600 dark:text-red-400 
+            hover:bg-red-100 dark:hover:bg-red-900/20 
+            focus:outline-none focus:ring-2 focus:ring-red-500 transition-all duration-200"
         >
-            <AlertTriangle className="h-5 w-5" />
-            <span>{message}</span>
-        </motion.div>
+            <div className="flex items-center gap-2">
+                <AlertCircle className="w-4 h-4" />
+                <span>{message}</span>
+            </div>
+        </motion.button>
+    );
+};
+
+// Standard Sign In Button
+const SignInButton = ({ handleLogin, isRedirecting }) => {
+    return (
+        <motion.a
+            href="#"
+            onClick={handleLogin}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            className={`
+                w-full relative z-20 inline-flex items-center justify-center px-4 py-2 font-medium text-gray-700 dark:text-gray-200 
+                rounded-lg hover:bg-slate-50/80 dark:hover:bg-slate-700/30 focus:outline-none focus:ring-2 
+                focus:ring-offset-2 focus:ring-csway-green/50 transition-all duration-200 bg-transparent
+                border border-transparent hover:border-slate-200 dark:hover:border-slate-700
+                ${isRedirecting ? 'opacity-75 cursor-wait scale-95' : ''}
+            `}
+        >
+            {isRedirecting ? (
+                <Loader2 className="w-5 h-5 mr-3 animate-spin text-csway-green" />
+            ) : (
+                <GoogleIcon />
+            )}
+            {isRedirecting ? 'Connecting...' : 'Sign in'}
+        </motion.a>
     );
 };
 
 export const Auth = () => {
     const { isAuthenticated } = useAuth();
     const router = useRouter();
+    const pathname = usePathname();
+    const searchParams = useSearchParams();
+    const error = searchParams.get('error');
+
     const [isRedirecting, setIsRedirecting] = useState(false);
     const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:9292';
 
@@ -236,10 +258,14 @@ export const Auth = () => {
 
         setIsRedirecting(true);
 
-        // Delay redirection slightly to allow the "Success Convergence" animation to play
         setTimeout(() => {
             window.location.href = `${backendUrl}/auth/google/login`;
         }, 800);
+    };
+
+    const handleRetry = () => {
+        // Clear the URL params to return to "Sign In" state
+        router.replace(pathname);
     };
 
     return (
@@ -255,27 +281,27 @@ export const Auth = () => {
                 </div>
 
                 <div className="my-4 flex justify-center items-center relative z-10">
-                    <ErrorMessage />
                     <LogoAnimation isRedirecting={isRedirecting} />
                 </div>
 
-                <a
-                    href={`${backendUrl}/auth/google/login`}
-                    onClick={handleLogin}
-                    className={`
-                        relative z-20 inline-flex items-center justify-center px-4 py-2 font-medium text-gray-700 dark:text-gray-200 
-                        rounded-lg hover:bg-slate-50/80 dark:hover:bg-slate-700/30 focus:outline-none focus:ring-2 
-                        focus:ring-offset-2 focus:ring-csway-green/50 transition-all duration-200 bg-transparent
-                        ${isRedirecting ? 'opacity-75 cursor-wait scale-95' : ''}
-                    `}
-                >
-                    {isRedirecting ? (
-                        <Loader2 className="w-5 h-5 mr-3 animate-spin text-csway-green" />
-                    ) : (
-                        <GoogleIcon />
-                    )}
-                    {isRedirecting ? 'Connecting...' : 'Sign in'}
-                </a>
+                {/* Authentication Action Area - Toggles between Button and Error */}
+                <div className="min-h-[42px]">
+                    <AnimatePresence mode="wait">
+                        {error ? (
+                            <InlineErrorButton
+                                key="error-banner"
+                                errorCode={error}
+                                onRetry={handleRetry}
+                            />
+                        ) : (
+                            <SignInButton
+                                key="signin-btn"
+                                handleLogin={handleLogin}
+                                isRedirecting={isRedirecting}
+                            />
+                        )}
+                    </AnimatePresence>
+                </div>
             </Card>
         </div>
     );

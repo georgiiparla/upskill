@@ -48,7 +48,8 @@ export default function Dashboard({ initialData }) {
                     iconAccentColor="text-blue-600 dark:text-blue-400"
                     className="mb-8"
                 />
-                <div className={`grid grid-cols-1 gap-5 ${editingItemId ? 'auto-rows-auto' : 'auto-rows-fr'}`}>
+                {/* MODIFIED LINE BELOW: Added responsive classes for height behavior */}
+                <div className={`grid grid-cols-1 gap-5 ${editingItemId ? 'auto-rows-auto' : 'auto-rows-auto md:auto-rows-fr'}`}>
                     {agendaItems.map((item, index) => (
                         <div key={item.id} className={editingItemId && item.id !== editingItemId ? 'h-full' : ''}>
                             <AgendaItem

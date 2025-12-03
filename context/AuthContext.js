@@ -1,7 +1,9 @@
 "use client";
 
 import React, { createContext, useState, useContext, useEffect, useCallback, useRef } from 'react';
-import { setTokenCookie, removeTokenCookie, getTokenFromCookie } from '@/context/token_helpers';
+import { useRouter } from 'next/navigation';
+// We still import helpers for cleanup, but we rely on the server for setting the main cookie
+import { removeTokenCookie, getTokenFromCookie } from '@/context/token_helpers';
 
 const AuthContext = createContext(null);
 
@@ -9,34 +11,24 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
-    const [isLoading, setIsLoading] = useState(true); // Single loading state
+    const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     const [navbarRefreshTrigger, setNavbarRefreshTrigger] = useState(0);
 
-    const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/auth`;
-    const friendlyError = "Could not connect to the server. Please check your connection and try again later.";
-
+    const router = useRouter();
     const hasCheckedSession = useRef(false);
+
+    // 1. Point Auth Checks to the Proxy
+    // This ensures we validate the HttpOnly cookie, not just the client state.
+    const AUTH_CHECK_URL = '/api/proxy/auth';
 
     const clearError = () => setError(null);
 
-    // Allow checkSession to accept an explicit token, falling back to the cookie if none is provided.
-    const checkSession = useCallback(async (token = null) => {
+    // 2. Check Session (Via Proxy)
+    const checkSession = useCallback(async () => {
         setIsLoading(true);
-        // Prioritize the passed token, otherwise check the cookie. This is the core of the fix.
-        const sessionToken = token || getTokenFromCookie();
-
-        if (!sessionToken) {
-            setIsAuthenticated(false);
-            setUser(null);
-            setIsLoading(false);
-            return;
-        }
-
         try {
-            const response = await fetch(`${API_URL}/profile`, {
-                headers: { 'Authorization': `Bearer ${sessionToken}` }
-            });
+            const response = await fetch(`${AUTH_CHECK_URL}/profile`);
 
             if (response.ok) {
                 const data = await response.json();
@@ -45,27 +37,21 @@ export const AuthProvider = ({ children }) => {
                     setIsAuthenticated(true);
                     setIsAdmin(data.is_admin || false);
                 } else {
-                    removeTokenCookie();
+                    // Middleware handles redirects, we just update state
                     setIsAuthenticated(false);
                     setUser(null);
-                    setIsAdmin(false);
                 }
             } else {
-                removeTokenCookie();
                 setIsAuthenticated(false);
                 setUser(null);
-                setIsAdmin(false);
             }
         } catch (err) {
-            console.error("Session check failed:", err);
-            setError(friendlyError);
             setIsAuthenticated(false);
             setUser(null);
-            setIsAdmin(false);
         } finally {
             setIsLoading(false);
         }
-    }, [API_URL]);
+    }, []);
 
     useEffect(() => {
         if (!hasCheckedSession.current) {
@@ -74,34 +60,64 @@ export const AuthProvider = ({ children }) => {
         }
     }, [checkSession]);
 
-
-    // Pass the token from the URL directly into our updated checkSession function.
+    // 3. Handle Login Token
     const handleTokenLogin = useCallback(async (token) => {
-        setTokenCookie(token);
-        await checkSession(token);
+        setIsLoading(true);
+        try {
+            const setCookieResponse = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ token }),
+            });
+
+            if (!setCookieResponse.ok) {
+                throw new Error('Failed to set session cookie');
+            }
+
+            await checkSession();
+
+        } catch (err) {
+            console.error("Login failed:", err);
+            setError("Login failed. Please try again.");
+            setIsLoading(false);
+            throw err; // Re-throw so caller can handle it
+        }
     }, [checkSession]);
 
+    // 4. Logout
     const logout = useCallback(async () => {
         setIsLoading(true);
         try {
-            await fetch(`${API_URL}/logout`, { method: 'POST' });
+            await fetch('/api/auth/logout', { method: 'POST' });
         } catch (err) {
             console.error("Logout failed:", err);
-            setError(friendlyError);
         } finally {
             setUser(null);
             setIsAuthenticated(false);
             setIsAdmin(false);
-            removeTokenCookie(); //
+            removeTokenCookie();
+            // Middleware will handle redirect on next navigation
+            router.push('/login');
             setIsLoading(false);
         }
-    }, [API_URL]);
+    }, [router]);
 
     const refreshNavbarPoints = useCallback(() => {
         setNavbarRefreshTrigger(prev => prev + 1);
     }, []);
 
-    const value = { user, isAuthenticated, isAdmin, isLoading, logout, error, clearError, handleTokenLogin, refreshNavbarPoints, navbarRefreshTrigger };
+    const value = {
+        user,
+        isAuthenticated,
+        isAdmin,
+        isLoading,
+        logout,
+        error,
+        clearError,
+        handleTokenLogin,
+        refreshNavbarPoints,
+        navbarRefreshTrigger
+    };
 
     return (
         <AuthContext.Provider value={value}>

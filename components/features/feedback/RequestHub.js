@@ -45,6 +45,10 @@ const CreateRequestForm = () => {
     const [visibility, setVisibility] = useState('public');
     const [isSubmitting, setIsSubmitting] = useState(false);
 
+    // Limit Constants
+    const MAX_TOPIC_LENGTH = 100;
+    const MAX_DESC_LENGTH = 1000;
+
     const visibilityOptions = [
         { id: 'public', label: 'Public' },
         { id: 'requester_only', label: 'Requester Only' }
@@ -112,12 +116,25 @@ const CreateRequestForm = () => {
                             </motion.div>
 
                             <motion.div variants={formItemVariants}>
-                                <label htmlFor="feedback-topic" className="block mb-2 text-base font-medium text-gray-700 dark:text-gray-300">
-                                    Topic <span className="text-red-500">*</span>
-                                </label>
-                                <input id="feedback-topic" type="text" value={topic} onChange={(e) => setTopic(e.target.value)}
+                                <div className="flex justify-between items-center mb-2">
+                                    <label htmlFor="feedback-topic" className="block text-base font-medium text-gray-700 dark:text-gray-300">
+                                        Topic <span className="text-red-500">*</span>
+                                    </label>
+                                    <span className="text-xs text-gray-500 dark:text-gray-400">
+                                        {topic.length}/{MAX_TOPIC_LENGTH}
+                                    </span>
+                                </div>
+                                <input
+                                    id="feedback-topic"
+                                    type="text"
+                                    value={topic}
+                                    onChange={(e) => setTopic(e.target.value)}
+                                    maxLength={MAX_TOPIC_LENGTH}
                                     className="block w-full px-4 py-3 bg-gray-50 dark:bg-gray-800/60 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 transition-colors disabled:opacity-50"
-                                    placeholder="e.g., Q3 Project Proposal" required disabled={isSubmitting} />
+                                    placeholder="e.g., Q3 Project Proposal"
+                                    required
+                                    disabled={isSubmitting}
+                                />
                             </motion.div>
 
                             <motion.div variants={formItemVariants}>
@@ -134,13 +151,23 @@ const CreateRequestForm = () => {
                             </motion.div>
 
                             <motion.div variants={formItemVariants}>
-                                <label htmlFor="feedback-desc" className="block mb-2 text-base font-medium text-gray-700 dark:text-gray-300">
-                                    Description (Optional)
-                                </label>
-                                <textarea id="feedback-desc" value={description} onChange={(e) => setDescription(e.target.value)}
+                                <div className="flex justify-between items-center mb-2">
+                                    <label htmlFor="feedback-desc" className="block text-base font-medium text-gray-700 dark:text-gray-300">
+                                        Description (Optional)
+                                    </label>
+                                    <span className="text-xs text-gray-500 dark:text-gray-400">
+                                        {description.length}/{MAX_DESC_LENGTH}
+                                    </span>
+                                </div>
+                                <textarea
+                                    id="feedback-desc"
+                                    value={description}
+                                    onChange={(e) => setDescription(e.target.value)}
+                                    maxLength={MAX_DESC_LENGTH}
                                     className="block w-full min-h-[200px] p-4 bg-gray-50 dark:bg-gray-800/60 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 transition-colors resize-y disabled:opacity-50"
                                     placeholder="Add any context or specific questions..."
-                                    disabled={isSubmitting}></textarea>
+                                    disabled={isSubmitting}
+                                ></textarea>
                             </motion.div>
 
                             <motion.div variants={formItemVariants} className="pt-2">

@@ -6,33 +6,38 @@ import { Confetti } from "./Confetti";
 import { QuestIndicators } from "./QuestIndicators";
 import { PointsBadge } from "./PointsBadge";
 
-// --- Samsung-Style "Pending" Edge Lighting ---
-// Updated to accept isNewProgress to toggle colors
-const EdgeLighting = ({ isActive, isNewProgress }) => {
+// iOS Detection Hook
+const useIsIOS = () => {
+    const [isIOS, setIsIOS] = useState(false);
+    useEffect(() => {
+        if (typeof window === 'undefined') return;
+        const userAgent = window.navigator.userAgent || window.navigator.vendor || window.opera;
+        const isIOSDevice = /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream;
+        setIsIOS(isIOSDevice);
+    }, []);
+    return isIOS;
+};
+
+// Edge Lighting Component
+const EdgeLighting = ({ isActive, isNewProgress, isIOS }) => {
     if (!isActive) return null;
+    if (isIOS) return null;
 
-    // Default: Blue/Purple blend for "Ready/Pending" state
     const defaultGradient = `conic-gradient(from 0deg at 50% 50%, transparent 0deg, transparent 200deg, #a855f7 300deg, #3b82f6 340deg, transparent 360deg)`;
-
-    // Success: Emerald/Green blend for "Just Completed" state
     const successGradient = `conic-gradient(from 0deg at 50% 50%, transparent 0deg, transparent 200deg, #34d399 300deg, #10b981 340deg, transparent 360deg)`;
-
-    // Switch gradient based on the "trick" state
     const gradientColors = isNewProgress ? successGradient : defaultGradient;
 
     return (
         <div className="absolute inset-0 z-0 overflow-hidden rounded-xl pointer-events-none">
-            {/* CONE FIX: mask-composite excludes the content-box from the mask */}
             <div
                 className="absolute inset-0 w-full h-full"
                 style={{
-                    padding: '2px', // Ultra-thin, elegant border
+                    padding: '2px',
                     mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
                     maskComposite: 'exclude',
                     WebkitMaskComposite: 'xor',
                 }}
             >
-                {/* Slow, calm rotation (8s) */}
                 <motion.div
                     className="absolute inset-[-100%] top-[-100%]"
                     style={{ background: gradientColors }}
@@ -43,8 +48,6 @@ const EdgeLighting = ({ isActive, isNewProgress }) => {
                         repeat: Infinity,
                     }}
                 />
-
-                {/* Blur layer for the "Glow" effect */}
                 <motion.div
                     className="absolute inset-[-100%] top-[-100%] blur-lg"
                     style={{ background: gradientColors, opacity: 0.6 }}
@@ -72,23 +75,23 @@ export const QuestCard = ({
     isInProgress
 }) => {
     const [showConfettiOnTrigger, setShowConfettiOnTrigger] = useState(false);
-    const isAlwaysType = quest?.quest_type === 'always'; //
+    const isIOS = useIsIOS();
 
-    // Logic to detect "Just Triggered" state matching Confetti logic
+    const isAlwaysType = quest?.quest_type === 'always';
+
+    // FIX: Rely on SERVER TIME (seconds_since_trigger) instead of client clock
     useEffect(() => {
-        if (isAlwaysType && quest?.last_triggered_at) {
-            const lastTriggeredTime = new Date(quest.last_triggered_at).getTime();
-            const currentTime = Date.now();
-            // 5 second window to consider it "new" on the client side
-            if (currentTime - lastTriggeredTime < 5000) {
+        if (isAlwaysType && quest?.seconds_since_trigger !== null) {
+            // If triggered less than 10 seconds ago server-time, show effect
+            if (quest.seconds_since_trigger < 10) {
                 setShowConfettiOnTrigger(true);
                 const timer = setTimeout(() => setShowConfettiOnTrigger(false), 2000);
                 return () => clearTimeout(timer);
             }
         }
-    }, [quest?.last_triggered_at, isAlwaysType]);
+    }, [quest?.seconds_since_trigger, isAlwaysType]);
 
-    // Mirroring Confetti logic: Use backend flag OR local trigger
+    // Update new progress logic
     const isNewProgress = quest?.has_new_progress || showConfettiOnTrigger;
 
     const questVariants = {
@@ -97,15 +100,14 @@ export const QuestCard = ({
         exit: (d) => ({ opacity: 0, x: d > 0 ? -120 : 120, scale: 0.95 })
     };
 
-    const completed = isCompleted ?? quest?.completed; //
-    const inProgress = isInProgress ?? quest?.in_progress; //
+    const completed = isCompleted ?? quest?.completed;
+    const inProgress = isInProgress ?? quest?.in_progress;
 
-    // Minimalist Card Styles
     const getCardStyles = () => {
-        if (isAlwaysType) return 'bg-white/80 dark:bg-slate-900/80 border-slate-200/60 dark:border-slate-800/60 shadow-sm backdrop-blur-md'; //
-        if (completed) return 'bg-emerald-50/50 dark:bg-emerald-900/10 border-emerald-200/50 dark:border-emerald-800/50'; //
-        if (inProgress) return 'bg-sky-50/50 dark:bg-sky-900/10 border-sky-200/50 dark:border-sky-800/50'; //
-        return 'bg-white/90 dark:bg-slate-900/90 border-slate-200 dark:border-slate-800'; //
+        if (isAlwaysType) return 'bg-white/80 dark:bg-slate-900/80 border-slate-200/60 dark:border-slate-800/60 shadow-sm backdrop-blur-md';
+        if (completed) return 'bg-emerald-50/50 dark:bg-emerald-900/10 border-emerald-200/50 dark:border-emerald-800/50';
+        if (inProgress) return 'bg-sky-50/50 dark:bg-sky-900/10 border-sky-200/50 dark:border-sky-800/50';
+        return 'bg-white/90 dark:bg-slate-900/90 border-slate-200 dark:border-slate-800';
     };
 
     return (
@@ -124,15 +126,12 @@ export const QuestCard = ({
         >
             <Card variant="custom" className={`group relative min-h-[320px] flex flex-col w-full overflow-hidden transition-colors duration-500 ${getCardStyles()}`}>
 
-                {/* Apply Glow ONLY to Always type cards, passing the dynamic state */}
-                <EdgeLighting isActive={isAlwaysType} isNewProgress={isNewProgress} />
+                <EdgeLighting isActive={isAlwaysType} isNewProgress={isNewProgress} isIOS={isIOS} />
 
                 <Confetti isActive={showConfetti || showConfettiOnTrigger} color={isAlwaysType ? 'default' : undefined} />
 
-                {/* Content Layer (z-10 sits above the mask/glow) */}
                 <div className="relative z-10 flex flex-col w-full h-full p-6 md:p-8">
 
-                    {/* Top Row: Transparent Glass Indicators */}
                     <div className="w-full flex justify-center mb-8">
                         <QuestIndicators
                             quests={quests}
@@ -141,7 +140,6 @@ export const QuestCard = ({
                         />
                     </div>
 
-                    {/* Main Content */}
                     <div className="flex-1 flex flex-col items-center justify-center text-center space-y-6">
                         <motion.h2
                             layoutId={`title-${quest.id}`}

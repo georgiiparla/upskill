@@ -17,7 +17,8 @@ export const Feedback = ({
         switch (sentimentText) {
             case 'Exceeds Expectations': return 'teal';
             case 'Meets Expectations': return 'green';
-            case 'Approaching Expectations': return 'yellow';
+            // FIX: Changed 'yellow' to 'amber' to match HistoryListItem config
+            case 'Approaching Expectations': return 'amber';
             case 'Below Expectations': return 'red';
             default: return 'green';
         }
@@ -99,7 +100,6 @@ export const Feedback = ({
                             createdAt={item.created_at}
                             content={view === 'submissions' ? null : requestContent}
                             color={view === 'submissions' ? getSentimentColor(item.sentiment_text) : getRequestStatusColor(item.status)}
-                        //subjectBold={view !== 'submissions'}
                         />
                     );
                 })}
