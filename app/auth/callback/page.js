@@ -31,8 +31,7 @@ function AuthCallbackContent() {
             handleTokenLogin(token)
                 .then(() => {
                     setStatus('success');
-                    // Force hard navigation to ensure cookies are sent
-                    window.location.href = '/dashboard';
+                    router.replace('/dashboard');
                 })
                 .catch((err) => {
                     console.error("Login failed in callback:", err);
