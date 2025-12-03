@@ -69,6 +69,11 @@ async function proxyRequest(request) {
         const data = await response.arrayBuffer();
         const responseHeaders = new Headers(response.headers);
 
+        // Strip headers that might cause issues with Next.js handling of the response
+        responseHeaders.delete('content-encoding');
+        responseHeaders.delete('content-length');
+        responseHeaders.delete('transfer-encoding');
+
         return new NextResponse(data, {
             status: response.status,
             statusText: response.statusText,
