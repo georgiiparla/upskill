@@ -180,9 +180,10 @@ export const AgendaItemView = ({ item, onEditClick, isSystemMantra }) => {
 
     return (
         <motion.div
-            className="relative w-full h-full group"
+            className={`relative w-full h-full group ${isMenuOpen ? '!z-[100]' : ''}`}
             initial="idle"
             whileHover="hover"
+            whileTap="hover"
             // Use 'animate' to force a state reset when theme changes
             animate="idle"
             // [!] SCALE EFFECT

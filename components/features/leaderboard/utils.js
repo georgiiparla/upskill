@@ -1,35 +1,36 @@
 // Helper functions for leaderboard components
 
 // Platform-style color scheme - balanced and professional
+// Platform-style color scheme - Clean and Professional
 export const getRankColors = (rank) => {
     switch (rank) {
         case 1:
             return {
+                text: 'text-amber-500',
+                bg: 'bg-amber-500',
                 badge: 'bg-amber-100 text-amber-800 border-amber-200',
-                avatar: 'bg-amber-500',
-                podium: 'from-amber-50 to-yellow-50 border-amber-200',
-                bar: 'bg-gradient-to-r from-amber-400/70 to-yellow-500/70'
+                bar: 'bg-amber-500'
             };
         case 2:
             return {
+                text: 'text-slate-500',
+                bg: 'bg-slate-400',
                 badge: 'bg-slate-100 text-slate-700 border-slate-200',
-                avatar: 'bg-slate-500',
-                podium: 'from-slate-50 to-gray-50 border-slate-200',
-                bar: 'bg-gradient-to-r from-slate-400/70 to-gray-500/70'
+                bar: 'bg-slate-400'
             };
         case 3:
             return {
+                text: 'text-orange-500',
+                bg: 'bg-orange-500',
                 badge: 'bg-orange-100 text-orange-800 border-orange-200',
-                avatar: 'bg-orange-500',
-                podium: 'from-orange-50 to-amber-50 border-orange-200',
-                bar: 'bg-gradient-to-r from-orange-400/70 to-red-400/70'
+                bar: 'bg-orange-500'
             };
         default:
             return {
-                badge: 'bg-blue-50 text-blue-700 border-blue-100',
-                avatar: 'bg-blue-500',
-                podium: 'from-blue-50 to-indigo-50 border-blue-100',
-                bar: 'bg-gradient-to-r from-blue-400/70 to-indigo-500/70'
+                text: 'text-slate-600 dark:text-slate-400',
+                bg: 'bg-slate-200 dark:bg-slate-700',
+                badge: 'bg-slate-50 text-slate-600 border-slate-100',
+                bar: 'bg-slate-200 dark:bg-slate-700'
             };
     }
 };

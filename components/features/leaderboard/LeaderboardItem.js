@@ -2,6 +2,7 @@
 import React from 'react';
 import { Avatar } from '@/components/core/ui/Avatar';
 import { useAuth } from '@/context/AuthContext';
+import { getRankColors } from './utils';
 
 export const LeaderboardItem = ({ user, maxPoints, isDesktop = true }) => {
     const { user: currentUser } = useAuth();
@@ -9,116 +10,105 @@ export const LeaderboardItem = ({ user, maxPoints, isDesktop = true }) => {
     // Check if this leaderboard entry belongs to the logged-in user
     const isMe = currentUser?.id === user.user_id;
 
-    // Safe bar width calculation: avoid division by zero when maxPoints is 0
+    // Safe bar width calculation
     const barWidth = (() => {
-        if (!maxPoints || maxPoints <= 0) return '8%';
-        const width = Math.max((user.points / maxPoints) * 100, 8);
-        return `${width}%`;
+        if (!maxPoints || maxPoints <= 0) return '0%';
+        // Ensure at least a tiny sliver is visible if they have points
+        const percentage = (user.points / maxPoints) * 100;
+        return `${Math.max(percentage, 1)}%`;
     })();
 
-    const isGhost = user.rank > 5; // ranks 6 and below should be grayish
+    const colors = getRankColors(user.rank);
 
     if (isDesktop) {
         return (
             <div
                 key={user.id}
-                className={`group bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-200/50 dark:border-gray-700/50 p-6 transition-all duration-300 hover:shadow-lg hover:bg-white/70 dark:hover:bg-gray-800/70 ${isMe ? 'border-blue-200 dark:border-blue-800/50 bg-blue-50/30 dark:bg-blue-900/10' : ''}`}
+                className={`group relative bg-white dark:bg-slate-900 rounded-xl border p-4 transition-all duration-200 hover:shadow-md hover:-translate-y-0.5
+                ${isMe
+                        ? 'border-l-4 border-l-csway-green border-y-slate-200 border-r-slate-200 dark:border-y-slate-800 dark:border-r-slate-800 shadow-sm'
+                        : 'border-slate-200 dark:border-slate-800'
+                    }`}
             >
                 <div className="flex items-center">
-                    {/* Left Side: Rank, Avatar, Name - Fixed Width */}
-                    <div className="flex items-center gap-4 w-80 flex-shrink-0">
-                        {/* Rank Number */}
-                        <div className="w-8 text-center font-bold text-slate-400 dark:text-slate-500 text-lg">
+                    {/* Rank Section */}
+                    <div className="w-12 flex justify-center flex-shrink-0">
+                        <span className={`text-sm font-bold ${colors.text}`}>
                             #{user.rank}
-                        </div>
+                        </span>
+                    </div>
 
-                        {/* Avatar - With "Me" Highlight */}
+                    {/* User Section */}
+                    <div className="flex items-center gap-3 w-64 flex-shrink-0">
                         <Avatar
                             username={user.name}
-                            className={`w-12 h-12 text-lg shadow-md ${isMe ? 'ring-2 ring-blue-500 ring-offset-2 ring-offset-white dark:ring-offset-slate-900' : ''}`}
+                            className="w-10 h-10 text-sm font-semibold"
                         />
-
-                        {/* Name */}
-                        <span className={`font-semibold min-w-[100px] ${isMe ? 'text-blue-700 dark:text-blue-300' : 'text-gray-900 dark:text-white'}`}>
+                        <span className={`font-medium truncate ${isMe ? 'text-csway-green' : 'text-slate-900 dark:text-white'}`}>
                             {user.name}
                         </span>
                     </div>
 
-                    {/* Center: Progress Bar - Full remaining width */}
-                    <div className="flex-1 mx-8">
-                        <div className="relative">
-                            {/* Background bar */}
-                            <div className="w-full h-3 bg-gray-200 dark:bg-gray-700 rounded-full">
-                                {/* Progress bar */}
-                                <div
-                                    className={`h-full rounded-full transition-all duration-700 ease-out`}
-                                    style={{
-                                        width: barWidth,
-                                        background: isGhost
-                                            ? 'linear-gradient(90deg, rgba(203,213,225,0.7), rgba(148,163,184,0.7))'
-                                            : `linear-gradient(90deg, ${user.rank === 1 ? 'rgba(255, 20, 147, 0.7)' : user.rank === 2 ? 'rgba(34, 165, 94, 0.6)' : user.rank === 3 ? 'rgba(243, 183, 90, 0.6)' : user.rank === 4 ? 'rgba(147, 51, 234, 0.6)' : user.rank === 5 ? 'rgba(59, 130, 246, 0.6)' : 'rgba(0, 255, 150, 0.6)'}, ${user.rank === 1 ? 'rgba(255, 0, 100, 0.7)' : user.rank === 2 ? 'rgba(20, 140, 80, 0.6)' : user.rank === 3 ? 'rgba(220, 160, 70, 0.6)' : user.rank === 4 ? 'rgba(168, 85, 247, 0.6)' : user.rank === 5 ? 'rgba(96, 165, 250, 0.6)' : 'rgba(0, 255, 100, 0.6)'})`,
-                                        boxShadow: isGhost
-                                            ? '0 0 6px rgba(148,163,184,0.35)'
-                                            : `0 0 8px ${user.rank === 1 ? 'rgba(255, 20, 147, 0.5)' : user.rank === 2 ? 'rgba(34, 165, 94, 0.4)' : user.rank === 3 ? 'rgba(243, 183, 90, 0.4)' : user.rank === 4 ? 'rgba(147, 51, 234, 0.4)' : user.rank === 5 ? 'rgba(59, 130, 246, 0.4)' : 'rgba(0, 255, 150, 0.4)'}`
-                                    }}
-                                />
-                            </div>
-
-                            {/* Trophy icons for top 3 */}
-                            {user.rank <= 3 && (
-                                <div className="absolute -top-1 text-lg" style={{ left: `calc(${barWidth} - 12px)` }}>
-                                    {user.rank === 1 ? '🥇' : user.rank === 2 ? '🥈' : '🥉'}
-                                </div>
-                            )}
+                    {/* Progress Bar Section */}
+                    <div className="flex-1 px-6">
+                        <div className="w-full h-2 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                            <div
+                                className={`h-full rounded-full transition-all duration-1000 ease-out ${colors.bar}`}
+                                style={{ width: barWidth }}
+                            />
                         </div>
                     </div>
 
-                    {/* Right Side: Points - Fixed Width */}
-                    <div className="text-right w-20 flex-shrink-0">
-                        <div className={`font-bold text-xl ${user.rank === 1 ? 'text-amber-600 dark:text-amber-400' : user.rank === 2 ? 'text-slate-600 dark:text-slate-400' : user.rank === 3 ? 'text-orange-600 dark:text-orange-400' : 'text-gray-900 dark:text-white'}`}>
+                    {/* Points Section */}
+                    <div className="w-24 text-right flex-shrink-0">
+                        <span className="text-lg font-bold font-mono tracking-tight text-slate-900 dark:text-white">
                             {user.points.toLocaleString()}
-                        </div>
-                        <div className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">
-                            pts
-                        </div>
+                        </span>
                     </div>
                 </div>
             </div>
         );
     }
 
-    // Mobile version
+    // Mobile Version
     return (
         <div
             key={user.id}
-            className={`group bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-200/50 dark:border-gray-700/50 p-4 transition-all duration-200 hover:shadow-lg hover:bg-white/70 dark:hover:bg-gray-800/70 ${isMe ? 'border-blue-200 dark:border-blue-800/50 bg-blue-50/30 dark:bg-blue-900/10' : ''}`}
+            className={`group relative bg-white dark:bg-slate-900 rounded-xl border p-4 transition-all duration-200
+            ${isMe
+                    ? 'border-l-4 border-l-csway-green border-y-slate-200 border-r-slate-200 dark:border-y-slate-800 dark:border-r-slate-800 shadow-sm'
+                    : 'border-slate-200 dark:border-slate-800'
+                }`}
         >
             <div className="flex items-center justify-between">
-                {/* Left Side: Rank Badge, Avatar, and Name */}
                 <div className="flex items-center gap-3">
-                    {/* Small Rank Number */}
-                    <span className="font-bold text-slate-400 dark:text-slate-500 text-xs min-w-[20px]">
+                    <span className={`text-xs font-bold w-6 ${colors.text}`}>
                         #{user.rank}
                     </span>
 
-                    {/* Avatar with Highlight */}
                     <Avatar
                         username={user.name}
-                        className={`w-10 h-10 text-sm font-semibold ${isMe ? 'ring-2 ring-blue-500 ring-offset-2 ring-offset-white dark:ring-offset-slate-900' : ''}`}
+                        className="w-8 h-8 text-xs"
                     />
 
-                    {/* Clean Name Display */}
-                    <span className={`font-medium transition-colors group-hover:text-blue-600 dark:group-hover:text-blue-400 ${isMe ? 'text-blue-700 dark:text-blue-300' : 'text-gray-900 dark:text-white'}`}>
+                    <span className={`text-sm font-medium ${isMe ? 'text-csway-green' : 'text-slate-900 dark:text-white'}`}>
                         {user.name}
                     </span>
                 </div>
 
-                {/* Points Display */}
                 <div className="text-right">
-                    <div className="font-bold text-lg text-gray-900 dark:text-white">
+                    <span className="text-base font-bold font-mono text-slate-900 dark:text-white">
                         {user.points.toLocaleString()}
-                    </div>
+                    </span>
                 </div>
+            </div>
+
+            {/* Slim progress bar at bottom of card for mobile context */}
+            <div className="mt-3 w-full h-1 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                <div
+                    className={`h-full rounded-full transition-all duration-1000 ease-out ${colors.bar}`}
+                    style={{ width: barWidth }}
+                />
             </div>
         </div>
     );
