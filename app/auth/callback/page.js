@@ -31,8 +31,10 @@ function AuthCallbackContent() {
             handleTokenLogin(token)
                 .then(() => {
                     setStatus('success');
-                    // Force hard navigation to ensure cookies are sent (fixes iPad/WebKit timing issues)
-                    window.location.href = '/dashboard';
+                    // Middleware will check the cookie on the next request.
+                    // We use router.refresh() to ensure the middleware runs and updates the cache.
+                    router.refresh();
+                    router.replace('/dashboard');
                 })
                 .catch((err) => {
                     console.error("Login failed in callback:", err);

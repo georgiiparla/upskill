@@ -28,8 +28,6 @@ export const AuthProvider = ({ children }) => {
     const checkSession = useCallback(async () => {
         setIsLoading(true);
         try {
-            // We do NOT attach headers manually. We let the Proxy handle it 
-            // via the HttpOnly cookie.
             const response = await fetch(`${AUTH_CHECK_URL}/profile`);
 
             if (response.ok) {
@@ -39,18 +37,17 @@ export const AuthProvider = ({ children }) => {
                     setIsAuthenticated(true);
                     setIsAdmin(data.is_admin || false);
                 } else {
-                    throw new Error("Not logged in");
+                    // Middleware handles redirects, we just update state
+                    setIsAuthenticated(false);
+                    setUser(null);
                 }
             } else {
-                throw new Error("Session check failed");
+                setIsAuthenticated(false);
+                setUser(null);
             }
         } catch (err) {
-            // Silent fail for session check is normal (user just isn't logged in)
-            // But we clean up artifacts to be safe.
-            removeTokenCookie();
             setIsAuthenticated(false);
             setUser(null);
-            setIsAdmin(false);
         } finally {
             setIsLoading(false);
         }
@@ -63,12 +60,10 @@ export const AuthProvider = ({ children }) => {
         }
     }, [checkSession]);
 
-    // 3. Handle Login Token (THE CRITICAL FIX)
+    // 3. Handle Login Token
     const handleTokenLogin = useCallback(async (token) => {
         setIsLoading(true);
         try {
-            // Step A: Call the Next.js Server Route to set the HttpOnly Cookie
-            // This bridges the gap between the frontend and the Proxy
             const setCookieResponse = await fetch('/api/auth/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -79,13 +74,13 @@ export const AuthProvider = ({ children }) => {
                 throw new Error('Failed to set session cookie');
             }
 
-            // Step B: Verify the session immediately using the new cookie
             await checkSession();
 
         } catch (err) {
             console.error("Login failed:", err);
             setError("Login failed. Please try again.");
             setIsLoading(false);
+            throw err; // Re-throw so caller can handle it
         }
     }, [checkSession]);
 
@@ -93,7 +88,6 @@ export const AuthProvider = ({ children }) => {
     const logout = useCallback(async () => {
         setIsLoading(true);
         try {
-            // Call the Next.js route to delete the HttpOnly cookie
             await fetch('/api/auth/logout', { method: 'POST' });
         } catch (err) {
             console.error("Logout failed:", err);
@@ -101,7 +95,8 @@ export const AuthProvider = ({ children }) => {
             setUser(null);
             setIsAuthenticated(false);
             setIsAdmin(false);
-            removeTokenCookie(); // Clear any legacy client cookies too
+            removeTokenCookie();
+            // Middleware will handle redirect on next navigation
             router.push('/login');
             setIsLoading(false);
         }
