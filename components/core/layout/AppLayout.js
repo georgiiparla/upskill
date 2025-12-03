@@ -43,24 +43,25 @@ export default function AppLayout({ children }) {
         }
     }, [isLoading, isAuthenticated, isPublicRoute, isCallbackRoute, router]);
 
-    // Show a global loader during auth checks or redirects
-    if (isLoading ||
-        (isAuthenticated && (isPublicRoute || isCallbackRoute)) ||
-        (!isAuthenticated && !isPublicRoute && !isCallbackRoute)) {
-        return (
-            <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
-                <Loader2 className="h-12 w-12 animate-spin text-csway-green" />
-            </div>
-        );
-    }
-
-    // Render the appropriate layout once auth state is resolved and no redirect is pending
+    // Render the layout with a loading overlay if needed
     return (
-        <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
-            {isAuthenticated && <Navbar />}
-            <main className={isAuthenticated ? "mx-auto max-w-7xl px-4 py-5 sm:px-6 lg:px-8" : ""}>
-                {children}
-            </main>
+        <div className="min-h-screen bg-gray-100 dark:bg-gray-900 relative">
+            {/* Global Loader Overlay */}
+            {(isLoading ||
+                (isAuthenticated && (isPublicRoute || isCallbackRoute)) ||
+                (!isAuthenticated && !isPublicRoute && !isCallbackRoute)) && (
+                    <div className="absolute inset-0 z-50 flex items-center justify-center bg-gray-100 dark:bg-gray-900">
+                        <Loader2 className="h-12 w-12 animate-spin text-csway-green" />
+                    </div>
+                )}
+
+            {/* Main Content - Always mounted to preserve state */}
+            <div className={isLoading ? "invisible" : ""}>
+                {isAuthenticated && <Navbar />}
+                <main className={isAuthenticated ? "mx-auto max-w-7xl px-4 py-5 sm:px-6 lg:px-8" : ""}>
+                    {children}
+                </main>
+            </div>
         </div>
     );
 }
