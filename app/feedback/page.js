@@ -18,11 +18,22 @@ async function getFeedbackData() {
 }
 
 export default async function FeedbackPage() {
-    const data = await getFeedbackData();
-    return (
-        <Feedback
-            initialSubmissions={data.submissions}
-            initialRequests={data.requests}
-        />
-    );
+    try {
+        const data = await getFeedbackData();
+        return (
+            <Feedback
+                initialSubmissions={data.submissions}
+                initialRequests={data.requests}
+            />
+        );
+    } catch (error) {
+        console.error("Feedback RSC Error:", error);
+        return (
+            <div className="p-8 text-center">
+                <h1 className="text-2xl font-bold text-red-600">Error Loading Feedback</h1>
+                <p className="mt-4 text-gray-700">Unable to fetch server data.</p>
+                <p className="mt-2 text-sm text-gray-500">{error.message}</p>
+            </div>
+        );
+    }
 }
