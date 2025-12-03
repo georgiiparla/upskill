@@ -1,6 +1,8 @@
 import { serverFetch } from "@/lib/server-api";
 import { AccountView } from '@/components/features/account/AccountView';
 
+export const dynamic = 'force-dynamic';
+
 async function getAliases() {
     const aliases = await serverFetch('/me/aliases');
     return aliases;
