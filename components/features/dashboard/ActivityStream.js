@@ -40,7 +40,7 @@ const getEventStyle = (type) => {
     }
 };
 
-export const ActivityStream = ({ activityStream }) => {
+export const ActivityStream = ({ activityStream, viewMode = 'detailed' }) => {
 
     const getTargetLink = (targetInfo, eventType) => {
         if (!targetInfo) return null;
@@ -76,32 +76,40 @@ export const ActivityStream = ({ activityStream }) => {
                 const style = getEventStyle(activity.event_type);
                 const dateStr = activity.formatted_date || new Date(activity.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
 
+                const isMinimal = viewMode === 'minimal';
+
                 return (
                     <div
                         key={activity.id}
-                        className="
+                        className={`
                             group relative 
                             flex flex-col md:flex-row md:items-center 
-                            gap-1 md:gap-3 
-                            py-2 px-2 md:px-3
+                            gap-1 ${isMinimal ? 'md:gap-2' : 'md:gap-3'} 
+                            ${isMinimal ? 'py-1 px-2' : 'py-2 px-2 md:px-3'}
                             rounded-md
                             transition-all duration-200
                             hover:bg-slate-100/50 dark:hover:bg-slate-800/50
-                        "
+                        `}
                     >
-                        {/* --- RESTORED: The Vertical Blue Line Indicator --- */}
-                        {activity.isNew && (
+                        {/* --- Vertical Blue Line Indicator (Hidden in Minimal) --- */}
+                        {activity.isNew && !isMinimal && (
                             <div className="absolute left-0 top-3 md:top-1/2 md:-translate-y-1/2 w-0.5 h-2 md:h-4 bg-blue-500 rounded-r-full shadow-[0_0_8px_rgba(59,130,246,0.5)]"></div>
                         )}
 
                         {/* Meta Column: Date & Universal Icon */}
-                        <div className="flex items-center gap-3 md:w-28 flex-shrink-0 opacity-60 group-hover:opacity-100 transition-opacity">
-                            <span className="text-[10px] md:text-xs font-mono text-slate-400 dark:text-slate-500 min-w-[45px]">
-                                {dateStr}
-                            </span>
+                        <div className={`flex items-center gap-3 ${isMinimal ? 'w-auto' : 'md:w-28'} flex-shrink-0 opacity-60 group-hover:opacity-100 transition-opacity`}>
+                            {!isMinimal && (
+                                <span className="text-[10px] md:text-xs font-mono text-slate-400 dark:text-slate-500 min-w-[45px]">
+                                    {dateStr}
+                                </span>
+                            )}
 
-                            {/* UNIVERSAL MINIMAL ICON */}
-                            <Activity className="w-3.5 h-3.5 text-slate-300 dark:text-slate-700" />
+                            {/* UNIVERSAL MINIMAL ICON - Only show in DETAILED or if date is hidden but we want some icon? Actually user asked for minimal display style. Let's keep icon for structure or hide it? Let's hide date, keep icon if it acts as bullet point, or just reduce. Detailed plan said "Hide Date column". I'll Keep icon as a bullet. */
+                                /* UPDATE: User requested to REMOVE pulse icon in minimal view */
+                            }
+                            {!isMinimal && (
+                                <Activity className="w-3.5 h-3.5 text-slate-300 dark:text-slate-700" />
+                            )}
                         </div>
 
                         {/* Main Content Flow */}

@@ -9,7 +9,7 @@ const publicRoutes = [
     '/' // Root is technically public but we redirect to dashboard/login
 ];
 
-export function middleware(request) {
+export function proxy(request) {
     const { pathname } = request.nextUrl;
 
     // 2. Get Token from Cookies

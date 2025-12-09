@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Card } from "../../../shared/helpers/Helper";
 import { formatRelativeTime } from "@/lib/helper-func";
-import { ThumbsUp, User, Trash2 } from "lucide-react";
+import { Hand, User, Trash2 } from "lucide-react";
 import { Modal } from "../../../core/ui/Modal";
 import { likeSubmission, unlikeSubmission, deleteSubmission } from "@/lib/client-api";
 import { useAuth } from "@/context/AuthContext";
@@ -121,7 +121,7 @@ export const FeedbackCommentItem = ({ feedback, onDeleteSuccess }) => {
                                     : "text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700"
                                     }`}
                             >
-                                <ThumbsUp className={`h-4 w-4 ${isLiked ? "fill-current" : ""}`} />
+                                <Hand className={`h-4 w-4 ${isLiked ? "fill-current" : ""}`} />
                                 <span>{likeCount}</span>
                             </button>
                         </div>

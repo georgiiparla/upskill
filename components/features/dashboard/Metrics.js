@@ -20,46 +20,52 @@ const MetricRow = ({ label, primaryValue, subValue, highlightColor }) => (
     </div>
 );
 
-export const Metrics = ({ metricsData }) => {
+export const Metrics = ({ metricsData, viewMode = 'detailed' }) => {
+    const isMinimal = viewMode === 'minimal';
+
     return (
-        <div className="flex flex-col gap-6">
+        <div className={`flex flex-col ${isMinimal ? 'gap-2' : 'gap-6'}`}>
             {/* Personal Section */}
             <div>
-                <h4 className="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3 border-b border-slate-200 dark:border-slate-700 pb-1">
-                    My Activity
-                </h4>
+                {!isMinimal && (
+                    <h4 className="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3 border-b border-slate-200 dark:border-slate-700 pb-1">
+                        My Activity
+                    </h4>
+                )}
                 <div className="flex flex-col">
                     <MetricRow
                         label="Feedback Given"
                         primaryValue={`${metricsData.personal.feedback.allTime || 0}`}
-                        subValue={`(${metricsData.personal.feedback.thisWeek || 0} this week)`}
+                        subValue={!isMinimal ? `(${metricsData.personal.feedback.thisWeek || 0} this week)` : null}
                         highlightColor="text-emerald-600 dark:text-emerald-400"
                     />
                     <MetricRow
                         label="Requests Made"
                         primaryValue={`${metricsData.personal.requests.allTime || 0}`}
-                        subValue={`(${metricsData.personal.requests.thisWeek || 0} this week)`}
+                        subValue={!isMinimal ? `(${metricsData.personal.requests.thisWeek || 0} this week)` : null}
                         highlightColor="text-blue-600 dark:text-blue-400"
                     />
                 </div>
             </div>
 
-            {/* Team Section */}
+            {/* Team Section - Always visible, but styled differently in minimal */}
             <div>
-                <h4 className="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3 border-b border-slate-200 dark:border-slate-700 pb-1">
-                    Team Activity
-                </h4>
+                {!isMinimal && (
+                    <h4 className="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3 border-b border-slate-200 dark:border-slate-700 pb-1">
+                        Team Activity
+                    </h4>
+                )}
                 <div className="flex flex-col">
                     <MetricRow
                         label="Total Feedback"
                         primaryValue={`${metricsData.team.feedback.allTime || 0}`}
-                        subValue={`(${metricsData.team.feedback.thisWeek || 0} this week)`}
+                        subValue={!isMinimal ? `(${metricsData.team.feedback.thisWeek || 0} this week)` : null}
                         highlightColor="text-purple-600 dark:text-purple-400"
                     />
                     <MetricRow
                         label="Total Requests"
                         primaryValue={`${metricsData.team.requests.allTime || 0}`}
-                        subValue={`(${metricsData.team.requests.thisWeek || 0} this week)`}
+                        subValue={!isMinimal ? `(${metricsData.team.requests.thisWeek || 0} this week)` : null}
                         highlightColor="text-orange-600 dark:text-orange-400"
                     />
                 </div>

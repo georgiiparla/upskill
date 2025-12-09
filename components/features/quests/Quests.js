@@ -40,8 +40,8 @@ export const Quests = ({ initialQuests }) => {
             <div className="space-y-6">
                 <HeroHeader
                     icon={Target}
-                    title="Weekly Challenges"
-                    subtitle="Complete mini-challenges automatically as you use the platform"
+                    title="Weekly Quests"
+                    subtitle="Complete mini-challenges"
                     iconBg="from-blue-500 to-blue-600"
                     iconAccentColor="text-orange-600 dark:text-orange-400"
                 />
@@ -65,8 +65,8 @@ export const Quests = ({ initialQuests }) => {
             {/* Hero Section Header */}
             <HeroHeader
                 icon={Target}
-                title="Weekly Challenges"
-                subtitle="Complete mini-challenges automatically as you use the platform"
+                title="Weekly Quests"
+                subtitle="Complete mini-challenges"
                 iconBg="from-yellow-400 to-orange-500"
                 iconAccentColor="text-green-600 dark:text-green-400"
             />

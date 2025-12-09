@@ -9,3 +9,9 @@ export async function POST() {
 
     return NextResponse.json({ success: true });
 }
+
+export async function GET(request) {
+    const cookieStore = await cookies();
+    cookieStore.delete('token');
+    return NextResponse.redirect(new URL('/login', request.url));
+}

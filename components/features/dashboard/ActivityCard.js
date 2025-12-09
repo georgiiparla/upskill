@@ -1,6 +1,6 @@
 "use client";
 import { useState } from 'react';
-import { MessageSquarePlus, ThumbsUp } from 'lucide-react';
+import { MessageSquarePlus, Hand } from 'lucide-react';
 import { Card } from "../../shared/helpers/Helper";
 import SimpleToggleSwitch from '../../core/ui/SimpleToggleSwitch';
 import { MetricItem } from './MetricItem';
@@ -36,7 +36,7 @@ const ActivityCard = ({ activityData }) => {
                     thisWeek={currentData.requests.thisWeek}
                 />
                 <MetricItem
-                    icon={<ThumbsUp className="h-4 w-4 md:h-5 md:w-5 text-blue-600 dark:text-blue-400" />}
+                    icon={<Hand className="h-4 w-4 md:h-5 md:w-5 text-blue-600 dark:text-blue-400" />}
                     label="Feedback"
                     allTime={currentData.feedback.allTime}
                     thisWeek={currentData.feedback.thisWeek}
