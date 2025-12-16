@@ -91,16 +91,16 @@ export const MobileSidebar = ({
         <>
             <div
                 className={cn(
-                    "h-10 px-4 py-4 flex flex-row lg:hidden items-center justify-between bg-transparent w-full absolute top-0 left-0 z-50"
+                    "h-10 px-4 py-4 flex flex-row lg:hidden items-center justify-between bg-transparent w-full absolute top-0 left-0 z-50 pointer-events-none"
                 )}
                 {...props}
             >
-                <div className="flex justify-end z-20 w-full">
-                    <IconMenu2
-                        className="text-neutral-800 dark:text-neutral-200"
-                        onClick={() => setOpen(!open)}
-                    />
-                </div>
+                <button
+                    className="fixed bottom-4 right-4 z-50 p-3 bg-white text-gray-800 rounded-full shadow-lg border border-gray-200 hover:bg-gray-100 dark:bg-gray-800 dark:text-white dark:border-gray-700 dark:hover:bg-gray-700 transition-colors duration-300 ease-in-out pointer-events-auto"
+                    onClick={() => setOpen(!open)}
+                >
+                    <IconMenu2 className="h-5 w-5" />
+                </button>
                 <AnimatePresence>
                     {open && (
                         <motion.div
@@ -112,7 +112,7 @@ export const MobileSidebar = ({
                                 ease: "easeInOut",
                             }}
                             className={cn(
-                                "fixed h-full w-full inset-0 bg-white dark:bg-gray-900 p-10 z-[100] flex flex-col justify-between",
+                                "fixed h-full w-full inset-0 bg-white dark:bg-gray-900 p-10 z-[100] flex flex-col justify-between pointer-events-auto",
                                 className
                             )}
                         >
@@ -153,10 +153,11 @@ export const SidebarLink = ({
                     display: animate ? (open ? "inline-block" : "none") : "inline-block",
                     opacity: animate ? (open ? 1 : 0) : 1,
                 }}
-                className="text-neutral-700 dark:text-slate-200 text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block !p-0 !m-0"
+                className="text-neutral-700 dark:text-slate-200 text-xl lg:text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block !p-0 !m-0"
             >
                 {link.label}
             </motion.span>
         </Link>
     );
 };
+

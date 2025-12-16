@@ -76,7 +76,7 @@ export default function RootLayout({ children }) {
 
                         <AppLayout>{children}</AppLayout>
 
-                        <ThemeToggleButton />
+
                     </ThemeProvider>
                 </AuthProvider>
             </body>

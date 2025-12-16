@@ -24,6 +24,12 @@ export function AppSidebar() {
     const { theme, setTheme } = useTheme();
     const [open, setOpen] = useState(false);
 
+    const handleLinkClick = () => {
+        if (typeof window !== "undefined" && window.innerWidth < 1024) {
+            setOpen(false);
+        }
+    };
+
     // Define links
     const links = [
         {
@@ -61,12 +67,12 @@ export function AppSidebar() {
             <SidebarBody className="justify-between gap-10">
                 <div className="flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
                     {/* Logo */}
-                    <Link href="/dashboard" className="flex items-center gap-2 py-2 mb-4">
+                    <Link href="/dashboard" className="flex items-center gap-2 py-2 mb-4" onClick={handleLinkClick}>
                         <div className="h-6 w-6 relative shrink-0">
                             <Image src="/csway-logo.png" alt="Logo" fill className="object-contain" />
                         </div>
                         {open && (
-                            <span className="font-bold text-lg text-neutral-700 dark:text-white whitespace-pre">
+                            <span className="font-bold text-2xl lg:text-lg text-neutral-700 dark:text-white whitespace-pre">
                                 Upskill
                             </span>
                         )}
@@ -74,7 +80,7 @@ export function AppSidebar() {
 
                     <div className="flex flex-col gap-2">
                         {links.map((link, idx) => (
-                            <SidebarLink key={idx} link={link} />
+                            <SidebarLink key={idx} link={link} onClick={handleLinkClick} />
                         ))}
                     </div>
                 </div>
@@ -92,7 +98,7 @@ export function AppSidebar() {
                             <IconMoon className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
                         )}
                         {open && (
-                            <span className="text-neutral-700 dark:text-slate-200 text-sm group-hover/sidebar:translate-x-1 transition duration-150">
+                            <span className="text-neutral-700 dark:text-slate-200 text-xl lg:text-sm group-hover/sidebar:translate-x-1 transition duration-150">
                                 {theme === 'dark' ? 'Light' : 'Dark'}
                             </span>
                         )}
@@ -105,7 +111,7 @@ export function AppSidebar() {
                     >
                         <IconLogout className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
                         {open && (
-                            <span className="text-neutral-700 dark:text-slate-200 text-sm group-hover/sidebar:translate-x-1 transition duration-150">
+                            <span className="text-neutral-700 dark:text-slate-200 text-xl lg:text-sm group-hover/sidebar:translate-x-1 transition duration-150">
                                 Logout
                             </span>
                         )}
@@ -113,6 +119,7 @@ export function AppSidebar() {
 
                     {/* Profile */}
                     <SidebarLink
+                        onClick={handleLinkClick}
                         link={{
                             label: user?.username || "Profile",
                             href: "/account",
