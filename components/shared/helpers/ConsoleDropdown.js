@@ -39,7 +39,7 @@ export const ConsoleDropdown = ({ title, children, hasUnviewedEvents = false, on
                         <div className="flex items-center gap-3">
                             {/* Header Text: JetBrains Mono */}
                             <h2
-                                className="text-sm md:text-base font-semibold text-slate-800 dark:text-slate-100"
+                                className="text-base md:text-lg font-semibold text-slate-800 dark:text-slate-100"
                                 style={{ fontFamily: "'JetBrains Mono', monospace" }}
                             >
                                 {title}
@@ -54,7 +54,7 @@ export const ConsoleDropdown = ({ title, children, hasUnviewedEvents = false, on
                         {/* Animated Chevron */}
                         <ChevronDown
                             className={`
-                                h-4 w-4 text-slate-400 
+                                h-5 w-5 text-slate-400 
                                 transition-transform duration-300 ease-[cubic-bezier(0.23,1,0.32,1)]
                                 ${isOpen ? 'rotate-180' : 'rotate-0'}
                                 group-hover:text-slate-600 dark:group-hover:text-slate-300

@@ -243,7 +243,7 @@ export const Navbar = () => {
                 Are you sure you want to sign out of your account?
             </Modal>
 
-            <nav className={`bg-gradient-to-br from-white to-slate-50/80 dark:from-slate-900 dark:to-slate-800/90 backdrop-blur-sm border-b border-slate-200/60 dark:border-slate-700/60 sticky top-0 z-50 transition-all duration-300 ease-in-out ${inter.className}`}>
+            <nav className={`lg:hidden bg-gradient-to-br from-white to-slate-50/80 dark:from-slate-900 dark:to-slate-800/90 backdrop-blur-sm border-b border-slate-200/60 dark:border-slate-700/60 sticky top-0 z-50 transition-all duration-300 ease-in-out ${inter.className}`}>
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <NavbarContent
                         scrolled={scrolled}

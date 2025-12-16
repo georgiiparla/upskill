@@ -47,8 +47,8 @@ export const LeaderboardItem = ({ user, maxPoints, isDesktop = true }) => {
     }, [isTop5, user.rank, isDark]);
 
     const GradientBackground = () => (
-        <div className={`absolute inset-0 z-0 overflow-hidden rounded-xl transition-opacity duration-500 pointer-events-none 
-            ${isDark ? 'opacity-20 group-hover:opacity-100' : 'opacity-5 group-hover:opacity-40'}`}>
+        <div className={`absolute inset-0 z-0 overflow-hidden rounded-xl transition-opacity duration-700 ease-in-out pointer-events-none 
+            ${isDark ? 'opacity-10 group-hover:opacity-100' : 'opacity-[0.02] group-hover:opacity-40'}`}>
             <BackgroundGradientAnimation
                 containerClassName="h-full w-full"
                 size="130%"

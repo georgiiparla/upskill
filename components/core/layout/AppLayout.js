@@ -1,7 +1,7 @@
 "use client";
 
 import { useAuth } from '@/context/AuthContext';
-import { Navbar } from '../navigation/Navbar';
+import { AppSidebar } from '../navigation/AppSidebar';
 import { Loader2 } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
@@ -70,9 +70,15 @@ export default function AppLayout({ children }) {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
-            {isAuthenticated && <Navbar />}
-            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200 flex flex-col lg:flex-row">
+            {/* Universal Sidebar (Handles both Desktop and Mobile) */}
+            {isAuthenticated && (
+                <div className="h-full lg:h-screen lg:sticky lg:top-0 lg:left-0 z-40">
+                    <AppSidebar />
+                </div>
+            )}
+
+            <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 {children}
             </main>
         </div>
