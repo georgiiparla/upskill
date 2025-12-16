@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { Sidebar, SidebarBody, SidebarLink } from "@/components/ui/Sidebar";
+import { Avatar } from "@/components/core/ui/Avatar";
 import {
     IconLayoutDashboard,
     IconMessage2,
@@ -60,7 +61,7 @@ export function AppSidebar() {
             <SidebarBody className="justify-between gap-10">
                 <div className="flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
                     {/* Logo */}
-                    <div className="flex items-center gap-2 py-2 mb-4">
+                    <Link href="/dashboard" className="flex items-center gap-2 py-2 mb-4">
                         <div className="h-6 w-6 relative shrink-0">
                             <Image src="/csway-logo.png" alt="Logo" fill className="object-contain" />
                         </div>
@@ -69,7 +70,7 @@ export function AppSidebar() {
                                 Upskill
                             </span>
                         )}
-                    </div>
+                    </Link>
 
                     <div className="flex flex-col gap-2">
                         {links.map((link, idx) => (
@@ -92,7 +93,7 @@ export function AppSidebar() {
                         )}
                         {open && (
                             <span className="text-neutral-700 dark:text-slate-200 text-sm group-hover/sidebar:translate-x-1 transition duration-150">
-                                {theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
+                                {theme === 'dark' ? 'Light' : 'Dark'}
                             </span>
                         )}
                     </div>
@@ -105,7 +106,7 @@ export function AppSidebar() {
                         <IconLogout className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
                         {open && (
                             <span className="text-neutral-700 dark:text-slate-200 text-sm group-hover/sidebar:translate-x-1 transition duration-150">
-                                Sign Out
+                                Logout
                             </span>
                         )}
                     </div>
@@ -116,10 +117,13 @@ export function AppSidebar() {
                             label: user?.username || "Profile",
                             href: "/account",
                             icon: (
-                                <div className="h-7 w-7 shrink-0 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center overflow-hidden">
-                                    {/* Simple avatar placeholder if no image, or use Avatar component if compatible */}
-                                    <IconUser className="h-4 w-4 text-slate-500" />
-                                </div>
+                                user?.username ? (
+                                    <Avatar username={user.username} className="h-7 w-7 text-xs" />
+                                ) : (
+                                    <div className="h-7 w-7 shrink-0 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center overflow-hidden">
+                                        <IconUser className="h-4 w-4 text-slate-500" />
+                                    </div>
+                                )
                             ),
                         }}
                     />
