@@ -4,7 +4,7 @@ import { useAuth } from '@/context/AuthContext';
 import Image from 'next/image';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { motion, useSpring, useTransform, AnimatePresence } from 'framer-motion';
-import { AlertCircle, Loader2, X, ArrowRight } from 'lucide-react';
+import { AlertCircle, Loader2, X, ArrowRight, Snowflake } from 'lucide-react';
 import { Card } from '../../shared/helpers/Helper';
 
 const GoogleIcon = () => (
@@ -20,6 +20,9 @@ const LogoAnimation = ({ isRedirecting }) => {
     // Parallax Effect Setup
     const x = useSpring(0, { stiffness: 40, damping: 15 });
     const y = useSpring(0, { stiffness: 40, damping: 15 });
+
+    // TOGGLE: 'orbs' or 'snowflakes'
+    const variant = 'snowflakes';
 
     // Track mouse for subtle 3D tilt
     useEffect(() => {
@@ -103,6 +106,53 @@ const LogoAnimation = ({ isRedirecting }) => {
             {orbConfigs.map(({ key, radius, size, duration, delay }, index) => {
                 const paletteEntry = orbPalette[index % orbPalette.length];
 
+                // Snowflakes Variant
+                if (variant === 'snowflakes') {
+                    return (
+                        <motion.div
+                            key={key}
+                            className="absolute flex items-center justify-center text-gray-600 dark:text-sky-100/90"
+                            style={{
+                                width: `${size * 9}px`, // Slightly larger for icons
+                                height: `${size * 9}px`,
+                                filter: 'drop-shadow(0 0 6px rgba(186, 230, 253, 0.5)) dark:drop-shadow(0 0 6px rgba(186, 230, 253, 0.5))',
+                                transform: 'translateZ(10px)'
+                            }}
+                            initial={{ opacity: 0, scale: 0, x: 0, y: 0 }}
+                            animate={isRedirecting ? {
+                                x: 0,
+                                y: 0,
+                                opacity: 0,
+                                scale: 0,
+                                transition: { duration: 0.6, ease: "backIn" }
+                            } : {
+                                x: [
+                                    Math.cos(index * 1.2) * radius,
+                                    Math.cos(index * 1.2 + Math.PI / 3) * (radius + 10),
+                                    Math.cos(index * 1.2 + Math.PI) * radius,
+                                ],
+                                y: [
+                                    Math.sin(index * 1.2) * radius,
+                                    Math.sin(index * 1.2 + Math.PI / 3) * (radius + 10),
+                                    Math.sin(index * 1.2 + Math.PI) * radius,
+                                ],
+                                opacity: [0.4, 1, 0.4],
+                                scale: [0.8, 1.2, 0.8],
+                                rotate: [0, 180, 360], // Add rotation for snowflakes
+                                transition: {
+                                    duration: duration * 1.2, // Slightly slower/floatier
+                                    repeat: Infinity,
+                                    ease: 'easeInOut',
+                                    delay: delay * 0.5
+                                }
+                            }}
+                        >
+                            <Snowflake className="w-full h-full stroke-[1.5px]" />
+                        </motion.div>
+                    );
+                }
+
+                // Default Orbs Variant
                 return (
                     <motion.span
                         key={key}
