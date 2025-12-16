@@ -18,9 +18,11 @@ import { useTheme } from "next-themes";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import { usePointsData } from "./NavbarHelpers";
 
 export function AppSidebar() {
-    const { user, logout, isAdmin } = useAuth();
+    const { user, logout, isAdmin, navbarRefreshTrigger } = useAuth();
+    const { points } = usePointsData(user, navbarRefreshTrigger);
     const { theme, setTheme } = useTheme();
     const [open, setOpen] = useState(false);
 
@@ -121,7 +123,7 @@ export function AppSidebar() {
                     <SidebarLink
                         onClick={handleLinkClick}
                         link={{
-                            label: user?.username || "Profile",
+                            label: user?.username ? `${user.username} (${points ?? 0} pts)` : "Profile",
                             href: "/account",
                             icon: (
                                 user?.username ? (
