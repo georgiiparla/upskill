@@ -20,7 +20,7 @@ export const QuestIndicators = ({ quests, currentIndex, onIndicatorClick }) => {
             if (isNewProgress) {
                 return '#10b981'; // Emerald-500
             }
-            return '#3b82f6'; // Blue-500
+            return '#64748b'; // Slate-500
         }
 
         if (isCompleted) {

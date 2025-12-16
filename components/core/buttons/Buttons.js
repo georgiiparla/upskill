@@ -133,23 +133,31 @@ export const QuickActionButton = ({
     onClick,
     colorScheme = 'gray',
 }) => {
-    // Defines the icon colors
+    // Defines the icon colors and background gradients
     const colorClasses = {
         orange: {
             icon: 'text-csway-orange',
+            text: 'text-csway-orange dark:text-csway-orange',
             bg: 'bg-csway-orange/10 dark:bg-csway-orange/20',
+            buttonBg: 'bg-gradient-to-br from-orange-50/80 to-orange-100/50 dark:from-orange-900/20 dark:to-orange-900/10 border-orange-200/50 dark:border-orange-800/30 hover:border-orange-300 dark:hover:border-orange-700',
         },
         blue: {
             icon: 'text-blue-600 dark:text-blue-400',
+            text: 'text-blue-700 dark:text-blue-300',
             bg: 'bg-blue-100 dark:bg-blue-900/30',
+            buttonBg: 'bg-gradient-to-br from-blue-50/80 to-blue-100/50 dark:from-blue-900/20 dark:to-blue-900/10 border-blue-200/50 dark:border-blue-800/30 hover:border-blue-300 dark:hover:border-blue-700',
         },
         green: {
-            icon: 'text-csway-green dark:text-csway-green',
-            bg: 'bg-csway-green/10 dark:bg-csway-green/20',
+            icon: 'text-emerald-600 dark:text-emerald-400',
+            text: 'text-emerald-700 dark:text-emerald-300',
+            bg: 'bg-emerald-100 dark:bg-emerald-900/30',
+            buttonBg: 'bg-gradient-to-br from-emerald-50/80 to-emerald-100/50 dark:from-emerald-900/20 dark:to-emerald-900/10 border-emerald-200/50 dark:border-emerald-800/30 hover:border-emerald-300 dark:hover:border-emerald-700',
         },
         gray: {
             icon: 'text-slate-600 dark:text-slate-400',
+            text: 'text-slate-700 dark:text-slate-300',
             bg: 'bg-slate-100 dark:bg-slate-800',
+            buttonBg: 'bg-gradient-to-br from-white/90 to-slate-50/50 dark:from-slate-800/60 dark:to-slate-900/40 border-slate-200/60 dark:border-slate-700/60 hover:border-slate-300 dark:hover:border-slate-600',
         },
     };
 
@@ -160,17 +168,17 @@ export const QuickActionButton = ({
             onClick={onClick}
             className={`
                 group flex items-center justify-center md:justify-start gap-3 px-3 md:px-5 py-3 md:py-5 rounded-xl transition-all duration-200
+                backdrop-blur-sm shadow-sm
                 
-                /* SOLID BACKGROUNDS (No more transparent/dashed) */
-                bg-white dark:bg-slate-900
-                border border-slate-200 dark:border-slate-800
+                /* Gradient Background & Borders */
+                ${colors.buttonBg}
+                border
                 
                 /* Interactions */
-                hover:border-slate-300 dark:hover:border-slate-700
-                 dark:hover:bg-slate-800/50
+                dark:hover:bg-slate-800/50
                 
                 /* Text */
-                text-slate-900 dark:text-slate-100
+                ${colors.text}
                 
                 /* Layout */
                 flex-1 min-w-0

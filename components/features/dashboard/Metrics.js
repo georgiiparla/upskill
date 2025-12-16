@@ -13,7 +13,7 @@ const MetricRow = ({ label, primaryValue, subValue, highlightColor }) => (
             <span className={`text-lg font-bold ${highlightColor}`}>
                 {primaryValue}
             </span>
-            <span className="text-xs text-slate-400 dark:text-slate-500">
+            <span className="text-sm text-slate-400 dark:text-slate-500">
                 {subValue}
             </span>
         </div>

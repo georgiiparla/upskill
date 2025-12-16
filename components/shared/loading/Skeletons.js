@@ -1,12 +1,20 @@
 import React from 'react';
 
-const CardSkeleton = ({ children, className = '', innerClassName = '', glass = true }) => {
+const CardSkeleton = ({ children, className = '', innerClassName = '', glass = true, variant = glass ? 'glass' : 'default' }) => {
     // Matches the variant logic in Helper.js -> Card
-    const variantClasses = glass
-        ? 'bg-gradient-to-br from-white to-slate-50/30 dark:from-slate-900 dark:to-slate-800/50 border border-slate-200/60 dark:border-slate-700/60 shadow-sm'
-        : 'bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 shadow-sm';
+    const getVariantClasses = () => {
+        switch (variant) {
+            case 'glass':
+                return 'bg-gradient-to-br from-white to-slate-50/30 dark:from-slate-900 dark:to-slate-800/50 border border-slate-200/60 dark:border-slate-700/60 shadow-sm';
+            case 'ghost':
+                return 'bg-transparent border-none shadow-none';
+            default:
+                return 'bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 shadow-sm';
+        }
+    };
 
-    const defaultPadding = 'p-6';
+    const variantClasses = getVariantClasses();
+    const defaultPadding = variant === 'ghost' ? '' : 'p-6';
 
     return (
         <div className={`rounded-xl ${variantClasses} ${className} ${defaultPadding}`}>

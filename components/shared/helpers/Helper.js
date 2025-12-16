@@ -17,15 +17,19 @@ export const Card = ({ children, className = '', innerClassName = '', glass = tr
                 return 'bg-gradient-to-br from-white to-slate-50/30 dark:from-slate-900 dark:to-slate-800/50 border border-slate-200/60 dark:border-slate-700/60 shadow-sm';
             case 'custom':
                 return 'border border-slate-200/60 dark:border-slate-700/60 shadow-sm';
+            case 'ghost':
+                return 'bg-transparent border-none shadow-none';
             default:
                 return 'bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 shadow-sm';
         }
     };
 
-    const defaultPadding = 'p-6';
+    const defaultPadding = variant === 'ghost' ? '' : 'p-6';
+
+    const containerClasses = `rounded-xl ${getVariantClasses()} ${className} ${defaultPadding}`;
 
     return (
-        <div className={`rounded-xl ${getVariantClasses()} ${className} ${defaultPadding}`}>
+        <div className={containerClasses}>
             {innerClassName ? (
                 <div className={innerClassName}>{children}</div>
             ) : (

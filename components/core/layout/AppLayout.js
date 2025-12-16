@@ -9,7 +9,7 @@ import { useEffect } from 'react';
 const PUBLIC_ROUTES = ['/login', '/signup'];
 
 export default function AppLayout({ children }) {
-    const { isAuthenticated, isLoading, logout } = useAuth();
+    const { isAuthenticated, isLoading, logout, loadingMessage, setIsLoading, setLoadingMessage } = useAuth();
     const pathname = usePathname();
     const router = useRouter();
 
@@ -29,6 +29,22 @@ export default function AppLayout({ children }) {
         }
     }, [isLoading, logout]);
 
+    // --- FIX: Reset Loading State on Login Page ---
+    // If we were logging out, we kept isLoading=true.
+    // When we land on /login, we must clear it.
+    useEffect(() => {
+        if (pathname === '/login' && isLoading && !isAuthenticated) {
+            // Include a small delay/timeout if needed for visual smoothing, 
+            // but usually immediate is fine if the page is ready.
+            // We can add a small timeout to ensure the transition is smooth.
+            const t = setTimeout(() => {
+                setIsLoading(false);
+                if (setLoadingMessage) setLoadingMessage('');
+            }, 500); // 500ms delay to ensure "Logging out" is read and transition finishes
+            return () => clearTimeout(t);
+        }
+    }, [pathname, isLoading, isAuthenticated, setIsLoading, setLoadingMessage]);
+
     useEffect(() => {
         if (isLoading) return;
 
@@ -42,8 +58,13 @@ export default function AppLayout({ children }) {
 
     if (isLoading) {
         return (
-            <div className="absolute inset-0 z-50 flex items-center justify-center bg-gray-100 dark:bg-gray-900">
-                <Loader2 className="h-10 w-10 animate-spin text-csway-green" />
+            <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900">
+                <Loader2 className="h-10 w-10 animate-spin text-csway-green mb-4" />
+                {loadingMessage && (
+                    <p className="text-gray-600 dark:text-gray-300 font-medium animate-pulse">
+                        {loadingMessage}
+                    </p>
+                )}
             </div>
         );
     }

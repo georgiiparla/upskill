@@ -23,7 +23,7 @@ const EdgeLighting = ({ isActive, isNewProgress, isIOS }) => {
     if (!isActive) return null;
     if (isIOS) return null;
 
-    const defaultGradient = `conic-gradient(from 0deg at 50% 50%, transparent 0deg, transparent 200deg, #a855f7 300deg, #3b82f6 340deg, transparent 360deg)`;
+    const defaultGradient = `conic-gradient(from 0deg at 50% 50%, transparent 0deg, transparent 200deg, #94a3b8 300deg, #64748b 340deg, transparent 360deg)`;
     const successGradient = `conic-gradient(from 0deg at 50% 50%, transparent 0deg, transparent 200deg, #34d399 300deg, #10b981 340deg, transparent 360deg)`;
     const gradientColors = isNewProgress ? successGradient : defaultGradient;
 

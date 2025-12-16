@@ -6,24 +6,32 @@ export const getRankColors = (rank) => {
     switch (rank) {
         case 1:
             return {
+                text: 'text-red-500',
+                bg: 'bg-red-500',
+                badge: 'bg-red-100 text-red-800 border-red-200',
+                bar: 'bg-red-500'
+            };
+        case 2:
+            return {
+                text: 'text-green-500',
+                bg: 'bg-green-500',
+                badge: 'bg-green-100 text-green-800 border-green-200',
+                bar: 'bg-green-500'
+            };
+        case 3:
+            return {
                 text: 'text-amber-500',
                 bg: 'bg-amber-500',
                 badge: 'bg-amber-100 text-amber-800 border-amber-200',
                 bar: 'bg-amber-500'
             };
-        case 2:
+        case 4:
+        case 5:
             return {
-                text: 'text-slate-500',
-                bg: 'bg-slate-400',
-                badge: 'bg-slate-100 text-slate-700 border-slate-200',
-                bar: 'bg-slate-400'
-            };
-        case 3:
-            return {
-                text: 'text-orange-500',
-                bg: 'bg-orange-500',
-                badge: 'bg-orange-100 text-orange-800 border-orange-200',
-                bar: 'bg-orange-500'
+                text: 'text-sky-500',
+                bg: 'bg-sky-500',
+                badge: 'bg-sky-100 text-sky-800 border-sky-200',
+                bar: 'bg-sky-500'
             };
         default:
             return {

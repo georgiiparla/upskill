@@ -62,7 +62,7 @@ export const ConsoleLog = ({ children, maxHeight = "max-h-[300px]" }) => {
                 <div
                     className={`
                     p-2 md:p-4 
-                    text-xs md:text-sm 
+                    text-sm md:text-base 
                     font-mono 
                     overflow-y-auto 
                     ${maxHeight}

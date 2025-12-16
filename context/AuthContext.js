@@ -12,6 +12,7 @@ export const AuthProvider = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
+    const [loadingMessage, setLoadingMessage] = useState(''); // New state for loading text
     const [error, setError] = useState(null);
     const [navbarRefreshTrigger, setNavbarRefreshTrigger] = useState(0);
 
@@ -87,6 +88,7 @@ export const AuthProvider = ({ children }) => {
     // 4. Logout
     const logout = useCallback(async () => {
         setIsLoading(true);
+        setLoadingMessage('Logging out...');
         try {
             await fetch('/api/auth/logout', { method: 'POST' });
         } catch (err) {
@@ -98,7 +100,9 @@ export const AuthProvider = ({ children }) => {
             removeTokenCookie();
             // Middleware will handle redirect on next navigation
             router.push('/login');
-            setIsLoading(false);
+            // NOTE: We do NOT set isLoading(false) here. 
+            // We want the spinner to persist until the login page mounts or pathname changes.
+            // This prevents the "flash" of dashboard content.
         }
     }, [router]);
 
@@ -110,7 +114,12 @@ export const AuthProvider = ({ children }) => {
         user,
         isAuthenticated,
         isAdmin,
+        isAuthenticated,
+        isAdmin,
         isLoading,
+        setIsLoading, // Exported so AppLayout can reset it if needed (though we'll use pathname check)
+        loadingMessage,
+        setLoadingMessage,
         logout,
         error,
         clearError,

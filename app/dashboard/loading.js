@@ -19,7 +19,9 @@ export default function DashboardSkeleton() {
         <div className="space-y-8 animate-pulse pb-16 pt-3">
             {/* This Week's Agenda Card */}
             {/* innerClassName matches Dashboard.js exactly */}
-            <CardSkeleton innerClassName="pt-3 px-3 pb-8">
+            {/* This Week's Agenda Card */}
+            {/* innerClassName matches Dashboard.js exactly */}
+            <CardSkeleton innerClassName="pt-3 px-3 pb-8" variant="ghost">
                 <SectionHeaderSkeleton />
 
                 {/* Agenda Items Grid - Matches Dashboard.js grid-cols-1 gap-5 */}
@@ -45,7 +47,7 @@ export default function DashboardSkeleton() {
             </CardSkeleton>
 
             {/* Dashboard Section Card */}
-            <CardSkeleton innerClassName="pt-3 px-3 pb-8">
+            <CardSkeleton innerClassName="pt-3 px-3 pb-8" variant="ghost">
                 <div className="space-y-6">
                     <SectionHeaderSkeleton />
 

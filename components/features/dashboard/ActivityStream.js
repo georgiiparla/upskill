@@ -99,7 +99,7 @@ export const ActivityStream = ({ activityStream, viewMode = 'detailed' }) => {
                         {/* Meta Column: Date & Universal Icon */}
                         <div className={`flex items-center gap-3 ${isMinimal ? 'w-auto' : 'md:w-28'} flex-shrink-0 opacity-60 group-hover:opacity-100 transition-opacity`}>
                             {!isMinimal && (
-                                <span className="text-[10px] md:text-xs font-mono text-slate-400 dark:text-slate-500 min-w-[45px]">
+                                <span className="text-xs md:text-sm font-mono text-slate-400 dark:text-slate-500 min-w-[45px]">
                                     {dateStr}
                                 </span>
                             )}
@@ -113,14 +113,14 @@ export const ActivityStream = ({ activityStream, viewMode = 'detailed' }) => {
                         </div>
 
                         {/* Main Content Flow */}
-                        <div className="flex flex-wrap items-center gap-x-2 text-xs md:text-sm leading-relaxed">
+                        <div className="flex flex-wrap items-center gap-x-2 text-sm md:text-base leading-relaxed">
                             {/* User */}
                             <span className="font-semibold text-slate-700 dark:text-slate-200">
                                 {activity.user_name}
                             </span>
 
                             {/* Verb */}
-                            <span className={`text-[10px] md:text-xs font-medium ${style.color} bg-slate-50 dark:bg-slate-800/50 px-1.5 py-0.5 rounded border border-slate-200 dark:border-slate-700/50`}>
+                            <span className={`text-xs md:text-sm font-medium ${style.color} bg-slate-50 dark:bg-slate-800/50 px-1.5 py-0.5 rounded border border-slate-200 dark:border-slate-700/50`}>
                                 {style.verb}
                             </span>
 

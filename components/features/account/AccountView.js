@@ -8,7 +8,7 @@ import { ThumbsUp, Heart } from 'lucide-react';
 
 // New Stats Component
 const StatCard = ({ label, value, icon: Icon, colorClass }) => (
-    <div className="flex items-center p-4 bg-white dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm">
+    <Card className="flex items-center">
         <div className={`p-3 rounded-full mr-4 ${colorClass}`}>
             <Icon className="w-5 h-5" />
         </div>
@@ -16,7 +16,7 @@ const StatCard = ({ label, value, icon: Icon, colorClass }) => (
             <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">{label}</p>
             <p className="text-2xl font-bold text-gray-900 dark:text-white">{value}</p>
         </div>
-    </div>
+    </Card>
 );
 
 export const AccountView = ({ initialAliases, stats }) => {

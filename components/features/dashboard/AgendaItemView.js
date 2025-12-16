@@ -5,8 +5,7 @@ import { useTheme } from 'next-themes';
 import tinycolor from 'tinycolor2';
 import { MoreHorizontal, Pencil, Link as LinkIcon } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { BackgroundGradientAnimation } from '@/components/ui/BackgroundGradientAnimation';
-import { BASE_COLORS, ICON_MAP, generateGradientTheme, IconDisplay } from './agenda-shared';
+import { BASE_COLORS, ICON_MAP, IconDisplay } from './agenda-shared';
 
 // --- CONFIGURATION: Animation Settings ---
 const ANIMATION_CONFIG = {
@@ -57,30 +56,25 @@ export const AgendaItemView = ({ item, onEditClick, isSystemMantra }) => {
     // Identify the mascot icon
     const MascotIcon = ICON_MAP[iconKey]?.component || ICON_MAP['ClipboardList'].component;
 
-    const gradientConfig = useMemo(() => {
-        if (!isDark) return null;
-        return generateGradientTheme(baseColor);
-    }, [baseColor, isDark]);
-
     // --- CRITICAL FIX: Unified Frame Variants ---
     // We define explicit visual states for BOTH themes in the same object.
-    // This prevents "style leakage" where properties from one theme persist to the other.
     const frameVariants = useMemo(() => {
         const c = tinycolor(baseColor);
 
         if (isDark) {
             return {
                 idle: {
-                    // Explicitly set Dark Mode styles to overwrite any potential Light Mode leftovers
-                    borderColor: "rgba(30, 41, 59, 1)", // slate-800
-                    boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)", // shadow-lg
-                    backgroundColor: "rgba(15, 23, 42, 1)", // slate-900 (Explicit BG prevents transparency bugs)
+                    // Dark Mode Idle: Low opacity colored border
+                    borderColor: c.clone().setAlpha(0.3).toRgbString(),
+                    boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
+                    backgroundColor: "rgba(15, 23, 42, 1)", // slate-900
                     transition: { ...ANIMATION_CONFIG.frameTransition, delay: ANIMATION_CONFIG.resetDelay }
                 },
                 hover: {
-                    borderColor: "rgba(51, 65, 85, 0.8)", // slate-700/80
-                    boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)", // shadow-2xl
-                    backgroundColor: "rgba(15, 23, 42, 1)", // Keep BG consistent
+                    // Dark Mode Hover: Full opacity colored border
+                    borderColor: c.clone().setAlpha(1.0).toRgbString(),
+                    boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
+                    backgroundColor: "rgba(15, 23, 42, 1)",
                     transition: { ...ANIMATION_CONFIG.frameTransition, delay: ANIMATION_CONFIG.hoverDelay }
                 }
             };
@@ -91,7 +85,6 @@ export const AgendaItemView = ({ item, onEditClick, isSystemMantra }) => {
             idle: {
                 // Low opacity colored border
                 borderColor: c.clone().setAlpha(0.3).toRgbString(),
-                // FORCE shadow to none to clean up any Dark Mode shadows if switching themes while active
                 boxShadow: "0 0 0 0 rgba(0,0,0,0)",
                 backgroundColor: "#ffffff",
                 transition: { ...ANIMATION_CONFIG.frameTransition, delay: ANIMATION_CONFIG.resetDelay }
@@ -107,24 +100,20 @@ export const AgendaItemView = ({ item, onEditClick, isSystemMantra }) => {
     }, [baseColor, isDark]);
 
     // --- CRITICAL FIX: Base Styles ---
-    // These styles apply immediately on render/hydration before animation kicks in.
-    // This fixes the "Thick Black Outline" bug by ensuring a color is always present 
-    // if a border-width exists.
     const baseCardStyle = useMemo(() => {
+        const c = tinycolor(baseColor);
         if (isDark) {
             return {
                 borderWidth: '1px',
                 borderStyle: 'solid',
-                borderColor: "rgba(30, 41, 59, 1)", // Match idle variant
+                borderColor: c.clone().setAlpha(0.3).toRgbString(),
+                backgroundColor: "rgba(15, 23, 42, 1)"
             };
         }
 
-        const c = tinycolor(baseColor);
         return {
             borderWidth: '1px',
             borderStyle: 'solid',
-            // Explicitly set the calculated color immediately. 
-            // Prevents browser defaulting to "black" (currentColor) before JS runs.
             borderColor: c.clone().setAlpha(0.3).toRgbString(),
             backgroundColor: '#ffffff'
         };
@@ -144,17 +133,17 @@ export const AgendaItemView = ({ item, onEditClick, isSystemMantra }) => {
     const Content = () => (
         <div className="relative h-full flex flex-col z-20 pointer-events-none">
             {/* Badge */}
-            <div className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center justify-center h-8 w-8 rounded-lg backdrop-blur-md" style={badgeStyle}>
+            <div className="absolute left-6 top-1/2 -translate-y-1/2 flex items-center justify-center h-8 w-8 rounded-lg backdrop-blur-md" style={badgeStyle}>
                 <IconDisplay name={item.icon_name} className="h-4 w-4" />
             </div>
 
-            <div className="py-8 px-4 pl-16 flex-1 flex flex-col justify-center pointer-events-auto">
+            <div className="py-10 px-6 pl-20 flex-1 flex flex-col justify-center pointer-events-auto">
                 <div className="flex items-start justify-between gap-4">
                     <div className="flex-1 min-w-0">
-                        <h3 className={`font-medium text-sm sm:text-base md:text-lg mb-2 break-words drop-shadow-sm ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                        <h3 className={`font-medium text-base sm:text-lg md:text-xl mb-2 break-words drop-shadow-sm ${isDark ? 'text-white' : 'text-slate-900'}`}>
                             {item.title}
                         </h3>
-                        <div className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                        <div className={`text-sm ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
                             {item.editor_username ? (
                                 <>Updated by <span className={`font-medium ${isDark ? 'text-slate-200' : 'text-slate-700'}`}>{item.editor_username}</span></>
                             ) : isSystemMantra ? (
@@ -209,75 +198,36 @@ export const AgendaItemView = ({ item, onEditClick, isSystemMantra }) => {
                 // [!] Variants handle smooth interpolation between states
                 variants={frameVariants}
             >
-                {/* --- LIGHT THEME: Mascot Animation --- */}
-                {!isDark && (
-                    <motion.div
-                        className="absolute -bottom-8 -right-8 z-0 pointer-events-none"
-                        variants={{
-                            idle: {
-                                y: 40,
-                                x: 40,
-                                rotate: 10,
-                                opacity: 0,
-                                scale: 0.8
-                            },
-                            hover: {
-                                y: 0,
-                                x: 0,
-                                rotate: -15,
-                                opacity: 0.25,
-                                scale: 1,
-                                transition: { ...ANIMATION_CONFIG.mascotSpring, delay: ANIMATION_CONFIG.hoverDelay }
-                            }
-                        }}
-                    >
-                        <MascotIcon
-                            size={140}
-                            color={baseColor}
-                            strokeWidth={1.5}
-                        />
-                    </motion.div>
-                )}
+                {/* --- UNIFIED: Mascot Animation for BOTH Themes --- */}
+                <motion.div
+                    className="absolute -bottom-8 -right-8 z-0 pointer-events-none"
+                    variants={{
+                        idle: {
+                            y: 40,
+                            x: 40,
+                            rotate: 10,
+                            opacity: 0,
+                            scale: 0.8
+                        },
+                        hover: {
+                            y: 0,
+                            x: 0,
+                            rotate: -15,
+                            opacity: 0.25,
+                            scale: 1,
+                            transition: { ...ANIMATION_CONFIG.mascotSpring, delay: ANIMATION_CONFIG.hoverDelay }
+                        }
+                    }}
+                >
+                    <MascotIcon
+                        size={140}
+                        color={baseColor}
+                        strokeWidth={1.5}
+                    />
+                </motion.div>
 
-                {/* --- DARK THEME: Gradient Animation --- */}
                 {isDark && (
-                    <>
-                        <div className="absolute inset-0 bg-slate-900 z-0" />
-
-                        {/* Layer 1: Breathing Base */}
-                        <div className="absolute inset-0 z-0 animate-glow-breathe pointer-events-none">
-                            <BackgroundGradientAnimation
-                                containerClassName="h-full w-full"
-                                size="130%"
-                                interactive={false}
-                                {...gradientConfig}
-                            />
-                        </div>
-
-                        {/* Layer 2: Hover Highlight (Motion Controlled) */}
-                        <motion.div
-                            className="absolute inset-0 z-1 pointer-events-none"
-                            variants={{
-                                idle: {
-                                    opacity: 0,
-                                    transition: { duration: 0.5, delay: ANIMATION_CONFIG.resetDelay }
-                                },
-                                hover: {
-                                    opacity: 1,
-                                    transition: { duration: 2, ease: "easeOut", delay: ANIMATION_CONFIG.hoverDelay }
-                                }
-                            }}
-                        >
-                            <BackgroundGradientAnimation
-                                containerClassName="h-full w-full"
-                                size="130%"
-                                interactive={true}
-                                {...gradientConfig}
-                            />
-                        </motion.div>
-
-                        <div className="absolute inset-0 bg-slate-950/10 pointer-events-none z-10" />
-                    </>
+                    <div className="absolute inset-0 bg-slate-950/10 pointer-events-none z-10" />
                 )}
             </motion.div>
 

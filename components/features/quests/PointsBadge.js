@@ -26,7 +26,7 @@ export const PointsBadge = ({
             // Reverts to Gray to indicate it can be done again
             return {
                 icon: <Repeat className="w-3.5 h-3.5" />,
-                style: 'text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-800/50 bg-blue-50/50 dark:bg-blue-900/20',
+                style: 'text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-800/50 bg-slate-50/50 dark:bg-slate-900/20',
                 text: `${points} PTS`
             };
         }

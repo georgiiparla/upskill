@@ -28,9 +28,11 @@ const toRgbString = (colorObj) => {
 };
 
 // --- BRIGHT NEON GENERATOR ---
-export const generateGradientTheme = (baseColorHex) => {
+// --- BRIGHT NEON GENERATOR ---
+export const generateGradientTheme = (baseColorHex, isDark = true) => {
     const base = tinycolor(baseColorHex);
-    const slateBase = '#0f172a'; // Slate 900
+    // [!] Theme-dependent Base
+    const slateBase = isDark ? '#0f172a' : '#ffffff'; // Slate 900 vs White
 
     // Analyze input color
     const hsl = base.toHsl();
@@ -40,37 +42,53 @@ export const generateGradientTheme = (baseColorHex) => {
 
     if (isGrayscale) {
         // --- STRATEGY: MONOCHROME / SILVER ---
-        // Kept similar to original but tightened to match the slate icon
-        const silverBase = tinycolor('#cbd5e1'); // Slate 300
-
-        coreColor = tinycolor('#f8fafc').setAlpha(0.9); // Slate 50
-        glowColor = silverBase.clone().setAlpha(0.8);
-        secondaryGlow = tinycolor('#64748b').setAlpha(0.7); // Slate 500
-        ambientColor = tinycolor('#475569').setAlpha(0.5); // Slate 600
+        if (isDark) {
+            const silverBase = tinycolor('#cbd5e1'); // Slate 300
+            coreColor = tinycolor('#f8fafc').setAlpha(0.9); // Slate 50
+            glowColor = silverBase.clone().setAlpha(0.8);
+            secondaryGlow = tinycolor('#64748b').setAlpha(0.7); // Slate 500
+            ambientColor = tinycolor('#475569').setAlpha(0.5); // Slate 600
+        } else {
+            // Light Mode Grayscale
+            coreColor = tinycolor('#0f172a').setAlpha(0.1); // Dark hint
+            glowColor = tinycolor('#94a3b8').setAlpha(0.2); // Slate 400
+            secondaryGlow = tinycolor('#cbd5e1').setAlpha(0.3); // Slate 300
+            ambientColor = tinycolor('#f1f5f9').setAlpha(0.8); // Slate 100
+        }
 
     } else {
-        // --- STRATEGY: PRIMITIVE BRIGHT COLORS ---
-        // CHANGED: Removed .lighten() and .saturate() calls that created the pastel/neon look.
-        // We now use the base color directly to match the icon exactly.
+        // --- STRATEGY: COLORFUL ---
 
-        // 1. Core: The exact base color (e.g., Blue 500)
+        // 1. Core: The exact base color
         coreColor = base.clone().setAlpha(1.0);
 
-        // 2. Glow: The exact base color, slightly transparent for blending
+        // 2. Glow: The exact base color, slightly transparent
         glowColor = base.clone().setAlpha(0.9);
 
-        // 3. Shift: Minimal spin to create texture without changing the perceived color family
+        // 3. Shift: Minimal spin
         secondaryGlow = base.clone().spin(5).setAlpha(0.8);
 
-        // 4. Ambient: A slightly darker version for the background depth
-        ambientColor = base.clone().darken(5).setAlpha(0.6);
+        // 4. Ambient: 
+        if (isDark) {
+            ambientColor = base.clone().darken(5).setAlpha(0.6);
+        } else {
+            // In light mode, ambient should be very light/washy
+            ambientColor = base.clone().lighten(20).setAlpha(0.3);
+        }
     }
 
     // Background Mix:
-    // We mix a small amount of the primitive color into the dark background
-    // so the card feels cohesive.
-    const bgStart = tinycolor.mix(slateBase, coreColor, 15);
-    const bgEnd = tinycolor(slateBase);
+    let bgStart, bgEnd;
+
+    if (isDark) {
+        bgStart = tinycolor.mix(slateBase, coreColor, 15);
+        bgEnd = tinycolor(slateBase);
+    } else {
+        // Light Mode Background logic
+        // We want a very subtle wash, not a dark mix
+        bgStart = tinycolor.mix(slateBase, coreColor, 5); // Mostly white with tiny tint
+        bgEnd = tinycolor(slateBase); // Pure white
+    }
 
     return {
         gradientBackgroundStart: bgStart.toRgbString(),
@@ -79,7 +97,7 @@ export const generateGradientTheme = (baseColorHex) => {
         // The Center/Largest Blob -> The "Light Source"
         firstColor: toRgbString(coreColor),
 
-        // The Surrounding Blobs -> Matching the primitive icon color
+        // The Surrounding Blobs
         secondColor: toRgbString(glowColor),
         thirdColor: toRgbString(secondaryGlow),
 
@@ -89,7 +107,7 @@ export const generateGradientTheme = (baseColorHex) => {
         // Anchor
         fifthColor: toRgbString(tinycolor(slateBase)),
 
-        // Mouse Pointer -> Pure Base Color
+        // Mouse Pointer
         pointerColor: toRgbString(coreColor.clone().setAlpha(0.8))
     };
 };

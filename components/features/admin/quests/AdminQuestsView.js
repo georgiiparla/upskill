@@ -3,8 +3,10 @@
 import { useState } from 'react';
 import { Monitor, ShieldCheck } from 'lucide-react';
 
-import { Card } from '@/components/shared/helpers/Helper'; //
-import { QuestsManager } from './QuestsManager'; //
+import { Card } from '@/components/shared/helpers/Helper';
+import { EnvironmentVariables } from '../EnvironmentVariables';
+import { JobTriggers } from '../JobTriggers';
+import { QuestsManager } from './QuestsManager';
 
 export const AdminQuestsView = ({ initialQuests = [] }) => {
     const [quests, setQuests] = useState(initialQuests);
@@ -26,7 +28,7 @@ export const AdminQuestsView = ({ initialQuests = [] }) => {
             </div>
 
             {/* Desktop View - Geometric & Clean */}
-            <div className="hidden lg:block space-y-6">
+            <div className="hidden lg:block space-y-8 pb-10">
                 <div className="flex items-end justify-between border-b border-slate-200 dark:border-slate-700 pb-6">
                     <div className="space-y-2">
                         <div className="flex items-center gap-2">
@@ -45,7 +47,11 @@ export const AdminQuestsView = ({ initialQuests = [] }) => {
                     </div>
                 </div>
 
-                <QuestsManager initialQuests={initialQuests} onQuestsChange={setQuests} />
+                <div className="grid grid-cols-1 gap-8">
+                    <QuestsManager initialQuests={initialQuests} onQuestsChange={setQuests} />
+                    <JobTriggers />
+                    <EnvironmentVariables />
+                </div>
             </div>
         </div>
     );
