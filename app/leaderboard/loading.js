@@ -1,4 +1,4 @@
-import { HeroHeaderSkeleton } from "@/components/shared/loading/Skeletons";
+import { CardSkeleton, TextSkeleton, HeroHeaderSkeleton } from "@/components/ui/loading/Skeletons";
 
 // Matches LeaderboardItem styling
 const ItemContainerSkeleton = ({ children, className = '' }) => (

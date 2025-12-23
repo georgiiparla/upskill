@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Settings, Play, Check, AlertCircle, Loader2 } from 'lucide-react';
 import { clientFetch } from '@/lib/client-api';
 import toast from 'react-hot-toast';
-import { Modal } from '@/components/core/ui/Modal';
+import { Modal } from '@/components/ui/Modal';
 
 const JOBS = [
     { id: 'leaderboard_reset_job', label: 'Reset Leaderboard', description: 'Resets points for the new cycle' },

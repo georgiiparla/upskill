@@ -1,4 +1,4 @@
-import { CardSkeleton, TextSkeleton, SectionTitleSkeleton } from "@/components/shared/loading/Skeletons";
+import { CardSkeleton, TextSkeleton, SectionTitleSkeleton } from "@/components/ui/loading/Skeletons";
 
 const AliasItemSkeleton = () => (
     // Matches AliasManager list item: p-3 rounded-lg

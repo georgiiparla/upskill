@@ -1,4 +1,4 @@
-import { CardSkeleton, TextSkeleton } from "@/components/shared/loading/Skeletons";
+import { CardSkeleton, TextSkeleton } from "@/components/ui/loading/Skeletons";
 
 const ListItemSkeleton = () => (
     // Matches HistoryListItem structure: py-4 px-5, border-l-4

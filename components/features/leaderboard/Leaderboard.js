@@ -1,7 +1,7 @@
 "use client";
 import React from 'react';
 import { Trophy } from 'lucide-react';
-import { HeroHeader } from '../../shared/helpers/HeroHeader';
+import { HeroHeader } from '@/components/ui/HeroHeader';
 import { DesktopLeaderboard } from './DesktopLeaderboard';
 import { MobileLeaderboard } from './MobileLeaderboard';
 import { processLeaderboardData } from './utils';

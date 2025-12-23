@@ -1,8 +1,8 @@
 "use client";
-import { useEffect, useState } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Card } from "../../shared/helpers/Helper";
-import { Confetti } from "./Confetti";
+import { Card } from "@/components/ui/Shared";
+import { Confetti } from "@/registry/magicui/Confetti";
 import { QuestIndicators } from "./QuestIndicators";
 import { PointsBadge } from "./PointsBadge";
 
@@ -76,6 +76,7 @@ export const QuestCard = ({
 }) => {
     const [showConfettiOnTrigger, setShowConfettiOnTrigger] = useState(false);
     const isIOS = useIsIOS();
+    const confettiRef = useRef(null);
 
     const isAlwaysType = quest?.quest_type === 'always';
 
@@ -90,6 +91,14 @@ export const QuestCard = ({
             }
         }
     }, [quest?.seconds_since_trigger, isAlwaysType]);
+
+    useEffect(() => {
+        if (showConfetti || showConfettiOnTrigger) {
+            confettiRef.current?.fire({
+                colors: ['#FFD700', '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7']
+            });
+        }
+    }, [showConfetti, showConfettiOnTrigger]);
 
     // Update new progress logic
     const isNewProgress = quest?.has_new_progress || showConfettiOnTrigger;
@@ -128,7 +137,11 @@ export const QuestCard = ({
 
                 <EdgeLighting isActive={isAlwaysType} isNewProgress={isNewProgress} isIOS={isIOS} />
 
-                <Confetti isActive={showConfetti || showConfettiOnTrigger} color={isAlwaysType ? 'default' : undefined} />
+                <Confetti
+                    ref={confettiRef}
+                    className="absolute inset-0 z-30 pointer-events-none w-full h-full"
+                    manualstart={true}
+                />
 
                 <div className="relative z-10 flex flex-col w-full h-full p-6 md:p-8">
 

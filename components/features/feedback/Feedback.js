@@ -1,9 +1,9 @@
 "use client"
 
 import { useState } from 'react';
-import { HistoryListItem, Card } from "../../shared/helpers/Helper";
-import { ActionButton } from '../../core/buttons/Buttons';
-import { SearchBar } from '../../core/ui/SearchBar';
+import { HistoryListItem, Card } from "@/components/ui/Shared";
+import { ActionButton } from '@/components/ui/Buttons';
+import { SearchBar } from '@/components/ui/SearchBar';
 import { User } from 'lucide-react';
 
 export const Feedback = ({

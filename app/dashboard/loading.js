@@ -1,4 +1,4 @@
-import { CardSkeleton, TextSkeleton } from "@/components/shared/loading/Skeletons";
+import { CardSkeleton, TextSkeleton } from "@/components/ui/loading/Skeletons";
 
 const SectionHeaderSkeleton = () => (
     <div className="flex items-center gap-4 mb-8">

@@ -1,6 +1,6 @@
 import { serverFetch } from '@/lib/server-api';
 import { AdminQuestsView } from '@/components/features/admin/quests/AdminQuestsView';
-import { AdminRoute } from '@/components/common/AdminRoute';
+import { AdminRoute } from '@/components/features/admin/AdminRoute';
 
 export default async function AdminQuestsPage() {
     const quests = await serverFetch('/quests/admin');

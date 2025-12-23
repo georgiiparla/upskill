@@ -3,11 +3,11 @@ import "./globals.css";
 
 import { Toaster } from 'react-hot-toast';
 
-import { ThemeProvider } from '@/components/shared/theme/ThemeProvider';
+import { ThemeProvider } from '@/components/layout/ThemeProvider';
 import { AuthProvider } from "@/context/AuthContext";
-import { GlobalErrorNotifier } from "@/components/core/feedback/GlobalErrorNotifier";
-import AppLayout from "@/components/core/layout/AppLayout";
-import { ThemeToggleButton } from "@/components/shared/theme/ThemeToggleButton";
+import { GlobalErrorNotifier } from "@/components/ui/feedback/GlobalErrorNotifier";
+import AppLayout from "@/components/layout/AppLayout";
+import { ThemeToggleButton } from "@/components/ui/ThemeToggleButton";
 
 const inter = Inter({ subsets: ["latin"] });
 

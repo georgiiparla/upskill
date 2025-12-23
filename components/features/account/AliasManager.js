@@ -2,9 +2,9 @@
 
 import { useState } from 'react';
 import toast from 'react-hot-toast';
-import { Card, SectionTitle } from "../../shared/helpers/Helper";
+import { Card, SectionTitle } from "@/components/ui/Shared";
 import { AtSign, MailPlus, Trash2, Loader2 } from 'lucide-react';
-import { Modal } from '../../core/ui/Modal';
+import { Modal } from '@/components/ui/Modal';
 import { addUserAlias, removeUserAlias } from '@/lib/client-api';
 
 export const AliasManager = ({ initialAliases = [] }) => {

@@ -1,7 +1,7 @@
 "use client";
 import { Target } from 'lucide-react';
-import { Card } from "../../shared/helpers/Helper";
-import { HeroHeader } from "../../shared/helpers/HeroHeader";
+import { Card } from "@/components/ui/Shared";
+import { HeroHeader } from "@/components/ui/HeroHeader";
 import { QuestCarousel } from "./QuestCarousel";
 
 export const Quests = ({ initialQuests }) => {

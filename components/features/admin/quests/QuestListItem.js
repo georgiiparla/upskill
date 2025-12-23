@@ -1,7 +1,7 @@
 "use client";
 
 import { Pencil, Check, X, ToggleLeft, ToggleRight, Loader2, Trophy, AlertTriangle } from 'lucide-react';
-import { IconButton } from '@/components/core/buttons/Buttons';
+import { IconButton } from '@/components/ui/Buttons';
 import { formatTimeUntilReset } from '@/lib/time-formatter';
 
 // --- VIEW FORMATTER: Days Only ---

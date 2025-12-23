@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
-import { Sidebar, SidebarBody, SidebarLink } from "@/components/ui/Sidebar";
-import { Avatar } from "@/components/core/ui/Avatar";
+import { Sidebar, SidebarBody, SidebarLink } from "@/components/layout/Sidebar";
+import { Avatar } from "@/components/ui/Avatar";
 import {
     IconLayoutDashboard,
     IconMessage2,

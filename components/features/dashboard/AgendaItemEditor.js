@@ -4,7 +4,7 @@
 import { useState } from 'react';
 import { X, Check, Link as LinkIcon } from 'lucide-react';
 import tinycolor from 'tinycolor2';
-import { DetailActionButton } from '../../core/buttons/Buttons';
+import { DetailActionButton } from '@/components/ui/Buttons';
 import { BASE_COLORS, ICON_MAP, IconDisplay } from './agenda-shared';
 
 export const AgendaItemEditor = ({ item, onSave, onCancel, isLoading }) => {

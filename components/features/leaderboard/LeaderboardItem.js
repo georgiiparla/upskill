@@ -1,7 +1,7 @@
 "use client";
 import React, { useMemo, useEffect, useState } from 'react';
 import { useTheme } from 'next-themes';
-import { Avatar } from '@/components/core/ui/Avatar';
+import { Avatar } from '@/components/ui/Avatar';
 import { useAuth } from '@/context/AuthContext';
 import { getRankColors } from './utils';
 import { BackgroundGradientAnimation } from '@/components/ui/BackgroundGradientAnimation';

@@ -1,8 +1,8 @@
 "use client";
 import { useState } from 'react';
 import { MessageSquarePlus, Hand } from 'lucide-react';
-import { Card } from "../../shared/helpers/Helper";
-import SimpleToggleSwitch from '../../core/ui/SimpleToggleSwitch';
+import { Card } from "@/components/ui/Shared";
+import SimpleToggleSwitch from '@/components/ui/SimpleToggleSwitch';
 import { MetricItem } from './MetricItem';
 
 const ActivityCard = ({ activityData }) => {

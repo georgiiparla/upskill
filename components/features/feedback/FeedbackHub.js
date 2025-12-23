@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import { clientFetch } from '@/lib/client-api';
 import { useAuth } from '@/context/AuthContext';
 
-import { Card } from "../../shared/helpers/Helper";
+import { Card } from "@/components/ui/Shared";
 
 const formContainerVariants = {
     hidden: { opacity: 0 },

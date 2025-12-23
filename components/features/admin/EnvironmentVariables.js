@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { Card } from '@/components/shared/helpers/Helper';
+import { Card } from '@/components/ui/Shared';
 import { Server, Terminal, Copy, Check } from 'lucide-react';
 import { clientFetch } from '@/lib/client-api';
 

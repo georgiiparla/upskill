@@ -8,9 +8,9 @@ import { Loader2, RefreshCw } from 'lucide-react';
 
 import { clientFetch } from '@/lib/client-api';
 import { useAuth } from '@/context/AuthContext';
-import { Card } from '../../shared/helpers/Helper';
+import { Card } from '@/components/ui/Shared';
 import { generateRandomTag } from '@/lib/helper-func';
-import SimpleToggleSwitch from '../../core/ui/SimpleToggleSwitch';
+import SimpleToggleSwitch from '@/components/ui/SimpleToggleSwitch';
 
 const formContainerVariants = {
     hidden: { opacity: 0 },

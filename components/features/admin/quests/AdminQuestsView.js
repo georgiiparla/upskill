@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { Monitor, ShieldCheck } from 'lucide-react';
 
-import { Card } from '@/components/shared/helpers/Helper';
+import { Card } from '@/components/ui/Shared';
 import { EnvironmentVariables } from '../EnvironmentVariables';
 import { JobTriggers } from '../JobTriggers';
 import { QuestsManager } from './QuestsManager';

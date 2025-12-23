@@ -5,7 +5,7 @@ import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { clientFetch } from '@/lib/client-api';
 import { useAuth } from '@/context/AuthContext';
-import { BlurOverlay } from '../../core/layout/BlurOverlay';
+import { BlurOverlay } from '@/components/layout/BlurOverlay';
 
 // Import sub-components
 import { AgendaItemView } from './AgendaItemView';

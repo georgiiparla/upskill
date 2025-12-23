@@ -1,13 +1,13 @@
-import { Card } from "../../../shared/helpers/Helper";
+import { Card } from "@/components/ui/Shared";
 import { Tag, MessageSquarePlus, Trash2, Archive, Eye, EyeOff } from "lucide-react";
 import Link from 'next/link';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import toast from 'react-hot-toast';
-import { Modal } from '../../../core/ui/Modal';
+import { Modal } from '@/components/ui/Modal';
 import { clientFetch } from '@/lib/client-api';
-import { DetailActionButton } from '../../../core/buttons/Buttons';
+import { DetailActionButton } from '@/components/ui/Buttons';
 
 export const RequestDetailsCard = ({ requestData, onUpdate }) => {
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);

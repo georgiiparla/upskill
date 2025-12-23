@@ -1,7 +1,7 @@
 "use client";
 
-import { Card } from "../../../shared/helpers/Helper";
-import { Avatar } from '../../../core/ui/Avatar';
+import { Card } from "@/components/ui/Shared";
+import { Avatar } from '@/components/ui/Avatar';
 import { ShieldCheck, User, Mail, Calendar } from 'lucide-react';
 
 export const UsersList = ({ initialUsers = [] }) => {

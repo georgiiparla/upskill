@@ -3,15 +3,15 @@ import React, { useState } from 'react';
 import { AgendaItem } from './AgendaItem';
 import '@fontsource/jetbrains-mono/400.css';
 import '@fontsource/jetbrains-mono/700.css';
-import { ConsoleDropdown } from "../../shared/helpers/ConsoleDropdown";
-import { ConsoleLog } from "../../shared/helpers/ConsoleLog";
+import { ConsoleDropdown } from "@/components/ui/ConsoleDropdown";
+import { ConsoleLog } from "@/components/ui/ConsoleLog";
 import { Metrics } from "./Metrics";
 import { ActivityStream } from "./ActivityStream";
-import { SectionHeader } from "../../shared/helpers/SectionHeader";
+import { SectionHeader } from "@/components/ui/SectionHeader";
 import { BarChart2, ClipboardList, Zap, MessageSquarePlus, ThumbsUp, Target, Trophy } from 'lucide-react';
-import { QuickActionButton } from "../../core/buttons/Buttons";
+import { QuickActionButton } from "@/components/ui/Buttons";
 import { useRouter } from 'next/navigation';
-import { Card } from "@/components/shared/helpers/Helper";
+import { Card } from "@/components/ui/Shared";
 import { clientFetch } from "@/lib/client-api";
 
 export default function Dashboard({ initialData }) {

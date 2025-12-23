@@ -1,6 +1,6 @@
 import { serverFetch } from "@/lib/server-api";
 import { UsersList } from "@/components/features/admin/users/UsersList";
-import { AdminRoute } from '@/components/common/AdminRoute';
+import { AdminRoute } from '@/components/features/admin/AdminRoute';
 
 async function getDirectoryData() {
     const users = await serverFetch('/admin/users');

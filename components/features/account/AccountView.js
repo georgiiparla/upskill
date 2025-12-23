@@ -1,8 +1,8 @@
 "use client";
 
 import { useAuth } from '@/context/AuthContext';
-import { Card } from '../../shared/helpers/Helper';
-import { Avatar } from '../../core/ui/Avatar';
+import { Card } from '@/components/ui/Shared';
+import { Avatar } from '@/components/ui/Avatar';
 import { AliasManager } from './AliasManager';
 import { ThumbsUp, Heart } from 'lucide-react';
 
