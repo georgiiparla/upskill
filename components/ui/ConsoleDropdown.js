@@ -39,8 +39,7 @@ export const ConsoleDropdown = ({ title, children, hasUnviewedEvents = false, on
                         <div className="flex items-center gap-3">
                             {/* Header Text: JetBrains Mono */}
                             <h2
-                                className="text-base md:text-lg font-semibold text-slate-800 dark:text-slate-100"
-                                style={{ fontFamily: "'JetBrains Mono', monospace" }}
+                                className="text-base md:text-lg font-bold text-slate-700 dark:text-slate-200"
                             >
                                 {title}
                             </h2>

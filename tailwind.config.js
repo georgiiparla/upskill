@@ -14,6 +14,10 @@ module.exports = {
                     'red': '#e37a7b',
                 }
             },
+            fontFamily: {
+                sans: ['var(--font-sans)'],
+                mono: ['var(--font-mono)'],
+            },
             animation: {
                 'glow-breathe': 'breathe 8s ease-in-out infinite',
                 'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',

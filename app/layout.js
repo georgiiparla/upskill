@@ -1,4 +1,4 @@
-import { Inter } from "next/font/google";
+import { Outfit, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
 import { Toaster } from 'react-hot-toast';
@@ -9,7 +9,15 @@ import { GlobalErrorNotifier } from "@/components/ui/feedback/GlobalErrorNotifie
 import AppLayout from "@/components/layout/AppLayout";
 import { ThemeToggleButton } from "@/components/ui/ThemeToggleButton";
 
-const inter = Inter({ subsets: ["latin"] });
+const outfit = Outfit({
+    subsets: ["latin"],
+    variable: "--font-sans",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+    subsets: ["latin"],
+    variable: "--font-mono",
+});
 
 export const metadata = {
     title: "Upskill",
@@ -49,7 +57,7 @@ export const viewport = {
 export default function RootLayout({ children }) {
     return (
         <html lang="en" suppressHydrationWarning>
-            <body className={`${inter.className} antialiased`}>
+            <body className={`${outfit.variable} ${jetbrainsMono.variable} font-sans antialiased`}>
                 <AuthProvider>
                     <GlobalErrorNotifier />
                     <ThemeProvider>

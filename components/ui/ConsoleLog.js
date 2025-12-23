@@ -68,9 +68,6 @@ export const ConsoleLog = ({ children, maxHeight = "max-h-[300px]" }) => {
                     ${maxHeight}
                     scrollbar-thin scrollbar-thumb-slate-200 dark:scrollbar-thumb-slate-700 scrollbar-track-transparent
                 `}
-                    style={{
-                        fontFamily: "'JetBrains Mono', monospace",
-                    }}
                 >
                     <div className="flex flex-col gap-1">
                         {React.Children.map(children, child => {

@@ -155,7 +155,7 @@ export const QuickActionButton = ({
         },
         gray: {
             icon: 'text-slate-600 dark:text-slate-400',
-            text: 'text-slate-700 dark:text-slate-300',
+            text: 'text-slate-600 dark:text-slate-300',
             bg: 'bg-slate-100 dark:bg-slate-800',
             buttonBg: 'bg-gradient-to-br from-white/90 to-slate-50/50 dark:from-slate-800/60 dark:to-slate-900/40 border-slate-200/60 dark:border-slate-700/60 hover:border-slate-300 dark:hover:border-slate-600',
         },
@@ -190,7 +190,7 @@ export const QuickActionButton = ({
                 <Icon className={`h-5 w-5 ${colors.icon}`} />
             </div>
 
-            <span className="hidden md:inline text-sm md:text-base font-semibold truncate">
+            <span className="hidden md:inline text-base md:text-lg font-bold truncate">
                 {text}
             </span>
         </button>

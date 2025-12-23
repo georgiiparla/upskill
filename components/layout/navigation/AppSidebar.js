@@ -11,7 +11,9 @@ import {
     IconLogout,
     IconSun,
     IconMoon,
-    IconUser
+    IconUser,
+    IconMessagePlus,
+    IconUsers
 } from "@tabler/icons-react";
 import { useAuth } from "@/context/AuthContext";
 import { useTheme } from "next-themes";
@@ -45,6 +47,11 @@ export function AppSidebar() {
             icon: <IconMessage2 className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />,
         },
         {
+            label: "Request Feedback",
+            href: "/feedback/request/new",
+            icon: <IconMessagePlus className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />,
+        },
+        {
             label: "Quests",
             href: "/quests",
             icon: <IconTargetArrow className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />,
@@ -57,6 +64,11 @@ export function AppSidebar() {
     ];
 
     if (isAdmin) {
+        links.push({
+            label: "Users",
+            href: "/admin/users",
+            icon: <IconUsers className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />,
+        });
         links.push({
             label: "Admin",
             href: "/admin/quests",
