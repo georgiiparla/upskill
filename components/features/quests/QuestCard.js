@@ -7,61 +7,10 @@ import { QuestIndicators } from "./QuestIndicators";
 import { PointsBadge } from "./PointsBadge";
 
 // iOS Detection Hook
-const useIsIOS = () => {
-    const [isIOS, setIsIOS] = useState(false);
-    useEffect(() => {
-        if (typeof window === 'undefined') return;
-        const userAgent = window.navigator.userAgent || window.navigator.vendor || window.opera;
-        const isIOSDevice = /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream;
-        setIsIOS(isIOSDevice);
-    }, []);
-    return isIOS;
-};
+
 
 // Edge Lighting Component
-const EdgeLighting = ({ isActive, isNewProgress, isIOS }) => {
-    if (!isActive) return null;
-    if (isIOS) return null;
 
-    const defaultGradient = `conic-gradient(from 0deg at 50% 50%, transparent 0deg, transparent 200deg, #94a3b8 300deg, #64748b 340deg, transparent 360deg)`;
-    const successGradient = `conic-gradient(from 0deg at 50% 50%, transparent 0deg, transparent 200deg, #34d399 300deg, #10b981 340deg, transparent 360deg)`;
-    const gradientColors = isNewProgress ? successGradient : defaultGradient;
-
-    return (
-        <div className="absolute inset-0 z-0 overflow-hidden rounded-xl pointer-events-none">
-            <div
-                className="absolute inset-0 w-full h-full"
-                style={{
-                    padding: '2px',
-                    mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
-                    maskComposite: 'exclude',
-                    WebkitMaskComposite: 'xor',
-                }}
-            >
-                <motion.div
-                    className="absolute inset-[-100%] top-[-100%]"
-                    style={{ background: gradientColors }}
-                    animate={{ rotate: 360 }}
-                    transition={{
-                        duration: 8,
-                        ease: "linear",
-                        repeat: Infinity,
-                    }}
-                />
-                <motion.div
-                    className="absolute inset-[-100%] top-[-100%] blur-lg"
-                    style={{ background: gradientColors, opacity: 0.6 }}
-                    animate={{ rotate: 360 }}
-                    transition={{
-                        duration: 8,
-                        ease: "linear",
-                        repeat: Infinity,
-                    }}
-                />
-            </div>
-        </div>
-    );
-};
 
 export const QuestCard = ({
     quest,
@@ -74,34 +23,24 @@ export const QuestCard = ({
     isCompleted,
     isInProgress
 }) => {
-    const [showConfettiOnTrigger, setShowConfettiOnTrigger] = useState(false);
-    const isIOS = useIsIOS();
+
+
     const confettiRef = useRef(null);
 
     const isAlwaysType = quest?.quest_type === 'always';
 
-    // FIX: Rely on SERVER TIME (seconds_since_trigger) instead of client clock
-    useEffect(() => {
-        if (isAlwaysType && quest?.seconds_since_trigger !== null) {
-            // If triggered less than 10 seconds ago server-time, show effect
-            if (quest.seconds_since_trigger < 10) {
-                setShowConfettiOnTrigger(true);
-                const timer = setTimeout(() => setShowConfettiOnTrigger(false), 2000);
-                return () => clearTimeout(timer);
-            }
-        }
-    }, [quest?.seconds_since_trigger, isAlwaysType]);
+
 
     useEffect(() => {
-        if (showConfetti || showConfettiOnTrigger) {
+        if (showConfetti) {
             confettiRef.current?.fire({
                 colors: ['#FFD700', '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7']
             });
         }
-    }, [showConfetti, showConfettiOnTrigger]);
+    }, [showConfetti]);
 
     // Update new progress logic
-    const isNewProgress = quest?.has_new_progress || showConfettiOnTrigger;
+    const isNewProgress = quest?.has_new_progress;
 
     const questVariants = {
         enter: (d) => ({ opacity: 0, x: d > 0 ? 120 : -120, scale: 0.95 }),
@@ -113,6 +52,7 @@ export const QuestCard = ({
     const inProgress = isInProgress ?? quest?.in_progress;
 
     const getCardStyles = () => {
+        if (isNewProgress) return 'bg-emerald-50/50 dark:bg-emerald-900/10 border-emerald-200/50 dark:border-emerald-800/50';
         if (isAlwaysType) return 'bg-white/80 dark:bg-slate-900/80 border-slate-200/60 dark:border-slate-800/60 shadow-sm backdrop-blur-md';
         if (completed) return 'bg-emerald-50/50 dark:bg-emerald-900/10 border-emerald-200/50 dark:border-emerald-800/50';
         if (inProgress) return 'bg-sky-50/50 dark:bg-sky-900/10 border-sky-200/50 dark:border-sky-800/50';
@@ -135,7 +75,7 @@ export const QuestCard = ({
         >
             <Card variant="custom" className={`group relative min-h-[320px] flex flex-col w-full overflow-hidden transition-colors duration-500 ${getCardStyles()}`}>
 
-                <EdgeLighting isActive={isAlwaysType} isNewProgress={isNewProgress} isIOS={isIOS} />
+
 
                 <Confetti
                     ref={confettiRef}
@@ -156,13 +96,13 @@ export const QuestCard = ({
                     <div className="flex-1 flex flex-col items-center justify-center text-center space-y-6">
                         <motion.h2
                             layoutId={`title-${quest.id}`}
-                            className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900 dark:text-white"
+                            className="text-3xl md:text-4xl font-bold tracking-tight text-slate-900 dark:text-white"
                         >
                             {quest.title}
                         </motion.h2>
 
                         <motion.p
-                            className="text-base text-slate-600 dark:text-slate-400 max-w-lg leading-relaxed font-light"
+                            className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl leading-relaxed font-light"
                         >
                             {quest.description}
                         </motion.p>

@@ -17,7 +17,7 @@ export const PointsBadge = ({
             // Shows Green Tick only momentarily or on first view of completion
             if (isNewProgress) {
                 return {
-                    icon: <Check className="w-3.5 h-3.5" />,
+                    icon: <Check className="w-4 h-4" />,
                     style: 'text-emerald-600 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800/50 bg-emerald-50/50 dark:bg-emerald-900/20',
                     text: `${points} PTS`
                 };
@@ -25,7 +25,7 @@ export const PointsBadge = ({
             // STATE: Pending / Refresh (Default for Always)
             // Reverts to Gray to indicate it can be done again
             return {
-                icon: <Repeat className="w-3.5 h-3.5" />,
+                icon: <Repeat className="w-4 h-4" />,
                 style: 'text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-800/50 bg-slate-50/50 dark:bg-slate-900/20',
                 text: `${points} PTS`
             };
@@ -34,7 +34,7 @@ export const PointsBadge = ({
         // CASE 2: Standard Interval Quests
         if (status === 'completed') {
             return {
-                icon: <Check className="w-3.5 h-3.5" />,
+                icon: <Check className="w-4 h-4" />,
                 style: 'text-emerald-600 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800/50 bg-emerald-50/50 dark:bg-emerald-900/20',
                 text: 'COMPLETED'
             };
@@ -42,7 +42,7 @@ export const PointsBadge = ({
 
         // Default / Implicit
         return {
-            icon: <Clock className="w-3.5 h-3.5" />,
+            icon: <Clock className="w-4 h-4" />,
             style: 'text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/30',
             text: `${points} PTS`
         };
@@ -57,7 +57,7 @@ export const PointsBadge = ({
             animate={{ opacity: 1, scale: 1 }}
             className={`
                 inline-flex items-center gap-2 px-4 py-1.5 rounded-full border backdrop-blur-sm
-                text-xs font-semibold tracking-wider transition-colors duration-500
+                text-sm font-semibold tracking-wider transition-colors duration-500
                 ${config.style}
             `}
         >
