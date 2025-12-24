@@ -19,7 +19,7 @@ export const AgendaItemView = ({ item, onEditClick, isSystemMantra }) => {
 
     // Click outside handler for the dropdown menu
     // --- COLOR LOGIC & STYLES ---
-    const { baseColor, MascotIcon, frameVariants, baseCardStyle, badgeStyle } = useAgendaItemStyles(item, isSystemMantra, isDark);
+    const { baseColor, textColor, MascotIcon, frameVariants, baseCardStyle, badgeStyle } = useAgendaItemStyles(item, isSystemMantra, isDark);
 
     return (
         <motion.div
@@ -87,6 +87,7 @@ export const AgendaItemView = ({ item, onEditClick, isSystemMantra }) => {
                 isDark={isDark}
                 onMenuToggle={() => setIsMenuOpen(!isMenuOpen)}
                 badgeStyle={badgeStyle}
+                textColor={textColor}
             />
 
             {/* 3. DROPDOWN MENU */}

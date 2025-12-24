@@ -43,7 +43,7 @@ const SentimentPicker = ({ selected, onSelect }) => {
 
     return (
         <div>
-            <label className="block mb-2 text-base font-medium text-gray-700 dark:text-gray-300">Assessment</label>
+            <label className="block mb-2 text-lg font-medium text-slate-700 dark:text-slate-200">Assessment</label>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                 {sentiments.map(sentiment => (
                     <button
@@ -51,17 +51,17 @@ const SentimentPicker = ({ selected, onSelect }) => {
                         type="button"
                         onClick={() => onSelect(sentiment.value)}
                         className={`
-                            flex flex-col items-center justify-center p-3 h-[80px] rounded-lg border-2 transition-all duration-200
+                            flex flex-col items-center justify-center p-3 h-[100px] rounded-lg border-2 transition-all duration-200
                             ${selected === sentiment.value
-                                ? `${sentiment.color} border-current bg-slate-50/80 dark:bg-slate-800/60`
-                                : `text-gray-500 dark:text-gray-400 border-gray-200 dark:border-gray-700 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:border-gray-300 dark:hover:border-gray-600 ${sentiment.bgColor}`
+                                ? `${sentiment.color} border-current bg-slate-50 dark:bg-slate-900/50`
+                                : `text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-900/50 hover:border-slate-300 dark:hover:border-slate-700 ${sentiment.bgColor}`
                             }
                         `}
                     >
-                        <div className="flex items-center justify-center h-6 w-6 text-xl font-bold">
+                        <div className="flex items-center justify-center h-8 w-8 text-2xl font-bold">
                             {sentiment.value}
                         </div>
-                        <span className="text-xs text-center mt-1">{sentiment.name}</span>
+                        <span className="text-sm text-center mt-2">{sentiment.name}</span>
                     </button>
                 ))}
             </div>
@@ -149,7 +149,7 @@ const NewFeedbackForm = ({ requestTag }) => {
 
     return (
         <>
-            <div className="max-w-xl mx-auto">
+            <div className="max-w-2xl mx-auto">
                 <form onSubmit={handleSubmit}>
                     <motion.div
                         variants={formContainerVariants}
@@ -160,11 +160,11 @@ const NewFeedbackForm = ({ requestTag }) => {
                             <div className="flex flex-col gap-10">
 
                                 <motion.div variants={formItemVariants}>
-                                    <label htmlFor="feedback-topic" className="block mb-2 text-base font-medium text-gray-700 dark:text-gray-300">
+                                    <label htmlFor="feedback-topic" className="block mb-2 text-lg font-medium text-slate-700 dark:text-slate-200">
                                         Topic
                                     </label>
-                                    <div className="block w-full px-4 py-3 bg-gray-100 dark:bg-gray-800/60 border border-gray-300 dark:border-gray-700 rounded-lg">
-                                        <p className="font-semibold text-gray-800 dark:text-gray-200">{requestTopic || "Loading topic..."}</p>
+                                    <div className="block w-full px-5 py-4 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-lg">
+                                        <p className="font-semibold text-lg text-slate-800 dark:text-slate-200">{requestTopic || "Loading topic..."}</p>
                                     </div>
                                 </motion.div>
 
@@ -174,10 +174,10 @@ const NewFeedbackForm = ({ requestTag }) => {
 
                                 <motion.div variants={formItemVariants}>
                                     <div className="flex justify-between items-center mb-2">
-                                        <label htmlFor="feedback-text" className="block text-base font-medium text-gray-700 dark:text-gray-300">
+                                        <label htmlFor="feedback-text" className="block text-lg font-medium text-slate-700 dark:text-slate-200">
                                             What are your thoughts?
                                         </label>
-                                        <span className="text-xs text-gray-500 dark:text-gray-400">
+                                        <span className="text-sm text-slate-500 dark:text-slate-400">
                                             {content.length}/{MAX_CONTENT_LENGTH}
                                         </span>
                                     </div>
@@ -186,16 +186,17 @@ const NewFeedbackForm = ({ requestTag }) => {
                                         value={content}
                                         onChange={(e) => setContent(e.target.value)}
                                         maxLength={MAX_CONTENT_LENGTH}
-                                        className="block w-full min-h-[200px] p-4 bg-gray-50 dark:bg-gray-800/60 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-csway-orange focus:border-csway-orange transition-colors resize-y"
+                                        className="block w-full min-h-[200px] p-5 text-lg bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-lg focus:ring-2 focus:ring-csway-orange focus:border-csway-orange transition-colors resize-y"
                                         placeholder="Be specific and provide examples..."
                                     ></textarea>
                                 </motion.div>
 
                                 <motion.div variants={formItemVariants}>
+
                                     <button
                                         type="submit"
                                         disabled={isSubmitting}
-                                        className="w-full inline-flex items-center justify-center px-6 py-3 font-semibold text-white bg-csway-orange/90 rounded-lg shadow-sm hover:bg-csway-orange focus:outline-none focus:ring-2 focus:ring-csway-orange/50 focus:ring-offset-2 dark:focus:ring-offset-gray-900 disabled:bg-gray-400 disabled:cursor-not-allowed transition-all"
+                                        className="w-full inline-flex items-center justify-center px-6 py-4 font-semibold text-lg text-white bg-csway-orange/90 rounded-lg shadow-sm hover:bg-csway-orange focus:outline-none focus:ring-2 focus:ring-csway-orange/50 focus:ring-offset-2 dark:focus:ring-offset-slate-900 disabled:bg-slate-400 disabled:cursor-not-allowed transition-all"
                                     >
                                         {isSubmitting ? (
                                             <>

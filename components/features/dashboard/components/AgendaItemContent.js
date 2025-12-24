@@ -3,7 +3,7 @@
 import { MoreHorizontal } from 'lucide-react';
 import { IconDisplay } from '../agenda-shared';
 
-export const AgendaItemContent = ({ item, isSystemMantra, isDark, onMenuToggle, badgeStyle }) => {
+export const AgendaItemContent = ({ item, isSystemMantra, isDark, onMenuToggle, badgeStyle, textColor }) => {
     return (
         <div className="relative h-full flex flex-col z-20 pointer-events-none">
             {/* Badge */}
@@ -14,7 +14,10 @@ export const AgendaItemContent = ({ item, isSystemMantra, isDark, onMenuToggle, 
             <div className="py-10 px-6 pl-20 flex-1 flex flex-col justify-center pointer-events-auto">
                 <div className="flex items-start justify-between gap-4">
                     <div className="flex-1 min-w-0">
-                        <h3 className={`font-bold text-lg sm:text-xl md:text-2xl mb-2 break-words drop-shadow-sm ${isDark ? 'text-slate-200' : 'text-slate-700'}`}>
+                        <h3
+                            className="font-bold text-lg sm:text-xl md:text-2xl mb-2 break-words drop-shadow-sm"
+                            style={{ color: textColor }}
+                        >
                             {item.title}
                         </h3>
                         <div className={`text-sm ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>

@@ -87,7 +87,7 @@ export function AppSidebar() {
                         </div>
                         {open && (
                             <span className="font-bold text-2xl lg:text-lg text-neutral-700 dark:text-white whitespace-pre">
-                                Upskill
+                                Upskill Platform
                             </span>
                         )}
                     </Link>

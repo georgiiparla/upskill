@@ -104,8 +104,21 @@ export const useAgendaItemStyles = (item, isSystemMantra, isDark) => {
         boxShadow: 'none'
     };
 
+    // --- CRITICAL FIX: Base Text Color for Title ---
+    const textColor = useMemo(() => {
+        const c = tinycolor(baseColor);
+        if (isDark) {
+            // Dark Mode: Balanced "Neon" (Less lighten to keep legibility)
+            return c.lighten(15).saturate(10).toRgbString();
+        } else {
+            // Light Mode: High Contrast (Darker)
+            return c.darken(25).toRgbString();
+        }
+    }, [baseColor, isDark]);
+
     return {
         baseColor,
+        textColor,
         MascotIcon,
         frameVariants,
         baseCardStyle,

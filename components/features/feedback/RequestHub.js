@@ -96,20 +96,20 @@ const CreateRequestForm = () => {
     };
 
     return (
-        <div className="max-w-xl mx-auto">
+        <div className="max-w-2xl mx-auto">
             <form onSubmit={handleSubmit}>
                 <motion.div variants={formContainerVariants} initial="hidden" animate="visible">
                     <Card className="mt-4">
                         <div className="flex flex-col gap-8">
                             <motion.div variants={formItemVariants}>
-                                <label className="block mb-2 text-base font-medium text-gray-700 dark:text-gray-300">
+                                <label className="block mb-2 text-lg font-medium text-slate-700 dark:text-slate-200">
                                     Your Unique Share Tag
                                 </label>
                                 <div className="flex items-center gap-2">
-                                    <div className="flex-grow px-4 py-3 bg-gray-100 dark:bg-gray-700/50 border border-dashed border-gray-300 dark:border-gray-600 rounded-lg text-center font-mono tracking-wider text-gray-800 dark:text-gray-200">
+                                    <div className="flex-grow px-5 py-4 bg-slate-50 dark:bg-slate-900/50 border border-dashed border-slate-200 dark:border-slate-800 rounded-lg text-center font-mono tracking-wider text-lg text-slate-800 dark:text-slate-200">
                                         {generatedTag}
                                     </div>
-                                    <button type="button" onClick={handleRegenerateTag} disabled={isSubmitting} className="p-3 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors disabled:opacity-50" title="Generate New Tag">
+                                    <button type="button" onClick={handleRegenerateTag} disabled={isSubmitting} className="p-3 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors disabled:opacity-50" title="Generate New Tag">
                                         <RefreshCw className="h-5 w-5" />
                                     </button>
                                 </div>
@@ -117,10 +117,10 @@ const CreateRequestForm = () => {
 
                             <motion.div variants={formItemVariants}>
                                 <div className="flex justify-between items-center mb-2">
-                                    <label htmlFor="feedback-topic" className="block text-base font-medium text-gray-700 dark:text-gray-300">
+                                    <label htmlFor="feedback-topic" className="block text-lg font-medium text-slate-700 dark:text-slate-200">
                                         Topic <span className="text-red-500">*</span>
                                     </label>
-                                    <span className="text-xs text-gray-500 dark:text-gray-400">
+                                    <span className="text-sm text-slate-500 dark:text-slate-400">
                                         {topic.length}/{MAX_TOPIC_LENGTH}
                                     </span>
                                 </div>
@@ -130,7 +130,7 @@ const CreateRequestForm = () => {
                                     value={topic}
                                     onChange={(e) => setTopic(e.target.value)}
                                     maxLength={MAX_TOPIC_LENGTH}
-                                    className="block w-full px-4 py-3 bg-gray-50 dark:bg-gray-800/60 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 transition-colors disabled:opacity-50"
+                                    className="block w-full px-5 py-4 text-lg bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-lg focus:ring-2 transition-colors disabled:opacity-50"
                                     placeholder="e.g., Q3 Project Proposal"
                                     required
                                     disabled={isSubmitting}
@@ -138,11 +138,11 @@ const CreateRequestForm = () => {
                             </motion.div>
 
                             <motion.div variants={formItemVariants}>
-                                <label className="block mb-2 text-base font-medium text-gray-700 dark:text-gray-300">
+                                <label className="block mb-2 text-lg font-medium text-slate-700 dark:text-slate-200">
                                     Feedback Visibility
                                 </label>
                                 <SimpleToggleSwitch options={visibilityOptions} activeOption={visibility} setActiveOption={setVisibility} />
-                                <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 pl-1">
+                                <p className="text-sm text-slate-500 dark:text-slate-400 mt-2 pl-1">
                                     {visibility === 'public'
                                         ? 'All feedback will be visible to anyone with the link.'
                                         : 'Only you will be able to see the feedback submitted.'
@@ -152,10 +152,10 @@ const CreateRequestForm = () => {
 
                             <motion.div variants={formItemVariants}>
                                 <div className="flex justify-between items-center mb-2">
-                                    <label htmlFor="feedback-desc" className="block text-base font-medium text-gray-700 dark:text-gray-300">
+                                    <label htmlFor="feedback-desc" className="block text-lg font-medium text-slate-700 dark:text-slate-200">
                                         Description (Optional)
                                     </label>
-                                    <span className="text-xs text-gray-500 dark:text-gray-400">
+                                    <span className="text-sm text-slate-500 dark:text-slate-400">
                                         {description.length}/{MAX_DESC_LENGTH}
                                     </span>
                                 </div>
@@ -164,7 +164,7 @@ const CreateRequestForm = () => {
                                     value={description}
                                     onChange={(e) => setDescription(e.target.value)}
                                     maxLength={MAX_DESC_LENGTH}
-                                    className="block w-full min-h-[200px] p-4 bg-gray-50 dark:bg-gray-800/60 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 transition-colors resize-y disabled:opacity-50"
+                                    className="block w-full min-h-[200px] p-5 text-lg bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-lg focus:ring-2 transition-colors resize-y disabled:opacity-50"
                                     placeholder="Add any context or specific questions..."
                                     disabled={isSubmitting}
                                 ></textarea>
@@ -172,7 +172,7 @@ const CreateRequestForm = () => {
 
                             <motion.div variants={formItemVariants} className="pt-2">
                                 <button type="submit" disabled={isSubmitting}
-                                    className="w-full inline-flex items-center justify-center px-6 py-3.5 font-semibold text-white bg-csway-green rounded-lg shadow-sm hover:bg-green-500/70 focus:outline-none focus:ring-2 focus:ring-csway-green/50 focus:ring-offset-2 dark:focus:ring-offset-gray-900 disabled:bg-gray-400 disabled:cursor-not-allowed transition-all">
+                                    className="w-full inline-flex items-center justify-center px-6 py-4 font-semibold text-lg text-white bg-csway-green rounded-lg shadow-sm hover:bg-green-500/70 focus:outline-none focus:ring-2 focus:ring-csway-green/50 focus:ring-offset-2 dark:focus:ring-offset-slate-900 disabled:bg-slate-400 disabled:cursor-not-allowed transition-all">
                                     {isSubmitting ? <><Loader2 className="mr-2 h-5 w-5 animate-spin" />Submitting...</> : <>Create Request</>}
                                 </button>
                             </motion.div>
