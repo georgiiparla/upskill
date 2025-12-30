@@ -62,8 +62,6 @@ export const ConsoleLog = ({ children, className = "" }) => {
                     p-2 md:p-4 
                     text-sm md:text-base 
                     font-mono 
-                    /* [!] REMOVED: overflow-y-auto, max-h-[300px], scrollbar classes */
-                    /* [!] ADDED: h-auto to ensure full height expansion */
                     h-auto
                 `}
                 >
