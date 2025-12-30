@@ -27,7 +27,7 @@ export const ActionButton = ({ icon, text, shortText, colorScheme = 'orange', on
             {icon}
             {shortText ? (
                 <>
-                    {/* UPDATED: Only add margin-left (ml-2) if an icon is present */}
+                    {/* Only add margin-left (ml-2) if an icon is present */}
                     <span className={`hidden md:inline ${icon ? 'ml-2' : ''}`}>{text}</span>
                     <span className={`inline md:hidden ${icon ? 'ml-2' : ''}`}>{shortText}</span>
                 </>
@@ -74,7 +74,6 @@ export const DetailActionButton = ({
             {isLoading ? (
                 <IconLoader2 className="h-4 w-4 mr-2 animate-spin" />
             ) : (
-                // Safe check: Ensure Icon exists before rendering
                 Icon && <Icon className="h-4 w-4 mr-2" stroke={1.5} />
             )}
             <span>{text}</span>
@@ -132,6 +131,7 @@ export const IconButton = ({
 export const QuickActionButton = ({
     icon: Icon,
     text,
+    shortText,
     onClick,
     colorScheme = 'gray',
 }) => {
@@ -181,9 +181,22 @@ export const QuickActionButton = ({
             <div className={`flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-lg transition-colors ${colors.bg}`}>
                 <Icon className={`h-5 w-5 ${colors.icon}`} stroke={1.5} />
             </div>
-            <span className="hidden md:inline text-base md:text-lg font-bold truncate">
-                {text}
-            </span>
+
+            {/* [!] Mobile Short Text Logic */}
+            {shortText ? (
+                <>
+                    <span className="inline md:hidden text-base font-bold truncate">
+                        {shortText}
+                    </span>
+                    <span className="hidden md:inline text-lg font-bold truncate">
+                        {text}
+                    </span>
+                </>
+            ) : (
+                <span className="text-base md:text-lg font-bold truncate">
+                    {text}
+                </span>
+            )}
         </button>
     );
 };

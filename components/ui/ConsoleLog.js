@@ -1,8 +1,8 @@
 "use client";
-
 import React, { useState } from 'react';
 
-export const ConsoleLog = ({ children, maxHeight = "max-h-[300px]" }) => {
+// [!] Removed maxHeight prop from arguments
+export const ConsoleLog = ({ children, className = "" }) => {
     // Local state to handle the "Minimize" interaction
     const [isMinimized, setIsMinimized] = useState(false);
     // Local state for view mode: 'detailed' vs 'minimal'
@@ -20,12 +20,12 @@ export const ConsoleLog = ({ children, maxHeight = "max-h-[300px]" }) => {
                 overflow-hidden
                 flex flex-col
                 transition-all duration-300 ease-in-out
-                ${isMinimized ? 'h-auto' : ''} /* Allow height to adjust when minimized */
+                ${isMinimized ? 'h-auto' : ''}
+                ${className}
             `}
         >
-            {/* Window Controls - Visible on all devices */}
+            {/* Window Controls */}
             <div className="flex gap-2 px-4 py-3 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
-
                 {/* Red: Minimize/Close Action */}
                 <button
                     onClick={() => setIsMinimized(true)}
@@ -33,7 +33,6 @@ export const ConsoleLog = ({ children, maxHeight = "max-h-[300px]" }) => {
                     aria-label="Minimize Console"
                     title="Minimize"
                 />
-
                 {/* Amber: Minimal View Action */}
                 <button
                     onClick={() => {
@@ -44,7 +43,6 @@ export const ConsoleLog = ({ children, maxHeight = "max-h-[300px]" }) => {
                     aria-label="Minimal View"
                     title="Minimal View"
                 />
-
                 {/* Green: Detailed View Action */}
                 <button
                     onClick={() => {
@@ -57,16 +55,16 @@ export const ConsoleLog = ({ children, maxHeight = "max-h-[300px]" }) => {
                 />
             </div>
 
-            {/* Content Area - Conditionally rendered based on state */}
+            {/* Content Area */}
             {!isMinimized && (
                 <div
                     className={`
                     p-2 md:p-4 
                     text-sm md:text-base 
                     font-mono 
-                    overflow-y-auto 
-                    ${maxHeight}
-                    scrollbar-thin scrollbar-thumb-slate-200 dark:scrollbar-thumb-slate-700 scrollbar-track-transparent
+                    /* [!] REMOVED: overflow-y-auto, max-h-[300px], scrollbar classes */
+                    /* [!] ADDED: h-auto to ensure full height expansion */
+                    h-auto
                 `}
                 >
                     <div className="flex flex-col gap-1">
@@ -80,7 +78,7 @@ export const ConsoleLog = ({ children, maxHeight = "max-h-[300px]" }) => {
                 </div>
             )}
 
-            {/* Optional: Placeholder text when minimized to show it's still there */}
+            {/* Optional: Placeholder text when minimized */}
             {isMinimized && (
                 <div className="px-4 py-2 text-xs text-slate-400 font-mono italic">
                     Console minimized...

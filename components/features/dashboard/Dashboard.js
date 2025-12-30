@@ -7,18 +7,17 @@ import { ConsoleDropdown } from "@/components/ui/ConsoleDropdown";
 import { ConsoleLog } from "@/components/ui/ConsoleLog";
 import { Metrics } from "./Metrics";
 import { ActivityStream } from "./ActivityStream";
-import { SectionHeader } from "@/components/ui/SectionHeader";
+import { HeroHeader } from "@/components/ui/HeroHeader";
 import { QuickActionButton } from "@/components/ui/Buttons";
 import { useRouter } from 'next/navigation';
-import { Card } from "@/components/ui/Shared";
 import { clientFetch } from "@/lib/client-api";
-
-// [!] Lucide Replacements
+// [!] Icons
 import {
-    IconChartBar,       // was BarChart2
-    IconClipboardList,  // was ClipboardList
-    IconMessagePlus,    // was MessageSquarePlus
-    IconThumbUp         // was ThumbsUp
+    IconLayoutDashboard,
+    IconMessagePlus,
+    IconThumbUp,
+    IconActivity,
+    IconCalendarStats
 } from '@tabler/icons-react';
 
 export default function Dashboard({ initialData }) {
@@ -45,18 +44,22 @@ export default function Dashboard({ initialData }) {
     };
 
     return (
-        <div className="space-y-8 pb-16 pt-3">
-            {/* This Week's Agenda Section */}
-            <Card innerClassName="pt-3 px-3 pb-8" variant="ghost">
-                <SectionHeader
-                    icon={IconClipboardList}
-                    title="This Week's Agenda"
-                    subtitle="Your key discussion points"
-                    iconAccentColor="text-blue-600 dark:text-blue-400"
-                    className="mb-8"
-                />
+        <div className="w-full space-y-8 pb-10">
+            {/* 1. Main Hero Header */}
+            <HeroHeader
+                icon={IconLayoutDashboard}
+                title="Dashboard"
+                subtitle="Your daily focus, quick actions, and team insights."
+                iconBg="from-blue-500 to-indigo-600"
+                iconAccentColor="text-blue-600 dark:text-blue-400"
+            />
+
+            {/* 2. Unified Content Container */}
+            <div className="flex flex-col gap-12">
+
+                {/* Section A: Agenda Items */}
                 <div className={`grid grid-cols-1 gap-5 ${editingItemId ? 'auto-rows-auto' : 'auto-rows-auto md:auto-rows-fr'}`}>
-                    {agendaItems.map((item, index) => (
+                    {agendaItems.map((item) => (
                         <div key={item.id} className={editingItemId && item.id !== editingItemId ? 'h-full' : ''}>
                             <AgendaItem
                                 key={item.id}
@@ -68,47 +71,50 @@ export default function Dashboard({ initialData }) {
                         </div>
                     ))}
                 </div>
-            </Card>
 
-            {/* Dashboard Section */}
-            <Card innerClassName="pt-3 px-3 pb-8" variant="ghost">
-                <div className="space-y-6">
-                    <SectionHeader
-                        icon={IconChartBar}
-                        title="Dashboard Section"
-                        subtitle="Quick Actions and Summary"
-                        iconAccentColor="text-purple-600 dark:text-purple-400"
-                        className="mb-8"
+                {/* Section B: Quick Actions */}
+                <div className="flex flex-row gap-4">
+                    <QuickActionButton
+                        icon={IconMessagePlus}
+                        text="Request Feedback"
+                        shortText="Request"
+                        colorScheme="green"
+                        onClick={() => router.push('/feedback/request/new')}
                     />
+                    <QuickActionButton
+                        icon={IconThumbUp}
+                        text="Provide Feedback"
+                        shortText="Submit"
+                        colorScheme="blue"
+                        onClick={() => router.push('/feedback')}
+                    />
+                </div>
 
-                    <div className="flex gap-4">
-                        <QuickActionButton
-                            icon={IconMessagePlus}
-                            text="Request Feedback"
-                            colorScheme="green"
-                            onClick={() => router.push('/feedback/request/new')}
-                        />
-                        <QuickActionButton
-                            icon={IconThumbUp}
-                            text="Provide Feedback"
-                            colorScheme="blue"
-                            onClick={() => router.push('/feedback')}
-                        />
-                    </div>
-
-                    <ConsoleDropdown title="Activity Stream" hasUnviewedEvents={hasUnviewedEvents} onClose={handleActivityStreamViewed}>
+                {/* Section C: Data & Insights */}
+                <div className="space-y-6">
+                    {/* Activity Stream */}
+                    <ConsoleDropdown
+                        title="Activity Stream"
+                        icon={IconActivity}
+                        hasUnviewedEvents={hasUnviewedEvents}
+                        onClose={handleActivityStreamViewed}
+                    >
                         <ConsoleLog>
                             <ActivityStream activityStream={initialData.activityStream} />
                         </ConsoleLog>
                     </ConsoleDropdown>
 
-                    <ConsoleDropdown title="Weekly Summary" >
+                    {/* Weekly Summary */}
+                    <ConsoleDropdown
+                        title="Weekly Summary"
+                        icon={IconCalendarStats}
+                    >
                         <ConsoleLog>
                             <Metrics metricsData={initialData.activityData} />
                         </ConsoleLog>
                     </ConsoleDropdown>
                 </div>
-            </Card>
+            </div>
         </div >
     );
 }
