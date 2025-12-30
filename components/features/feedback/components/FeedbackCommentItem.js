@@ -1,9 +1,9 @@
 "use client";
-
 import { useState } from "react";
 import { Card } from "@/components/ui/Shared";
 import { formatRelativeTime } from "@/lib/helper-func";
-import { Hand, User, Trash2 } from "lucide-react";
+// [!] Swapping Lucide for Tabler
+import { IconThumbUp, IconUser, IconTrash } from "@tabler/icons-react";
 import { Modal } from "@/components/ui/Modal";
 import { likeSubmission, unlikeSubmission, deleteSubmission } from "@/lib/client-api";
 import { useAuth } from "@/context/AuthContext";
@@ -12,34 +12,23 @@ import toast from 'react-hot-toast';
 export const FeedbackCommentItem = ({ feedback, onDeleteSuccess }) => {
     const [isLiked, setIsLiked] = useState(feedback.initialLiked || false);
     const [likeCount, setLikeCount] = useState(feedback.likes || 0);
-
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
-
     const { refreshNavbarPoints } = useAuth();
     const isOwner = feedback.isCommentOwner;
 
     const handleLikeToggle = async () => {
         const originalLikedState = isLiked;
         const originalLikeCount = likeCount;
-
-        // Optimistic UI Update
         setIsLiked(!originalLikedState);
         setLikeCount(originalLikedState ? originalLikeCount - 1 : originalLikeCount + 1);
-
         const action = originalLikedState ? unlikeSubmission : likeSubmission;
         const response = await action(feedback.id);
-
         if (!response.success) {
-            // UPDATED: Show the actual error message from backend (e.g., "Daily limit reached")
-            // If no specific message is provided, fall back to generic error.
             toast.error(response.error || "Failed to update like.");
-
-            // Revert UI state on failure
             setIsLiked(originalLikedState);
             setLikeCount(originalLikeCount);
         } else {
-            // Refresh points on both like and unlike so the navbar stays accurate
             try { refreshNavbarPoints(); } catch (e) { /* ignore */ }
         }
     };
@@ -48,10 +37,8 @@ export const FeedbackCommentItem = ({ feedback, onDeleteSuccess }) => {
         setIsDeleting(true);
         const toastId = toast.loading('Deleting comment...');
         const response = await deleteSubmission(feedback.id);
-
         setIsDeleting(false);
         setIsDeleteModalOpen(false);
-
         if (response.success) {
             toast.success('Comment deleted!', { id: toastId });
             onDeleteSuccess(feedback.id);
@@ -67,7 +54,6 @@ export const FeedbackCommentItem = ({ feedback, onDeleteSuccess }) => {
         'Approaching Expectations': "bg-yellow-500/10 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-400",
         'Below Expectations': "bg-red-500/10 dark:bg-red-900/20 text-red-700 dark:text-red-400",
     };
-
     const colorClass = sentimentColors[feedback.sentiment_text] || sentimentColors['Meets Expectations'];
 
     return (
@@ -83,12 +69,11 @@ export const FeedbackCommentItem = ({ feedback, onDeleteSuccess }) => {
             >
                 Are you sure you want to permanently delete this comment?
             </Modal>
-
             <Card className={`transition-shadow hover:shadow-md ${colorClass}`}>
                 <div className="flex flex-col space-y-3">
                     <div className="flex justify-between items-center">
                         <div className="flex items-center space-x-2">
-                            <User className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+                            <IconUser className="h-4 w-4 text-gray-500 dark:text-gray-400" stroke={1.5} />
                             <span className="font-semibold text-gray-900 dark:text-white">
                                 {feedback.authorName} {isOwner && '(Me)'}
                             </span>
@@ -97,9 +82,7 @@ export const FeedbackCommentItem = ({ feedback, onDeleteSuccess }) => {
                             {feedback.sentiment_text}
                         </span>
                     </div>
-
                     <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed break-words">{feedback.content}</p>
-
                     <div className="flex justify-between items-center pt-2 border-t border-gray-200 dark:border-gray-700 mt-3">
                         <span className="text-xs text-gray-500 dark:text-gray-400">
                             {formatRelativeTime(feedback.created_at)}
@@ -111,7 +94,7 @@ export const FeedbackCommentItem = ({ feedback, onDeleteSuccess }) => {
                                     className="p-2 rounded-full text-gray-500 dark:text-gray-400 hover:bg-red-100 dark:hover:bg-red-900/50 hover:text-red-600 dark:hover:text-red-400 transition-colors"
                                     title="Delete Comment"
                                 >
-                                    <Trash2 className="h-4 w-4" />
+                                    <IconTrash className="h-4 w-4" stroke={1.5} />
                                 </button>
                             )}
                             <button
@@ -121,7 +104,7 @@ export const FeedbackCommentItem = ({ feedback, onDeleteSuccess }) => {
                                     : "text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700"
                                     }`}
                             >
-                                <Hand className={`h-4 w-4 ${isLiked ? "fill-current" : ""}`} />
+                                <IconThumbUp className={`h-4 w-4 ${isLiked ? "fill-current" : ""}`} stroke={1.5} />
                                 <span>{likeCount}</span>
                             </button>
                         </div>

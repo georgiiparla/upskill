@@ -24,7 +24,7 @@ export default function AppLayout({ children }) {
             const timer = setTimeout(() => {
                 console.error("Authentication timeout detected - Forcing state reset.");
                 logout();
-            }, 5000);
+            }, 15000);
             return () => clearTimeout(timer);
         }
     }, [isLoading, logout]);

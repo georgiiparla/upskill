@@ -1,16 +1,15 @@
 "use client";
-
 import { useAuth } from '@/context/AuthContext';
 import { Card } from '@/components/ui/Shared';
 import { Avatar } from '@/components/ui/Avatar';
 import { AliasManager } from './AliasManager';
-import { ThumbsUp, Heart } from 'lucide-react';
+// [!] Swapping Lucide for Tabler
+import { IconThumbUp, IconHeart } from '@tabler/icons-react';
 
-// New Stats Component
 const StatCard = ({ label, value, icon: Icon, colorClass }) => (
     <Card className="flex items-center">
         <div className={`p-3 rounded-full mr-4 ${colorClass}`}>
-            <Icon className="w-5 h-5" />
+            <Icon className="w-5 h-5" stroke={1.5} />
         </div>
         <div>
             <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">{label}</p>
@@ -28,7 +27,6 @@ export const AccountView = ({ initialAliases, stats }) => {
 
     return (
         <div className="space-y-8">
-            {/* --- Hero Section --- */}
             <Card>
                 <div className="flex flex-col items-center text-center sm:flex-row sm:text-left sm:space-x-6">
                     <Avatar username={user.username} className="w-24 h-24 text-4xl mb-4 sm:mb-0" />
@@ -39,18 +37,17 @@ export const AccountView = ({ initialAliases, stats }) => {
                 </div>
             </Card>
 
-            {/* --- NEW: Impact Stats Section --- */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <StatCard
                     label="Likes Received"
                     value={stats?.likes_received || 0}
-                    icon={Heart}
+                    icon={IconHeart}
                     colorClass="bg-rose-100 text-rose-600 dark:bg-rose-900/30 dark:text-rose-400"
                 />
                 <StatCard
                     label="Likes Given"
                     value={stats?.likes_given || 0}
-                    icon={ThumbsUp}
+                    icon={IconThumbUp}
                     colorClass="bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400"
                 />
             </div>

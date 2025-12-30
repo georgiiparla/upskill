@@ -6,8 +6,8 @@ export const HeroHeader = ({
     title,
     subtitle,
     iconSize = "w-14 h-14",
-    iconBg = "from-blue-500 to-blue-600", // This will now be used for the icon's text color
-    iconAccentColor = "text-blue-600 dark:text-blue-400", // New prop for icon color
+    iconBg = "from-blue-500 to-blue-600",
+    iconAccentColor = "text-blue-600 dark:text-blue-400",
     alignment = "left",
     className = ""
 }) => {
@@ -25,10 +25,10 @@ export const HeroHeader = ({
         return (
             <div className={containerClasses}>
                 <div className="space-y-4">
-                    <div className={`inline-flex items-center justify-center ${iconSize} bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm border border-slate-200/60 dark:border-slate-700/60 rounded-xl  mb-6`}>
-                        <Icon className={`h-7 w-7 ${iconAccentColor}`} />
+                    <div className={`inline-flex items-center justify-center ${iconSize} bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm border border-slate-200/60 dark:border-slate-700/60 rounded-xl mb-6`}>
+                        {/* Tabler icons look best with 1.5 stroke */}
+                        <Icon className={`h-7 w-7 ${iconAccentColor}`} stroke={1.5} />
                     </div>
-
                     <div className="space-y-3">
                         <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white leading-tight">
                             {title}
@@ -44,15 +44,13 @@ export const HeroHeader = ({
         );
     }
 
-    // Left-aligned version
     return (
         <div className={containerClasses}>
             <div className="flex-shrink-0">
-                <div className={`${iconSize} bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm border border-slate-200/60 dark:border-slate-700/60 rounded-xl  flex items-center justify-center`}>
-                    <Icon className={`h-7 w-7 ${iconAccentColor}`} />
+                <div className={`${iconSize} bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm border border-slate-200/60 dark:border-slate-700/60 rounded-xl flex items-center justify-center`}>
+                    <Icon className={`h-7 w-7 ${iconAccentColor}`} stroke={1.5} />
                 </div>
             </div>
-
             <div className="flex-1 min-w-0">
                 <div className="space-y-2">
                     <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white leading-tight">

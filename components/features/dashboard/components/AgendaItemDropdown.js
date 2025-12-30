@@ -1,12 +1,11 @@
 "use client";
-
 import { useEffect, useRef } from 'react';
-import { Pencil, Link as LinkIcon } from 'lucide-react';
+// [!] Swapping Lucide for Tabler
+import { IconPencil, IconLink } from '@tabler/icons-react';
 
 export const AgendaItemDropdown = ({ item, isOpen, onClose, onEdit }) => {
     const dropdownRef = useRef(null);
 
-    // Click outside handler
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (!isOpen) return;
@@ -27,11 +26,11 @@ export const AgendaItemDropdown = ({ item, isOpen, onClose, onEdit }) => {
         >
             <div className="py-1">
                 <button onClick={() => { onEdit(); onClose(); }} className="w-full text-left flex items-center gap-2.5 px-4 py-2.5 text-sm transition-colors text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/80">
-                    <Pencil className="h-4 w-4 text-slate-400 dark:text-slate-500" /><span>Edit item</span>
+                    <IconPencil className="h-4 w-4 text-slate-400 dark:text-slate-500" /><span>Edit item</span>
                 </button>
                 {item.link && (
                     <a href={item.link} target="_blank" rel="noopener noreferrer" onClick={() => onClose()} className="w-full text-left flex items-center gap-2.5 px-4 py-2.5 text-sm transition-colors text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/80">
-                        <LinkIcon className="h-4 w-4 text-slate-400 dark:text-slate-500" /><span>Open link</span>
+                        <IconLink className="h-4 w-4 text-slate-400 dark:text-slate-500" /><span>Open link</span>
                     </a>
                 )}
             </div>

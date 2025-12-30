@@ -1,24 +1,19 @@
 "use client";
-
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import { useTheme } from 'next-themes';
 import { motion } from 'framer-motion';
-
 import { AgendaItemContent } from './components/AgendaItemContent';
 import { AgendaItemDropdown } from './components/AgendaItemDropdown';
 import { useAgendaItemStyles, ANIMATION_CONFIG } from './hooks/useAgendaItemStyles';
 
 export const AgendaItemView = ({ item, onEditClick, isSystemMantra }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const dropdownRef = useRef(null);
     const { theme, systemTheme } = useTheme();
-
-    // Ensure we have a stable boolean for the theme
     const currentTheme = theme === 'system' ? systemTheme : theme;
     const isDark = currentTheme === 'dark';
 
-    // Click outside handler for the dropdown menu
     // --- COLOR LOGIC & STYLES ---
+    // MascotIcon is now a Tabler icon component from agenda-shared.js
     const { baseColor, textColor, MascotIcon, frameVariants, baseCardStyle, badgeStyle } = useAgendaItemStyles(item, isSystemMantra, isDark);
 
     return (
@@ -68,13 +63,13 @@ export const AgendaItemView = ({ item, onEditClick, isSystemMantra }) => {
                         }
                     }}
                 >
+                    {/* [!] UPDATE: Tabler uses 'stroke' (not strokeWidth) and size prop works natively */}
                     <MascotIcon
                         size={140}
                         color={baseColor}
-                        strokeWidth={1.5}
+                        stroke={1} // Thinner stroke for large mascot icons looks much better
                     />
                 </motion.div>
-
                 {isDark && (
                     <div className="absolute inset-0 bg-slate-950/10 pointer-events-none z-10" />
                 )}

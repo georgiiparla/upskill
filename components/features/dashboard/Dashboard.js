@@ -8,11 +8,18 @@ import { ConsoleLog } from "@/components/ui/ConsoleLog";
 import { Metrics } from "./Metrics";
 import { ActivityStream } from "./ActivityStream";
 import { SectionHeader } from "@/components/ui/SectionHeader";
-import { BarChart2, ClipboardList, Zap, MessageSquarePlus, ThumbsUp, Target, Trophy } from 'lucide-react';
 import { QuickActionButton } from "@/components/ui/Buttons";
 import { useRouter } from 'next/navigation';
 import { Card } from "@/components/ui/Shared";
 import { clientFetch } from "@/lib/client-api";
+
+// [!] Lucide Replacements
+import {
+    IconChartBar,       // was BarChart2
+    IconClipboardList,  // was ClipboardList
+    IconMessagePlus,    // was MessageSquarePlus
+    IconThumbUp         // was ThumbsUp
+} from '@tabler/icons-react';
 
 export default function Dashboard({ initialData }) {
     const [agendaItems, setAgendaItems] = useState(initialData.agendaItems);
@@ -42,13 +49,12 @@ export default function Dashboard({ initialData }) {
             {/* This Week's Agenda Section */}
             <Card innerClassName="pt-3 px-3 pb-8" variant="ghost">
                 <SectionHeader
-                    icon={ClipboardList}
+                    icon={IconClipboardList}
                     title="This Week's Agenda"
                     subtitle="Your key discussion points"
                     iconAccentColor="text-blue-600 dark:text-blue-400"
                     className="mb-8"
                 />
-                {/* MODIFIED LINE BELOW: Added responsive classes for height behavior */}
                 <div className={`grid grid-cols-1 gap-5 ${editingItemId ? 'auto-rows-auto' : 'auto-rows-auto md:auto-rows-fr'}`}>
                     {agendaItems.map((item, index) => (
                         <div key={item.id} className={editingItemId && item.id !== editingItemId ? 'h-full' : ''}>
@@ -58,7 +64,6 @@ export default function Dashboard({ initialData }) {
                                 onUpdate={handleUpdateAgendaItem}
                                 isEditing={item.id === editingItemId}
                                 setEditingItemId={setEditingItemId}
-                                isFirst={index === index}
                             />
                         </div>
                     ))}
@@ -69,31 +74,34 @@ export default function Dashboard({ initialData }) {
             <Card innerClassName="pt-3 px-3 pb-8" variant="ghost">
                 <div className="space-y-6">
                     <SectionHeader
-                        icon={BarChart2}
+                        icon={IconChartBar}
                         title="Dashboard Section"
                         subtitle="Quick Actions and Summary"
                         iconAccentColor="text-purple-600 dark:text-purple-400"
                         className="mb-8"
                     />
+
                     <div className="flex gap-4">
                         <QuickActionButton
-                            icon={MessageSquarePlus}
+                            icon={IconMessagePlus}
                             text="Request Feedback"
                             colorScheme="green"
                             onClick={() => router.push('/feedback/request/new')}
                         />
                         <QuickActionButton
-                            icon={ThumbsUp}
+                            icon={IconThumbUp}
                             text="Provide Feedback"
                             colorScheme="blue"
                             onClick={() => router.push('/feedback')}
                         />
                     </div>
+
                     <ConsoleDropdown title="Activity Stream" hasUnviewedEvents={hasUnviewedEvents} onClose={handleActivityStreamViewed}>
                         <ConsoleLog>
                             <ActivityStream activityStream={initialData.activityStream} />
                         </ConsoleLog>
                     </ConsoleDropdown>
+
                     <ConsoleDropdown title="Weekly Summary" >
                         <ConsoleLog>
                             <Metrics metricsData={initialData.activityData} />

@@ -1,9 +1,9 @@
 "use client";
-
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { Card, SectionTitle } from "@/components/ui/Shared";
-import { AtSign, MailPlus, Trash2, Loader2 } from 'lucide-react';
+// [!] Swapping Lucide for Tabler
+import { IconAt, IconMailPlus, IconTrash, IconLoader2 } from '@tabler/icons-react';
 import { Modal } from '@/components/ui/Modal';
 import { addUserAlias, removeUserAlias } from '@/lib/client-api';
 
@@ -13,8 +13,6 @@ export const AliasManager = ({ initialAliases = [] }) => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedAlias, setSelectedAlias] = useState(null);
-
-    // Limit Constant
     const MAX_EMAIL_LENGTH = 254;
 
     const handleAddAlias = async (e) => {
@@ -25,9 +23,7 @@ export const AliasManager = ({ initialAliases = [] }) => {
         }
         setIsSubmitting(true);
         const toastId = toast.loading('Adding email alias...');
-
         const response = await addUserAlias(newAlias);
-
         if (response.success) {
             toast.success('Alias added!', { id: toastId });
             setAliases([...aliases, response.data]);
@@ -45,12 +41,9 @@ export const AliasManager = ({ initialAliases = [] }) => {
 
     const handleRemoveAlias = async () => {
         if (!selectedAlias) return;
-
         setIsModalOpen(false);
         const toastId = toast.loading('Removing alias...');
-
         const response = await removeUserAlias(selectedAlias.id);
-
         if (response.success) {
             toast.success('Alias removed!', { id: toastId });
             setAliases(aliases.filter(a => a.id !== selectedAlias.id));
@@ -71,8 +64,9 @@ export const AliasManager = ({ initialAliases = [] }) => {
             >
                 <p>Are you sure you want to remove <strong>{selectedAlias?.email}</strong> as an alias? You will no longer be able to log in with this email.</p>
             </Modal>
+
             <Card>
-                <SectionTitle icon={<AtSign className="h-6 w-6 text-csway-green" />} title="Manage Your Email Aliases" />
+                <SectionTitle icon={<IconAt className="h-6 w-6 text-csway-green" />} title="Manage Your Email Aliases" />
                 <p className="mb-6 text-sm text-gray-600 dark:text-gray-400">
                     Add an alternative email you can use to sign into your account.
                 </p>
@@ -86,7 +80,7 @@ export const AliasManager = ({ initialAliases = [] }) => {
                                 className="p-2 text-gray-500 rounded-full hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/50"
                                 title="Remove Alias"
                             >
-                                <Trash2 className="h-4 w-4" />
+                                <IconTrash className="h-4 w-4" />
                             </button>
                         </div>
                     ))}
@@ -109,7 +103,7 @@ export const AliasManager = ({ initialAliases = [] }) => {
                             title="Add Alias"
                             className="flex items-center justify-center p-2.5 text-white bg-csway-green rounded-lg shadow-sm hover:bg-green-500/80 focus:outline-none focus:ring-2 disabled:bg-gray-400"
                         >
-                            {isSubmitting ? <Loader2 className="h-5 w-5 animate-spin" /> : <MailPlus className="h-5 w-5" />}
+                            {isSubmitting ? <IconLoader2 className="h-5 w-5 animate-spin" /> : <IconMailPlus className="h-5 w-5" />}
                         </button>
                     </form>
                 ) : (

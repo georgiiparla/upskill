@@ -1,5 +1,6 @@
 import React from 'react';
-import { Loader2 } from 'lucide-react';
+// [!] Using Tabler's Loader2
+import { IconLoader2 } from '@tabler/icons-react';
 
 export const ActionButton = ({ icon, text, shortText, colorScheme = 'orange', onClick, isActive = false }) => {
     const colorClasses = {
@@ -8,6 +9,7 @@ export const ActionButton = ({ icon, text, shortText, colorScheme = 'orange', on
         green: 'text-csway-green dark:text-csway-green ring-csway-green',
         gray: 'text-gray-600 dark:text-gray-400 ring-gray-500',
     };
+
     const selectedColor = colorClasses[colorScheme] || colorClasses.orange;
 
     return (
@@ -15,27 +17,22 @@ export const ActionButton = ({ icon, text, shortText, colorScheme = 'orange', on
             className={`
                 flex items-center justify-center px-3 py-1.5 text-sm font-semibold
                 rounded-md transition-colors focus:outline-none
-                
                 bg-gray-100/50
                 dark:bg-gray-800
-                
                 ${selectedColor}
-                
-                ${isActive
-                    ? 'ring-2'
-                    : 'focus:ring-2'
-                }
+                ${isActive ? 'ring-2' : 'focus:ring-2'}
             `}
             onClick={onClick}
         >
             {icon}
             {shortText ? (
                 <>
-                    <span className="hidden md:inline">{text}</span>
-                    <span className="inline md:hidden">{shortText}</span>
+                    {/* UPDATED: Only add margin-left (ml-2) if an icon is present */}
+                    <span className={`hidden md:inline ${icon ? 'ml-2' : ''}`}>{text}</span>
+                    <span className={`inline md:hidden ${icon ? 'ml-2' : ''}`}>{shortText}</span>
                 </>
             ) : (
-                <span>{text}</span>
+                <span className={icon ? 'ml-2' : ''}>{text}</span>
             )}
         </button>
     );
@@ -74,7 +71,12 @@ export const DetailActionButton = ({
             onClick={onClick}
             disabled={disabled || isLoading}
         >
-            {isLoading ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Icon className="h-4 w-4 mr-2" />}
+            {isLoading ? (
+                <IconLoader2 className="h-4 w-4 mr-2 animate-spin" />
+            ) : (
+                // Safe check: Ensure Icon exists before rendering
+                Icon && <Icon className="h-4 w-4 mr-2" stroke={1.5} />
+            )}
             <span>{text}</span>
         </button>
     );
@@ -122,7 +124,7 @@ export const IconButton = ({
             title={title}
             className={`inline-flex items-center gap-1 rounded-md border border-transparent px-3 py-2 text-xs font-semibold transition focus:outline-none focus:ring-2 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-60 ${colors.text} ${colors.hover} ${colors.ring}`}
         >
-            {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Icon className="h-4 w-4" />}
+            {isLoading ? <IconLoader2 className="h-4 w-4 animate-spin" /> : <Icon className="h-4 w-4" stroke={1.5} />}
         </button>
     );
 };
@@ -133,7 +135,6 @@ export const QuickActionButton = ({
     onClick,
     colorScheme = 'gray',
 }) => {
-    // Defines the icon colors and background gradients
     const colorClasses = {
         orange: {
             icon: 'text-csway-orange',
@@ -169,27 +170,17 @@ export const QuickActionButton = ({
             className={`
                 group flex items-center justify-center md:justify-start gap-3 px-3 md:px-5 py-3 md:py-5 rounded-xl transition-all duration-200
                 backdrop-blur-sm shadow-sm
-                
-                /* Gradient Background & Borders */
                 ${colors.buttonBg}
                 border
-                
-                /* Interactions */
                 dark:hover:bg-slate-800/50
-                
-                /* Text */
                 ${colors.text}
-                
-                /* Layout */
                 flex-1 min-w-0
                 focus:outline-none focus:ring-2 focus:ring-slate-300/50 dark:focus:ring-slate-600/50
             `}
         >
-            {/* Colored Icon Container */}
             <div className={`flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-lg transition-colors ${colors.bg}`}>
-                <Icon className={`h-5 w-5 ${colors.icon}`} />
+                <Icon className={`h-5 w-5 ${colors.icon}`} stroke={1.5} />
             </div>
-
             <span className="hidden md:inline text-base md:text-lg font-bold truncate">
                 {text}
             </span>

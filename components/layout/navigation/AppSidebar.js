@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { Sidebar, SidebarBody, SidebarLink } from "@/components/layout/Sidebar";
 import { Avatar } from "@/components/ui/Avatar";
+// [!] Ensure these Tabler imports are clean (already used partially in your existing file, just ensuring consistency)
 import {
     IconLayoutDashboard,
     IconMessage2,
@@ -18,7 +19,6 @@ import {
 import { useAuth } from "@/context/AuthContext";
 import { useTheme } from "next-themes";
 import Link from "next/link";
-import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { usePointsData } from "./NavbarHelpers";
 
@@ -34,32 +34,31 @@ export function AppSidebar() {
         }
     };
 
-    // Define links
     const links = [
         {
             label: "Dashboard",
             href: "/dashboard",
-            icon: <IconLayoutDashboard className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />,
+            icon: <IconLayoutDashboard className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" stroke={1.5} />,
         },
         {
             label: "My Feedback",
             href: "/feedback",
-            icon: <IconMessage2 className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />,
+            icon: <IconMessage2 className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" stroke={1.5} />,
         },
         {
             label: "Request Feedback",
             href: "/feedback/request/new",
-            icon: <IconMessagePlus className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />,
+            icon: <IconMessagePlus className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" stroke={1.5} />,
         },
         {
             label: "Quests",
             href: "/quests",
-            icon: <IconTargetArrow className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />,
+            icon: <IconTargetArrow className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" stroke={1.5} />,
         },
         {
             label: "Leaderboard",
             href: "/leaderboard",
-            icon: <IconTrophy className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />,
+            icon: <IconTrophy className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" stroke={1.5} />,
         },
     ];
 
@@ -67,12 +66,12 @@ export function AppSidebar() {
         links.push({
             label: "Users",
             href: "/admin/users",
-            icon: <IconUsers className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />,
+            icon: <IconUsers className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" stroke={1.5} />,
         });
         links.push({
             label: "Admin",
             href: "/admin/quests",
-            icon: <IconSettings className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />,
+            icon: <IconSettings className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" stroke={1.5} />,
         });
     }
 
@@ -91,25 +90,22 @@ export function AppSidebar() {
                             </span>
                         )}
                     </Link>
-
                     <div className="flex flex-col gap-2">
                         {links.map((link, idx) => (
                             <SidebarLink key={idx} link={link} onClick={handleLinkClick} />
                         ))}
                     </div>
                 </div>
-
-                {/* Footer / User Profile & Actions */}
+                {/* Footer */}
                 <div className="flex flex-col gap-2">
-                    {/* Theme Toggle as a Link-like item */}
                     <div
                         className="flex items-center justify-start gap-2 group/sidebar py-2 cursor-pointer"
                         onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
                     >
                         {theme === 'dark' ? (
-                            <IconSun className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
+                            <IconSun className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" stroke={1.5} />
                         ) : (
-                            <IconMoon className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
+                            <IconMoon className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" stroke={1.5} />
                         )}
                         {open && (
                             <span className="text-neutral-700 dark:text-slate-200 text-xl lg:text-sm group-hover/sidebar:translate-x-1 transition duration-150">
@@ -117,21 +113,17 @@ export function AppSidebar() {
                             </span>
                         )}
                     </div>
-
-                    {/* Logout */}
                     <div
                         className="flex items-center justify-start gap-2 group/sidebar py-2 cursor-pointer"
                         onClick={() => logout()}
                     >
-                        <IconLogout className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
+                        <IconLogout className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" stroke={1.5} />
                         {open && (
                             <span className="text-neutral-700 dark:text-slate-200 text-xl lg:text-sm group-hover/sidebar:translate-x-1 transition duration-150">
                                 Logout
                             </span>
                         )}
                     </div>
-
-                    {/* Profile */}
                     <SidebarLink
                         onClick={handleLinkClick}
                         link={{
@@ -142,7 +134,7 @@ export function AppSidebar() {
                                     <Avatar username={user.username} className="h-7 w-7 text-xs" />
                                 ) : (
                                     <div className="h-7 w-7 shrink-0 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center overflow-hidden">
-                                        <IconUser className="h-4 w-4 text-slate-500" />
+                                        <IconUser className="h-4 w-4 text-slate-500" stroke={1.5} />
                                     </div>
                                 )
                             ),

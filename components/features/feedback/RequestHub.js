@@ -4,8 +4,8 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
-import { Loader2, RefreshCw } from 'lucide-react';
-
+// [!] Swapping Lucide for Tabler
+import { IconLoader2, IconRefresh } from '@tabler/icons-react';
 import { clientFetch } from '@/lib/client-api';
 import { useAuth } from '@/context/AuthContext';
 import { Card } from '@/components/ui/Shared';
@@ -45,13 +45,12 @@ const CreateRequestForm = () => {
     const [visibility, setVisibility] = useState('public');
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    // Limit Constants
     const MAX_TOPIC_LENGTH = 100;
     const MAX_DESC_LENGTH = 1000;
 
     const visibilityOptions = [
         { id: 'public', label: 'Public' },
-        { id: 'requester_only', label: 'Requester Only' }
+        { id: 'requester_only', label: 'Private' }
     ];
 
     useEffect(() => {
@@ -71,7 +70,6 @@ const CreateRequestForm = () => {
         }
         setIsSubmitting(true);
         const toastId = toast.loading('Submitting your request...');
-
         const response = await clientFetch('/feedback_requests', {
             method: 'POST',
             body: {
@@ -84,14 +82,12 @@ const CreateRequestForm = () => {
 
         if (response.success) {
             toast.success('Feedback request created!', { id: toastId });
-            // Refresh navbar points since this action completes the 'create_feedback_request' quest
             refreshNavbarPoints();
             const newRequestTag = response.data.tag;
             setTimeout(() => router.push(`/feedback/request/${newRequestTag}`), 1000);
-
         } else {
             toast.error(`Error: ${response.error}`, { id: toastId });
-            setIsSubmitting(false); // Re-enable form on error
+            setIsSubmitting(false);
         }
     };
 
@@ -110,7 +106,7 @@ const CreateRequestForm = () => {
                                         {generatedTag}
                                     </div>
                                     <button type="button" onClick={handleRegenerateTag} disabled={isSubmitting} className="p-3 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors disabled:opacity-50" title="Generate New Tag">
-                                        <RefreshCw className="h-5 w-5" />
+                                        <IconRefresh className="h-5 w-5" />
                                     </button>
                                 </div>
                             </motion.div>
@@ -173,7 +169,7 @@ const CreateRequestForm = () => {
                             <motion.div variants={formItemVariants} className="pt-2">
                                 <button type="submit" disabled={isSubmitting}
                                     className="w-full inline-flex items-center justify-center px-6 py-4 font-semibold text-lg text-white bg-csway-green rounded-lg shadow-sm hover:bg-green-500/70 focus:outline-none focus:ring-2 focus:ring-csway-green/50 focus:ring-offset-2 dark:focus:ring-offset-slate-900 disabled:bg-slate-400 disabled:cursor-not-allowed transition-all">
-                                    {isSubmitting ? <><Loader2 className="mr-2 h-5 w-5 animate-spin" />Submitting...</> : <>Create Request</>}
+                                    {isSubmitting ? <><IconLoader2 className="mr-2 h-5 w-5 animate-spin" />Submitting...</> : <>Create Request</>}
                                 </button>
                             </motion.div>
                         </div>

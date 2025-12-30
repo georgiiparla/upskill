@@ -1,5 +1,13 @@
 import { Card } from "@/components/ui/Shared";
-import { Tag, MessageSquarePlus, Trash2, Archive, Eye, EyeOff } from "lucide-react";
+// [!] Swapping Lucide for Tabler
+import {
+    IconTag,
+    IconMessagePlus,
+    IconTrash,
+    IconArchive,
+    IconEye,
+    IconEyeOff
+} from "@tabler/icons-react";
 import Link from 'next/link';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -133,7 +141,7 @@ export const RequestDetailsCard = ({ requestData, onUpdate }) => {
                         </div>
 
                         <div className="flex items-center space-x-2 bg-gradient-to-br from-slate-100/60 to-slate-200/40 dark:from-slate-700/60 dark:to-slate-600/40 p-2 rounded-md">
-                            <Tag className="h-4 w-4 text-gray-500" />
+                            <IconTag className="h-4 w-4 text-gray-500" stroke={1.5} />
                             <span className="text-xs font-mono text-gray-600 dark:text-gray-400">{requestData.tag}</span>
                         </div>
                     </div>
@@ -145,15 +153,14 @@ export const RequestDetailsCard = ({ requestData, onUpdate }) => {
                             {!requestData.isOwner && !isClosed && (
                                 <Link href={`/feedback/request/${requestData.tag}/new`} passHref>
                                     <DetailActionButton
-                                        icon={MessageSquarePlus} text="Give Feedback" colorScheme="orange" title="Give Feedback"
+                                        icon={IconMessagePlus} text="Give Feedback" colorScheme="orange" title="Give Feedback"
                                     />
                                 </Link>
                             )}
-
                             {requestData.isOwner && (
                                 <>
                                     <DetailActionButton
-                                        icon={isPublic ? EyeOff : Eye}
+                                        icon={isPublic ? IconEyeOff : IconEye}
                                         text={isPublic ? "Private" : "Public"}
                                         colorScheme="gray"
                                         onClick={handleVisibilityToggle}
@@ -162,13 +169,13 @@ export const RequestDetailsCard = ({ requestData, onUpdate }) => {
                                     />
                                     {!isClosed && (
                                         <DetailActionButton
-                                            icon={Archive} text="Close" colorScheme="blue"
+                                            icon={IconArchive} text="Close" colorScheme="blue"
                                             onClick={() => setIsCloseModalOpen(true)}
                                             isLoading={isClosing} title="Close Request"
                                         />
                                     )}
                                     <DetailActionButton
-                                        icon={Trash2} text="Delete" colorScheme="red"
+                                        icon={IconTrash} text="Delete" colorScheme="red"
                                         onClick={() => setIsDeleteModalOpen(true)}
                                         isLoading={isDeleting} title="Delete Request"
                                     />

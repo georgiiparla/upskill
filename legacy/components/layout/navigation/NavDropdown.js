@@ -1,11 +1,10 @@
 "use client";
-
 import { useState, useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
-import { ChevronDown } from 'lucide-react';
+// [!] Swapping Lucide for Tabler
+import { IconChevronDown } from '@tabler/icons-react';
 import { Avatar } from '../ui/Avatar';
 import { NavItem } from './NavItem';
-
 import Link from 'next/link';
 
 export const DropdownItem = ({ href, children, onClick }) => {
@@ -55,7 +54,7 @@ export const DesktopDropdown = ({ title, children, scrolled, activePaths = [] })
                 className={`flex items-center ${scrolled ? 'px-4 py-2' : 'px-4 pt-1'}`}
             >
                 {title}
-                <ChevronDown className={`h-3.5 w-3.5 ml-2 transition-all duration-200 text-gray-400 dark:text-gray-500 group-hover:text-gray-600 dark:group-hover:text-gray-300 ${isOpen ? 'rotate-180' : ''}`} />
+                <IconChevronDown className={`h-3.5 w-3.5 ml-2 transition-all duration-200 text-gray-400 dark:text-gray-500 group-hover:text-gray-600 dark:group-hover:text-gray-300 ${isOpen ? 'rotate-180' : ''}`} stroke={1.5} />
             </NavItem>
             {isOpen && (
                 <div className="absolute z-10 mt-3 w-48 origin-top-right rounded-xl bg-white dark:bg-slate-900 shadow-xl ring-1 ring-black/5 dark:ring-white/10 focus:outline-none overflow-hidden border border-slate-200/60 dark:border-slate-700/60">
@@ -95,7 +94,7 @@ export const UserDropdown = ({ user, onLogoutClick }) => {
                 <span className="hidden xl:inline text-sm lg:text-base font-normal tracking-tight text-gray-700 dark:text-gray-300">
                     {user?.username}
                 </span>
-                <ChevronDown className={`h-3.5 w-3.5 text-gray-400 dark:text-gray-500 transition-all duration-200 hover:text-gray-600 dark:hover:text-gray-300 hidden xl:inline ${isOpen ? 'rotate-180' : ''}`} />
+                <IconChevronDown className={`h-3.5 w-3.5 text-gray-400 dark:text-gray-500 transition-all duration-200 hover:text-gray-600 dark:hover:text-gray-300 hidden xl:inline ${isOpen ? 'rotate-180' : ''}`} stroke={1.5} />
             </button>
             {isOpen && (
                 <div className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-xl bg-white/95 dark:bg-slate-900/95 shadow-xl ring-1 ring-black/5 dark:ring-white/10 focus:outline-none border border-slate-200/60 dark:border-slate-700/60">
@@ -104,13 +103,11 @@ export const UserDropdown = ({ user, onLogoutClick }) => {
                             <p className="font-normal tracking-tight text-sm text-gray-800 dark:text-gray-100 truncate">{user?.username}</p>
                             <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{user?.email}</p>
                         </div>
-
                         {pathname !== '/account' && (
                             <DropdownItem href="/account">
                                 My Account
                             </DropdownItem>
                         )}
-
                         <DropdownItem href="#" onClick={(e) => { e.preventDefault(); onLogoutClick(); }}>
                             Sign Out
                         </DropdownItem>

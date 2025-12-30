@@ -12,7 +12,7 @@ import { RequestSentimentDonutChart } from './components/RequestSentimentDonutCh
 const VisibilityBadge = ({ visibility }) => {
     const isPublic = visibility === 'public';
     const Icon = isPublic ? Eye : Lock;
-    const tooltipText = isPublic ? 'Public: Feedback is visible to everyone' : 'Requester Only: Feedback is visible only to the requester';
+    const tooltipText = isPublic ? 'Public: Feedback is visible to everyone' : 'Private: Feedback is visible only to the requester';
     const color = isPublic ? 'text-green-600 dark:text-green-400' : 'text-amber-600 dark:text-amber-500';
 
     return (

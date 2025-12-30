@@ -11,10 +11,9 @@ export const SectionHeader = ({
         <div className={`flex items-center gap-4 ${className}`}>
             <div className="flex-shrink-0">
                 <div className={`w-10 h-10 flex items-center justify-center rounded-lg bg-gray-100 dark:bg-gray-800 shadow-sm`}>
-                    <Icon className={`h-5 w-5 ${iconAccentColor}`} />
+                    <Icon className={`h-5 w-5 ${iconAccentColor}`} stroke={1.5} />
                 </div>
             </div>
-
             <div className="flex-1 min-w-0">
                 <h2 className="text-xl font-semibold text-gray-900 dark:text-white leading-tight">
                     {title}

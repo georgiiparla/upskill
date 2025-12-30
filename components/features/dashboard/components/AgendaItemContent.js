@@ -1,6 +1,6 @@
 "use client";
-
-import { MoreHorizontal } from 'lucide-react';
+// [!] Swapped Lucide MoreHorizontal for Tabler IconDots
+import { IconDots } from '@tabler/icons-react';
 import { IconDisplay } from '../agenda-shared';
 
 export const AgendaItemContent = ({ item, isSystemMantra, isDark, onMenuToggle, badgeStyle, textColor }) => {
@@ -8,7 +8,7 @@ export const AgendaItemContent = ({ item, isSystemMantra, isDark, onMenuToggle, 
         <div className="relative h-full flex flex-col z-20 pointer-events-none">
             {/* Badge */}
             <div className="absolute left-6 top-1/2 -translate-y-1/2 flex items-center justify-center h-8 w-8 rounded-lg backdrop-blur-md" style={badgeStyle}>
-                <IconDisplay name={item.icon_name} className="h-4 w-4" />
+                <IconDisplay name={item.icon_name} className="h-4 w-4" stroke={2} />
             </div>
 
             <div className="py-10 px-6 pl-20 flex-1 flex flex-col justify-center pointer-events-auto">
@@ -35,7 +35,8 @@ export const AgendaItemContent = ({ item, isSystemMantra, isDark, onMenuToggle, 
                                 onClick={(e) => { e.stopPropagation(); onMenuToggle(); }}
                                 className={`flex-shrink-0 p-2 rounded-lg transition-all ${isDark ? 'text-white/60 hover:text-white hover:bg-white/20' : 'text-slate-400 hover:text-slate-900 hover:bg-slate-100'}`}
                             >
-                                <MoreHorizontal className="h-4 w-4" />
+                                {/* [!] Updated Icon */}
+                                <IconDots className="h-4 w-4" stroke={1.5} />
                             </button>
                         </div>
                     )}

@@ -1,6 +1,7 @@
 "use client";
 import Link from 'next/link';
-import { Sun, Moon, LogOut, Menu, X } from 'lucide-react';
+// [!] Swapping Lucide for Tabler
+import { IconSun, IconMoon, IconLogout, IconMenu2, IconX } from '@tabler/icons-react';
 import { UserDropdown } from '../../NavDropdown';
 import { Avatar } from '@/components/ui/Avatar';
 
@@ -16,7 +17,7 @@ export const DesktopControls = ({ user, rank, renderPointsText, getPointsBadgeCl
             onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
             className="p-2 rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none"
         >
-            {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+            {theme === 'dark' ? <IconSun className="h-5 w-5" stroke={1.5} /> : <IconMoon className="h-5 w-5" stroke={1.5} />}
         </button>
     </div>
 );
@@ -30,7 +31,7 @@ export const MobileControls = ({ user, rank, renderPointsText, getPointsBadgeCla
         )}
         {pathname === '/account' ? (
             <button onClick={() => setIsLogoutModalOpen(true)} title="Sign Out" className="p-2 rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700">
-                <LogOut className="h-5 w-5" />
+                <IconLogout className="h-5 w-5" stroke={1.5} />
             </button>
         ) : (
             <Link href="/account" title="My Account" className="p-1 rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700">
@@ -38,7 +39,7 @@ export const MobileControls = ({ user, rank, renderPointsText, getPointsBadgeCla
             </Link>
         )}
         <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="p-2 rounded-md text-gray-500 dark:text-gray-400">
-            {isMenuOpen ? <X className="block h-6 w-6" /> : <Menu className="block h-6 w-6" />}
+            {isMenuOpen ? <IconX className="block h-6 w-6" stroke={1.5} /> : <IconMenu2 className="block h-6 w-6" stroke={1.5} />}
         </button>
     </div>
 );

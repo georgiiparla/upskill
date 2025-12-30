@@ -1,22 +1,17 @@
 "use client"
-
 import { useState, useEffect } from 'react';
 import { useTheme } from 'next-themes';
 import { usePathname } from 'next/navigation';
 import { Inter } from 'next/font/google';
-
 import { useAuth } from '@/context/AuthContext';
 import { Modal } from '../ui/Modal';
 import { useScrollBehavior, usePointsData, usePointsBadge } from './NavbarHelpers';
-
 import { LogoAndBrand } from './components/LogoAndBrand';
 import { DesktopNavLinks } from './components/DesktopNavLinks';
 import { MobileMenu } from './components/MobileMenu';
 import { DesktopControls, MobileControls } from './components/NavbarControls';
 
 const inter = Inter({ subsets: ['latin'] });
-
-
 
 const NavbarContent = ({ scrolled, user, rank, renderPointsText, getPointsBadgeClasses, setIsLogoutModalOpen, theme, setTheme, pathname, isMenuOpen, setIsMenuOpen, isAdmin }) => (
     <div className={`flex items-center justify-between h-16 transition-[height] duration-300 ease-in-out ${scrolled ? 'h-[44px]' : ''}`}>
@@ -71,7 +66,6 @@ export const Navbar = () => {
         setIsLogoutModalOpen(false);
     };
 
-    // UPDATED: Simply returns points without rank text
     const renderPointsText = () => {
         if (isPointsLoading) return "…";
         return `${points ?? 0} pts`;

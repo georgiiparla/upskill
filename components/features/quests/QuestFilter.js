@@ -1,7 +1,8 @@
 "use client";
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown, Check } from 'lucide-react';
+// [!] Swapping Lucide for Tabler
+import { IconChevronDown, IconCheck } from '@tabler/icons-react';
 
 export const QuestFilter = ({ currentFilter, onFilterChange }) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -11,7 +12,6 @@ export const QuestFilter = ({ currentFilter, onFilterChange }) => {
         { value: 'weekly', label: 'Weekly Quests' },
         { value: 'core', label: 'Core Quests' }
     ];
-
     const selectedOption = options.find(opt => opt.value === currentFilter);
 
     useEffect(() => {
@@ -39,11 +39,11 @@ export const QuestFilter = ({ currentFilter, onFilterChange }) => {
                 `}
             >
                 <span className="truncate">{selectedOption?.label}</span>
-                <ChevronDown
+                <IconChevronDown
                     className={`w-4 h-4 ml-2 text-slate-400 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+                    stroke={1.5}
                 />
             </button>
-
             <AnimatePresence>
                 {isOpen && (
                     <motion.div
@@ -76,7 +76,7 @@ export const QuestFilter = ({ currentFilter, onFilterChange }) => {
                                             animate={{ scale: 1 }}
                                             transition={{ type: "spring", bounce: 0.5 }}
                                         >
-                                            <Check className="w-4 h-4" />
+                                            <IconCheck className="w-4 h-4" stroke={1.5} />
                                         </motion.div>
                                     )}
                                 </button>

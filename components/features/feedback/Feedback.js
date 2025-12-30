@@ -4,7 +4,14 @@ import { useState } from 'react';
 import { HistoryListItem, Card } from "@/components/ui/Shared";
 import { ActionButton } from '@/components/ui/Buttons';
 import { SearchBar } from '@/components/ui/SearchBar';
-import { User } from 'lucide-react';
+// [!] Swapping Lucide for Tabler
+import {
+    IconUser,
+    IconInbox,
+    IconCheckbox,
+    IconSend,
+    IconMessage
+} from '@tabler/icons-react';
 
 export const Feedback = ({
     initialSubmissions = [],
@@ -17,7 +24,6 @@ export const Feedback = ({
         switch (sentimentText) {
             case 'Exceeds Expectations': return 'teal';
             case 'Meets Expectations': return 'green';
-            // FIX: Changed 'yellow' to 'amber' to match HistoryListItem config
             case 'Approaching Expectations': return 'amber';
             case 'Below Expectations': return 'red';
             default: return 'green';
@@ -86,7 +92,7 @@ export const Feedback = ({
 
                     const requestContent = (
                         <span className="flex items-center gap-1.5">
-                            <User className="h-3.5 w-3.5 flex-shrink-0" />
+                            <IconUser className="h-3.5 w-3.5 flex-shrink-0" stroke={1.5} />
                             {item.isOwner ? 'Me' : item.requester_username}
                         </span>
                     );
@@ -111,18 +117,38 @@ export const Feedback = ({
         <div className="space-y-8">
             <Card className="h-full flex flex-col">
                 <div className="flex items-center gap-4 mb-10 flex-shrink-0">
-                    <ActionButton text="Active" shortText="Open" colorScheme="blue"
+                    <ActionButton
+                        icon={<IconInbox className="h-4 w-4" />}
+                        text="Active"
+                        shortText="Open"
+                        colorScheme="blue"
                         onClick={() => setView("active")}
-                        isActive={view === 'active'} />
-                    <ActionButton text="Closed" shortText="Done" colorScheme="gray"
+                        isActive={view === 'active'}
+                    />
+                    <ActionButton
+                        icon={<IconCheckbox className="h-4 w-4" />}
+                        text="Closed"
+                        shortText="Done"
+                        colorScheme="gray"
                         onClick={() => setView("closed")}
-                        isActive={view === 'closed'} />
-                    <ActionButton text="Submissions" shortText="Sent" colorScheme="orange"
+                        isActive={view === 'closed'}
+                    />
+                    <ActionButton
+                        icon={<IconSend className="h-4 w-4" />}
+                        text="Submissions"
+                        shortText="Sent"
+                        colorScheme="orange"
                         onClick={() => setView("submissions")}
-                        isActive={view === 'submissions'} />
-                    <ActionButton text="My Requests" shortText="Me" colorScheme="green"
+                        isActive={view === 'submissions'}
+                    />
+                    <ActionButton
+                        icon={<IconMessage className="h-4 w-4" />}
+                        text="My Requests"
+                        shortText="Me"
+                        colorScheme="green"
                         onClick={() => setView("requests")}
-                        isActive={view === 'requests'} />
+                        isActive={view === 'requests'}
+                    />
                 </div>
 
                 <SearchBar

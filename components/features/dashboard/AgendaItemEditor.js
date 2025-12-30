@@ -1,8 +1,7 @@
-// components/features/dashboard/AgendaItemEditor.js
 "use client";
-
 import { useState } from 'react';
-import { X, Check, Link as LinkIcon } from 'lucide-react';
+// [!] Swapping Lucide for Tabler
+import { IconX, IconCheck, IconLink } from '@tabler/icons-react';
 import tinycolor from 'tinycolor2';
 import { DetailActionButton } from '@/components/ui/Buttons';
 import { BASE_COLORS, ICON_MAP, IconDisplay } from './agenda-shared';
@@ -11,7 +10,6 @@ export const AgendaItemEditor = ({ item, onSave, onCancel, isLoading }) => {
     const [title, setTitle] = useState(item.title);
     const [iconName, setIconName] = useState(item.icon_name);
     const [link, setLink] = useState(item.link || '');
-
     const MAX_CHARS = 94;
     const MAX_LINK_CHARS = 2048;
 
@@ -62,7 +60,7 @@ export const AgendaItemEditor = ({ item, onSave, onCancel, isLoading }) => {
 
                     {/* Link Input */}
                     <div className="relative">
-                        <LinkIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 dark:text-slate-500" />
+                        <IconLink className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 dark:text-slate-500" />
                         <input
                             type="url"
                             value={link}
@@ -75,8 +73,8 @@ export const AgendaItemEditor = ({ item, onSave, onCancel, isLoading }) => {
 
                     {/* Actions */}
                     <div className="flex justify-end gap-2 pt-2">
-                        <DetailActionButton icon={X} text="Cancel" colorScheme="gray" onClick={onCancel} disabled={isLoading} />
-                        <DetailActionButton icon={Check} text="Save" colorScheme="blue" onClick={handleSaveClick} isLoading={isLoading} />
+                        <DetailActionButton icon={IconX} text="Cancel" colorScheme="gray" onClick={onCancel} disabled={isLoading} />
+                        <DetailActionButton icon={IconCheck} text="Save" colorScheme="blue" onClick={handleSaveClick} isLoading={isLoading} />
                     </div>
                 </div>
             </div>
