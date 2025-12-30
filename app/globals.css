@@ -40,7 +40,9 @@
 @layer utilities {
     .scrollbar-thin::-webkit-scrollbar {
         width: 4px;
-        /* Thinner for cleaner look */
+        /* Controls thickness for vertical scrollbars */
+        height: 4px;
+        /* [!] NEW: Controls thickness for horizontal scrollbars */
     }
 
     .scrollbar-thin::-webkit-scrollbar-track {

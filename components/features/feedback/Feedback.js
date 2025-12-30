@@ -1,10 +1,8 @@
 "use client"
-
 import { useState } from 'react';
 import { HistoryListItem, Card } from "@/components/ui/Shared";
 import { ActionButton } from '@/components/ui/Buttons';
 import { SearchBar } from '@/components/ui/SearchBar';
-// [!] Swapping Lucide for Tabler
 import {
     IconUser,
     IconInbox,
@@ -116,39 +114,52 @@ export const Feedback = ({
     return (
         <div className="space-y-8">
             <Card className="h-full flex flex-col">
-                <div className="flex items-center gap-4 mb-10 flex-shrink-0">
-                    <ActionButton
-                        icon={<IconInbox className="h-4 w-4" />}
-                        text="Active"
-                        shortText="Open"
-                        colorScheme="blue"
-                        onClick={() => setView("active")}
-                        isActive={view === 'active'}
-                    />
-                    <ActionButton
-                        icon={<IconCheckbox className="h-4 w-4" />}
-                        text="Closed"
-                        shortText="Done"
-                        colorScheme="gray"
-                        onClick={() => setView("closed")}
-                        isActive={view === 'closed'}
-                    />
-                    <ActionButton
-                        icon={<IconSend className="h-4 w-4" />}
-                        text="Submissions"
-                        shortText="Sent"
-                        colorScheme="orange"
-                        onClick={() => setView("submissions")}
-                        isActive={view === 'submissions'}
-                    />
-                    <ActionButton
-                        icon={<IconMessage className="h-4 w-4" />}
-                        text="My Requests"
-                        shortText="Me"
-                        colorScheme="green"
-                        onClick={() => setView("requests")}
-                        isActive={view === 'requests'}
-                    />
+                {/* [!] FIXES APPLIED:
+                    1. 'py-1': Adds vertical padding so top/bottom focus rings aren't cut off.
+                    2. 'scrollbar-thin': Shows your custom styled scrollbar.
+                    3. 'md:no-scrollbar': Hides scrollbar on desktop (keeps it mobile-only).
+                */}
+                <div className="flex flex-nowrap items-center gap-4 mb-10 overflow-x-auto w-full px-1 py-1 scrollbar-thin md:no-scrollbar">
+                    <div className="flex-shrink-0">
+                        <ActionButton
+                            icon={<IconInbox className="h-4 w-4" />}
+                            text="Active"
+                            shortText="Open"
+                            colorScheme="blue"
+                            onClick={() => setView("active")}
+                            isActive={view === 'active'}
+                        />
+                    </div>
+                    <div className="flex-shrink-0">
+                        <ActionButton
+                            icon={<IconCheckbox className="h-4 w-4" />}
+                            text="Closed"
+                            shortText="Done"
+                            colorScheme="gray"
+                            onClick={() => setView("closed")}
+                            isActive={view === 'closed'}
+                        />
+                    </div>
+                    <div className="flex-shrink-0">
+                        <ActionButton
+                            icon={<IconSend className="h-4 w-4" />}
+                            text="Submissions"
+                            shortText="Sent"
+                            colorScheme="orange"
+                            onClick={() => setView("submissions")}
+                            isActive={view === 'submissions'}
+                        />
+                    </div>
+                    <div className="flex-shrink-0">
+                        <ActionButton
+                            icon={<IconMessage className="h-4 w-4" />}
+                            text="My Requests"
+                            shortText="Me"
+                            colorScheme="green"
+                            onClick={() => setView("requests")}
+                            isActive={view === 'requests'}
+                        />
+                    </div>
                 </div>
 
                 <SearchBar
@@ -157,7 +168,6 @@ export const Feedback = ({
                     placeholder="Search by topic, author, or tag..."
                     className="mb-6 flex-shrink-0"
                 />
-
                 <div className="flex-1 space-y-4 overflow-y-auto max-h-[400px] sm:max-h-[450px] no-scrollbar">
                     {renderList()}
                 </div>
