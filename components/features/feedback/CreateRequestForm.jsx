@@ -111,7 +111,7 @@ export default function CreateRequestForm() {
         <div className="max-w-2xl mx-auto">
             <form onSubmit={handleSubmit}>
                 <motion.div variants={formContainerVariants} initial="hidden" animate="visible">
-                    <Card className="mt-4">
+                    <Card className="mt-4" mobileSpaceless={true}>
                         <div className="flex flex-col gap-8">
                             <motion.div variants={formItemVariants}>
                                 <label className="block mb-2 text-lg font-medium text-slate-700 dark:text-slate-200">

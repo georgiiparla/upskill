@@ -156,7 +156,7 @@ const NewFeedbackForm = ({ requestTag }) => {
                         initial="hidden"
                         animate="visible"
                     >
-                        <Card className="mt-4">
+                        <Card className="mt-4" mobileSpaceless={true}>
                             <div className="flex flex-col gap-10">
 
                                 <motion.div variants={formItemVariants}>

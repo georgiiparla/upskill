@@ -10,7 +10,7 @@ export const SectionTitle = ({ icon, title, className = '' }) => (
     </div>
 );
 
-export const Card = ({ children, className = '', innerClassName = '', glass = true, variant = glass ? 'glass' : 'default' }) => {
+export const Card = ({ children, className = '', innerClassName = '', glass = true, variant = glass ? 'glass' : 'default', mobileSpaceless = false }) => {
     const getVariantClasses = () => {
         switch (variant) {
             case 'glass':
@@ -24,9 +24,22 @@ export const Card = ({ children, className = '', innerClassName = '', glass = tr
         }
     };
 
-    const defaultPadding = variant === 'ghost' ? '' : 'p-6';
+    const baseVariant = getVariantClasses();
+    const basePadding = variant === 'ghost' ? '' : 'p-6';
+    const baseRounded = 'rounded-xl';
 
-    const containerClasses = `rounded-xl ${getVariantClasses()} ${className} ${defaultPadding}`;
+    let finalVariant = baseVariant;
+    let finalPadding = basePadding;
+    let finalRounded = baseRounded;
+
+    if (mobileSpaceless) {
+        // On mobile, remove styles by prefixing everything with md:
+        finalVariant = baseVariant.split(' ').map(c => `md:${c}`).join(' ');
+        finalPadding = basePadding ? `md:${basePadding}` : '';
+        finalRounded = `md:${finalRounded}`;
+    }
+
+    const containerClasses = `${finalRounded} ${finalVariant} ${className} ${finalPadding}`;
 
     return (
         <div className={containerClasses}>
