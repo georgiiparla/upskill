@@ -5,13 +5,16 @@ import path from 'path'
 export default defineConfig({
     plugins: [react()],
     test: {
-        environment: 'jsdom',
         globals: true,
+        environment: 'jsdom',
         setupFiles: ['./vitest.setup.js'],
-    },
-    resolve: {
         alias: {
-            '@': path.resolve(__dirname, './'),
+            '@': path.resolve(__dirname, './')
         },
+    },
+    esbuild: {
+        loader: "jsx",
+        include: /.*\.(js|jsx)$/,
+        exclude: [],
     },
 })

@@ -92,6 +92,11 @@ export const Feedback = ({
                         <span className="flex items-center gap-1.5">
                             <IconUser className="h-3.5 w-3.5 flex-shrink-0" stroke={1.5} />
                             {item.isOwner ? 'Me' : item.requester_username}
+                            {item.pair_username && (
+                                <span className="text-gray-500 dark:text-gray-400">
+                                    & {item.pair_username === item.requester_username ? 'Me' : item.pair_username}
+                                </span>
+                            )}
                         </span>
                     );
 
