@@ -9,6 +9,7 @@ import { useAuth } from '@/context/AuthContext';
 import { Card } from '@/components/ui/Shared';
 import { generateRandomTag } from '@/lib/helper-func';
 import SimpleToggleSwitch from '@/components/ui/SimpleToggleSwitch';
+import UserSearchCombobox from '@/components/ui/UserSearchCombobox';
 
 const formContainerVariants = {
     hidden: { opacity: 0 },
@@ -143,18 +144,10 @@ export default function CreateRequestForm() {
                                 <label htmlFor="pair-requester" className="block mb-2 text-lg font-medium text-slate-700 dark:text-slate-200">
                                     Pair Requester (Optional)
                                 </label>
-                                <input
+                                <UserSearchCombobox
                                     id="pair-requester"
-                                    type="text"
-                                    value={pairUsername}
-                                    onChange={(e) => setPairUsername(e.target.value)}
-                                    className="block w-full px-5 py-4 text-lg bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-lg focus:ring-2 transition-colors disabled:opacity-50"
-                                    placeholder="Enter username to pair with..."
-                                    disabled={isSubmitting}
+                                    onSelect={(user) => setPairUsername(user ? user.username : '')}
                                 />
-                                <p className="text-sm text-slate-500 dark:text-slate-400 mt-2 pl-1">
-                                    Both of you will receive points for this request.
-                                </p>
                             </motion.div>
 
                             <motion.div variants={formItemVariants}>

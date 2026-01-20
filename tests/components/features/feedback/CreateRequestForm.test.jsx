@@ -48,6 +48,15 @@ vi.mock('@/components/ui/SimpleToggleSwitch', () => ({
     ),
 }));
 
+vi.mock('@/components/ui/UserSearchCombobox', () => ({
+    default: ({ onSelect }) => (
+        <input
+            aria-label="Pair Requester"
+            onChange={(e) => onSelect({ username: e.target.value })}
+        />
+    ),
+}));
+
 describe('CreateRequestForm', () => {
     beforeEach(() => {
         vi.clearAllMocks();
