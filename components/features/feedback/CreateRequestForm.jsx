@@ -1,10 +1,8 @@
 "use client"
-import React from 'react';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
-// [!] Swapping Lucide for Tabler
 import { IconLoader2, IconRefresh } from '@tabler/icons-react';
 import { clientFetch } from '@/lib/client-api';
 import { useAuth } from '@/context/AuthContext';
@@ -36,11 +34,12 @@ const formItemVariants = {
     },
 };
 
-const CreateRequestForm = () => {
+export default function CreateRequestForm() {
     const router = useRouter();
     const { refreshNavbarPoints } = useAuth();
     const [topic, setTopic] = useState('');
     const [description, setDescription] = useState('');
+    const [pairUsername, setPairUsername] = useState('');
     const [generatedTag, setGeneratedTag] = useState('');
     const [visibility, setVisibility] = useState('public');
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -70,14 +69,21 @@ const CreateRequestForm = () => {
         }
         setIsSubmitting(true);
         const toastId = toast.loading('Submitting your request...');
+
+        const payload = {
+            topic: topic,
+            details: description,
+            tag: generatedTag,
+            visibility: visibility
+        };
+
+        if (pairUsername.trim()) {
+            payload.pair_username = pairUsername.trim();
+        }
+
         const response = await clientFetch('/feedback_requests', {
             method: 'POST',
-            body: {
-                topic: topic,
-                details: description,
-                tag: generatedTag,
-                visibility: visibility
-            }
+            body: payload
         });
 
         if (response.success) {
@@ -134,6 +140,24 @@ const CreateRequestForm = () => {
                             </motion.div>
 
                             <motion.div variants={formItemVariants}>
+                                <label htmlFor="pair-requester" className="block mb-2 text-lg font-medium text-slate-700 dark:text-slate-200">
+                                    Pair Requester (Optional)
+                                </label>
+                                <input
+                                    id="pair-requester"
+                                    type="text"
+                                    value={pairUsername}
+                                    onChange={(e) => setPairUsername(e.target.value)}
+                                    className="block w-full px-5 py-4 text-lg bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-lg focus:ring-2 transition-colors disabled:opacity-50"
+                                    placeholder="Enter username to pair with..."
+                                    disabled={isSubmitting}
+                                />
+                                <p className="text-sm text-slate-500 dark:text-slate-400 mt-2 pl-1">
+                                    Both of you will receive points for this request.
+                                </p>
+                            </motion.div>
+
+                            <motion.div variants={formItemVariants}>
                                 <label className="block mb-2 text-lg font-medium text-slate-700 dark:text-slate-200">
                                     Feedback Visibility
                                 </label>
@@ -179,11 +203,3 @@ const CreateRequestForm = () => {
         </div>
     );
 };
-
-export default function RequestHub() {
-    return (
-        <div className="container mx-auto px-4">
-            <CreateRequestForm />
-        </div>
-    );
-}

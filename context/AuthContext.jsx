@@ -114,9 +114,7 @@ export const AuthProvider = ({ children }) => {
         user,
         isAuthenticated,
         isAdmin,
-        isAuthenticated,
-        isAdmin,
-        isLoading,
+
         setIsLoading, // Exported so AppLayout can reset it if needed (though we'll use pathname check)
         loadingMessage,
         setLoadingMessage,
