@@ -62,8 +62,17 @@ export default function CreateRequestForm() {
         toast('New tag generated!', { icon: '✨' });
     };
 
+    const [pairSearchQuery, setPairSearchQuery] = useState('');
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        // Validation: If user typed something but didn't select a valid user
+        if (pairSearchQuery.trim() && !pairUsername) {
+            toast.error('Please select a valid user from the dropdown list, or clear the search to proceed solo.');
+            return;
+        }
+
         if (topic.trim().length < 3) {
             toast.error('Please enter a more descriptive topic.');
             return;
@@ -131,6 +140,7 @@ export default function CreateRequestForm() {
                                     id="feedback-topic"
                                     type="text"
                                     value={topic}
+                                    autoComplete="off"
                                     onChange={(e) => setTopic(e.target.value)}
                                     maxLength={MAX_TOPIC_LENGTH}
                                     className="block w-full px-5 py-4 text-lg bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-lg focus:ring-2 transition-colors disabled:opacity-50"
@@ -147,6 +157,7 @@ export default function CreateRequestForm() {
                                 <UserSearchCombobox
                                     id="pair-requester"
                                     onSelect={(user) => setPairUsername(user ? user.username : '')}
+                                    onSearchChange={setPairSearchQuery}
                                 />
                             </motion.div>
 

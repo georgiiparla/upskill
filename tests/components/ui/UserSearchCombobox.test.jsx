@@ -53,4 +53,32 @@ describe('UserSearchCombobox', () => {
 
         expect(handleSelect).toHaveBeenCalledWith(expect.objectContaining({ username: 'found_user' }));
     });
+    it('reopens the dropdown when focusing the input with existing text', async () => {
+        ClientApi.clientFetch.mockResolvedValue({
+            success: true,
+            data: [{ id: 1, username: 'existing_user' }]
+        });
+
+        render(<UserSearchCombobox onSelect={() => { }} />);
+        const user = userEvent.setup();
+        const input = screen.getByPlaceholderText(/search users/i);
+
+        // Type to search
+        await user.type(input, 'exist');
+        await screen.findByText('existing_user'); // Wait for results
+
+        // Blur (click outside)
+        await user.click(document.body);
+        await waitFor(() => {
+            expect(screen.queryByText('existing_user')).not.toBeInTheDocument();
+        });
+
+        // Focus again
+        await user.click(input);
+
+        // Should reappear
+        await waitFor(() => {
+            expect(screen.getByText('existing_user')).toBeInTheDocument();
+        });
+    });
 });

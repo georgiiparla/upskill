@@ -1,5 +1,6 @@
 "use client"
 import { useState } from 'react';
+import { useAuth } from '@/context/AuthContext';
 import { HistoryListItem, Card } from "@/components/ui/Shared";
 import { ActionButton } from '@/components/ui/Buttons';
 import { SearchBar } from '@/components/ui/SearchBar';
@@ -17,6 +18,7 @@ export const Feedback = ({
 }) => {
     const [view, setView] = useState('active');
     const [searchTerm, setSearchTerm] = useState('');
+    const { user } = useAuth();
 
     const getSentimentColor = (sentimentText) => {
         switch (sentimentText) {
@@ -88,15 +90,38 @@ export const Feedback = ({
                         ? (item.request_tag ? `/feedback/request/${item.request_tag}` : undefined)
                         : (item.tag ? `/feedback/request/${item.tag}` : undefined);
 
+                    let displayUserHtml;
+                    const amIRequester = item.requester_username === user?.username;
+                    const amIPair = item.pair_username === user?.username;
+
+                    if (item.pair_username) {
+                        if (amIRequester) {
+                            displayUserHtml = (
+                                <>
+                                    Me <span className="text-gray-500 dark:text-gray-400">& {item.pair_username}</span>
+                                </>
+                            );
+                        } else if (amIPair) {
+                            displayUserHtml = (
+                                <>
+                                    Me <span className="text-gray-500 dark:text-gray-400">& {item.requester_username}</span>
+                                </>
+                            );
+                        } else {
+                            displayUserHtml = (
+                                <>
+                                    {item.requester_username} <span className="text-gray-500 dark:text-gray-400">& {item.pair_username}</span>
+                                </>
+                            );
+                        }
+                    } else {
+                        displayUserHtml = item.isOwner ? 'Me' : item.requester_username;
+                    }
+
                     const requestContent = (
                         <span className="flex items-center gap-1.5">
                             <IconUser className="h-3.5 w-3.5 flex-shrink-0" stroke={1.5} />
-                            {item.isOwner ? 'Me' : item.requester_username}
-                            {item.pair_username && (
-                                <span className="text-gray-500 dark:text-gray-400">
-                                    & {item.pair_username === item.requester_username ? 'Me' : item.pair_username}
-                                </span>
-                            )}
+                            {displayUserHtml}
                         </span>
                     );
 

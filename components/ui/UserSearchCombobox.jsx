@@ -3,7 +3,7 @@ import { clientFetch } from '@/lib/client-api';
 import { IconSearch, IconUser } from '@tabler/icons-react'; // Assuming tabler icons are available
 import { motion, AnimatePresence } from 'framer-motion';
 
-export default function UserSearchCombobox({ onSelect, id }) {
+export default function UserSearchCombobox({ onSelect, onSearchChange, id }) {
     const [query, setQuery] = useState('');
     const [results, setResults] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -56,6 +56,7 @@ export default function UserSearchCombobox({ onSelect, id }) {
     const handleSelect = (user) => {
         setSelectedUser(user);
         setQuery(user.username);
+        if (onSearchChange) onSearchChange(user.username); // Ensure verified text matches confirmed user
         setResults([]);
         setIsOpen(false);
         onSelect(user);
@@ -63,6 +64,7 @@ export default function UserSearchCombobox({ onSelect, id }) {
 
     const handleClear = () => {
         setQuery('');
+        if (onSearchChange) onSearchChange('');
         setSelectedUser(null);
         setResults([]);
         onSelect(null);
@@ -75,12 +77,19 @@ export default function UserSearchCombobox({ onSelect, id }) {
                     id={id}
                     type="text"
                     value={query}
+                    autoComplete="off"
                     onChange={(e) => {
-                        setQuery(e.target.value);
+                        const newVal = e.target.value;
+                        setQuery(newVal);
+                        if (onSearchChange) onSearchChange(newVal);
                         setSelectedUser(null); // Clear selection on edit
-                        if (!isOpen && e.target.value.length >= 2) setIsOpen(true);
+                        onSelect(null); // Clear parent selection immediately on edit
+                        if (!isOpen && newVal.length >= 2) setIsOpen(true);
                     }}
                     placeholder="Search users..."
+                    onFocus={() => {
+                        if (query.length >= 2) setIsOpen(true);
+                    }}
                     className="block w-full px-5 py-4 pl-12 text-lg bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-lg focus:ring-2 transition-colors disabled:opacity-50"
                 />
                 <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400">
