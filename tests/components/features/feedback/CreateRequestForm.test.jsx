@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 import toast from 'react-hot-toast';
@@ -11,13 +11,13 @@ vi.mock('next/navigation', () => ({
     useRouter: () => ({ push: vi.fn() }),
 }));
 
-vi.mock('react-hot-toast', () => ({
-    default: {
-        loading: vi.fn(),
-        success: vi.fn(),
-        error: vi.fn(),
-    },
-}));
+vi.mock('react-hot-toast', () => {
+    const toast = vi.fn();
+    toast.loading = vi.fn();
+    toast.success = vi.fn();
+    toast.error = vi.fn();
+    return { default: toast };
+});
 
 vi.mock('@/context/AuthContext', () => ({
     useAuth: vi.fn(),
@@ -37,6 +37,7 @@ vi.mock('@/components/ui/SimpleToggleSwitch', () => ({
         <div data-testid="toggle-switch">
             {options.map((opt) => (
                 <button
+                    type="button"
                     key={opt.id}
                     onClick={() => setActiveOption(opt.id)}
                     data-active={activeOption === opt.id}
@@ -57,6 +58,7 @@ vi.mock('@/components/ui/UserSearchCombobox', () => ({
                 data-testid="user-search-input"
                 onChange={(e) => {
                     if (onSearchChange) onSearchChange(e.target.value);
+                    if (onSelect) onSelect(null);
                 }}
             />
             <button
@@ -177,5 +179,82 @@ describe('CreateRequestForm', () => {
 
         expect(submitBtn).toBeDisabled();
         expect(screen.getByText(/submitting/i)).toBeInTheDocument();
+    });
+    it('updates visibility option in payload', async () => {
+        const mockFetch = ClientApi.clientFetch.mockResolvedValue({
+            success: true,
+            data: { tag: 'TEST-TAG' }
+        });
+        render(<CreateRequestForm />);
+        const user = userEvent.setup();
+
+        await user.type(screen.getByLabelText(/topic/i), 'Test Topic');
+
+        // Toggle visibility to 'Private' (id: requester_only)
+        const toggleSwitch = screen.getByTestId('toggle-switch');
+        const privateBtn = within(toggleSwitch).getByText('Private');
+        await user.click(privateBtn);
+
+        await user.click(screen.getByRole('button', { name: /create request/i }));
+
+        await waitFor(() => {
+            expect(mockFetch).toHaveBeenCalledWith('/feedback_requests', expect.objectContaining({
+                method: 'POST',
+                body: expect.objectContaining({
+                    visibility: 'requester_only'
+                })
+            }));
+        });
+    });
+
+    it('regenerates tag when button is clicked', async () => {
+        // Mock helper func if needed, or rely on toast
+        const user = userEvent.setup();
+        render(<CreateRequestForm />);
+
+        const regenerateBtn = screen.getByTitle('Generate New Tag');
+        await user.click(regenerateBtn);
+
+        expect(toast).toHaveBeenCalledWith('New tag generated!', expect.anything());
+    });
+
+    it('clearing selected user allows submission without pair_username', async () => {
+        const mockFetch = ClientApi.clientFetch.mockResolvedValue({
+            success: true,
+            data: { tag: 'TAG' }
+        });
+        render(<CreateRequestForm />);
+        const user = userEvent.setup();
+
+        await user.type(screen.getByLabelText(/topic/i), 'Test Topic');
+
+        // Select a user
+        const searchInput = screen.getByTestId('user-search-input');
+        await user.type(searchInput, 'pair_user');
+        await user.click(screen.getByTestId('mock-select-user'));
+
+        // Verify user is selected (implicit logic would ideally check state, 
+        // but here we verify "unselecting" behavior via SearchCombobox logic or just clearing input)
+        // The mock UserSearchCombobox doesn't fully simulate the "clear" button inside it, 
+        // but it does verify `onSearchChange` flow. 
+        // In the real app, `UserSearchCombobox` has a clear button. 
+        // Our mock `UserSearchCombobox` is simple. We can simulate clearing by calling onSelect(null) or onSearchChange('') 
+        // if we could access the trigger. 
+        // Since we can't easily access internal state of the real component from the parent test with a shallow mock,
+        // we might rely on the fact that `onSearchChange` handles text.
+        // Let's assume the user clears the text manually.
+        await user.clear(searchInput);
+
+        // Submit
+        await user.click(screen.getByRole('button', { name: /create request/i }));
+
+        await waitFor(() => {
+            expect(mockFetch).toHaveBeenCalledWith('/feedback_requests', expect.objectContaining({
+                method: 'POST',
+                body: expect.not.objectContaining({
+                    pair_username: expect.anything()
+                })
+            }));
+        });
     });
 });

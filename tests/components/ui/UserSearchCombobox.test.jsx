@@ -81,4 +81,25 @@ describe('UserSearchCombobox', () => {
             expect(screen.getByText('existing_user')).toBeInTheDocument();
         });
     });
+    it('handles API error gracefully', async () => {
+        ClientApi.clientFetch.mockResolvedValue({
+            success: false,
+            error: 'API Error'
+        });
+
+        render(<UserSearchCombobox onSelect={() => { }} />);
+        const user = userEvent.setup();
+        const input = screen.getByPlaceholderText(/search users/i);
+
+        await user.type(input, 'error_case');
+
+        // Should not show results, should not crash
+        await waitFor(() => {
+            // Wait for potential fetch
+            expect(ClientApi.clientFetch).toHaveBeenCalled();
+        });
+
+        // Ensure no results dropdown is shown (or at least no items)
+        expect(screen.queryByRole('list')).not.toBeInTheDocument();
+    });
 });
