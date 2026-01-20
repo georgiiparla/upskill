@@ -56,31 +56,31 @@ export default function AppLayout({ children }) {
     }, [isAuthenticated, isLoading, isPublicRoute, isCallbackRoute, router]);
 
 
-    if (isLoading) {
-        return (
-            <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900">
-                <Loader2 className="h-10 w-10 animate-spin text-csway-green mb-4" />
-                {loadingMessage && (
-                    <p className="text-gray-600 dark:text-gray-300 font-medium animate-pulse">
-                        {loadingMessage}
-                    </p>
-                )}
-            </div>
-        );
-    }
-
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200 flex flex-col lg:flex-row">
-            {/* Universal Sidebar (Handles both Desktop and Mobile) */}
-            {isAuthenticated && (
-                <div className="h-full lg:h-screen lg:sticky lg:top-0 lg:left-0 z-40">
-                    <AppSidebar />
+            {isLoading ? (
+                <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900">
+                    <Loader2 className="h-10 w-10 animate-spin text-csway-green mb-4" />
+                    {loadingMessage && (
+                        <p className="text-gray-600 dark:text-gray-300 font-medium animate-pulse">
+                            {loadingMessage}
+                        </p>
+                    )}
                 </div>
-            )}
+            ) : (
+                <>
+                    {/* Universal Sidebar (Handles both Desktop and Mobile) */}
+                    {isAuthenticated && (
+                        <div className="h-full lg:h-screen lg:sticky lg:top-0 lg:left-0 z-40">
+                            <AppSidebar />
+                        </div>
+                    )}
 
-            <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                {children}
-            </main>
+                    <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                        {children}
+                    </main>
+                </>
+            )}
         </div>
     );
 }

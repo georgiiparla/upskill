@@ -57,7 +57,7 @@ export const viewport = {
 export default function RootLayout({ children }) {
     return (
         <html lang="en" suppressHydrationWarning>
-            <body className={`${outfit.variable} ${jetbrainsMono.variable} font-sans antialiased`}>
+            <body className={`${outfit.variable} ${jetbrainsMono.variable} font-sans antialiased bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-50`}>
                 <AuthProvider>
                     <GlobalErrorNotifier />
                     <ThemeProvider>
