@@ -15,7 +15,7 @@ export const ActionButton = ({ icon, text, shortText, colorScheme = 'orange', on
     return (
         <button
             className={`
-                flex items-center justify-center px-3 py-1.5 text-sm font-semibold
+                flex items-center justify-center p-2.5 sm:px-3 sm:py-1.5 text-sm font-semibold
                 rounded-md transition-colors focus:outline-none
                 bg-gray-100/50
                 dark:bg-gray-800
@@ -23,16 +23,16 @@ export const ActionButton = ({ icon, text, shortText, colorScheme = 'orange', on
                 ${isActive ? 'ring-2' : 'focus:ring-2'}
             `}
             onClick={onClick}
+            title={text}
         >
             {icon}
             {shortText ? (
                 <>
-                    {/* Only add margin-left (ml-2) if an icon is present */}
+                    <span className={`hidden sm:inline md:hidden ${icon ? 'ml-2' : ''}`}>{shortText}</span>
                     <span className={`hidden md:inline ${icon ? 'ml-2' : ''}`}>{text}</span>
-                    <span className={`inline md:hidden ${icon ? 'ml-2' : ''}`}>{shortText}</span>
                 </>
             ) : (
-                <span className={icon ? 'ml-2' : ''}>{text}</span>
+                <span className={`hidden sm:inline ${icon ? 'ml-2' : ''}`}>{text}</span>
             )}
         </button>
     );

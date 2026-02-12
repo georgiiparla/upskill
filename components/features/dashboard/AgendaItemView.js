@@ -47,17 +47,17 @@ export const AgendaItemView = ({ item, onEditClick, isSystemMantra }) => {
                     className="absolute -bottom-8 -right-8 z-0 pointer-events-none"
                     variants={{
                         idle: {
-                            y: 40,
-                            x: 40,
+                            y: 30,
+                            x: 30,
                             rotate: 10,
-                            opacity: 0,
-                            scale: 0.8
+                            opacity: 0.05,
+                            scale: 0.9
                         },
                         hover: {
                             y: 0,
                             x: 0,
                             rotate: -15,
-                            opacity: 0.25,
+                            opacity: 0.85,
                             scale: 1,
                             transition: { ...ANIMATION_CONFIG.mascotSpring, delay: ANIMATION_CONFIG.hoverDelay }
                         }

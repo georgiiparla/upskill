@@ -1,63 +1,82 @@
-import { CardSkeleton, TextSkeleton, HeroHeaderSkeleton } from "@/components/ui/loading/Skeletons";
+import { HeroHeaderSkeleton } from "@/components/ui/loading/Skeletons";
 
-// Matches LeaderboardItem styling
-const ItemContainerSkeleton = ({ children, className = '' }) => (
-    <div className={`bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-200/50 dark:border-gray-700/50 ${className}`}>
+// Matches LeaderboardItem container styling
+const ItemSkeleton = ({ children, heightClass = 'py-4' }) => (
+    <div className={`bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 px-4 ${heightClass}`}>
         {children}
     </div>
 );
+
+// Matches LeaderboardItem dynamic sizing per rank
+const DESKTOP_ROWS = [
+    { heightClass: 'py-10', rank: 'w-8 h-6', avatar: 'w-16 h-16', name: 'w-36 h-6', points: 'w-16 h-8' },
+    { heightClass: 'py-9', rank: 'w-6 h-5', avatar: 'w-14 h-14', name: 'w-32 h-5', points: 'w-14 h-7' },
+    { heightClass: 'py-8', rank: 'w-6 h-5', avatar: 'w-12 h-12', name: 'w-28 h-5', points: 'w-12 h-6' },
+    { heightClass: 'py-6', rank: 'w-5 h-4', avatar: 'w-10 h-10', name: 'w-28 h-4', points: 'w-12 h-5' },
+    { heightClass: 'py-5', rank: 'w-5 h-4', avatar: 'w-10 h-10', name: 'w-24 h-4', points: 'w-10 h-5' },
+];
+
+const MOBILE_ROWS = [
+    { heightClass: 'py-10', rank: 'w-6 h-5', avatar: 'w-10 h-10', name: 'w-28 h-5', points: 'w-14 h-5' },
+    { heightClass: 'py-9', rank: 'w-5 h-4', avatar: 'w-10 h-10', name: 'w-24 h-4', points: 'w-12 h-5' },
+    { heightClass: 'py-8', rank: 'w-5 h-4', avatar: 'w-10 h-10', name: 'w-24 h-4', points: 'w-12 h-5' },
+    { heightClass: 'py-6', rank: 'w-4 h-3', avatar: 'w-8 h-8', name: 'w-20 h-4', points: 'w-10 h-4' },
+    { heightClass: 'py-5', rank: 'w-4 h-3', avatar: 'w-8 h-8', name: 'w-20 h-4', points: 'w-10 h-4' },
+];
 
 const LeaderboardSkeleton = () => (
     <div className="animate-pulse">
         {/* Desktop Layout - Matches DesktopLeaderboard.js */}
         <div className="hidden lg:block space-y-4">
-            {[...Array(5)].map((_, i) => (
-                // Matches LeaderboardItem (Desktop) padding: p-6
-                <ItemContainerSkeleton key={i} className="p-6">
+            {DESKTOP_ROWS.map((row, i) => (
+                <ItemSkeleton key={i} heightClass={row.heightClass}>
                     <div className="flex items-center">
-                        {/* Left Side: Fixed Width w-80 */}
-                        <div className="flex items-center gap-4 w-80 flex-shrink-0">
-                            {/* Avatar: w-12 h-12 */}
-                            <div className="w-12 h-12 bg-slate-300 dark:bg-slate-700 rounded-full shadow-md"></div>
-                            {/* Name */}
-                            <div className="h-5 w-32 bg-slate-300 dark:bg-slate-700 rounded"></div>
+                        {/* Rank */}
+                        <div className="w-16 flex justify-center flex-shrink-0">
+                            <div className={`${row.rank} bg-slate-200 dark:bg-slate-700 rounded`}></div>
                         </div>
 
-                        {/* Center: Progress Bar - Flex-1, mx-8 */}
-                        <div className="flex-1 mx-8">
-                            <div className="w-full h-3 bg-slate-200 dark:bg-slate-700 rounded-full"></div>
+                        {/* Avatar + Name */}
+                        <div className="flex items-center gap-4 w-72 flex-shrink-0">
+                            <div className={`${row.avatar} bg-slate-200 dark:bg-slate-700 rounded-full flex-shrink-0`}></div>
+                            <div className={`${row.name} bg-slate-200 dark:bg-slate-700 rounded`}></div>
                         </div>
 
-                        {/* Right Side: Fixed Width w-20 */}
-                        <div className="text-right w-20 flex-shrink-0">
-                            <div className="h-6 w-12 bg-slate-300 dark:bg-slate-700 rounded ml-auto mb-1"></div>
-                            <div className="h-3 w-6 bg-slate-200 dark:bg-slate-700 rounded ml-auto"></div>
+                        {/* Progress Bar */}
+                        <div className="flex-1 px-6">
+                            <div className="w-full h-2 bg-slate-100 dark:bg-slate-800 rounded-full"></div>
+                        </div>
+
+                        {/* Points */}
+                        <div className="w-32 text-right flex-shrink-0 flex justify-end">
+                            <div className={`${row.points} bg-slate-200 dark:bg-slate-700 rounded`}></div>
                         </div>
                     </div>
-                </ItemContainerSkeleton>
+                </ItemSkeleton>
             ))}
         </div>
 
         {/* Mobile Layout - Matches MobileLeaderboard.js */}
         <div className="lg:hidden space-y-3">
-            {[...Array(5)].map((_, i) => (
-                // Matches LeaderboardItem (Mobile) padding: p-4
-                <ItemContainerSkeleton key={i} className="p-4">
+            {MOBILE_ROWS.map((row, i) => (
+                <ItemSkeleton key={i} heightClass={row.heightClass}>
                     <div className="flex items-center justify-between">
-                        {/* Left Side */}
+                        {/* Left: Rank + Avatar + Name */}
                         <div className="flex items-center gap-3">
-                            {/* Avatar: w-10 h-10 */}
-                            <div className="h-10 w-10 bg-slate-300 dark:bg-slate-700 rounded-full"></div>
-                            {/* Name */}
-                            <div className="h-5 w-24 bg-slate-300 dark:bg-slate-700 rounded"></div>
+                            <div className={`${row.rank} bg-slate-200 dark:bg-slate-700 rounded`}></div>
+                            <div className={`${row.avatar} bg-slate-200 dark:bg-slate-700 rounded-full flex-shrink-0`}></div>
+                            <div className={`${row.name} bg-slate-200 dark:bg-slate-700 rounded`}></div>
                         </div>
 
-                        {/* Right Side */}
+                        {/* Right: Points */}
                         <div className="text-right">
-                            <div className="h-5 w-12 bg-slate-300 dark:bg-slate-700 rounded mb-1 ml-auto"></div>
+                            <div className={`${row.points} bg-slate-200 dark:bg-slate-700 rounded ml-auto`}></div>
                         </div>
                     </div>
-                </ItemContainerSkeleton>
+
+                    {/* Bottom progress bar */}
+                    <div className="mt-3 w-full h-1 bg-slate-100 dark:bg-slate-800 rounded-full"></div>
+                </ItemSkeleton>
             ))}
         </div>
     </div>

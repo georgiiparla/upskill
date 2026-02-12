@@ -149,47 +149,39 @@ export const Feedback = ({
                     2. 'scrollbar-thin': Shows your custom styled scrollbar.
                     3. 'md:no-scrollbar': Hides scrollbar on desktop (keeps it mobile-only).
                 */}
-                <div className="flex flex-nowrap items-center gap-4 mb-10 overflow-x-auto w-full px-1 py-1 scrollbar-thin md:no-scrollbar">
-                    <div className="flex-shrink-0">
-                        <ActionButton
-                            icon={<IconInbox className="h-4 w-4" />}
-                            text="Active"
-                            shortText="Open"
-                            colorScheme="blue"
-                            onClick={() => setView("active")}
-                            isActive={view === 'active'}
-                        />
-                    </div>
-                    <div className="flex-shrink-0">
-                        <ActionButton
-                            icon={<IconCheckbox className="h-4 w-4" />}
-                            text="Closed"
-                            shortText="Done"
-                            colorScheme="gray"
-                            onClick={() => setView("closed")}
-                            isActive={view === 'closed'}
-                        />
-                    </div>
-                    <div className="flex-shrink-0">
-                        <ActionButton
-                            icon={<IconSend className="h-4 w-4" />}
-                            text="Submissions"
-                            shortText="Sent"
-                            colorScheme="orange"
-                            onClick={() => setView("submissions")}
-                            isActive={view === 'submissions'}
-                        />
-                    </div>
-                    <div className="flex-shrink-0">
-                        <ActionButton
-                            icon={<IconMessage className="h-4 w-4" />}
-                            text="My Requests"
-                            shortText="Me"
-                            colorScheme="green"
-                            onClick={() => setView("requests")}
-                            isActive={view === 'requests'}
-                        />
-                    </div>
+                <div className="flex flex-wrap items-center gap-2 md:gap-4 mb-10 w-full px-1 py-1">
+                    <ActionButton
+                        icon={<IconInbox className="h-4 w-4" />}
+                        text="Active"
+                        shortText="Open"
+                        colorScheme="blue"
+                        onClick={() => setView("active")}
+                        isActive={view === 'active'}
+                    />
+                    <ActionButton
+                        icon={<IconCheckbox className="h-4 w-4" />}
+                        text="Closed"
+                        shortText="Done"
+                        colorScheme="gray"
+                        onClick={() => setView("closed")}
+                        isActive={view === 'closed'}
+                    />
+                    <ActionButton
+                        icon={<IconSend className="h-4 w-4" />}
+                        text="Submissions"
+                        shortText="Sent"
+                        colorScheme="orange"
+                        onClick={() => setView("submissions")}
+                        isActive={view === 'submissions'}
+                    />
+                    <ActionButton
+                        icon={<IconMessage className="h-4 w-4" />}
+                        text="My Requests"
+                        shortText="Me"
+                        colorScheme="green"
+                        onClick={() => setView("requests")}
+                        isActive={view === 'requests'}
+                    />
                 </div>
 
                 <SearchBar

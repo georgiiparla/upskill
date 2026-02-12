@@ -11,10 +11,10 @@ export const ANIMATION_CONFIG = {
         stiffness: 400,
         damping: 25
     },
-    mascotSpring: {       // Physics for mascot entrance
+    mascotSpring: {       // Physics for mascot entrance — smooth, no bounce
         type: "spring",
-        stiffness: 260,
-        damping: 15,
+        stiffness: 200,
+        damping: 25,
         mass: 1
     },
     frameTransition: {    // Physics for Border/Shadow/Color transitions
@@ -108,11 +108,11 @@ export const useAgendaItemStyles = (item, isSystemMantra, isDark) => {
     const textColor = useMemo(() => {
         const c = tinycolor(baseColor);
         if (isDark) {
-            // Dark Mode: Balanced "Neon" (Less lighten to keep legibility)
-            return c.lighten(15).saturate(10).toRgbString();
+            // Dark Mode: Brighter neon — more saturation, more lightening
+            return c.lighten(20).saturate(20).toRgbString();
         } else {
-            // Light Mode: High Contrast (Darker)
-            return c.darken(25).toRgbString();
+            // Light Mode: Less darkening to keep vibrancy while maintaining contrast
+            return c.darken(15).saturate(15).toRgbString();
         }
     }, [baseColor, isDark]);
 
