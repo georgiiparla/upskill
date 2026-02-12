@@ -125,7 +125,7 @@ export const RequestDetailsCard = ({ requestData, onUpdate }) => {
             </Modal>
 
             <div>
-                <h3 className={`text-lg font-bold transition-colors ${topicClasses}`}>{displayTopic}</h3>
+                <h3 className={`text-lg font-bold transition-colors break-words ${topicClasses}`}>{displayTopic}</h3>
                 <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
                     Requested by <span className="font-medium">{requestData.requester_username}</span> on {new Date(requestData.created_at).toLocaleDateString()}
                 </p>
@@ -135,7 +135,7 @@ export const RequestDetailsCard = ({ requestData, onUpdate }) => {
                 <div className="space-y-8">
                     <div className="space-y-6 text-sm text-gray-700 dark:text-gray-300 bg-gradient-to-br from-slate-50/60 to-slate-100/40 dark:from-slate-800/60 dark:to-slate-700/40 p-4 rounded-md border border-slate-200/40 dark:border-slate-700/40">
                         <div>
-                            <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+                            <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed break-words">
                                 {requestData.details ? requestData.details : "No additional details provided."}
                             </p>
                         </div>

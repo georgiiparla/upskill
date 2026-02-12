@@ -65,11 +65,15 @@ export const DesktopSidebar = ({
         <>
             <motion.div
                 className={cn(
-                    "h-full px-4 py-4 hidden  lg:flex lg:flex-col bg-white dark:bg-slate-900 w-[300px] shrink-0 border-r border-slate-200 dark:border-slate-800",
+                    "h-full px-2 py-4 hidden lg:flex lg:flex-col bg-white dark:bg-slate-900 w-[300px] shrink-0 border-r border-slate-200 dark:border-slate-800",
                     className
                 )}
                 animate={{
                     width: animate ? (open ? "300px" : "64px") : "300px",
+                }}
+                transition={{
+                    duration: 0.3,
+                    ease: "easeInOut",
                 }}
                 onMouseEnter={() => setOpen(true)}
                 onMouseLeave={() => setOpen(false)}
@@ -141,12 +145,14 @@ export const SidebarLink = ({
         <Link
             href={link.href}
             className={cn(
-                "flex items-center justify-start gap-2  group/sidebar py-2",
+                "flex items-center justify-start gap-2 group/sidebar py-2 px-2 rounded-md",
                 className
             )}
             {...props}
         >
-            {link.icon}
+            <div className="w-8 h-8 flex items-center justify-center shrink-0">
+                {link.icon}
+            </div>
 
             <motion.span
                 animate={{
