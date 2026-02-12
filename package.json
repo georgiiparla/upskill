@@ -6,8 +6,7 @@
         "dev": "next dev --turbopack",
         "build": "next build",
         "start": "next start",
-        "lint": "next lint",
-        "test": "vitest"
+        "lint": "next lint"
     },
     "dependencies": {
         "@fontsource/jetbrains-mono": "^5.2.8",
@@ -33,15 +32,8 @@
         "yaml": "^2.8.1"
     },
     "devDependencies": {
-        "@testing-library/dom": "^10.4.1",
-        "@testing-library/jest-dom": "^6.9.1",
-        "@testing-library/react": "^16.3.2",
-        "@testing-library/user-event": "^14.6.1",
-        "@vitejs/plugin-react": "^5.1.2",
         "autoprefixer": "^10.4.21",
-        "jsdom": "^27.4.0",
         "postcss": "^8.5.6",
-        "tailwindcss": "^3.4.17",
-        "vitest": "^4.0.17"
+        "tailwindcss": "^3.4.17"
     }
 }
