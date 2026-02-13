@@ -2,16 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-.no-scrollbar::-webkit-scrollbar {
-    display: none;
-}
-
-.no-scrollbar {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-}
-
-/* Fade In Animation */
+/* --- Animations --- */
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -36,40 +27,53 @@
     animation-delay: 0.2s;
 }
 
-/* In globals.css */
+/* --- Utilities Layer --- */
 @layer utilities {
+
+    /* Hide Scrollbar (Cross-browser support) */
+    .no-scrollbar {
+        -ms-overflow-style: none;
+        /* IE and Edge */
+        scrollbar-width: none;
+        /* Firefox */
+    }
+
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+        /* Chrome, Safari, Opera */
+    }
+
+    /* Custom Thin Scrollbar */
     .scrollbar-thin::-webkit-scrollbar {
         width: 4px;
-        /* Controls thickness for vertical scrollbars */
+        /* Vertical scrollbar width */
         height: 4px;
-        /* [!] NEW: Controls thickness for horizontal scrollbars */
+        /* Horizontal scrollbar height */
     }
 
     .scrollbar-thin::-webkit-scrollbar-track {
         background: transparent;
+        margin-bottom: 30px;
+        margin-top: 14px;
     }
 
     .scrollbar-thin::-webkit-scrollbar-thumb {
-        background-color: #cbd5e1;
-        border-radius: 20px;
+        @apply bg-slate-300 rounded-[20px];
+        /* Tailwind utility equivalent for #cbd5e1 */
     }
 
     .dark .scrollbar-thin::-webkit-scrollbar-thumb {
-        background-color: #334155;
+        @apply bg-slate-700;
+        /* Tailwind utility equivalent for #334155 */
     }
-}
 
-@layer utilities {
-
-    /* Mechanical Ease: Starts fast, snaps into place. 
-     Ideal for console/terminal interfaces where user expects precision.
-  */
+    /* Custom Easing */
     .ease-mechanical {
         transition-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
     }
 }
 
-/* Accessibility: Disable animation for users who prefer reduced motion */
+/* --- Accessibility --- */
 @media (prefers-reduced-motion: reduce) {
 
     .transition-transform,
