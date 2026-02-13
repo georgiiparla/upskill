@@ -19,26 +19,21 @@ export const LeaderboardItem = ({ user, maxPoints, isDesktop = true }) => {
     const { user: currentUser } = useAuth();
     const { theme, systemTheme } = useTheme();
 
-    // Fix hydration mismatch by only rendering theme-dependent UI after mount
     const [mounted, setMounted] = useState(false);
     useEffect(() => setMounted(true), []);
 
     const isDark = mounted ? (theme === 'system' ? systemTheme === 'dark' : theme === 'dark') : true;
 
-    // Check if this leaderboard entry belongs to the logged-in user
     const isMe = currentUser?.id === user.user_id;
 
-    // Safe bar width calculation
     const barWidth = (() => {
         if (!maxPoints || maxPoints <= 0) return '0%';
-        // Ensure at least a tiny sliver is visible if they have points
         const percentage = (user.points / maxPoints) * 100;
         return `${Math.max(percentage, 1)}%`;
     })();
 
     const colors = getRankColors(user.rank);
 
-    // --- GRADIENT LOGIC ---
     const isTop5 = user.rank <= 5;
     const gradientConfig = useMemo(() => {
         if (!isTop5) return null;
@@ -67,7 +62,6 @@ export const LeaderboardItem = ({ user, maxPoints, isDesktop = true }) => {
         return 'py-4';
     })();
 
-    // Dynamic Font & Avatar Scaling
     const sizeConfig = (() => {
         if (user.rank === 1) return {
             rankText: 'text-3xl',
@@ -93,7 +87,6 @@ export const LeaderboardItem = ({ user, maxPoints, isDesktop = true }) => {
             pointsText: 'text-lg',
             avatarSize: 'w-10 h-10 text-sm'
         };
-        // Default
         return {
             rankText: 'text-sm',
             nameText: 'text-sm',
@@ -108,18 +101,15 @@ export const LeaderboardItem = ({ user, maxPoints, isDesktop = true }) => {
                 key={user.id}
                 className={`group relative bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 px-4 ${heightClass} transition-all duration-200 hover:shadow-md hover:-translate-y-0.5`}
             >
-                {/* Gradient Layer */}
                 {isTop5 && gradientConfig && <GradientBackground />}
 
                 <div className="flex items-center relative z-10">
-                    {/* Rank Section */}
                     <div className="w-16 flex justify-center flex-shrink-0">
                         <span className={`font-bold ${sizeConfig.rankText} ${colors.text}`}>
                             #{user.rank}
                         </span>
                     </div>
 
-                    {/* User Section */}
                     <div className="flex items-center gap-4 w-72 flex-shrink-0">
                         <Avatar
                             username={user.name}
@@ -137,7 +127,6 @@ export const LeaderboardItem = ({ user, maxPoints, isDesktop = true }) => {
                         </div>
                     </div>
 
-                    {/* Progress Bar Section */}
                     <div className="flex-1 px-6">
                         <div className="w-full h-2 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden backdrop-blur-sm bg-opacity-50 dark:bg-opacity-50">
                             <div
@@ -147,7 +136,6 @@ export const LeaderboardItem = ({ user, maxPoints, isDesktop = true }) => {
                         </div>
                     </div>
 
-                    {/* Points Section */}
                     <div className="w-32 text-right flex-shrink-0">
                         <span className={`font-bold font-mono tracking-tight text-slate-900 dark:text-white ${sizeConfig.pointsText}`}>
                             {user.points.toLocaleString()}
@@ -158,15 +146,11 @@ export const LeaderboardItem = ({ user, maxPoints, isDesktop = true }) => {
         );
     }
 
-    // Mobile Version
-    // For mobile, we might want slightly toned down sizing, but let's stick to the requested logic for "dominance"
-    // We will just constrain the container so it doesn't break layout
     return (
         <div
             key={user.id}
             className={`group relative bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 px-4 ${heightClass} transition-all duration-200`}
         >
-            {/* Gradient Layer */}
             {isTop5 && gradientConfig && <GradientBackground />}
 
             <div className="relative z-10">
@@ -200,7 +184,6 @@ export const LeaderboardItem = ({ user, maxPoints, isDesktop = true }) => {
                     </div>
                 </div>
 
-                {/* Slim progress bar at bottom of card for mobile context */}
                 <div className="mt-3 w-full h-1 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden backdrop-blur-sm bg-opacity-50 dark:bg-opacity-50">
                     <div
                         className={`h-full rounded-full transition-all duration-1000 ease-out ${colors.bar}`}

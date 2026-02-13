@@ -14,7 +14,6 @@ import confetti from "canvas-confetti"
 
 const ConfettiContext = createContext({})
 
-// Define component first
 const ConfettiComponent = forwardRef((props, ref) => {
     const {
         options,
@@ -83,8 +82,6 @@ const ConfettiComponent = forwardRef((props, ref) => {
     )
 })
 
-// Set display name immediately
 ConfettiComponent.displayName = "Confetti"
 
-// Export as Confetti
 export const Confetti = ConfettiComponent

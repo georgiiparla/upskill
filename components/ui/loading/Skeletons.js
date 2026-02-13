@@ -1,7 +1,6 @@
 import React from 'react';
 
 const CardSkeleton = ({ children, className = '', innerClassName = '', glass = true, variant = glass ? 'glass' : 'default' }) => {
-    // Matches the variant logic in Helper.js -> Card
     const getVariantClasses = () => {
         switch (variant) {
             case 'glass':

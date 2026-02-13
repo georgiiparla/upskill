@@ -4,7 +4,6 @@ import React from 'react';
 import Link from 'next/link';
 import { Activity } from 'lucide-react';
 
-// Helper to map event types to colors and short verbs
 const getEventStyle = (type) => {
     switch (type) {
         case 'feedback_submitted':
@@ -91,12 +90,10 @@ export const ActivityStream = ({ activityStream, viewMode = 'detailed' }) => {
                             hover:bg-slate-100/50 dark:hover:bg-slate-800/50
                         `}
                     >
-                        {/* --- Vertical Blue Line Indicator (Hidden in Minimal) --- */}
                         {activity.isNew && !isMinimal && (
                             <div className="absolute left-0 top-3 md:top-1/2 md:-translate-y-1/2 w-0.5 h-2 md:h-4 bg-blue-500 rounded-r-full shadow-[0_0_8px_rgba(59,130,246,0.5)]"></div>
                         )}
 
-                        {/* Meta Column: Date & Universal Icon */}
                         <div className={`flex items-center gap-3 ${isMinimal ? 'w-auto' : 'md:w-28'} flex-shrink-0 opacity-60 group-hover:opacity-100 transition-opacity`}>
                             {!isMinimal && (
                                 <span className="text-xs md:text-sm font-mono text-slate-400 dark:text-slate-500 min-w-[45px]">
@@ -104,9 +101,6 @@ export const ActivityStream = ({ activityStream, viewMode = 'detailed' }) => {
                                 </span>
                             )}
 
-                            {/* UNIVERSAL MINIMAL ICON - Only show in DETAILED or if date is hidden but we want some icon? Actually user asked for minimal display style. Let's keep icon for structure or hide it? Let's hide date, keep icon if it acts as bullet point, or just reduce. Detailed plan said "Hide Date column". I'll Keep icon as a bullet. */
-                                /* UPDATE: User requested to REMOVE pulse icon in minimal view */
-                            }
                             {!isMinimal && (
                                 <Activity className="w-3.5 h-3.5 text-slate-300 dark:text-slate-700" />
                             )}

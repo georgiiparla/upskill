@@ -10,8 +10,6 @@ export const QuestIndicators = ({ quests, currentIndex, onIndicatorClick }) => {
         const isAlwaysType = quest.quest_type === 'always';
         const isCompleted = quest.user_completed ?? quest.completed;
 
-        // FIX: Use server-provided relative time check
-        // We consider it "New Progress" if the backend flag is set OR if it happened recently
         const isRecentTrigger = quest.seconds_since_trigger !== null && quest.seconds_since_trigger < 10;
 
         const isNewProgress = quest.has_new_progress || isRecentTrigger;

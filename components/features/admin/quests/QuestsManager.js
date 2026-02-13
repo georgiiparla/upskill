@@ -19,7 +19,6 @@ export const QuestsManager = ({ initialQuests = [], onQuestsChange }) => {
         setUpdatingId(questId);
         const toastId = toast.loading('Updating quest...');
 
-        // Logic preserved from original
         const body = { points };
         if (resetInterval !== null && resetInterval !== undefined) {
             body.reset_interval_seconds = resetInterval;

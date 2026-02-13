@@ -1,5 +1,4 @@
 import React from 'react';
-// [!] Using Tabler's Loader2
 import { IconLoader2 } from '@tabler/icons-react';
 
 export const ActionButton = ({ icon, text, shortText, colorScheme = 'orange', onClick, isActive = false }) => {
@@ -182,7 +181,6 @@ export const QuickActionButton = ({
                 <Icon className={`h-5 w-5 ${colors.icon}`} stroke={1.5} />
             </div>
 
-            {/* [!] Mobile Short Text Logic */}
             {shortText ? (
                 <>
                     <span className="inline md:hidden text-base font-bold truncate">

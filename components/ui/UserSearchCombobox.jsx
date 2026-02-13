@@ -11,7 +11,6 @@ export default function UserSearchCombobox({ onSelect, onSearchChange, id }) {
     const [selectedUser, setSelectedUser] = useState(null);
     const wrapperRef = useRef(null);
 
-    // Debounce search
     useEffect(() => {
         let active = true;
 
@@ -42,7 +41,6 @@ export default function UserSearchCombobox({ onSelect, onSearchChange, id }) {
         };
     }, [query, selectedUser]);
 
-    // Close on click outside
     useEffect(() => {
         function handleClickOutside(event) {
             if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {

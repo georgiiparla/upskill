@@ -2,7 +2,6 @@
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { Card, SectionTitle } from "@/components/ui/Shared";
-// [!] Swapping Lucide for Tabler
 import { IconAt, IconMailPlus, IconTrash, IconLoader2 } from '@tabler/icons-react';
 import { Modal } from '@/components/ui/Modal';
 import { addUserAlias, removeUserAlias } from '@/lib/client-api';

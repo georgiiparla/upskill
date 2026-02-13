@@ -1,11 +1,8 @@
 "use client";
 import React, { useState } from 'react';
 
-// [!] Removed maxHeight prop from arguments
 export const ConsoleLog = ({ children, className = "" }) => {
-    // Local state to handle the "Minimize" interaction
     const [isMinimized, setIsMinimized] = useState(false);
-    // Local state for view mode: 'detailed' vs 'minimal'
     const [viewMode, setViewMode] = useState('detailed');
 
     return (
@@ -24,16 +21,13 @@ export const ConsoleLog = ({ children, className = "" }) => {
                 ${className}
             `}
         >
-            {/* Window Controls */}
             <div className="flex gap-2 px-4 py-3 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
-                {/* Red: Minimize/Close Action */}
                 <button
                     onClick={() => setIsMinimized(true)}
                     className="w-2.5 h-2.5 rounded-full bg-red-500/80 border border-red-600/20 hover:bg-red-600 hover:scale-110 active:scale-90 transition-all cursor-pointer focus:outline-none"
                     aria-label="Minimize Console"
                     title="Minimize"
                 />
-                {/* Amber: Minimal View Action */}
                 <button
                     onClick={() => {
                         setIsMinimized(false);
@@ -43,7 +37,6 @@ export const ConsoleLog = ({ children, className = "" }) => {
                     aria-label="Minimal View"
                     title="Minimal View"
                 />
-                {/* Green: Detailed View Action */}
                 <button
                     onClick={() => {
                         setIsMinimized(false);
@@ -55,7 +48,6 @@ export const ConsoleLog = ({ children, className = "" }) => {
                 />
             </div>
 
-            {/* Content Area */}
             {!isMinimized && (
                 <div
                     className={`
@@ -76,7 +68,6 @@ export const ConsoleLog = ({ children, className = "" }) => {
                 </div>
             )}
 
-            {/* Optional: Placeholder text when minimized */}
             {isMinimized && (
                 <div className="px-4 py-2 text-xs text-slate-400 font-mono italic">
                     Console minimized...

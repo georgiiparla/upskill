@@ -67,7 +67,6 @@ export const BackgroundGradientAnimation = ({
         <div
             style={styleVariables}
             className={cn(
-                // [!] CHANGED: 'absolute inset-0' -> 'relative' to prevent height collapse
                 "h-full w-full relative overflow-hidden top-0 left-0",
                 containerClassName
             )}
@@ -86,10 +85,8 @@ export const BackgroundGradientAnimation = ({
                     </filter>
                 </defs>
             </svg>
-            {/* Content Container */}
             <div className={cn("relative z-10", className)}>{children}</div>
 
-            {/* Gradients Container */}
             <div
                 className={cn(
                     "gradients-container h-full w-full blur-lg absolute inset-0",

@@ -5,13 +5,10 @@ import { Avatar } from '@/components/ui/Avatar';
 import { ShieldCheck, User, Mail, Calendar } from 'lucide-react';
 
 export const UsersList = ({ initialUsers = [] }) => {
-    // Filter logic preserved from original code
     const filteredUsers = initialUsers.filter((user) => !user.username.startsWith('Mock User'));
 
-    // Date formatting helper
     const getJoinedDate = (timestamp) => {
         const date = new Date(timestamp);
-        // Using a more readable date format (e.g., "Nov 24, 2023")
         return Number.isNaN(date.getTime()) ? '—' : date.toLocaleDateString(undefined, {
             year: 'numeric',
             month: 'short',
@@ -21,9 +18,6 @@ export const UsersList = ({ initialUsers = [] }) => {
 
     return (
         <div className="space-y-6">
-            {/* Header Section
-                Redesigned to separate the page title from the stats for better visual hierarchy.
-            */}
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <div>
                     <div className="flex items-center gap-2 mb-2">
@@ -50,20 +44,14 @@ export const UsersList = ({ initialUsers = [] }) => {
                 </div>
             </div>
 
-            {/* Main Content Card 
-                Refactored to support a structured table layout for desktop and clean cards for mobile.
-                !p-0 is used to remove default Card padding so the table header can be full-width.
-            */}
             <Card className="overflow-hidden !p-0" innerClassName="p-0" glass={false}>
 
-                {/* Desktop Table Header */}
                 <div className="hidden md:grid md:grid-cols-[2fr_2.5fr_1fr] border-b border-slate-200 bg-slate-50/50 py-3 px-6 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:border-slate-700 dark:bg-slate-800/50 dark:text-slate-400">
                     <div>Member</div>
                     <div>Contact Info</div>
                     <div className="text-right">Joined Date</div>
                 </div>
 
-                {/* User List */}
                 <div className="divide-y divide-slate-100 dark:divide-slate-700/50">
                     {filteredUsers.map((user) => {
                         const joined = getJoinedDate(user.created_at);

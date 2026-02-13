@@ -1,5 +1,4 @@
 import tinycolor from 'tinycolor2';
-// [!] Import Tabler Icons
 import {
     IconClipboardList,
     IconBook,
@@ -9,8 +8,6 @@ import {
     IconHelp // Default fallback
 } from '@tabler/icons-react';
 
-// --- CONFIGURATION ---
-// [!] KEYS MUST MATCH BACKEND 'VALID_ICONS' EXACTLY
 export const BASE_COLORS = {
     ClipboardList: '#3b82f6', // Blue 500
     BookOpen: '#a855f7',      // Purple 500
@@ -20,7 +17,6 @@ export const BASE_COLORS = {
     Default: '#64748b'        // Slate
 };
 
-// [!] Map Backend Strings -> Tabler Components
 export const ICON_MAP = {
     ClipboardList: { component: IconClipboardList, colorKey: 'ClipboardList' },
     BookOpen: { component: IconBook, colorKey: 'BookOpen' },
@@ -30,13 +26,11 @@ export const ICON_MAP = {
     Star: { component: IconStar, colorKey: 'Star' },
 };
 
-// --- UTILITIES ---
 const toRgbString = (colorObj) => {
     const { r, g, b } = colorObj.toRgb();
     return `${r}, ${g}, ${b}`;
 };
 
-// --- BRIGHT NEON GENERATOR ---
 export const generateGradientTheme = (baseColorHex, isDark = true) => {
     const base = tinycolor(baseColorHex);
     const slateBase = isDark ? '#0f172a' : '#ffffff';
@@ -92,7 +86,6 @@ export const generateGradientTheme = (baseColorHex, isDark = true) => {
 };
 
 export const IconDisplay = ({ name, ...props }) => {
-    // Safety check: if backend sends a name we don't have, fallback
     const Icon = ICON_MAP[name]?.component || IconHelp;
     return <Icon {...props} />;
 };

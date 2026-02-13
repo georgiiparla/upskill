@@ -38,7 +38,6 @@ export const Auth = () => {
     };
 
     const handleRetry = () => {
-        // Clear the URL params to return to "Sign In" state
         router.replace(pathname);
     };
 
@@ -58,7 +57,6 @@ export const Auth = () => {
                     <LogoAnimation isRedirecting={isRedirecting} />
                 </div>
 
-                {/* Authentication Action Area - Toggles between Button and Error */}
                 <div className="min-h-[42px]">
                     <AnimatePresence mode="wait">
                         {error ? (

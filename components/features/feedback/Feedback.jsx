@@ -144,11 +144,6 @@ export const Feedback = ({
     return (
         <div className="space-y-8">
             <Card className="h-full flex flex-col">
-                {/* [!] FIXES APPLIED:
-                    1. 'py-1': Adds vertical padding so top/bottom focus rings aren't cut off.
-                    2. 'scrollbar-thin': Shows your custom styled scrollbar.
-                    3. 'md:no-scrollbar': Hides scrollbar on desktop (keeps it mobile-only).
-                */}
                 <div className="flex flex-wrap items-center gap-2 md:gap-4 mb-10 w-full px-1 py-1">
                     <ActionButton
                         icon={<IconInbox className="h-4 w-4" />}

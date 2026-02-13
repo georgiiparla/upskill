@@ -3,7 +3,6 @@ import { useAuth } from '@/context/AuthContext';
 import { Card } from '@/components/ui/Shared';
 import { Avatar } from '@/components/ui/Avatar';
 import { AliasManager } from './AliasManager';
-// [!] Swapping Lucide for Tabler
 import { IconThumbUp, IconHeart } from '@tabler/icons-react';
 
 const StatCard = ({ label, value, icon: Icon, colorClass }) => (

@@ -10,8 +10,6 @@ export const QuestList = ({ quests, onUpdatePoints, onToggleExplicit, updatingId
     const [draftResetUnits, setDraftResetUnits] = useState(null);
     const [inlineError, setInlineError] = useState('');
 
-    // --- LOGIC: Explicit Summation ---
-    // Only sums the inputs we allow (Days, Hours, Minutes)
     const calculateTotalSeconds = (units) => {
         let total = 0;
         total += (parseInt(units.days) || 0) * 86400;    // Days to seconds
@@ -20,8 +18,6 @@ export const QuestList = ({ quests, onUpdatePoints, onToggleExplicit, updatingId
         return total;
     };
 
-    // --- LOGIC: Flattening to Days ---
-    // Converts any existing duration (even years) into total Days
     const startEditing = (quest) => {
         setEditingId(quest.id);
         setDraftValue(String(quest.points ?? 0));
@@ -31,7 +27,6 @@ export const QuestList = ({ quests, onUpdatePoints, onToggleExplicit, updatingId
         const units = { days: 0, hours: 0, minutes: 0 };
         let remaining = totalSeconds;
 
-        // Calculate total days (e.g., 1 week becomes 7 days)
         units.days = Math.floor(remaining / 86400);
         remaining %= 86400;
 

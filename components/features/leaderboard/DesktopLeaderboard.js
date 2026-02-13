@@ -1,7 +1,6 @@
 "use client";
 import React from 'react';
 import { LeaderboardItem } from './LeaderboardItem';
-// import { ContinuationIndicators } from './ContinuationIndicators';
 
 export const DesktopLeaderboard = ({ rankedUsers, maxPoints }) => (
     <div
@@ -10,6 +9,5 @@ export const DesktopLeaderboard = ({ rankedUsers, maxPoints }) => (
         {rankedUsers.map((user) => (
             <LeaderboardItem key={user.id} user={user} maxPoints={maxPoints} isDesktop={true} />
         ))}
-        {/* <ContinuationIndicators isDesktop={true} /> */}
     </div>
 );

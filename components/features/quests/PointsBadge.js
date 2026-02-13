@@ -1,6 +1,6 @@
 "use client";
 import { motion } from 'framer-motion';
-// [!] Swapping Lucide for Tabler
+
 import { IconRepeat, IconCheck, IconClock } from '@tabler/icons-react';
 
 export const PointsBadge = ({

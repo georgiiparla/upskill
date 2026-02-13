@@ -1,5 +1,5 @@
 "use client";
-// [!] Swapping Lucide for Tabler
+
 import {
     IconPencil,
     IconCheck,

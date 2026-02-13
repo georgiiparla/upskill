@@ -25,7 +25,6 @@ export const Metrics = ({ metricsData, viewMode = 'detailed' }) => {
 
     return (
         <div className={`flex flex-col ${isMinimal ? 'gap-2' : 'gap-6'}`}>
-            {/* Personal Section */}
             <div>
                 {!isMinimal && (
                     <h4 className="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3 border-b border-slate-200 dark:border-slate-700 pb-1">
@@ -48,7 +47,6 @@ export const Metrics = ({ metricsData, viewMode = 'detailed' }) => {
                 </div>
             </div>
 
-            {/* Team Section - Always visible, but styled differently in minimal */}
             <div>
                 {!isMinimal && (
                     <h4 className="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3 border-b border-slate-200 dark:border-slate-700 pb-1">

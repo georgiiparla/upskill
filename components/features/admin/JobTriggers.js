@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from 'react';
-import { Settings, Play, Check, AlertCircle, Loader2 } from 'lucide-react';
+import { Settings, Play, AlertCircle, Loader2 } from 'lucide-react';
 import { clientFetch } from '@/lib/client-api';
 import toast from 'react-hot-toast';
 import { Modal } from '@/components/ui/Modal';
@@ -57,45 +57,6 @@ export const JobTriggers = () => {
 
     return (
         <>
-            {/* Placeholder for Modal component. You would typically import this from a UI library or define it. */}
-            {/* Example structure for a generic Modal component: */}
-            {/* <Modal
-                isOpen={confirmModalOpen}
-                onClose={() => setConfirmModalOpen(false)}
-                onConfirm={handleConfirmRun}
-                title="Special Job Confirmation"
-                confirmText="Execute Force Run"
-                confirmButtonClass="bg-red-600 hover:bg-red-700"
-                isConfirming={runningJob !== null}
-            >
-                <div className="space-y-4">
-                    <div className="flex items-start gap-3 p-3 bg-red-50 dark:bg-red-900/10 border border-red-200 dark:border-red-800 rounded-md">
-                        <AlertCircle className="h-5 w-5 text-red-600 dark:text-red-400 mt-0.5 shrink-0" />
-                        <div className="text-sm text-red-800 dark:text-red-200">
-                            <p className="font-semibold">Warning: Strong Intent Required</p>
-                            <p className="mt-1">
-                                This is a privileged operation that bypasses safety schedules. 
-                                It may have significant side effects on user data or system state.
-                            </p>
-                        </div>
-                    </div>
-                    
-                    <div>
-                        <p className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                            Type <span className="font-mono font-bold text-slate-900 dark:text-white select-all">sudo {selectedJob?.id}</span> to confirm:
-                        </p>
-                        <input
-                            type="text"
-                            value={confirmationInput}
-                            onChange={(e) => setConfirmationInput(e.target.value)}
-                            placeholder={`sudo ${selectedJob?.id}`}
-                            className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-md bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-mono text-sm focus:ring-2 focus:ring-red-500/20 focus:border-red-500 outline-none transition-all placeholder:text-slate-400"
-                            autoFocus
-                        />
-                    </div>
-                </div>
-            </Modal> */}
-            {/* The actual Modal component from the user's instruction: */}
             <Modal
                 isOpen={confirmModalOpen}
                 onClose={() => setConfirmModalOpen(false)}

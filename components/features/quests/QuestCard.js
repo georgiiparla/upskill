@@ -1,16 +1,10 @@
 "use client";
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Card } from "@/components/ui/Shared";
 import { Confetti } from "@/registry/magicui/Confetti";
 import { QuestIndicators } from "./QuestIndicators";
 import { PointsBadge } from "./PointsBadge";
-
-// iOS Detection Hook
-
-
-// Edge Lighting Component
-
 
 export const QuestCard = ({
     quest,
@@ -39,7 +33,6 @@ export const QuestCard = ({
         }
     }, [showConfetti]);
 
-    // Update new progress logic
     const isNewProgress = quest?.has_new_progress;
 
     const questVariants = {

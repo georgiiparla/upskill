@@ -1,4 +1,3 @@
-// components/features/dashboard/AgendaItem.js
 "use client";
 
 import { useState } from 'react';
@@ -7,7 +6,6 @@ import { clientFetch } from '@/lib/client-api';
 import { useAuth } from '@/context/AuthContext';
 import { BlurOverlay } from '@/components/layout/BlurOverlay';
 
-// Import sub-components
 import { AgendaItemView } from './AgendaItemView';
 import { AgendaItemEditor } from './AgendaItemEditor';
 

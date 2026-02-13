@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Card } from "@/components/ui/Shared";
 import { formatRelativeTime } from "@/lib/helper-func";
-// [!] Swapping Lucide for Tabler
+
 import { IconThumbUp, IconUser, IconTrash } from "@tabler/icons-react";
 import { Modal } from "@/components/ui/Modal";
 import { likeSubmission, unlikeSubmission, deleteSubmission } from "@/lib/client-api";

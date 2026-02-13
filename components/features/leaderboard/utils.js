@@ -1,7 +1,3 @@
-// Helper functions for leaderboard components
-
-// Platform-style color scheme - balanced and professional
-// Platform-style color scheme - Clean and Professional
 export const getRankColors = (rank) => {
     switch (rank) {
         case 1:
@@ -43,9 +39,7 @@ export const getRankColors = (rank) => {
     }
 };
 
-// Process leaderboard data
 export const processLeaderboardData = (initialData) => {
-    // Handle both direct array (legacy) and object wrapper (new)
     const rawUsers = Array.isArray(initialData) ? initialData : (initialData?.users || []);
     const lastUpdated = !Array.isArray(initialData) ? initialData?.last_updated_at : null;
 
@@ -53,22 +47,18 @@ export const processLeaderboardData = (initialData) => {
         return { rankedUsers: [], maxPoints: 0, lastUpdated };
     }
 
-    // Filter out mock users (users whose name starts with "Mock User")
     const filteredData = rawUsers.filter(user => {
         const name = user.name || user.full_name || '';
         return !name.startsWith('Mock User');
     });
 
-    // Make a shallow copy and sort so we don't mutate the original input
     const sorted = [...filteredData].sort((a, b) => (b.points || 0) - (a.points || 0));
 
-    // Add a rank property to each user object (1-based)
     const rankedUsers = sorted.map((user, index) => ({
         ...user,
         rank: index + 1
     }));
 
-    // Get max points for bar scaling (default to 0)
     const maxPoints = rankedUsers.length > 0 ? Math.max(...rankedUsers.map(user => user.points || 0)) : 0;
 
     return { rankedUsers, maxPoints, lastUpdated };

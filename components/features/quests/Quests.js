@@ -1,6 +1,5 @@
 "use client";
 import { useState } from 'react';
-// [!] Swapping Lucide Target for Tabler IconTargetArrow
 import { IconTargetArrow, IconTarget } from '@tabler/icons-react';
 import { Card } from "@/components/ui/Shared";
 import { HeroHeader } from "@/components/ui/HeroHeader";

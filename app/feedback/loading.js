@@ -14,7 +14,6 @@ export default function FeedbackLoadingSkeleton() {
     return (
         <div className="space-y-8 animate-pulse">
             <CardSkeleton className="h-full flex flex-col">
-                {/* [!] Updated padding to match the real component */}
                 <div className="flex flex-nowrap items-center gap-4 mb-10 overflow-x-hidden px-1 py-1">
                     {[...Array(4)].map((_, i) => (
                         <div key={i} className="h-8 w-24 bg-slate-200/60 dark:bg-slate-700/60 rounded-md flex-shrink-0"></div>

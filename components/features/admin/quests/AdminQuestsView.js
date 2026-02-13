@@ -14,7 +14,6 @@ export const AdminQuestsView = ({ initialQuests = [] }) => {
 
     return (
         <div className="h-full">
-            {/* Mobile Guard */}
             <div className="lg:hidden">
                 <Card className="h-full" innerClassName="flex flex-col items-center justify-center space-y-4 py-10 text-center">
                     <Monitor className="h-9 w-9 text-csway-green" />
@@ -27,7 +26,6 @@ export const AdminQuestsView = ({ initialQuests = [] }) => {
                 </Card>
             </div>
 
-            {/* Desktop View - Geometric & Clean */}
             <div className="hidden lg:block space-y-8 pb-10">
                 <div className="flex items-end justify-between border-b border-slate-200 dark:border-slate-700 pb-6">
                     <div className="space-y-2">

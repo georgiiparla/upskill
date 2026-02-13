@@ -1,6 +1,6 @@
 "use client";
 import { useState } from 'react';
-// [!] Swapping Lucide for Tabler
+
 import { IconX, IconCheck, IconLink } from '@tabler/icons-react';
 import tinycolor from 'tinycolor2';
 import { DetailActionButton } from '@/components/ui/Buttons';
@@ -42,7 +42,6 @@ export const AgendaItemEditor = ({ item, onSave, onCancel, isLoading }) => {
                         })}
                     </div>
 
-                    {/* Title Input */}
                     <div className="relative">
                         <input
                             type="text"
@@ -58,7 +57,6 @@ export const AgendaItemEditor = ({ item, onSave, onCancel, isLoading }) => {
                         </div>
                     </div>
 
-                    {/* Link Input */}
                     <div className="relative">
                         <IconLink className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 dark:text-slate-500" />
                         <input
@@ -71,7 +69,6 @@ export const AgendaItemEditor = ({ item, onSave, onCancel, isLoading }) => {
                         />
                     </div>
 
-                    {/* Actions */}
                     <div className="flex justify-end gap-2 pt-2">
                         <DetailActionButton icon={IconX} text="Cancel" colorScheme="gray" onClick={onCancel} disabled={isLoading} />
                         <DetailActionButton icon={IconCheck} text="Save" colorScheme="blue" onClick={handleSaveClick} isLoading={isLoading} />

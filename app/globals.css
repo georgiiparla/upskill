@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* --- Animations --- */
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -27,28 +26,20 @@
     animation-delay: 0.2s;
 }
 
-/* --- Utilities Layer --- */
 @layer utilities {
 
-    /* Hide Scrollbar (Cross-browser support) */
     .no-scrollbar {
         -ms-overflow-style: none;
-        /* IE and Edge */
         scrollbar-width: none;
-        /* Firefox */
     }
 
     .no-scrollbar::-webkit-scrollbar {
         display: none;
-        /* Chrome, Safari, Opera */
     }
 
-    /* Custom Thin Scrollbar */
     .scrollbar-thin::-webkit-scrollbar {
         width: 4px;
-        /* Vertical scrollbar width */
         height: 4px;
-        /* Horizontal scrollbar height */
     }
 
     .scrollbar-thin::-webkit-scrollbar-track {
@@ -59,21 +50,17 @@
 
     .scrollbar-thin::-webkit-scrollbar-thumb {
         @apply bg-slate-300 rounded-[20px];
-        /* Tailwind utility equivalent for #cbd5e1 */
     }
 
     .dark .scrollbar-thin::-webkit-scrollbar-thumb {
         @apply bg-slate-700;
-        /* Tailwind utility equivalent for #334155 */
     }
 
-    /* Custom Easing */
     .ease-mechanical {
         transition-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
     }
 }
 
-/* --- Accessibility --- */
 @media (prefers-reduced-motion: reduce) {
 
     .transition-transform,

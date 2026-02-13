@@ -1,7 +1,7 @@
 "use client";
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-// [!] Swapping Lucide for Tabler
+
 import { IconChevronDown, IconCheck } from '@tabler/icons-react';
 
 export const QuestFilter = ({ currentFilter, onFilterChange }) => {

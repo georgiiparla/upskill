@@ -7,7 +7,6 @@ import { ThemeProvider } from '@/components/layout/ThemeProvider';
 import { AuthProvider } from "@/context/AuthContext";
 import { GlobalErrorNotifier } from "@/components/ui/feedback/GlobalErrorNotifier";
 import AppLayout from "@/components/layout/AppLayout";
-import { ThemeToggleButton } from "@/components/ui/ThemeToggleButton";
 
 const outfit = Outfit({
     subsets: ["latin"],
@@ -22,19 +21,16 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata = {
     title: "Upskill",
     description: "Upskill platform",
-    // ADD THE SECTIONS BELOW
-    manifest: '/manifest.json', // Explicitly link the manifest
+    manifest: '/manifest.json',
     icons: {
         icon: [
             { url: '/icons/icon-192x192.png', sizes: '192x192', type: 'image/png' },
             { url: '/icons/icon-512x512.png', sizes: '512x512', type: 'image/png' },
         ],
-        // Critical for iOS - uses the high-res 192px icon instead of pixelated favicon
         apple: [
             { url: '/icons/icon-192x192.png?v=2', sizes: '180x180', type: 'image/png' },
         ],
     },
-    // Recommended for full PWA status
     appleWebApp: {
         capable: true,
         statusBarStyle: 'default',

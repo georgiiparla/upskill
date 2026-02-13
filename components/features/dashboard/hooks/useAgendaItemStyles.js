@@ -2,7 +2,6 @@ import { useMemo } from 'react';
 import tinycolor from 'tinycolor2';
 import { BASE_COLORS, ICON_MAP } from '../agenda-shared';
 
-// --- CONFIGURATION: Animation Settings ---
 export const ANIMATION_CONFIG = {
     hoverDelay: 0.1,      // Global debounce delay for all hover effects
     resetDelay: 0,        // Instant reset
@@ -24,15 +23,12 @@ export const ANIMATION_CONFIG = {
 };
 
 export const useAgendaItemStyles = (item, isSystemMantra, isDark) => {
-    // --- COLOR LOGIC ---
     const iconKey = item.icon_name || 'ClipboardList';
     const colorKey = isSystemMantra ? 'Star' : (ICON_MAP[iconKey]?.colorKey || 'ClipboardList');
     const baseColor = BASE_COLORS[colorKey];
 
-    // Identify the mascot icon
     const MascotIcon = ICON_MAP[iconKey]?.component || ICON_MAP['ClipboardList'].component;
 
-    // --- CRITICAL FIX: Unified Frame Variants ---
     const frameVariants = useMemo(() => {
         const c = tinycolor(baseColor);
 
@@ -74,7 +70,6 @@ export const useAgendaItemStyles = (item, isSystemMantra, isDark) => {
         };
     }, [baseColor, isDark]);
 
-    // --- CRITICAL FIX: Base Styles ---
     const baseCardStyle = useMemo(() => {
         const c = tinycolor(baseColor);
         if (isDark) {
@@ -104,7 +99,6 @@ export const useAgendaItemStyles = (item, isSystemMantra, isDark) => {
         boxShadow: 'none'
     };
 
-    // --- CRITICAL FIX: Base Text Color for Title ---
     const textColor = useMemo(() => {
         const c = tinycolor(baseColor);
         if (isDark) {

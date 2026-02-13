@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef } from 'react';
+import { useState} from 'react';
 import { useTheme } from 'next-themes';
 import { motion } from 'framer-motion';
 import { AgendaItemContent } from './components/AgendaItemContent';
@@ -12,8 +12,6 @@ export const AgendaItemView = ({ item, onEditClick, isSystemMantra }) => {
     const currentTheme = theme === 'system' ? systemTheme : theme;
     const isDark = currentTheme === 'dark';
 
-    // --- COLOR LOGIC & STYLES ---
-    // MascotIcon is now a Tabler icon component from agenda-shared.js
     const { baseColor, textColor, MascotIcon, frameVariants, baseCardStyle, badgeStyle } = useAgendaItemStyles(item, isSystemMantra, isDark);
 
     return (
@@ -36,13 +34,11 @@ export const AgendaItemView = ({ item, onEditClick, isSystemMantra }) => {
                 }
             }}
         >
-            {/* 1. BACKGROUND LAYER (Absolute) */}
             <motion.div
                 className="absolute inset-0 rounded-xl overflow-hidden"
                 style={baseCardStyle}
                 variants={frameVariants}
             >
-                {/* Mascot Animation for BOTH Themes */}
                 <motion.div
                     className="absolute -bottom-8 -right-8 z-0 pointer-events-none"
                     variants={{
@@ -63,7 +59,6 @@ export const AgendaItemView = ({ item, onEditClick, isSystemMantra }) => {
                         }
                     }}
                 >
-                    {/* [!] UPDATE: Tabler uses 'stroke' (not strokeWidth) and size prop works natively */}
                     <MascotIcon
                         size={140}
                         color={baseColor}
@@ -75,7 +70,6 @@ export const AgendaItemView = ({ item, onEditClick, isSystemMantra }) => {
                 )}
             </motion.div>
 
-            {/* 2. CONTENT LAYER */}
             <AgendaItemContent
                 item={item}
                 isSystemMantra={isSystemMantra}
@@ -85,7 +79,6 @@ export const AgendaItemView = ({ item, onEditClick, isSystemMantra }) => {
                 textColor={textColor}
             />
 
-            {/* 3. DROPDOWN MENU */}
             <AgendaItemDropdown
                 item={item}
                 isOpen={isMenuOpen}

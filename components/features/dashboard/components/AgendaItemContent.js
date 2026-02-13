@@ -4,14 +4,9 @@ import { IconDots } from '@tabler/icons-react';
 export const AgendaItemContent = ({ item, isSystemMantra, isDark, onMenuToggle, textColor }) => {
     return (
         <div className="relative h-full flex flex-col z-20 pointer-events-none">
-            {/* [!] BALANCED SPACIOUS PADDING: 
-                Mobile: py-8 px-6 (32px / 24px)
-                Desktop: py-10 px-8 (40px / 32px)
-            */}
             <div className="py-8 px-6 md:py-10 md:px-8 flex-1 flex flex-col justify-center pointer-events-auto">
                 <div className="flex items-start justify-between gap-4">
                     <div className="flex-1 min-w-0">
-                        {/* [!] UPDATED TYPOGRAPHY: Starts at text-xl for mobile */}
                         <h3
                             className="font-bold text-xl md:text-2xl leading-tight mb-2 break-words drop-shadow-sm"
                             style={{ color: textColor }}

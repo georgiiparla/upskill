@@ -1,5 +1,5 @@
 import { Card } from "@/components/ui/Shared";
-// [!] Swapping Lucide for Tabler
+
 import {
     IconTag,
     IconMessagePlus,

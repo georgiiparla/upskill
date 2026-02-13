@@ -1,13 +1,11 @@
 import { HeroHeaderSkeleton } from "@/components/ui/loading/Skeletons";
 
-// Matches LeaderboardItem container styling
 const ItemSkeleton = ({ children, heightClass = 'py-4' }) => (
     <div className={`bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 px-4 ${heightClass}`}>
         {children}
     </div>
 );
 
-// Matches LeaderboardItem dynamic sizing per rank
 const DESKTOP_ROWS = [
     { heightClass: 'py-10', rank: 'w-8 h-6', avatar: 'w-16 h-16', name: 'w-36 h-6', points: 'w-16 h-8' },
     { heightClass: 'py-9', rank: 'w-6 h-5', avatar: 'w-14 h-14', name: 'w-32 h-5', points: 'w-14 h-7' },
@@ -26,28 +24,23 @@ const MOBILE_ROWS = [
 
 const LeaderboardSkeleton = () => (
     <div className="animate-pulse">
-        {/* Desktop Layout - Matches DesktopLeaderboard.js */}
         <div className="hidden lg:block space-y-4">
             {DESKTOP_ROWS.map((row, i) => (
                 <ItemSkeleton key={i} heightClass={row.heightClass}>
                     <div className="flex items-center">
-                        {/* Rank */}
                         <div className="w-16 flex justify-center flex-shrink-0">
                             <div className={`${row.rank} bg-slate-200 dark:bg-slate-700 rounded`}></div>
                         </div>
 
-                        {/* Avatar + Name */}
                         <div className="flex items-center gap-4 w-72 flex-shrink-0">
                             <div className={`${row.avatar} bg-slate-200 dark:bg-slate-700 rounded-full flex-shrink-0`}></div>
                             <div className={`${row.name} bg-slate-200 dark:bg-slate-700 rounded`}></div>
                         </div>
 
-                        {/* Progress Bar */}
                         <div className="flex-1 px-6">
                             <div className="w-full h-2 bg-slate-100 dark:bg-slate-800 rounded-full"></div>
                         </div>
 
-                        {/* Points */}
                         <div className="w-32 text-right flex-shrink-0 flex justify-end">
                             <div className={`${row.points} bg-slate-200 dark:bg-slate-700 rounded`}></div>
                         </div>
@@ -56,25 +49,21 @@ const LeaderboardSkeleton = () => (
             ))}
         </div>
 
-        {/* Mobile Layout - Matches MobileLeaderboard.js */}
         <div className="lg:hidden space-y-3">
             {MOBILE_ROWS.map((row, i) => (
                 <ItemSkeleton key={i} heightClass={row.heightClass}>
                     <div className="flex items-center justify-between">
-                        {/* Left: Rank + Avatar + Name */}
                         <div className="flex items-center gap-3">
                             <div className={`${row.rank} bg-slate-200 dark:bg-slate-700 rounded`}></div>
                             <div className={`${row.avatar} bg-slate-200 dark:bg-slate-700 rounded-full flex-shrink-0`}></div>
                             <div className={`${row.name} bg-slate-200 dark:bg-slate-700 rounded`}></div>
                         </div>
 
-                        {/* Right: Points */}
                         <div className="text-right">
                             <div className={`${row.points} bg-slate-200 dark:bg-slate-700 rounded ml-auto`}></div>
                         </div>
                     </div>
 
-                    {/* Bottom progress bar */}
                     <div className="mt-3 w-full h-1 bg-slate-100 dark:bg-slate-800 rounded-full"></div>
                 </ItemSkeleton>
             ))}

@@ -11,7 +11,6 @@ import { HeroHeader } from "@/components/ui/HeroHeader";
 import { QuickActionButton } from "@/components/ui/Buttons";
 import { useRouter } from 'next/navigation';
 import { clientFetch } from "@/lib/client-api";
-// [!] Icons
 import {
     IconLayoutDashboard,
     IconMessagePlus,
@@ -45,7 +44,6 @@ export default function Dashboard({ initialData }) {
 
     return (
         <div className="w-full space-y-8 pb-10">
-            {/* 1. Main Hero Header */}
             <HeroHeader
                 icon={IconLayoutDashboard}
                 title="Dashboard"
@@ -54,10 +52,8 @@ export default function Dashboard({ initialData }) {
                 iconAccentColor="text-blue-600 dark:text-blue-400"
             />
 
-            {/* 2. Unified Content Container */}
             <div className="flex flex-col gap-12">
 
-                {/* Section A: Agenda Items */}
                 <div className={`grid grid-cols-1 gap-5 ${editingItemId ? 'auto-rows-auto' : 'auto-rows-auto md:auto-rows-fr'}`}>
                     {agendaItems.map((item) => (
                         <div key={item.id} className={editingItemId && item.id !== editingItemId ? 'h-full' : ''}>
@@ -72,7 +68,6 @@ export default function Dashboard({ initialData }) {
                     ))}
                 </div>
 
-                {/* Section B: Quick Actions */}
                 <div className="flex flex-row gap-4">
                     <QuickActionButton
                         icon={IconMessagePlus}
@@ -90,7 +85,6 @@ export default function Dashboard({ initialData }) {
                     />
                 </div>
 
-                {/* Section C: Data & Insights */}
                 <div className="space-y-6">
                     {/* Activity Stream */}
                     <ConsoleDropdown
@@ -104,7 +98,6 @@ export default function Dashboard({ initialData }) {
                         </ConsoleLog>
                     </ConsoleDropdown>
 
-                    {/* Weekly Summary */}
                     <ConsoleDropdown
                         title="Weekly Summary"
                         icon={IconCalendarStats}

@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef } from 'react';
-// [!] Swapping Lucide for Tabler
+
 import { IconPencil, IconLink } from '@tabler/icons-react';
 
 export const AgendaItemDropdown = ({ item, isOpen, onClose, onEdit }) => {

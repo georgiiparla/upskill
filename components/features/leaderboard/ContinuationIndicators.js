@@ -6,7 +6,6 @@ export const ContinuationIndicators = ({ isDesktop = true }) => {
 
     return (
         <div className="relative">
-            {/* Gradient overlay for fade effect */}
             <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-white/80 dark:to-gray-900/80 pointer-events-none z-10"></div>
 
             {ranks.map((rank, index) => {
@@ -28,29 +27,22 @@ export const ContinuationIndicators = ({ isDesktop = true }) => {
                         }}
                     >
                         <div className={`flex items-center ${isDesktop ? '' : 'justify-between'}`}>
-                            {/* Left Side: Rank, Avatar, Name - Fixed Width */}
                             <div className={`flex items-center gap-${isDesktop ? '4' : '3'} ${isDesktop ? 'w-80 flex-shrink-0' : ''}`}>
-                                {/* Rank Badge - very subtle */}
                                 <div className={`w-${isDesktop ? '8' : '6'} h-${isDesktop ? '8' : '6'} rounded-full flex items-center justify-center text-xs font-bold bg-gray-100/50 dark:bg-gray-700/50 text-gray-400/70 dark:text-gray-500/70 shadow-sm`}>
                                     {rank}
                                 </div>
 
-                                {/* Avatar - ghost like */}
                                 <div className={`w-${isDesktop ? '12' : '10'} h-${isDesktop ? '12' : '10'} rounded-full bg-gray-200/40 dark:bg-gray-700/40 shadow-md`}></div>
 
-                                {/* Name - very faded */}
                                 <span className={`font-medium text-gray-400/60 dark:text-gray-500/60 ${isDesktop ? 'min-w-[100px]' : ''}`}>
                                     ...
                                 </span>
                             </div>
 
-                            {/* Center: Progress Bar - faded (desktop only) */}
                             {isDesktop && (
                                 <div className="flex-1 mx-8">
                                     <div className="relative">
-                                        {/* Background bar */}
                                         <div className="w-full h-3 bg-gray-200/50 dark:bg-gray-700/50 rounded-full">
-                                            {/* Progress bar - decreasing width and opacity */}
                                             <div
                                                 className={`h-full rounded-full bg-gray-300/30 dark:bg-gray-600/30`}
                                                 style={{
@@ -62,7 +54,6 @@ export const ContinuationIndicators = ({ isDesktop = true }) => {
                                 </div>
                             )}
 
-                            {/* Right Side: Points - faded */}
                             <div className={`text-right ${isDesktop ? 'w-20 flex-shrink-0' : ''}`}>
                                 <div className={`font-bold text-${isDesktop ? 'xl' : 'lg'} text-gray-400/60 dark:text-gray-500/60`}>
                                     ...

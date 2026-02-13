@@ -17,8 +17,7 @@ export default async function HomePage() {
             throw error;
         }
         console.error("Dashboard RSC Error:", error);
-        // Return Dashboard with empty/error state
-        // This allows the client-side to potentially recover or show a specific error
+        // Return Dashboard with empty/error state (this allows the client-side to potentially recover or show a specific error).
         return (
             <div className="p-8 text-center">
                 <h1 className="text-2xl font-bold text-red-600">Error Loading Dashboard</h1>

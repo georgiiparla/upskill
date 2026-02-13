@@ -2,7 +2,6 @@
 
 import React, { createContext, useState, useContext, useEffect, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-// We still import helpers for cleanup, but we rely on the server for setting the main cookie
 import { removeTokenCookie, getTokenFromCookie } from '@/context/token_helpers';
 
 const AuthContext = createContext(null);
@@ -19,13 +18,10 @@ export const AuthProvider = ({ children }) => {
     const router = useRouter();
     const hasCheckedSession = useRef(false);
 
-    // 1. Point Auth Checks to the Proxy
-    // This ensures we validate the HttpOnly cookie, not just the client state.
     const AUTH_CHECK_URL = '/api/proxy/auth';
 
     const clearError = () => setError(null);
 
-    // 2. Check Session (Via Proxy)
     const checkSession = useCallback(async () => {
         setIsLoading(true);
         try {
@@ -38,7 +34,6 @@ export const AuthProvider = ({ children }) => {
                     setIsAuthenticated(true);
                     setIsAdmin(data.is_admin || false);
                 } else {
-                    // Middleware handles redirects, we just update state
                     setIsAuthenticated(false);
                     setUser(null);
                 }
@@ -61,7 +56,6 @@ export const AuthProvider = ({ children }) => {
         }
     }, [checkSession]);
 
-    // 3. Handle Login Token
     const handleTokenLogin = useCallback(async (token) => {
         setIsLoading(true);
         try {
@@ -98,11 +92,7 @@ export const AuthProvider = ({ children }) => {
             setIsAuthenticated(false);
             setIsAdmin(false);
             removeTokenCookie();
-            // Middleware will handle redirect on next navigation
             router.push('/login');
-            // NOTE: We do NOT set isLoading(false) here. 
-            // We want the spinner to persist until the login page mounts or pathname changes.
-            // This prevents the "flash" of dashboard content.
         }
     }, [router]);
 
@@ -115,7 +105,7 @@ export const AuthProvider = ({ children }) => {
         isAuthenticated,
         isAdmin,
 
-        setIsLoading, // Exported so AppLayout can reset it if needed (though we'll use pathname check)
+        setIsLoading,
         loadingMessage,
         setLoadingMessage,
         logout,

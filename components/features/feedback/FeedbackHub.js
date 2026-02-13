@@ -78,7 +78,6 @@ const NewFeedbackForm = ({ requestTag }) => {
     const isSubmittingRef = useRef(false); // Synchronous lock
     const { refreshNavbarPoints } = useAuth();
 
-    // Limit Constant
     const MAX_CONTENT_LENGTH = 3000;
 
     useEffect(() => {
@@ -98,7 +97,6 @@ const NewFeedbackForm = ({ requestTag }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Check if a submission is already in progress.
         if (isSubmittingRef.current) {
             return;
         }
@@ -108,7 +106,6 @@ const NewFeedbackForm = ({ requestTag }) => {
             return;
         }
 
-        // Engage the lock and update UI state
         isSubmittingRef.current = true;
         setIsSubmitting(true);
         const toastId = toast.loading('Submitting your feedback...');
@@ -125,9 +122,7 @@ const NewFeedbackForm = ({ requestTag }) => {
 
             if (response.success) {
                 toast.success('Feedback submitted successfully!', { id: toastId });
-                // Refresh navbar points since this action completes the 'give_feedback' quest
                 refreshNavbarPoints();
-                // We keep the button disabled during the redirect timeout
                 setTimeout(() => {
                     router.push(`/feedback/request/${requestTag}`);
                 }, 1000);
@@ -139,12 +134,9 @@ const NewFeedbackForm = ({ requestTag }) => {
             }
         } catch (error) {
             toast.error('An unexpected error occurred.', { id: toastId });
-            // Always release lock on unexpected error
             isSubmittingRef.current = false;
             setIsSubmitting(false);
         }
-        // Note: We don't release the lock in a finally block here,
-        // because we want the button to remain disabled until the user is redirected.
     };
 
     return (

@@ -1,6 +1,5 @@
 "use client";
 import React from 'react';
-// [!] Swapping Lucide Trophy for Tabler IconTrophy
 import { IconTrophy } from '@tabler/icons-react';
 import { HeroHeader } from '@/components/ui/HeroHeader';
 import { DesktopLeaderboard } from './DesktopLeaderboard';

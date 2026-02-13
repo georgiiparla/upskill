@@ -33,7 +33,6 @@ export const Card = ({ children, className = '', innerClassName = '', glass = tr
     let finalRounded = baseRounded;
 
     if (mobileSpaceless) {
-        // On mobile, remove styles by prefixing everything with md:
         finalVariant = baseVariant.split(' ').map(c => `md:${c}`).join(' ');
         finalPadding = basePadding ? `md:${basePadding}` : '';
         finalRounded = `md:${finalRounded}`;
