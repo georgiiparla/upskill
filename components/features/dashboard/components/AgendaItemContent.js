@@ -8,8 +8,7 @@ export const AgendaItemContent = ({ item, isSystemMantra, onMenuToggle }) => {
                 <div className="flex items-start justify-between gap-4">
                     <div className="flex-1 min-w-0">
                         <h3
-                            className="font-bold text-xl md:text-2xl leading-tight mb-2 break-words drop-shadow-sm transition-colors duration-300"
-                            style={{ color: 'var(--text-accent)' }}
+                            className="font-bold text-xl md:text-2xl leading-tight mb-2 break-words drop-shadow-sm transition-colors duration-300 text-[var(--accent-light)] dark:text-[var(--accent-dark)]"
                         >
                             {item.title}
                         </h3>
