@@ -1,10 +1,6 @@
-"use client"
-
-import { use } from 'react';
 import FeedbackHub from "@/components/features/feedback/FeedbackHub";
 
-export default function NewFeedbackForRequestPage({ params }) {
-    const resolvedParams = use(params);
-
+export default async function NewFeedbackForRequestPage({ params }) {
+    const resolvedParams = await params;
     return <FeedbackHub requestTag={resolvedParams.tag} />;
 }

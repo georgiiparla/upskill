@@ -3,6 +3,16 @@ import { useEffect } from 'react';
 import Image from 'next/image';
 import { motion, useSpring, useTransform } from 'framer-motion';
 import { Snowflake } from 'lucide-react';
+import {
+    IconDiamond,
+    IconMoonStars,
+    IconLayoutKanban,
+    IconFileText,
+    IconCode,
+    IconMessageCircle,
+    IconSwords,
+    IconLamp
+} from '@tabler/icons-react';
 
 export const LogoAnimation = ({ isRedirecting }) => {
     // Parallax Effect Setup
@@ -94,16 +104,29 @@ export const LogoAnimation = ({ isRedirecting }) => {
             {orbConfigs.map(({ key, radius, size, duration, delay }, index) => {
                 const paletteEntry = orbPalette[index % orbPalette.length];
 
-                // Snowflakes Variant
+                // Department Icons Variant
                 if (variant === 'snowflakes') {
+                    const departmentIcons = [
+                        { Icon: IconDiamond, color: 'fill-red-500/20 text-red-500' },          // Ruby
+                        { Icon: IconMoonStars, color: 'fill-blue-400/20 text-blue-400' },       // Lua
+                        { Icon: IconLayoutKanban, color: 'fill-blue-600/20 text-blue-600' },    // Jira
+                        { Icon: IconFileText, color: 'fill-gray-500/20 text-gray-500' },        // Docs
+                        { Icon: IconCode, color: 'fill-green-500/20 text-green-500' },           // Code
+                        { Icon: IconMessageCircle, color: 'fill-purple-500/20 text-purple-500' }, // Communication
+                        { Icon: IconSwords, color: 'fill-yellow-600/20 text-yellow-600' },        // RS2
+                        { Icon: IconLamp, color: 'fill-amber-500/20 text-amber-500' }            // Lamp
+                    ];
+
+                    const { Icon, color } = departmentIcons[index % departmentIcons.length];
+
                     return (
                         <motion.div
                             key={key}
-                            className="absolute flex items-center justify-center text-gray-600 dark:text-sky-100/90"
+                            className={`absolute flex items-center justify-center ${color} dark:${color}`}
                             style={{
-                                width: `${size * 9}px`, // Slightly larger for icons
+                                width: `${size * 9}px`,
                                 height: `${size * 9}px`,
-                                filter: 'drop-shadow(0 0 6px rgba(186, 230, 253, 0.5)) dark:drop-shadow(0 0 6px rgba(186, 230, 253, 0.5))',
+                                filter: 'drop-shadow(0 0 2px rgba(0,0,0,0.1))',
                                 transform: 'translateZ(10px)'
                             }}
                             initial={{ opacity: 0, scale: 0, x: 0, y: 0 }}
@@ -116,26 +139,26 @@ export const LogoAnimation = ({ isRedirecting }) => {
                             } : {
                                 x: [
                                     Math.cos(index * 1.2) * radius,
-                                    Math.cos(index * 1.2 + Math.PI / 3) * (radius + 10),
+                                    Math.cos(index * 1.2 + Math.PI / 3) * (radius + 15),
                                     Math.cos(index * 1.2 + Math.PI) * radius,
                                 ],
                                 y: [
                                     Math.sin(index * 1.2) * radius,
-                                    Math.sin(index * 1.2 + Math.PI / 3) * (radius + 10),
+                                    Math.sin(index * 1.2 + Math.PI / 3) * (radius + 15),
                                     Math.sin(index * 1.2 + Math.PI) * radius,
                                 ],
-                                opacity: [0.4, 1, 0.4],
-                                scale: [0.8, 1.2, 0.8],
-                                rotate: [0, 180, 360], // Add rotation for snowflakes
+                                opacity: [0.6, 1, 0.6],
+                                scale: [0.8, 1.1, 0.8],
+                                rotate: [0, 10, -10, 0],
                                 transition: {
-                                    duration: duration * 1.2, // Slightly slower/floatier
+                                    duration: duration * 1.5,
                                     repeat: Infinity,
                                     ease: 'easeInOut',
                                     delay: delay * 0.5
                                 }
                             }}
                         >
-                            <Snowflake className="w-full h-full stroke-[1.5px]" />
+                            <Icon className="w-full h-full stroke-[1.5px] fill-current" />
                         </motion.div>
                     );
                 }
