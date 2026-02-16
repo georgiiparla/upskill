@@ -27,8 +27,8 @@ export const config = {
      * - api (API routes)
      * - _next/static (static files)
      * - _next/image (image optimization files)
-     * - favicon.ico, icons, csway-logo.png (static assets)
+     * - favicon.ico, icons, csway-logo.png, manifest.json (static assets)
      */
-    '/((?!api|_next/static|_next/image|favicon.ico|icons|public|csway-logo.png|rs2logo.png).*)',
+    '/((?!api|_next/static|_next/image|favicon.ico|icons|public|csway-logo.png|rs2logo.png|manifest.json).*)',
   ],
 };

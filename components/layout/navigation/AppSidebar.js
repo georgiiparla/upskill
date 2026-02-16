@@ -87,7 +87,7 @@ export function AppSidebar() {
                     <Link href="/dashboard" className="flex items-center gap-2 py-2 px-2 mb-4 rounded-md" onClick={handleLinkClick}>
                         <div className="w-8 h-8 flex items-center justify-center shrink-0">
                             <div className="h-6 w-6 relative shrink-0">
-                                <Image src="/csway-logo.png" alt="Logo" fill className="object-contain" />
+                                <Image src="/csway-logo.png" alt="Logo" fill sizes="24px" className="object-contain" />
                             </div>
                         </div>
                         {open && (
