@@ -1,119 +1,44 @@
 "use client";
 
-import React, { createContext, useState, useContext, useEffect, useCallback, useRef } from 'react';
+import React, { createContext, useContext, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { removeTokenCookie, getTokenFromCookie } from '@/context/token_helpers';
+import { useAuthStore } from '@/store/authStore';
 
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [isAdmin, setIsAdmin] = useState(false);
-    const [isLoading, setIsLoading] = useState(true);
-    const [loadingMessage, setLoadingMessage] = useState(''); // New state for loading text
-    const [error, setError] = useState(null);
-    const [navbarRefreshTrigger, setNavbarRefreshTrigger] = useState(0);
-
+    const { user, isAuthenticated, isAdmin, clearAuth, refreshNavbarPoints, navbarRefreshTrigger } = useAuthStore();
     const router = useRouter();
-    const hasCheckedSession = useRef(false);
 
-    const AUTH_CHECK_URL = '/api/proxy/auth';
-
-    const clearError = () => setError(null);
-
-    const checkSession = useCallback(async () => {
-        setIsLoading(true);
-        try {
-            const response = await fetch(`${AUTH_CHECK_URL}/profile`);
-
-            if (response.ok) {
-                const data = await response.json();
-                if (data.logged_in) {
-                    setUser(data.user);
-                    setIsAuthenticated(true);
-                    setIsAdmin(data.is_admin || false);
-                } else {
-                    setIsAuthenticated(false);
-                    setUser(null);
-                }
-            } else {
-                setIsAuthenticated(false);
-                setUser(null);
-            }
-        } catch (err) {
-            setIsAuthenticated(false);
-            setUser(null);
-        } finally {
-            setIsLoading(false);
-        }
-    }, []);
-
-    useEffect(() => {
-        if (!hasCheckedSession.current) {
-            checkSession();
-            hasCheckedSession.current = true;
-        }
-    }, [checkSession]);
-
-    const handleTokenLogin = useCallback(async (token) => {
-        setIsLoading(true);
-        try {
-            const setCookieResponse = await fetch('/api/auth/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ token }),
-            });
-
-            if (!setCookieResponse.ok) {
-                throw new Error('Failed to set session cookie');
-            }
-
-            await checkSession();
-
-        } catch (err) {
-            console.error("Login failed:", err);
-            setError("Login failed. Please try again.");
-            setIsLoading(false);
-            throw err; // Re-throw so caller can handle it
-        }
-    }, [checkSession]);
-
-    // 4. Logout
     const logout = useCallback(async () => {
-        setIsLoading(true);
-        setLoadingMessage('Logging out...');
         try {
+            // Server-side logout (clears the HttpOnly cookie)
             await fetch('/api/auth/logout', { method: 'POST' });
         } catch (err) {
             console.error("Logout failed:", err);
         } finally {
-            setUser(null);
-            setIsAuthenticated(false);
-            setIsAdmin(false);
-            removeTokenCookie();
+            clearAuth();
             router.push('/login');
+            router.refresh();
         }
-    }, [router]);
+    }, [clearAuth, router]);
 
-    const refreshNavbarPoints = useCallback(() => {
-        setNavbarRefreshTrigger(prev => prev + 1);
-    }, []);
-
+    // Provided for backward compatibility with existing components
     const value = {
         user,
         isAuthenticated,
         isAdmin,
-
-        setIsLoading,
-        loadingMessage,
-        setLoadingMessage,
         logout,
-        error,
-        clearError,
-        handleTokenLogin,
         refreshNavbarPoints,
-        navbarRefreshTrigger
+        navbarRefreshTrigger,
+        
+        // These are now constant or dummy to prevent crashes in old components
+        isLoading: false,
+        loadingMessage: '',
+        error: null,
+        clearError: () => {},
+        handleTokenLogin: async () => {},
+        checkSession: async () => {}, // No longer needed on client-side mount
     };
 
     return (

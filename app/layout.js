@@ -2,11 +2,14 @@ import { Outfit, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
 import { Toaster } from 'react-hot-toast';
+import { cookies } from 'next/headers';
 
 import { ThemeProvider } from '@/components/layout/ThemeProvider';
 import { AuthProvider } from "@/context/AuthContext";
 import { GlobalErrorNotifier } from "@/components/ui/feedback/GlobalErrorNotifier";
 import AppLayout from "@/components/layout/AppLayout";
+import AuthInitializer from "@/components/auth/AuthInitializer";
+import { serverFetch } from "@/lib/server-api";
 
 const outfit = Outfit({
     subsets: ["latin"],
@@ -49,11 +52,31 @@ export const viewport = {
     ],
 };
 
+async function getAuthData() {
+    try {
+        const cookieStore = await cookies();
+        const token = cookieStore.get('token')?.value;
 
-export default function RootLayout({ children }) {
+        if (!token) return { user: null, isAdmin: false };
+
+        const data = await serverFetch('/auth/profile');
+        return {
+            user: data.user,
+            isAdmin: data.is_admin
+        };
+    } catch (error) {
+        // Silently fail auth fetch on layout level to prevent crash
+        return { user: null, isAdmin: false };
+    }
+}
+
+export default async function RootLayout({ children }) {
+    const authData = await getAuthData();
+
     return (
         <html lang="en" suppressHydrationWarning>
             <body suppressHydrationWarning className={`${outfit.variable} ${jetbrainsMono.variable} font-sans antialiased bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-50`}>
+                <AuthInitializer user={authData.user} isAdmin={authData.isAdmin} />
                 <AuthProvider>
                     <GlobalErrorNotifier />
                     <ThemeProvider>
