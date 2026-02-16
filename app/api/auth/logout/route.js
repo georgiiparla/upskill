@@ -1,17 +1,31 @@
-import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 
-export async function POST() {
-    const cookieStore = await cookies();
+export async function POST(request) {
+    const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'https://api.demoplatform.app';
 
-    // Delete the token cookie by setting it to empty/expired
-    cookieStore.delete('token');
+    try {
+        const backendRes = await fetch(`${backendUrl}/auth/logout`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Cookie: request.headers.get('cookie') || '',
+            },
+            credentials: 'include',
+        });
 
-    return NextResponse.json({ success: true });
-}
+        const data = await backendRes.json();
 
-export async function GET(request) {
-    const cookieStore = await cookies();
-    cookieStore.delete('token');
-    return NextResponse.redirect(new URL('/login', request.url));
+        const response = NextResponse.json(data);
+
+        const setCookie = backendRes.headers.get('set-cookie');
+        if (setCookie) {
+            response.headers.set('Set-Cookie', setCookie);
+        }
+
+        return response;
+
+    } catch (err) {
+        console.error('Logout proxy error:', err);
+        return NextResponse.json({ message: 'Logout failed' }, { status: 500 });
+    }
 }
