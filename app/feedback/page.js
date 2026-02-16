@@ -1,10 +1,10 @@
 import { Feedback } from "@/components/features/feedback/Feedback";
 import { serverFetch } from "@/lib/server-api";
-import { sleep } from "@/lib/delay";
+
 
 
 async function getFeedbackData() {
-    await sleep(1000);
+
     console.log("Fetching real data for feedback page.");
     const [submissions, requests] = await Promise.all([
         serverFetch('/feedback_submissions'),

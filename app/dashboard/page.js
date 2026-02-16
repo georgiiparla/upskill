@@ -1,9 +1,9 @@
 import Dashboard from "@/components/features/dashboard/Dashboard";
 import { serverFetch } from "@/lib/server-api";
-import { sleep } from "@/lib/delay";
+
 
 async function getDashboardData() {
-    await sleep(2000);
+
     return serverFetch('/dashboard');
 }
 

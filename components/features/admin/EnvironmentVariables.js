@@ -35,7 +35,7 @@ export const EnvironmentVariables = () => {
     const handleCopy = (text, key) => {
         navigator.clipboard.writeText(text);
         setCopiedKey(key);
-        setTimeout(() => setCopiedKey(null), 2000);
+
     };
 
     if (loading) {

@@ -40,11 +40,9 @@ export const AgendaItemView = ({ item, onEditClick, isSystemMantra }) => {
             }}
         >
             <motion.div
-                className="absolute inset-0 rounded-xl overflow-hidden border bg-white dark:bg-slate-900"
+                className="absolute inset-0 rounded-xl overflow-hidden border bg-white dark:bg-slate-900 border-[var(--accent-border)] shadow-[var(--shadow-idle)]"
                 variants={{
                     idle: {
-                        borderColor: 'var(--accent-border)',
-                        boxShadow: 'var(--shadow-idle)',
                         transition: { ...ANIMATION_CONFIG.frameTransition, delay: ANIMATION_CONFIG.resetDelay },
                     },
                     hover: {

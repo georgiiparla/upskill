@@ -1,13 +1,13 @@
 import { serverFetch } from "@/lib/server-api";
 import { AccountView } from '@/components/features/account/AccountView';
-import { sleep } from "@/lib/delay";
+
 
 
 export const dynamic = 'force-dynamic';
 
 async function getAliases() {
     const aliases = await serverFetch('/me/aliases');
-    await sleep(2000);
+
     return aliases;
 }
 
