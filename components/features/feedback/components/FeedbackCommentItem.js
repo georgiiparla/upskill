@@ -57,7 +57,7 @@ export const FeedbackCommentItem = ({ feedback, onDeleteSuccess }) => {
     const colorClass = sentimentColors[feedback.sentiment_text] || sentimentColors['Meets Expectations'];
 
     return (
-        <>
+        <div>
             <Modal
                 isOpen={isDeleteModalOpen}
                 onClose={() => setIsDeleteModalOpen(false)}
@@ -82,6 +82,8 @@ export const FeedbackCommentItem = ({ feedback, onDeleteSuccess }) => {
                             {feedback.sentiment_text}
                         </span>
                     </div>
+                </div>
+                <div className="mt-3">
                     <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed break-words">{feedback.content}</p>
                     <div className="flex justify-between items-center pt-2 border-t border-gray-200 dark:border-gray-700 mt-3">
                         <span className="text-xs text-gray-500 dark:text-gray-400">
@@ -111,6 +113,6 @@ export const FeedbackCommentItem = ({ feedback, onDeleteSuccess }) => {
                     </div>
                 </div>
             </Card>
-        </>
+        </div>
     );
 };

@@ -103,8 +103,8 @@ export default function FeedbackRequestDetail() {
     ];
 
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-            <div className="lg:col-span-1 space-y-8 lg:sticky top-16 self-start z-20">
+        <div className="grid grid-cols-1 lg:grid-cols-3 lg:items-start gap-8 max-w-7xl mx-auto">
+            <div className="lg:col-span-1 space-y-8 lg:sticky lg:top-8 self-start z-20">
                 <RequestDetailsCard
                     requestData={requestData}
                     onUpdate={handleRequestUpdate}

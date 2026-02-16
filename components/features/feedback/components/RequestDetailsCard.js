@@ -99,7 +99,7 @@ export const RequestDetailsCard = ({ requestData, onUpdate }) => {
     const isPublic = requestData.visibility === 'public';
 
     return (
-        <>
+        <div className="space-y-6">
             <Modal
                 isOpen={isDeleteModalOpen}
                 onClose={() => setIsDeleteModalOpen(false)}
@@ -185,6 +185,6 @@ export const RequestDetailsCard = ({ requestData, onUpdate }) => {
                     </Card>
                 )}
             </div>
-        </>
+        </div>
     );
 };

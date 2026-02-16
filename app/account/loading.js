@@ -1,11 +1,6 @@
 import { CardSkeleton, TextSkeleton, SectionTitleSkeleton } from "@/components/ui/loading/Skeletons";
 
-const AliasItemSkeleton = () => (
-    <div className="flex justify-between items-center p-3 bg-slate-50 dark:bg-slate-800/60 rounded-lg border border-transparent">
-        <TextSkeleton className="h-5 w-48" />
-        <div className="h-8 w-8 rounded-full bg-slate-200 dark:bg-slate-700"></div>
-    </div>
-);
+
 
 const StatCardSkeleton = () => (
     <CardSkeleton className="flex items-center">
@@ -38,8 +33,7 @@ export default function AccountLoading() {
             <CardSkeleton>
                 <SectionTitleSkeleton />
                 <TextSkeleton className="h-4 w-3/4 mb-6" />
-                <div className="mb-6 space-y-2">
-                    <AliasItemSkeleton />
+                <div className="mb-6 space-y-2 min-h-[0px]">
                 </div>
                 <div className="flex gap-2 border-t border-gray-200 dark:border-gray-700 pt-4">
                     <div className="flex-grow h-10 bg-slate-100 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700" />
