@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { IconLoader2, IconRefresh } from '@tabler/icons-react';
 import { clientFetch } from '@/lib/client-api';
-import { useAuth } from '@/context/AuthContext';
+import { useAuthStore } from '@/store/authStore';
 import { Card } from '@/components/ui/Shared';
 import { generateRandomTag } from '@/lib/helper-func';
 import SimpleToggleSwitch from '@/components/ui/SimpleToggleSwitch';
@@ -37,7 +37,7 @@ const formItemVariants = {
 
 export default function CreateRequestForm() {
     const router = useRouter();
-    const { refreshNavbarPoints } = useAuth();
+    const { refreshNavbarPoints } = useAuthStore();
     const [topic, setTopic] = useState('');
     const [description, setDescription] = useState('');
     const [pairUsername, setPairUsername] = useState('');

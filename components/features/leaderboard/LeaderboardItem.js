@@ -2,7 +2,7 @@
 import React, { useMemo, useEffect, useState } from 'react';
 import { useTheme } from 'next-themes';
 import { Avatar } from '@/components/ui/Avatar';
-import { useAuth } from '@/context/AuthContext';
+import { useAuthStore } from '@/store/authStore';
 import { getRankColors } from './utils';
 import { BackgroundGradientAnimation } from '@/components/ui/BackgroundGradientAnimation';
 import { generateGradientTheme } from '../dashboard/agenda-shared';
@@ -16,7 +16,7 @@ const RANK_HEX_COLORS = {
 };
 
 export const LeaderboardItem = ({ user, maxPoints, isDesktop = true }) => {
-    const { user: currentUser } = useAuth();
+    const { user: currentUser } = useAuthStore();
     const { theme, systemTheme } = useTheme();
 
     const [mounted, setMounted] = useState(false);

@@ -1,10 +1,10 @@
 "use client";
 
-import { useAuth } from "@/context/AuthContext";
+import { useAuthStore } from "@/store/authStore";
 import { AlertTriangle, X } from "lucide-react";
 
 export const GlobalErrorNotifier = () => {
-    const { error, clearError } = useAuth();
+    const { error, clearError } = useAuthStore();
 
     if (!error) {
         return null;

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useAuth } from '@/context/AuthContext';
+import { useAuthStore } from '@/store/authStore';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { AnimatePresence } from 'framer-motion';
 import { Card } from '@/components/ui/Shared';
@@ -11,7 +11,7 @@ import { SignInButton } from './components/SignInButton';
 
 
 export const Auth = () => {
-    const { isAuthenticated } = useAuth();
+    const { isAuthenticated } = useAuthStore();
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();

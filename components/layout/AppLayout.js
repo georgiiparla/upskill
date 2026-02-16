@@ -1,11 +1,11 @@
 "use client";
 
-import { useAuth } from '@/context/AuthContext';
+import { useAuthStore } from '@/store/authStore';
 import { AppSidebar } from './navigation/AppSidebar';
 import { usePathname } from 'next/navigation';
 
 export default function AppLayout({ children }) {
-    const { isAuthenticated } = useAuth();
+    const { isAuthenticated } = useAuthStore();
     const pathname = usePathname();
 
     // Pages that don't show the sidebar (login, signup)

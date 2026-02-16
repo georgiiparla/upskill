@@ -1,6 +1,6 @@
 "use client"
 import { useState } from 'react';
-import { useAuth } from '@/context/AuthContext';
+import { useAuthStore } from '@/store/authStore';
 import { HistoryListItem, Card } from "@/components/ui/Shared";
 import { ActionButton } from '@/components/ui/Buttons';
 import { SearchBar } from '@/components/ui/SearchBar';
@@ -18,7 +18,7 @@ export const Feedback = ({
 }) => {
     const [view, setView] = useState('active');
     const [searchTerm, setSearchTerm] = useState('');
-    const { user } = useAuth();
+    const { user } = useAuthStore();
 
     const getSentimentColor = (sentimentText) => {
         switch (sentimentText) {

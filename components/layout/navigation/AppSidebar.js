@@ -15,14 +15,16 @@ import {
     IconMessagePlus,
     IconUsers
 } from "@tabler/icons-react";
-import { useAuth } from "@/context/AuthContext";
+import { useAuthStore } from "@/store/authStore";
 import { useTheme } from "next-themes";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { usePointsData } from "./NavbarHelpers";
 
 export function AppSidebar() {
-    const { user, logout, isAdmin, navbarRefreshTrigger } = useAuth();
+    const { user, logout, isAdmin, navbarRefreshTrigger } = useAuthStore();
+    const router = useRouter();
     const { points } = usePointsData(user, navbarRefreshTrigger);
     const { theme, setTheme } = useTheme();
     const [open, setOpen] = useState(false);
@@ -31,6 +33,10 @@ export function AppSidebar() {
         if (typeof window !== "undefined" && window.innerWidth < 1024) {
             setOpen(false);
         }
+    };
+
+    const handleLogout = async () => {
+        await logout(router);
     };
 
     const links = [
@@ -117,7 +123,7 @@ export function AppSidebar() {
                     </div>
                     <div
                         className="flex items-center justify-start gap-2 group/sidebar py-2 px-2 cursor-pointer rounded-md"
-                        onClick={() => logout()}
+                        onClick={handleLogout}
                     >
                         <div className="w-8 h-8 flex items-center justify-center shrink-0">
                             <IconLogout className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" stroke={1.5} />

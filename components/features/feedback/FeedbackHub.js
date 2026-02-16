@@ -5,7 +5,7 @@ import toast from 'react-hot-toast';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { clientFetch } from '@/lib/client-api';
-import { useAuth } from '@/context/AuthContext';
+import { useAuthStore } from '@/store/authStore';
 
 import { Card } from "@/components/ui/Shared";
 
@@ -76,7 +76,7 @@ const NewFeedbackForm = ({ requestTag }) => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const router = useRouter();
     const isSubmittingRef = useRef(false); // Synchronous lock
-    const { refreshNavbarPoints } = useAuth();
+    const { refreshNavbarPoints } = useAuthStore();
 
     const MAX_CONTENT_LENGTH = 3000;
 

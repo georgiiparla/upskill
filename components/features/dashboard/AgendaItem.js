@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { clientFetch } from '@/lib/client-api';
-import { useAuth } from '@/context/AuthContext';
+import { useAuthStore } from '@/store/authStore';
 import { BlurOverlay } from '@/components/layout/BlurOverlay';
 
 import { AgendaItemView } from './AgendaItemView';
@@ -11,7 +11,7 @@ import { AgendaItemEditor } from './AgendaItemEditor';
 
 export const AgendaItem = ({ item, onUpdate, isEditing, setEditingItemId }) => {
     const [isLoading, setIsLoading] = useState(false);
-    const { refreshNavbarPoints } = useAuth();
+    const { refreshNavbarPoints } = useAuthStore();
     const isSystemMantra = item.is_system_mantra;
 
     const handleSave = async (newTitle, newIcon, newLink) => {

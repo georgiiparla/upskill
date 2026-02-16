@@ -1,33 +1,25 @@
 "use client";
 
-import { useAuth } from '@/context/AuthContext';
+import { useAuthStore } from '@/store/authStore';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
 export const AdminRoute = ({ children }) => {
-    const { isAuthenticated, isAdmin, isLoading } = useAuth();
+    const { isAuthenticated, isAdmin } = useAuthStore();
     const router = useRouter();
 
     useEffect(() => {
-        if (!isLoading) {
-            if (!isAuthenticated) {
-                router.push('/login');
-                return;
-            }
-            if (!isAdmin) {
-                router.push('/dashboard');
-                return;
-            }
+        // Only redirect if we are sure about the state
+        // In the new architecture, AuthInitializer seeds this immediately
+        if (!isAuthenticated) {
+            router.push('/login');
+            return;
         }
-    }, [isAuthenticated, isAdmin, isLoading, router]);
-
-    if (isLoading) {
-        return (
-            <div className="flex items-center justify-center min-h-screen">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
-            </div>
-        );
-    }
+        if (!isAdmin) {
+            router.push('/dashboard');
+            return;
+        }
+    }, [isAuthenticated, isAdmin, router]);
 
     if (!isAuthenticated || !isAdmin) {
         return null;

@@ -11,7 +11,7 @@ import {
 import Link from 'next/link';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '@/context/AuthContext';
+import { useAuthStore } from '@/store/authStore';
 import toast from 'react-hot-toast';
 import { Modal } from '@/components/ui/Modal';
 import { clientFetch } from '@/lib/client-api';
@@ -24,7 +24,7 @@ export const RequestDetailsCard = ({ requestData, onUpdate }) => {
     const [isClosing, setIsClosing] = useState(false);
     const [isTogglingVisibility, setIsTogglingVisibility] = useState(false);
     const router = useRouter();
-    const { refreshNavbarPoints } = useAuth();
+    const { refreshNavbarPoints } = useAuthStore();
 
     const handleClose = async () => {
         setIsClosing(true);

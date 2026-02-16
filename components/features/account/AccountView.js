@@ -1,5 +1,5 @@
 "use client";
-import { useAuth } from '@/context/AuthContext';
+import { useAuthStore } from '@/store/authStore';
 import { Card } from '@/components/ui/Shared';
 import { Avatar } from '@/components/ui/Avatar';
 import { AliasManager } from './AliasManager';
@@ -18,7 +18,7 @@ const StatCard = ({ label, value, icon: Icon, colorClass }) => (
 );
 
 export const AccountView = ({ initialAliases, stats }) => {
-    const { user } = useAuth();
+    const { user } = useAuthStore();
 
     if (!user) {
         return null;

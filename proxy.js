@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-export function middleware(req) {
+export function proxy(req) {
   const token = req.cookies.get('token')?.value;
   const { pathname } = req.nextUrl;
   
@@ -21,5 +21,14 @@ export function middleware(req) {
 }
 
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|icons|public).*)'],
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - api (API routes)
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico, icons, csway-logo.png (static assets)
+     */
+    '/((?!api|_next/static|_next/image|favicon.ico|icons|public|csway-logo.png|rs2logo.png).*)',
+  ],
 };

@@ -5,7 +5,6 @@ import { Toaster } from 'react-hot-toast';
 import { cookies } from 'next/headers';
 
 import { ThemeProvider } from '@/components/layout/ThemeProvider';
-import { AuthProvider } from "@/context/AuthContext";
 import { GlobalErrorNotifier } from "@/components/ui/feedback/GlobalErrorNotifier";
 import AppLayout from "@/components/layout/AppLayout";
 import AuthInitializer from "@/components/auth/AuthInitializer";
@@ -65,7 +64,6 @@ async function getAuthData() {
             isAdmin: data.is_admin
         };
     } catch (error) {
-        // Silently fail auth fetch on layout level to prevent crash
         return { user: null, isAdmin: false };
     }
 }
@@ -77,35 +75,16 @@ export default async function RootLayout({ children }) {
         <html lang="en" suppressHydrationWarning>
             <body suppressHydrationWarning className={`${outfit.variable} ${jetbrainsMono.variable} font-sans antialiased bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-50`}>
                 <AuthInitializer user={authData.user} isAdmin={authData.isAdmin} />
-                <AuthProvider>
-                    <GlobalErrorNotifier />
-                    <ThemeProvider>
-
-                        <Toaster
-                            position="bottom-right"
-                            toastOptions={{
-                                className: 'bg-white/95 dark:bg-slate-900/95 text-gray-900 dark:text-white border border-slate-200/60 dark:border-slate-700/60 rounded-lg shadow-xl p-4 backdrop-blur-sm',
-                                success: {
-                                    iconTheme: {
-                                        primary: '#22a55e',
-                                        secondary: '#ffffff',
-                                    },
-                                },
-                                error: {
-                                    iconTheme: {
-                                        primary: '#e37a7b',
-                                        secondary: '#ffffff',
-                                    },
-                                },
-                            }}
-                            containerClassName="fixed z-[9999]"
-                        />
-
-                        <AppLayout>{children}</AppLayout>
-
-
-                    </ThemeProvider>
-                </AuthProvider>
+                <GlobalErrorNotifier />
+                <ThemeProvider>
+                    <Toaster
+                        position="bottom-right"
+                        toastOptions={{
+                            className: 'bg-white/95 dark:bg-slate-900/95 text-gray-900 dark:text-white border border-slate-200/60 dark:border-slate-700/60 rounded-lg shadow-xl p-4 backdrop-blur-sm',
+                        }}
+                    />
+                    <AppLayout>{children}</AppLayout>
+                </ThemeProvider>
             </body>
         </html>
     );

@@ -6,7 +6,7 @@ import { formatRelativeTime } from "@/lib/helper-func";
 import { IconThumbUp, IconUser, IconTrash } from "@tabler/icons-react";
 import { Modal } from "@/components/ui/Modal";
 import { likeSubmission, unlikeSubmission, deleteSubmission } from "@/lib/client-api";
-import { useAuth } from "@/context/AuthContext";
+import { useAuthStore } from "@/store/authStore";
 import toast from 'react-hot-toast';
 
 export const FeedbackCommentItem = ({ feedback, onDeleteSuccess }) => {
@@ -14,7 +14,7 @@ export const FeedbackCommentItem = ({ feedback, onDeleteSuccess }) => {
     const [likeCount, setLikeCount] = useState(feedback.likes || 0);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
-    const { refreshNavbarPoints } = useAuth();
+    const { refreshNavbarPoints } = useAuthStore();
     const isOwner = feedback.isCommentOwner;
 
     const handleLikeToggle = async () => {

@@ -1,52 +1,73 @@
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:9292';
+const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:9292';
 
-async function proxyRequest(request) {
+/**
+ * PIPELINE HELPERS
+ */
+
+function getProxyPath(req) {
+    const url = new URL(req.url);
+    const path = url.pathname.replace(/^\/api\/proxy/, '');
+    const isSafe = /^\/[a-zA-Z0-9_\-\/]+$/.test(path);
+    
+    if (!isSafe) throw new Error('Insecure path');
+    return path;
+}
+
+async function getSessionToken() {
+    const cookieStore = await cookies();
+    return cookieStore.get('token')?.value;
+}
+
+function buildTargetUrl(path, rawUrl) {
+    const url = new URL(rawUrl);
+    return `${BACKEND_URL}${path}${url.search}`;
+}
+
+async function buildFetchOptions(req, token) {
+    const headers = new Headers(req.headers);
+    if (token) headers.set('Authorization', `Bearer ${token}`);
+
+    const options = {
+        method: req.method,
+        headers,
+        duplex: 'half'
+    };
+
+    if (req.method !== 'GET' && req.method !== 'HEAD') {
+        options.body = req.body;
+    }
+
+    return options;
+}
+
+async function createNextResponse(backendRes) {
+    const data = await backendRes.arrayBuffer();
+    return new NextResponse(data, {
+        status: backendRes.status,
+        headers: backendRes.headers,
+    });
+}
+
+/**
+ * MAIN PIPELINE
+ */
+async function proxyRequest(req) {
     try {
-        const cookieStore = await cookies();
-        const token = cookieStore.get('token')?.value;
+        const path = getProxyPath(req);
+        const token = await getSessionToken();
+        const target = buildTargetUrl(path, req.url);
+        const options = await buildFetchOptions(req, token);
 
-        const url = new URL(request.url);
-        const proxyPath = url.pathname.replace(/^\/api\/proxy/, '');
-
-        // Security: Block non-standard path characters
-        if (!/^\/[a-zA-Z0-9_\-\/]+$/.test(proxyPath)) {
-            return NextResponse.json({ error: 'Invalid Path' }, { status: 400 });
-        }
-
-        const targetUrl = `${API_URL}${proxyPath}${url.search}`;
-        const headers = new Headers(request.headers);
-
-        // Forward identity
-        if (token) {
-            headers.set('Authorization', `Bearer ${token}`);
-        }
-
-        // Duplex is required for forwarding bodies in Next.js
-        const fetchOptions = {
-            method: request.method,
-            headers,
-            duplex: 'half'
-        };
-
-        if (request.method !== 'GET' && request.method !== 'HEAD') {
-            fetchOptions.body = request.body;
-        }
-
-        const response = await fetch(targetUrl, fetchOptions);
-        const data = await response.arrayBuffer();
-
-        // Return the response as-is from the backend
-        return new NextResponse(data, {
-            status: response.status,
-            headers: response.headers,
-        });
-
-    } catch (error) {
-        console.error('Proxy Error:', error);
-        return NextResponse.json({ error: 'Proxy Failure' }, { status: 500 });
+        const backendRes = await fetch(target, options);
+        
+        return await createNextResponse(backendRes);
+    } catch (err) {
+        console.error('[Proxy Error]:', err.message);
+        const status = err.message === 'Insecure path' ? 400 : 500;
+        return NextResponse.json({ error: err.message }, { status });
     }
 }
 
