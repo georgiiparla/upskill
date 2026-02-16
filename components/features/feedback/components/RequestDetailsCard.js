@@ -1,4 +1,5 @@
 import { Card } from "@/components/ui/Shared";
+import { Avatar } from '@/components/ui/Avatar';
 
 import {
     IconTag,
@@ -126,9 +127,30 @@ export const RequestDetailsCard = ({ requestData, onUpdate }) => {
 
             <div>
                 <h3 className={`text-lg font-bold transition-colors break-words ${topicClasses}`}>{displayTopic}</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                    Requested by <span className="font-medium">{requestData.requester_username}</span> on {new Date(requestData.created_at).toLocaleDateString()}
-                </p>
+                <div className="flex items-center gap-2 mt-2">
+                    <span className="text-sm text-gray-600 dark:text-gray-400">Requested by</span>
+
+                    {requestData.pair_username ? (
+                        <div className="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-full border border-slate-200 dark:border-slate-700">
+                            <div className="flex -space-x-2">
+                                <Avatar username={requestData.requester_username} className="w-5 h-5 text-[9px] ring-2 ring-white dark:ring-slate-900" />
+                                <Avatar username={requestData.pair_username} className="w-5 h-5 text-[9px] ring-2 ring-white dark:ring-slate-900" />
+                            </div>
+                            <span className="text-sm font-medium text-gray-900 dark:text-gray-200">
+                                {requestData.requester_username} & {requestData.pair_username}
+                            </span>
+                        </div>
+                    ) : (
+                        <div className="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-full border border-slate-200 dark:border-slate-700">
+                            <Avatar username={requestData.requester_username} className="w-5 h-5 text-[9px]" />
+                            <span className="text-sm font-medium text-gray-900 dark:text-gray-200">
+                                {requestData.requester_username}
+                            </span>
+                        </div>
+                    )}
+
+                    <span className="text-sm text-gray-500 dark:text-gray-400">on {new Date(requestData.created_at).toLocaleDateString()}</span>
+                </div>
             </div>
 
             <div className="space-y-4">

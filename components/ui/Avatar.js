@@ -1,6 +1,6 @@
 "use client";
 
-export const Avatar = ({ username, className = '' }) => {
+export const Avatar = ({ username, className = '', isGrayscale = false }) => {
     if (!username) return null;
 
     const initials = username.slice(0, 2).toUpperCase();
@@ -33,10 +33,11 @@ export const Avatar = ({ username, className = '' }) => {
         'bg-pink-500',
         'bg-rose-500'
     ];
-    const color = colors[Math.abs(hashCode(username)) % colors.length];
+
+    const color = isGrayscale ? 'bg-gray-400 dark:bg-gray-600' : colors[Math.abs(hashCode(username)) % colors.length];
 
     return (
-        <div className={`rounded-full flex items-center justify-center text-white font-bold shrink-0 ${color} ${className}`}>
+        <div className={`rounded-lg flex items-center justify-center text-white font-bold shrink-0 ${color} ${className}`}>
             {initials}
         </div>
     );

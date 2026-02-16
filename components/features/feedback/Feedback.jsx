@@ -4,8 +4,8 @@ import { useAuthStore } from '@/store/authStore';
 import { HistoryListItem, Card } from "@/components/ui/Shared";
 import { ActionButton } from '@/components/ui/Buttons';
 import { SearchBar } from '@/components/ui/SearchBar';
+import { Avatar } from '@/components/ui/Avatar';
 import {
-    IconUser,
     IconInbox,
     IconCheckbox,
     IconSend,
@@ -94,36 +94,36 @@ export const Feedback = ({
                     const amIRequester = item.requester_username === user?.username;
                     const amIPair = item.pair_username === user?.username;
 
+                    const isGrayscale = view === 'closed';
+
                     if (item.pair_username) {
-                        if (amIRequester) {
-                            displayUserHtml = (
-                                <>
-                                    Me <span className="text-gray-500 dark:text-gray-400">& {item.pair_username}</span>
-                                </>
-                            );
-                        } else if (amIPair) {
-                            displayUserHtml = (
-                                <>
-                                    Me <span className="text-gray-500 dark:text-gray-400">& {item.requester_username}</span>
-                                </>
-                            );
-                        } else {
-                            displayUserHtml = (
-                                <>
-                                    {item.requester_username} <span className="text-gray-500 dark:text-gray-400">& {item.pair_username}</span>
-                                </>
-                            );
-                        }
+                        displayUserHtml = (
+                            <div className="flex items-center gap-2">
+                                <div className="flex -space-x-2">
+                                    <Avatar username={item.requester_username} className="w-6 h-6 text-[10px] ring-2 ring-white dark:ring-slate-900" isGrayscale={isGrayscale} />
+                                    <Avatar username={item.pair_username} className="w-6 h-6 text-[10px] ring-2 ring-white dark:ring-slate-900" isGrayscale={isGrayscale} />
+                                </div>
+                                <span className="text-sm">
+                                    {amIRequester ? (
+                                        <>Me <span className="text-slate-500 dark:text-slate-400">& {item.pair_username}</span></>
+                                    ) : amIPair ? (
+                                        <>Me <span className="text-slate-500 dark:text-slate-400">& {item.requester_username}</span></>
+                                    ) : (
+                                        <>{item.requester_username} <span className="text-slate-500 dark:text-slate-400">& {item.pair_username}</span></>
+                                    )}
+                                </span>
+                            </div>
+                        );
                     } else {
-                        displayUserHtml = item.isOwner ? 'Me' : item.requester_username;
+                        displayUserHtml = (
+                            <div className="flex items-center gap-2">
+                                <Avatar username={item.requester_username} className="w-6 h-6 text-[10px]" isGrayscale={isGrayscale} />
+                                <span className="text-sm">{item.isOwner ? 'Me' : item.requester_username}</span>
+                            </div>
+                        );
                     }
 
-                    const requestContent = (
-                        <span className="flex items-center gap-1.5">
-                            <IconUser className="h-3.5 w-3.5 flex-shrink-0" stroke={1.5} />
-                            {displayUserHtml}
-                        </span>
-                    );
+                    const requestContent = displayUserHtml;
 
                     return (
                         <HistoryListItem
@@ -142,9 +142,9 @@ export const Feedback = ({
     };
 
     return (
-        <div className="space-y-8">
-            <Card className="h-full flex flex-col">
-                <div className="flex flex-wrap items-center gap-2 md:gap-4 mb-10 w-full px-1 py-1">
+        <div className="w-full max-w-6xl mx-auto">
+            <Card className="h-[85vh] min-h-[600px] flex flex-col shadow-xl ring-1 ring-slate-900/5 dark:ring-white/10">
+                <div className="flex flex-wrap items-center gap-2 md:gap-4 mb-8 w-full px-1 py-1 flex-shrink-0 border-b border-slate-100 dark:border-slate-800/60 pb-6">
                     <ActionButton
                         icon={<IconInbox className="h-4 w-4" />}
                         text="Active"
@@ -179,14 +179,16 @@ export const Feedback = ({
                     />
                 </div>
 
-                <SearchBar
-                    searchTerm={searchTerm}
-                    onSearchChange={setSearchTerm}
-                    placeholder="Search by topic, author, or tag..."
-                    className="mb-6 flex-shrink-0"
-                />
-                <div className="flex-1 space-y-4 overflow-y-auto max-h-[400px] sm:max-h-[450px] no-scrollbar">
-                    {renderList()}
+                <div className="flex-1 flex flex-col min-h-0">
+                    <SearchBar
+                        searchTerm={searchTerm}
+                        onSearchChange={setSearchTerm}
+                        placeholder="Search by topic, author, or tag..."
+                        className="mb-6 flex-shrink-0"
+                    />
+                    <div className="flex-1 space-y-4 overflow-y-auto no-scrollbar pr-2">
+                        {renderList()}
+                    </div>
                 </div>
             </Card>
         </div>

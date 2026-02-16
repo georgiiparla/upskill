@@ -8,12 +8,12 @@ export const AgendaItemContent = ({ item, isSystemMantra, onMenuToggle }) => {
                 <div className="flex items-start justify-between gap-4">
                     <div className="flex-1 min-w-0">
                         <h3
-                            className="font-bold text-xl md:text-2xl leading-tight mb-2 break-words drop-shadow-sm text-[var(--accent-light)] dark:text-[var(--accent-dark)]"
+                            className="font-bold text-xl md:text-2xl leading-tight mb-2 break-words drop-shadow-sm text-[var(--accent-light)] dark:text-[var(--accent-dark)] transition-all duration-300 ease-out delay-0 origin-left group-hover:delay-100 group-hover:scale-[1.04] group-hover:brightness-110"
                         >
                             {item.title}
                         </h3>
 
-                        <div className="text-sm text-slate-500 dark:text-slate-400">
+                        <div className="text-sm text-slate-500 dark:text-slate-400 transition-colors duration-300 delay-0 group-hover:delay-100 group-hover:text-slate-600 dark:group-hover:text-slate-300">
                             {item.editor_username ? (
                                 <>Updated by <span className="font-medium text-slate-700 dark:text-slate-200">{item.editor_username}</span></>
                             ) : isSystemMantra ? (

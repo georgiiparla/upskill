@@ -14,12 +14,12 @@ export const ActionButton = ({ icon, text, shortText, colorScheme = 'orange', on
     return (
         <button
             className={`
-                flex items-center justify-center p-2.5 sm:px-3 sm:py-1.5 text-sm font-semibold
-                rounded-md transition-colors focus:outline-none
-                bg-gray-100/50
-                dark:bg-gray-800
+                flex items-center justify-center gap-1.5 p-2.5 sm:px-4 sm:py-2 text-sm font-semibold
+                rounded-lg transition-all focus:outline-none flex-1 sm:flex-initial
+                bg-gray-100/50 hover:bg-gray-100
+                dark:bg-slate-800 dark:hover:bg-slate-700
                 ${selectedColor}
-                ${isActive ? 'ring-2' : 'focus:ring-2'}
+                ${isActive ? 'ring-2 ring-offset-1 dark:ring-offset-slate-900 shadow-sm bg-white dark:bg-slate-800' : 'hover:ring-1 hover:ring-slate-300 dark:hover:ring-slate-600 focus:ring-2'}
             `}
             onClick={onClick}
             title={text}
@@ -27,11 +27,11 @@ export const ActionButton = ({ icon, text, shortText, colorScheme = 'orange', on
             {icon}
             {shortText ? (
                 <>
-                    <span className={`hidden sm:inline md:hidden ${icon ? 'ml-2' : ''}`}>{shortText}</span>
-                    <span className={`hidden md:inline ${icon ? 'ml-2' : ''}`}>{text}</span>
+                    <span className="sm:hidden">{shortText}</span>
+                    <span className="hidden sm:inline">{text}</span>
                 </>
             ) : (
-                <span className={`hidden sm:inline ${icon ? 'ml-2' : ''}`}>{text}</span>
+                <span>{text}</span>
             )}
         </button>
     );

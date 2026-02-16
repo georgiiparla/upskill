@@ -115,9 +115,9 @@ export const HistoryListItem = ({
                 <h4 className={`truncate text-sm md:text-base font-semibold text-gray-800 dark:text-gray-200 transition-colors`}>{subject}</h4>
                 <span className="text-xs text-gray-500 dark:text-gray-400 flex-shrink-0 ml-2">{formatRelativeTime(createdAt)}</span>
             </div>
-            <p className="text-xs md:text-sm text-gray-600 dark:text-gray-300 truncate">
+            <div className="text-xs md:text-sm text-gray-600 dark:text-gray-300 truncate">
                 {content}
-            </p>
+            </div>
         </>
     );
 

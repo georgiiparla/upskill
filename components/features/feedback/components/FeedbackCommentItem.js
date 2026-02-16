@@ -1,9 +1,10 @@
 "use client";
 import { useState } from "react";
 import { Card } from "@/components/ui/Shared";
+import { Avatar } from "@/components/ui/Avatar";
 import { formatRelativeTime } from "@/lib/helper-func";
 
-import { IconThumbUp, IconUser, IconTrash } from "@tabler/icons-react";
+import { IconThumbUp, IconTrash, IconUser } from "@tabler/icons-react";
 import { Modal } from "@/components/ui/Modal";
 import { likeSubmission, unlikeSubmission, deleteSubmission } from "@/lib/client-api";
 import { useAuthStore } from "@/store/authStore";

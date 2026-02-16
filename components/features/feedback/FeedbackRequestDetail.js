@@ -103,21 +103,19 @@ export default function FeedbackRequestDetail() {
     ];
 
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-3 lg:items-start gap-8 max-w-7xl mx-auto">
-            <div className="lg:col-span-1 space-y-8 lg:sticky lg:top-8 self-start z-20">
+        <div className="grid grid-cols-1 lg:grid-cols-[350px_1fr] lg:items-start gap-24 max-w-7xl mx-auto">
+            <div className="space-y-8 lg:sticky lg:top-8 self-start z-20">
                 <RequestDetailsCard
                     requestData={requestData}
                     onUpdate={handleRequestUpdate}
                 />
-                {isOwner && (
-                    <RequestSentimentDonutChart
-                        title="Sentiment Breakdown"
-                        data={sentimentChartData}
-                    />
-                )}
+                <RequestSentimentDonutChart
+                    title="Sentiment Breakdown"
+                    data={sentimentChartData}
+                />
             </div>
 
-            <div className="lg:col-span-2">
+            <div>
                 <div className="flex items-center gap-2 mb-6">
                     <h2 className="text-xl font-bold text-gray-800 dark:text-gray-200">
                         Received Feedback ({submissions.length})

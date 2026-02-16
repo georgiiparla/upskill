@@ -2,7 +2,8 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Activity } from 'lucide-react';
+import { Activity, Bot } from 'lucide-react';
+import { Avatar } from '@/components/ui/Avatar';
 
 const getEventStyle = (type) => {
     switch (type) {
@@ -107,7 +108,17 @@ export const ActivityStream = ({ activityStream, viewMode = 'detailed' }) => {
                         </div>
 
                         {/* Main Content Flow */}
-                        <div className="flex flex-wrap items-center gap-x-2 text-sm md:text-base leading-relaxed">
+                        <div className="flex flex-wrap items-center gap-x-4 text-sm md:text-base leading-relaxed">
+
+                            {/* Avatar */}
+                            {activity.user_name === 'System' ? (
+                                <div className="w-6 h-6 rounded-md bg-slate-200 dark:bg-slate-700 flex items-center justify-center border border-slate-300 dark:border-slate-600 shrink-0">
+                                    <Bot size={14} className="text-slate-600 dark:text-slate-300" />
+                                </div>
+                            ) : (
+                                <Avatar username={activity.user_name} className="w-6 h-6 text-[11px]" />
+                            )}
+
                             {/* User */}
                             <span className="font-semibold text-slate-700 dark:text-slate-200">
                                 {activity.user_name}
