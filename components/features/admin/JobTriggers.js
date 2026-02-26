@@ -1,22 +1,41 @@
 "use client";
 
-import { useState } from 'react';
-import { Settings, Play, AlertCircle, Loader2 } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Settings, Play, AlertCircle, Loader2, CalendarClock } from 'lucide-react';
 import { clientFetch } from '@/lib/client-api';
 import toast from 'react-hot-toast';
 import { Modal } from '@/components/ui/Modal';
 
-const JOBS = [
+const DEFAULT_JOBS = [
     { id: 'leaderboard_reset_job', label: 'Reset Leaderboard', description: 'Resets points for the new cycle' },
     { id: 'leaderboard_sync_job', label: 'Sync Leaderboard', description: 'Syncs public points with shadow points' },
     { id: 'quest_reset_job', label: 'Reset Quests', description: 'Resets progress for interval-based quests' },
 ];
 
 export const JobTriggers = () => {
+    const [jobs, setJobs] = useState(DEFAULT_JOBS);
     const [runningJob, setRunningJob] = useState(null);
     const [confirmModalOpen, setConfirmModalOpen] = useState(false);
     const [selectedJob, setSelectedJob] = useState(null);
     const [confirmationInput, setConfirmationInput] = useState('');
+    const [loading, setLoading] = useState(true);
+
+    const fetchJobs = async () => {
+        try {
+            const { success, data } = await clientFetch('/admin/jobs');
+            if (success && Array.isArray(data)) {
+                setJobs(data);
+            }
+        } catch (err) {
+            console.error("Failed to load jobs", err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchJobs();
+    }, []);
 
     const openConfirmation = (jobId, label) => {
         setSelectedJob({ id: jobId, label });
@@ -44,6 +63,7 @@ export const JobTriggers = () => {
 
             if (success) {
                 toast.success(`${selectedJob.label} triggered successfully`, { id: toastId });
+                fetchJobs(); // Refresh next run dates
             } else {
                 toast.error(`Failed to trigger ${selectedJob.label}: ${error}`, { id: toastId });
             }
@@ -101,13 +121,13 @@ export const JobTriggers = () => {
                         Background Jobs
                     </h3>
                     <span className="text-xs font-mono text-slate-400">
-                        {JOBS.length} jobs
+                        {jobs.length} jobs
                     </span>
                 </div>
 
                 <div className="rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden">
                     <div className="divide-y divide-slate-100 dark:divide-slate-800">
-                        {JOBS.map(({ id, label, description }) => (
+                        {jobs.map(({ id, label, description, next_run_date }) => (
                             <div
                                 key={id}
                                 className="group flex items-center justify-between px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"
@@ -119,6 +139,12 @@ export const JobTriggers = () => {
                                     <p className="text-xs text-slate-500 dark:text-slate-400">
                                         {description}
                                     </p>
+                                    {next_run_date && (
+                                        <p className="text-[11px] flex items-center font-medium mt-1 text-slate-500 dark:text-slate-400">
+                                            <CalendarClock className="w-3 h-3 mr-1 inline opacity-80" />
+                                            Next Run: {new Date(next_run_date).toLocaleString()}
+                                        </p>
+                                    )}
                                 </div>
 
                                 <button
